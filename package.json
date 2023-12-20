@@ -9,8 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.8.8",
+    "@reduxjs/toolkit": "^2.0.1",
+    "antd": "^5.12.4",
+    "clipboard-copy": "^4.0.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.4",
+    "next": "12.0.0",
+    "pubnub": "^7.4.5",
+    "qrcode.react": "^3.1.0",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.0.4"
+    "react-ga": "^3.3.1",
+    "react-icon": "^1.0.0",
+    "react-redux": "^9.0.4",
+    "react-toastify": "^9.1.3",
+    "redux": "^5.0.0",
+    "redux-persist": "^6.0.0"
   }
 }
