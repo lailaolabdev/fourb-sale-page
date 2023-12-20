@@ -1,11 +1,29 @@
+export const CORLOR_APP = "#3c169b";
+export const CORLOR_WHITE = "#FFF";
 
-
-export const COLOR_APP = "#3c169b";
-export const COLOR_WHITE = "#FFF";
-
-export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/files/"
+export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/files/";
 export const COMMISSION_OFFICE = 0.03;
+export const numberFormat = (_number) => {
+  return new Intl.NumberFormat("en-US").format(_number);
+};
 
+export const emptyImage =
+  "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
+
+// convert price
+export const calculateRoundedValue = (price) => {
+  // console.log("calculateRoundedValue------->", price)
+  let integerPart = Math.floor(price);
+  let decimalPart = price - integerPart;
+
+  if (decimalPart < 0.5 && decimalPart != 0) {
+    return integerPart + 0.5;
+  } else if (decimalPart === 0.5 || decimalPart == 0) {
+    return price;
+  } else {
+    return integerPart + 1;
+  }
+};
 
 // ======================================= link upoint ================================
 // Dev
@@ -19,4 +37,3 @@ export const SOCKET_SERVER_URI = "wss://cf-api-dev.lailaolab.com/";
 // localhost
 // export const SERVER_URI = "http://localhost:7070/";
 // export const SOCKET_SERVER_URI = "ws://localhost:7070/"
-

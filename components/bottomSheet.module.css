@@ -1,0 +1,151 @@
+.backdrop {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: height ease-in-out;
+    z-index: 1001;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.hidden {
+    display: none;
+}
+
+.show {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100vh;
+    z-index: 1001;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.backgroundGradient {
+    background-image: linear-gradient(white, gray, gray, gray, gray, gray, white);
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    opacity: 0.5;
+}
+
+.backgroundBlur {
+    /* The image used */
+    /* background-image: url("https://appzapimglailaolab.s3.ap-southeast-1.amazonaws.com/resized/medium/da1e91ec-25e6-436f-850d-4f6098523081.jpeg"); */
+
+    /* Add the blur effect */
+    filter: blur(7px);
+    -webkit-filter: blur(7px);
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.bottomSheet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    min-height: 80%;
+    background-color: #fff;
+    overflow: hidden;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1002;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+    box-shadow: 0px -8px 20px rgba(0, 0, 0, 0.1);
+    transition: bottom 0.3s ease;
+}
+
+.bottomSheet.is-open {
+    transform: translateY(100%);
+}
+
+
+/*  Pomotion */
+.modalBackdrop {
+    background: rgba(0, 0, 0, 0.7);
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    position: fixed;
+    z-index: 10000;
+    margin: 0px;
+}
+
+.modalContainer {
+    width: 85vw;
+    background-image: linear-gradient(to right, #FAA419, #EC5C24);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.modalContainer h1 {
+    font-size: 2.5rem;
+    color: rgb(0, 138, 92);
+}
+
+.modalContainer p {
+    font-size: 1.25rem;
+    color: rgb(95, 121, 1);
+    line-height: 2rem;
+}
+
+.close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+}
+
+.close div {
+    position: absolute;
+    height: 1.5rem;
+    width: 3px;
+    background: rgb(255, 145, 1);
+    border-radius: 10px;
+    right: 50%;
+    left: 50%;
+}
+
+.close div:first-child {
+    transform: rotate(45deg);
+}
+
+.close div:last-child {
+    transform: rotate(-45deg);
+}
+
+.buttonOkay {
+    background-color: #fff;
+    border-radius: 8px;
+    border-width: 0px;
+    height: 40px;
+    width: 200px;
+    margin: 10px;
+    color: #EC5C24;
+}

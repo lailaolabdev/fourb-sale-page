@@ -4,6 +4,8 @@
 //   return <Component {...pageProps} />
 // }  
 
+import "../styles/styleSalePage.css"
+
  
 // import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
 import "bootstrap/dist/css/bootstrap.css";
@@ -21,14 +23,14 @@ import ReactGA from "react-ga";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import { WebSocket } from "ws";
+import { WebSocket } from "ws";  
 import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 // import { authClient } from "../autClient";
 import { StateProvider } from "../store";
 import { SERVER_URI, SOCKET_SERVER_URI } from "../helper";
-import { DefaultToastContainer, ToastProvider } from "react-toast-notifications";
 import { ToastContainer } from "react-toastify";
+import { ToastProvider } from "react-toast-notifications";
 
   
 // config.autoAddCss = false;

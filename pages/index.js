@@ -26,7 +26,7 @@ export default function Home() {
             height: width > 700 ? "15em" : "10em",
             borderRadius: "50%",
             border: "1px solid #fefefe",
-            backgroundColor: "#f2f2f2",
+            backgroundColor: "#f2f2f2",  
             padding: "1em",
           }}>
           <Image src={mainLogo} />
