@@ -1,8 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap");
-/* @font-face {
+@font-face {
     font-family: "FontLao2";
-    src: url("../public/fonts/NotoSansLao/BB-Font.ttf");
-  }  */
+    src: url("../helper/font/NotoSansLao/BB-Font.ttf");
+  } 
   
   :root {
     --colorDefaultcf: #3c169b;
@@ -14,8 +14,8 @@
   }
   
   * {
-    font-family: "FontLaos";
-    /* font-family: "FontLao2"; */
+    /* font-family: "FontLaos"; */
+    font-family: "FontLao2";
   }
   
   Modal.Footer {
