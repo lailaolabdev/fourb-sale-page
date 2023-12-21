@@ -627,15 +627,15 @@ function ProductSalePage({ initialShop }) {
         // url="https://client.appzap.la/"
         openGraph={{
           type: "website",
-          // url: "http://18.141.228.151/",
-          url: SERVER_IP,
+          url: "http://18.141.228.151/",
+          // url: SERVER_IP,
           site_name: "SiteName",
           images: [
             {
               url:
                 loadShopData?.shop?.image?.length > 0
                   ? S3_URL + loadShopData?.shop?.image
-                  : `/assets/images/mainLogo.png`,
+                  : `/assets/images/mainLogo2.png`,
               // url: `/assets/images/mainLogo.png`,
               width: 800,
               height: 600,
