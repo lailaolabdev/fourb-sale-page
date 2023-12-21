@@ -166,7 +166,7 @@ function ProductSalePage({ initialShop }) {
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
   // pagination all =======================================================================>
-  const rowsPerPage = 10;
+  const rowsPerPage = 100;
   const pageAll = productTotal > 0 ? Math.ceil(productTotal / rowsPerPage) : 1;
   const handleChangePage = useCallback((newPage) => {
     setPage(newPage);
@@ -652,39 +652,7 @@ function ProductSalePage({ initialShop }) {
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
-      </Head>
-
-      {/* <DefaultSeo
-        title={initialShop?.name}
-        description="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
-        // url="https://client.appzap.la/"
-        openGraph={{
-          type: "website",
-          url: "http://18.141.228.151/",
-          // url: SERVER_IP,
-          site_name: "SiteName",
-          images: [
-            {
-              url:
-                initialShop?.image?.length > 0
-                  ? S3_URL + initialShop?.image
-                  : `/assets/images/mainLogo2.png`,
-              // url: `/assets/images/mainLogo.png`,
-              width: 800,
-              height: 600,
-              alt: "4B Sale Page Alt",
-            },
-          ],
-        }}
-        // facebook={{
-        //   appId: "694959341044795",
-        // }}
-        twitter={{
-          handle: "@handle",
-          site: "@site",
-          cardType: "summary_large_image",
-        }}
-      /> */}
+      </Head> 
 
       <HeaderSalePage
         enableSearch={enableSearch}
