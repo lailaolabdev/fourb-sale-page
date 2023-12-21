@@ -37,7 +37,7 @@ export default function ModalConfirmComponent({
               marginBottom: ".5em",
             }}>
             <Image
-              src="assets/images/warningImage_purple.png"
+              src="/assets/images/warningImage_purple.png"
               width={"100%"}
               height={"100%"}
               alt="wninngImage"

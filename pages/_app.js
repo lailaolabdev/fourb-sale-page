@@ -2,14 +2,21 @@
 
 // export default function App({ Component, pageProps }) {
 //   return <Component {...pageProps} />
-// }  
+// }
 
-import "../styles/styleSalePage.css"
+import "../styles/styleSalePage.css";
 
- 
 // import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
 import "bootstrap/dist/css/bootstrap.css";
-import { ApolloClient, ApolloLink, ApolloProvider, HttpLink, InMemoryCache, concat, split } from "@apollo/client";
+import {
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+  concat,
+  split,
+} from "@apollo/client";
 
 // import { config } from "@fortawesome/fontawesome-svg-core";
 import Head from "next/head";
@@ -23,36 +30,35 @@ import ReactGA from "react-ga";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
-import { WebSocket } from "ws";  
+import { WebSocket } from "ws";
 import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 // import { authClient } from "../autClient";
 import { StateProvider } from "../store";
-import { SERVER_URI, SOCKET_SERVER_URI } from "../helper";
+import { S3_URL, SERVER_URI, SOCKET_SERVER_URI } from "../helper";
 import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "react-toast-notifications";
 
-  
 // config.autoAddCss = false;
 
-const TRACKING_ID = "G-TWDP034E2W";
-ReactGA.initialize(TRACKING_ID); 
+// const TRACKING_ID = "G-TWDP034E2W";
+// ReactGA.initialize(TRACKING_ID);
 
 const App = ({ Component, pageProps }) => {
 
-  const httpLink = new HttpLink({  
+
+  const httpLink = new HttpLink({
     uri: SERVER_URI, // use https for secure endpoint
   });
 
-// create websocket link:
+  // create websocket link:
   const wsLink = new GraphQLWsLink(
     createClient({
       url: SOCKET_SERVER_URI,
       options: {
         reconnect: true,
       },
-      webSocketImpl: WebSocket, 
-      
+      webSocketImpl: WebSocket,
     })
   );
 
@@ -111,7 +117,7 @@ const App = ({ Component, pageProps }) => {
       }
     },
   });
-
+ 
 
   return (
     <>
@@ -121,7 +127,10 @@ const App = ({ Component, pageProps }) => {
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         />
         <meta name="theme-color" content="#000000" />
-        <meta name="description" content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ" />
+        <meta
+          name="description"
+          content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
+        />
         <link rel="icon" href="./mainLogo.png" type="image/icon type" />
         <meta charSet="UTF-8" />
 
@@ -138,17 +147,21 @@ const App = ({ Component, pageProps }) => {
           rel="stylesheet"
         />
       </Head>
-      <DefaultSeo
-        title="4B ເພື່ອທຸລະກິດຂອງທ່ານ"
+      {/* <DefaultSeo
+        title={shopDetail?.shop?.name}
         description="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
-        url="https://client.appzap.la/"
+        // url="https://client.appzap.la/"
         openGraph={{
           type: "website",
-          url: "http://18.141.228.151",
+          url: "http://18.141.228.151/",
           site_name: "SiteName",
           images: [
             {
-              url: `/assets/images/mainLogo.png`,
+              url:
+                shopDetail?.shop?.image?.length > 0
+                  ? S3_URL + shopDetail?.shop?.image
+                  : `/assets/images/mainLogo.png`,
+              // url: `/assets/images/mainLogo.png`,
               width: 800,
               height: 600,
               alt: "4B Sale Page Alt",
@@ -163,7 +176,7 @@ const App = ({ Component, pageProps }) => {
           site: "@site",
           cardType: "summary_large_image",
         }}
-      />
+      /> */}
       <Script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -185,10 +198,9 @@ const App = ({ Component, pageProps }) => {
         {/* <ApolloProvider client={authClient}> */}
         <ApolloProvider client={client}>
           <ToastProvider>
-
-          <StateProvider>
-            <Component {...pageProps} />
-          </StateProvider>
+            <StateProvider>
+              <Component {...pageProps} />
+            </StateProvider>
           </ToastProvider>
         </ApolloProvider>
       </Provider>

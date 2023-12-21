@@ -21,7 +21,6 @@ import {
   calculateRoundedValue,
   EMPTY_IMAGE,
   S3_URL,
-  emptyImage,
   numberFormat,
 } from "../../helper";
 import Image from "next/image";
@@ -30,6 +29,7 @@ import GenQrCode from "../../components/salePage/GenQrCode";
 import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutation";
 // import loading77 from "/assets/images/loading77.gif";
 import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
+import EmptyImage from "../../components/salePage/EmptyImage";
 
 export default function payment() {
   const router = useRouter();
@@ -613,15 +613,15 @@ export default function payment() {
                           alignItems: "center",
                         }}>
                         <div className="cartImage">
-                          <img
-                            src={
-                              data?.image?.length > 0
-                                ? S3_URL + data?.image
-                                : EMPTY_IMAGE
-                            }
-                            alt="productImage"
-                            style={{ width: 60, height: 60 }}
-                          />
+                          {data?.image?.length > 0 ? (
+                            <img
+                              src={S3_URL + data?.image}
+                              alt="productImage"
+                              style={{ width: 60, height: 60 }}
+                            />
+                          ) : (
+                            <EmptyImage />
+                          )}
                         </div>
                         <div className="action-item">
                           <h5>

@@ -16,10 +16,16 @@ import { useLazyQuery } from "@apollo/client";
 import { MdArrowBack } from "react-icons/md";
 import { useRouter } from "next/router";
 import { GET_EXCHANGRATE } from "../../apollo/exchanrage";
-import ButtonComponent from "../../components/ButtonComponent"; 
-import { calculateRoundedValue, emptyImage, numberFormat, S3_URL } from "../../helper";
+import ButtonComponent from "../../components/ButtonComponent";
+import {
+  calculateRoundedValue,
+  emptyImage,
+  numberFormat,
+  S3_URL,
+} from "../../helper";
 import ModalConfirmComponent from "../../components/salePage/ModalConfirmComponent";
 import Image from "next/image";
+import EmptyImage from "../../components/salePage/EmptyImage";
 
 export default function CartDetail() {
   // const { match, location } = useReactRouter();
@@ -192,14 +198,11 @@ export default function CartDetail() {
             return (
               <div key={data?.id} className="cartItem-product">
                 <div className="cartImage">
-                  <img
-                    src={
-                      data?.image?.length > 0
-                        ? S3_URL + data?.image
-                        : emptyImage
-                    }
-                    alt="productImage"
-                  />
+                  {data?.image?.length > 0 ? (
+                    <img src={S3_URL + data?.image} alt="productImage" />
+                  ) : (
+                    <EmptyImage />
+                  )}
                 </div>
                 <div className="action-item">
                   <h5>

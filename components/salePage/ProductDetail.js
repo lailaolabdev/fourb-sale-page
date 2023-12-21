@@ -16,6 +16,7 @@ import { COMMISSION_OFFICE, S3_URL } from "../../helper";
 import { addCartItem } from "../../redux/salepage/cartReducer";
 import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE } from "../../apollo";
 import { Image } from "antd";
+import EmptyImage from "./EmptyImage";
 
 export default function ProductDetail(props) {
   const router = useRouter();
@@ -39,7 +40,6 @@ export default function ProductDetail(props) {
     { fetchPolicy: "cache-and-network" }
   );
 
-  
   const [
     getShopCommissionFor,
     { data: shopDataCommissionFor, loading: shopLoading },
@@ -57,8 +57,8 @@ export default function ProductDetail(props) {
     });
   }, [shopForAffiliateId]);
 
-    // ຕົວປ່ຽນຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານ ກຳນົດໃຫ້ ອາຟຣິລີເອດ
-    const _commissionForAffiliate =
+  // ຕົວປ່ຽນຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານ ກຳນົດໃຫ້ ອາຟຣິລີເອດ
+  const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
   const isExChangeRate = useMemo(() => {
@@ -115,8 +115,10 @@ export default function ProductDetail(props) {
     let priceProduct = 0;
     const commissionRate = (shopDetail?.commision ?? 0) / 100; // commission affiliate default
     const _commissioinForInflu = (_commissionForAffiliate ?? 0) / 100; // commission shop as an affiliate
-    const baseCommission = shopDetail?.commissionService ? _price * COMMISSION_OFFICE : 0; // percent service for Lailaolab
- 
+    const baseCommission = shopDetail?.commissionService
+      ? _price * COMMISSION_OFFICE
+      : 0; // percent service for Lailaolab
+
     if (shopDetail?.commissionAffiliate && !shopDetail?.commissionService) {
       priceProduct = _price + _price * commissionRate;
     } else if (
@@ -142,17 +144,17 @@ export default function ProductDetail(props) {
     <>
       <div className="product-view-new">
         <div className="viewImage">
-          <Image
-            src={
-              stateView?.image?.length > 0
-                ? S3_URL + stateView?.image
-                : emptyImage
-            }
-            layout="fill"
-            alt="emptyImage"
-            width={'100%'}
-            height={"100%"}
-          />
+          {stateView?.image?.length > 0 ? (
+            <Image
+              src={S3_URL + stateView?.image}
+              layout="fill"
+              alt="emptyImage"
+              width={"100%"}
+              height={"100%"}
+            />
+          ) : (
+            <EmptyImage />
+          )}
         </div>
         <div className="viewDescription">
           <h3>{stateView?.name}</h3>
@@ -168,7 +170,7 @@ export default function ProductDetail(props) {
             </div>
             <div className="boxShowAction">
               <p>ລາຄາສິນຄ້າ</p>
-              <div className="boxdisplay"> 
+              <div className="boxdisplay">
                 {numberFormat(
                   _calculatePriceWithExchangeRate(
                     stateView?.price ?? 0,

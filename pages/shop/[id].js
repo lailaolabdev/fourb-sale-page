@@ -27,6 +27,7 @@ import {
   COMMISSION_OFFICE,
   EMPTY_USER_PROFILE,
   S3_URL,
+  SERVER_IP,
   calculateRoundedValue,
   emptyImage,
   numberFormat,
@@ -40,8 +41,10 @@ import { AiOutlineClose } from "react-icons/ai";
 import { Avatar } from "@mui/material";
 import PaginationComponent from "../../components/salePage/PaginationComponent";
 import LoadingComponent from "../../components/LoadingComponent";
-import authClient from "../../autClient";
+// import authClient from "../../autClient";
 import Image from "next/image";
+import { DefaultSeo } from "next-seo";
+import EmptyImage from "../../components/salePage/EmptyImage";
 //   import '../../styles/styleSalePage.css'
 
 const versionWeb = require("../../package.json");
@@ -618,6 +621,38 @@ function ProductSalePage({ initialShop }) {
 
   return (
     <div>
+      <DefaultSeo
+        title={loadShopData?.shop?.name}
+        description="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
+        // url="https://client.appzap.la/"
+        openGraph={{
+          type: "website",
+          // url: "http://18.141.228.151/",
+          url: SERVER_IP,
+          site_name: "SiteName",
+          images: [
+            {
+              url:
+                loadShopData?.shop?.image?.length > 0
+                  ? S3_URL + loadShopData?.shop?.image
+                  : `/assets/images/mainLogo.png`,
+              // url: `/assets/images/mainLogo.png`,
+              width: 800,
+              height: 600,
+              alt: "4B Sale Page Alt",
+            },
+          ],
+        }}
+        // facebook={{
+        //   appId: "694959341044795",
+        // }}
+        twitter={{
+          handle: "@handle",
+          site: "@site",
+          cardType: "summary_large_image",
+        }}
+      />
+
       <HeaderSalePage
         enableSearch={enableSearch}
         cartList={cartList}
@@ -658,18 +693,15 @@ function ProductSalePage({ initialShop }) {
                 <Col
                   key={index}
                   className="col-producct-card"
-                  style={{ padding: width > 700 ? 10 : 1 }}
+                  style={{ padding: width > 700 ? 10 : 2 }}
                   onClick={() => handleViewProduct(data)}>
                   <div className="productSalePage">
                     <div className="imageViews">
-                      <img
-                        src={
-                          data?.image?.length > 0
-                            ? S3_URL + data?.image
-                            : emptyImage
-                        }
-                        alt="productImage"
-                      />
+                      {data?.image?.length > 0 ? (
+                        <img src={S3_URL + data?.image} alt="productImage" />
+                      ) : (
+                        <EmptyImage />
+                      )}
                     </div>
                     <div style={{ padding: 10, lineHeight: "10px" }}>
                       <div className="title-product">

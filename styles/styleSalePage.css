@@ -1062,7 +1062,7 @@
   }
   
   .col-producct-card {
-    padding: 0;
+    padding: 0.5em;
   }
   
   .btn-add-to-cart {
@@ -1328,7 +1328,7 @@
     }
   
     .col-producct-card {
-      padding: 0.1em 0;
+      padding: 0.1em;
     }
   
     .gen-qrcode-salepage h2 {
