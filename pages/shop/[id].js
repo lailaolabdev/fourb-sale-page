@@ -45,6 +45,7 @@ import authClient from "../../autClient";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
 import EmptyImage from "../../components/salePage/EmptyImage";
+import Head from "next/head";
 //   import '../../styles/styleSalePage.css'
 
 const versionWeb = require("../../package.json");
