@@ -3,9 +3,7 @@ import mainLogo from "../images/mainLogo.png";
 import useWindowDimensions from "../helper/useWindowDimensions";
 // import "../App.css"
 
-
 export default function Home() {
-
   const { height, width } = useWindowDimensions();
 
   return (
@@ -26,10 +24,15 @@ export default function Home() {
             height: width > 700 ? "15em" : "10em",
             borderRadius: "50%",
             border: "1px solid #fefefe",
-            backgroundColor: "#f2f2f2",  
+            backgroundColor: "#f2f2f2",
             padding: "1em",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            overflow: "hidden",
           }}>
-          <Image src={mainLogo} />
+          {/* <img src="../images/mainLogo.png" style={{ width: "100%" }} /> */}
+          <Image src={mainLogo} style={{ width: "100%" }} />
         </div>
         <h2>
           <b>4B Sale Page</b>
