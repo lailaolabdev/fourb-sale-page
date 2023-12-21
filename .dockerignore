@@ -1,0 +1,6 @@
+node_modules
+npm-debug.log
+.git
+.DS_Store
+.env
+# Add other files and directories to exclude

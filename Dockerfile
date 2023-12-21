@@ -1,5 +1,5 @@
 # Use the official Node.js image as the base image
-FROM node:20
+FROM node:16
 
 # Set the working directory in the container
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install --legacy-peer-deps
+RUN npm install --force
 
 # Copy the rest of the application code into the container
 COPY . .
