@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import copy from "clipboard-copy";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_ORDER_ON_SALE_PAGE } from "../../apollo/order/mutation";
-import bcelOne from "../../images/bcelOne.png";
+import bcelOne from "/assets/images/bcelOne.png";
 import { toast, ToastContainer } from "react-toastify";
 // import { GET_BANKS } from "../../apollo/bank/query";
 
@@ -22,7 +22,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import GenQrCode from "../../components/salePage/GenQrCode";
 import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutation";
-import loading77 from "../../images/loading77.gif"
+import loading77 from "/assets/images/loading77.gif"
 import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
 
 export default function payment() {
