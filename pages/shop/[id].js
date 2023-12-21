@@ -41,7 +41,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import { Avatar } from "@mui/material";
 import PaginationComponent from "../../components/salePage/PaginationComponent";
 import LoadingComponent from "../../components/LoadingComponent";
-// import authClient from "../../autClient";
+import authClient from "../../autClient";
 import Image from "next/image";
 import { DefaultSeo } from "next-seo";
 import EmptyImage from "../../components/salePage/EmptyImage";
@@ -64,7 +64,7 @@ function ProductSalePage({ initialShop }) {
   const { height, width } = useWindowDimensions();
 
   // console.log("testId---->", id);
-  // console.log("initialShop909090---->", initialShop);
+  // console.log("initialShop909090---->", initialShop?.name);
 
   const [openProfileShop, setOpenProfileShop] = useState(false);
   const handleCloseProfile = () => setOpenProfileShop(false);
@@ -79,7 +79,7 @@ function ProductSalePage({ initialShop }) {
   const [productTotal, setProductTotal] = useState(0);
   const [filter, setFilter] = useState();
   const { cartList } = useSelector((state) => state?.salepage);
-  const [shopDetail, setShopDetail] = useState();
+  const [shopDetail, setShopDetail] = useState(initialShop);
 
   const [isInStock, setIsInStock] = useState(1);
 
@@ -148,9 +148,9 @@ function ProductSalePage({ initialShop }) {
     fetchPolicy: "cache-and-network",
   });
 
-  const [getShopData, { data: loadShopData }] = useLazyQuery(SHOP, {
-    fetchPolicy: "network-only",
-  });
+  // const [getShopData, { data: loadShopData }] = useLazyQuery(SHOP, {
+  //   fetchPolicy: "network-only",
+  // });
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
@@ -165,7 +165,7 @@ function ProductSalePage({ initialShop }) {
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
   // pagination all =======================================================================>
-  const rowsPerPage = 100;
+  const rowsPerPage = 10;
   const pageAll = productTotal > 0 ? Math.ceil(productTotal / rowsPerPage) : 1;
   const handleChangePage = useCallback((newPage) => {
     setPage(newPage);
@@ -184,15 +184,15 @@ function ProductSalePage({ initialShop }) {
   }, [commissionForShopId]);
 
   // fetch shop commission for shop
-  useEffect(() => {
-    getShopData({
-      variables: {
-        where: {
-          id: shopId,
-        },
-      },
-    });
-  }, [shopId]);
+  // useEffect(() => {
+  //   getShopData({
+  //     variables: {
+  //       where: {
+  //         id: shopId,
+  //       },
+  //     },
+  //   });
+  // }, [shopId]);
 
   useEffect(() => {
     if (live === "LIVE") {
@@ -203,11 +203,11 @@ function ProductSalePage({ initialShop }) {
   }, [liveId, shopId, page, live, isInStock]);
 
   // get shop data
-  useEffect(() => {
-    if (loadShopData?.shop) {
-      setShopDetail(loadShopData?.shop);
-    }
-  }, [loadShopData]);
+  // useEffect(() => {
+  //   if (loadShopData?.shop) {
+  //     setShopDetail(loadShopData?.shop);
+  //   }
+  // }, [loadShopData]);
 
   // get exchangerate
   useEffect(() => {
@@ -603,7 +603,7 @@ function ProductSalePage({ initialShop }) {
     // Replace '1234567890' with the recipient's phone number.
     // const phoneNumber = "020" + loadShopData?.shop?.phone;
     // const phoneNumber = "+85602094293951";
-    const phoneNumber = "+856020" + loadShopData?.shop?.phone;
+    const phoneNumber = "+856020" + initialShop?.phone;
 
     // You can also include a message using the 'text' parameter.
     const message = "ສະບາຍດີ🙏";
@@ -622,7 +622,7 @@ function ProductSalePage({ initialShop }) {
   return (
     <div>
       <DefaultSeo
-        title={loadShopData?.shop?.name}
+        title={initialShop?.name}
         description="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
         // url="https://client.appzap.la/"
         openGraph={{
@@ -633,8 +633,8 @@ function ProductSalePage({ initialShop }) {
           images: [
             {
               url:
-                loadShopData?.shop?.image?.length > 0
-                  ? S3_URL + loadShopData?.shop?.image
+                initialShop?.image?.length > 0
+                  ? S3_URL + initialShop?.image
                   : `/assets/images/mainLogo2.png`,
               // url: `/assets/images/mainLogo.png`,
               width: 800,
@@ -657,7 +657,7 @@ function ProductSalePage({ initialShop }) {
         enableSearch={enableSearch}
         cartList={cartList}
         handleShowProfile={handleShowProfile}
-        loadShopData={loadShopData}
+        loadShopData={initialShop}
         filter={filter}
         setFilter={setFilter}
         searchProduct={searchProduct}
@@ -742,8 +742,7 @@ function ProductSalePage({ initialShop }) {
               ))}
             </Row>
           )}
-        </div>
-        {productLists?.length >= rowsPerPage && (
+        </div> 
           <div className="pt-4">
             <PaginationComponent
               count={productTotal}
@@ -752,8 +751,7 @@ function ProductSalePage({ initialShop }) {
               pageAll={pageAll}
               onPageChange={handleChangePage}
             />
-          </div>
-        )}
+          </div> 
       </div>
 
       {/* Footer */}
@@ -824,26 +822,26 @@ function ProductSalePage({ initialShop }) {
                       alt="profile shop"
                     /> */}
                 <Avatar
-                  alt={loadShopData?.shop?.name}
-                  src={S3_URL + loadShopData?.shop?.image}
+                  alt={initialShop?.name}
+                  src={S3_URL + initialShop?.image}
                   sx={{ width: "100%", height: "100%" }}
                 />
               </div>
               <br />
-              <h4>{loadShopData?.shop?.name}</h4>
+              <h4>{initialShop?.name}</h4>
             </div>
             <br />
             <div className="show-contact-info">
-              <p>ຂໍ້ມູນພື້ນຖານ ຮ້ານ: {loadShopData?.shop?.name}</p>
+              <p>ຂໍ້ມູນພື້ນຖານ ຮ້ານ: {initialShop?.name}</p>
               <ul style={{ marginTop: "-.5em", marginLeft: "-.8em" }}>
                 <li>
-                  ເບີໂທລະສັບ: +856 20 {loadShopData?.shop?.phone ?? "........"}
+                  ເບີໂທລະສັບ: +856 20 {initialShop?.phone ?? "........"}
                 </li>
                 <li>
-                  ທີ່ຢູ່ປັດຈຸບັນ ບ້ານ: {loadShopData?.shop?.address?.village}
+                  ທີ່ຢູ່ປັດຈຸບັນ ບ້ານ: {initialShop?.address?.village}
                 </li>
-                <li>ເມືອງ:{loadShopData?.shop?.address?.district}</li>
-                <li>ແຂວງ:{loadShopData?.shop?.address?.province}</li>
+                <li>ເມືອງ:{initialShop?.address?.district}</li>
+                <li>ແຂວງ:{initialShop?.address?.province}</li>
               </ul>
             </div>
             <div
@@ -895,46 +893,46 @@ function ProductSalePage({ initialShop }) {
   );
 }
 
-//   export async function getServerSideProps(context) {
-//     let { id } = context.query;
+  export async function getServerSideProps(context) {
+    let { id } = context.query;
 
-//     try {
-//       const {
-//         data: { shop },
-//       } = await authClient.query({
-//         query: GET_SHOP,
-//         variables: {
-//           where: { id: id || "" },
-//         },
-//       });
+    try {
+      const {
+        data: { shop },
+      } = await authClient.query({
+        query: GET_SHOP,
+        variables: {
+          where: { id: id || "" },
+        },
+      });
 
-//       // console.log("shop---->", shop);
+      // console.log("shop---->", shop);
 
-//       // const data = {
-//       //   name: "kuang",
-//       // };
+      // const data = {
+      //   name: "kuang",
+      // };
 
-//       return {
-//         props: {
-//           error: "",
-//           initialShop: shop ?? {},
-//         },
-//       };
+      return {
+        props: {
+          error: "",
+          initialShop: shop ?? {},
+        },
+      };
 
-//       // return {
-//       //   props: {
-//       //     data: data,
-//       //   },
-//       // };
-//     } catch (error) {
-//       console.log("error-->", error);
-//       return {
-//         props: {
-//           error: "SHOP_NOT_FOUND",
-//         },
-//       };
-//     }
-//   }
+      // return {
+      //   props: {
+      //     data: data,
+      //   },
+      // };
+    } catch (error) {
+      console.log("error-->", error);
+      return {
+        props: {
+          error: "SHOP_NOT_FOUND",
+        },
+      };
+    }
+  }
 
 export default ProductSalePage;
 

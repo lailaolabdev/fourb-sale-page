@@ -42,7 +42,7 @@ function HeaderSalePage({
     totalQuantity += item?.qty;
   }
 
-  // console.log("loadShopData?.shop?.name-->", loadShopData?.shop?.name);
+  // console.log("loadShopData?.name-->", loadShopData?.name);
 
   return (
     <div>
@@ -52,18 +52,18 @@ function HeaderSalePage({
             <div className="imgShop" onClick={handleShowProfile}>
               {/* <FiSearch /> */}
               <Avatar
-                alt={loadShopData?.shop?.name}
-                src={S3_URL + loadShopData?.shop?.image}
+                alt={loadShopData?.name}
+                src={S3_URL + loadShopData?.image}
                 sx={{ width: 56, height: 56 }}
               /> 
             </div>
             &nbsp;
             {width > 370 && (
               <div className="shopName">
-                <span>{loadShopData?.shop?.name}</span>
+                <span>{loadShopData?.name}</span>
 
                 <span style={{ fontSize: "13px" }}>
-                  020 {loadShopData?.shop?.phone ?? "-"}
+                  020 {loadShopData?.phone ?? "-"}
                 </span>
               </div>
             )}
