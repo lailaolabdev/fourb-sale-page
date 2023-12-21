@@ -28,7 +28,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import GenQrCode from "../../components/salePage/GenQrCode";
 import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutation";
-import loading77 from "/assets/images/loading77.gif";
+// import loading77 from "/assets/images/loading77.gif";
 import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
 
 export default function payment() {
