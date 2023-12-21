@@ -1,7 +1,7 @@
 import React from "react";
 
 // import { S3_URL } from "../../helper";
-import userProfile from "../../images/userProfile.jpg";
+// import emptyProfile from "../../images/emptyProfile.jpg";
 import { FiSearch } from "react-icons/fi";
 import { HiMenuAlt1 } from "react-icons/hi";
 import {  

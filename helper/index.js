@@ -9,6 +9,7 @@ export const numberFormat = (_number) => {
 
 export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
+export const EMPTY_USER_PROFILE = 'assets/images/emptyProfile.jpg'
 
 // convert price
 export const calculateRoundedValue = (price) => {

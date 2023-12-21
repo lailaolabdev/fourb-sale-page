@@ -1,5 +1,5 @@
 import Image from "next/image";
-import mainLogo from "../images/mainLogo.png";
+// import mainLogo from "../images/mainLogo.png";
 import useWindowDimensions from "../helper/useWindowDimensions";
 // import "../App.css"
 
@@ -31,8 +31,8 @@ export default function Home() {
             alignItems: "center",
             overflow: "hidden",
           }}>
-          {/* <img src="../images/mainLogo.png" style={{ width: "100%" }} /> */}
-          <Image src={mainLogo} style={{ width: "100%" }} />
+          <img src="../images/mainLogo.png" style={{ width: "100%" }} />
+          {/* <img src={mainLogo} style={{ width: "100%" }} /> */}
         </div>
         <h2>
           <b>4B Sale Page</b>

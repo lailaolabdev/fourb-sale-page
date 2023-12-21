@@ -144,20 +144,20 @@ const App = ({ Component, pageProps }) => {
         url="https://client.appzap.la/"
         openGraph={{
           type: "website",
-          url: "https://client.appzap.la/",
+          url: "http://18.141.228.151",
           site_name: "SiteName",
           images: [
             {
-              url: `./mainLogo.png`,
+              url: `/assets/images/mainLogo.png`,
               width: 800,
               height: 600,
-              alt: "Appzap Image Alt",
+              alt: "4B Sale Page Alt",
             },
           ],
         }}
-        facebook={{
-          appId: "694959341044795",
-        }}
+        // facebook={{
+        //   appId: "694959341044795",
+        // }}
         twitter={{
           handle: "@handle",
           site: "@site",
