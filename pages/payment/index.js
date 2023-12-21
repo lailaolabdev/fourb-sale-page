@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import copy from "clipboard-copy";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_ORDER_ON_SALE_PAGE } from "../../apollo/order/mutation";
-import bcelOne from "/assets/images/bcelOne.png";
+// import bcelOne from "/assets/images/bcelOne.png";
 import { toast, ToastContainer } from "react-toastify";
 // import { GET_BANKS } from "../../apollo/bank/query";
 
@@ -17,19 +17,25 @@ import { GET_PRESIGN_URL } from "../../apollo/presignUrl/query";
 import axios from "axios";
 import ButtonComponent from "../../components/ButtonComponent";
 import { GET_EXCHANGRATE } from "../../apollo/exchanrage";
-import { calculateRoundedValue,EMPTY_IMAGE, S3_URL, emptyImage, numberFormat } from "../../helper";
+import {
+  calculateRoundedValue,
+  EMPTY_IMAGE,
+  S3_URL,
+  emptyImage,
+  numberFormat,
+} from "../../helper";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import GenQrCode from "../../components/salePage/GenQrCode";
 import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutation";
-import loading77 from "/assets/images/loading77.gif"
+import loading77 from "/assets/images/loading77.gif";
 import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
 
 export default function payment() {
   const router = useRouter();
   const { liveId, live, affiliateId, id, shopForAffiliateId } = router.query;
   const shopId = id;
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // console.log("shopId In Payment=---->", id)
 
@@ -69,7 +75,7 @@ export default function payment() {
   const _createOrderOnSalePage = async () => {
     try {
       if (loadingSubscripe || loadingPayment) return;
-      
+
       // Convert the orders into the required format
       const convertedOrders = await (ordersState?.setOrder?.order || []).map(
         (order) => ({
@@ -168,7 +174,7 @@ export default function payment() {
             shopId: shopId,
             amountPaided: amountPaided,
           };
-          dispatch(setDataCompleteds(compareData))
+          dispatch(setDataCompleteds(compareData));
           setDataCompleted(compareData);
           // history.push("/completed-payment", { compareData });
           // const handleBackSalePage = () => {
@@ -185,7 +191,7 @@ export default function payment() {
         showConfirmButton: false,
       });
     }
-  };  
+  };
 
   // ຖ້າບໍ່ມີ onepay ແມ່ນໃຫ້ໃຊ້ໂຕອັບໂຫລດຮູບ qrcode ການຊຳລະ
   useEffect(() => {
@@ -211,7 +217,7 @@ export default function payment() {
       }
     } catch (error) {
       console.log("ERROR: ", error);
-    }  
+    }
   };
 
   // ອັບໂຫລດຮູບ
@@ -265,7 +271,6 @@ export default function payment() {
       console.log(err);
     }
   };
- 
 
   // ຟັງເຊິນບັນທຶກຢູ່ໜ້າຟອມ
   const handlePayment = (event) => {
@@ -276,7 +281,6 @@ export default function payment() {
         autoClose: 700,
       });
       // router.push(`../completedOrder`);
-     
     } else if (phone?.length === 0) {
       toast.warning("ກາລຸນາປ້ອນເບີໂທລະສັບກ່ອນ", {
         autoClose: 700,
@@ -287,9 +291,9 @@ export default function payment() {
       });
     } else {
       setIsValidate(false);
-      _createOrderOnSalePage(); 
+      _createOrderOnSalePage();
     }
-  }; 
+  };
 
   // ຄັດລ໋ອກເລກບັນຊີຂອງຮ້ານ
   const handleCopyCodeBanks = async () => {
@@ -598,7 +602,7 @@ export default function payment() {
                 className="action-cart-product-footer"
                 style={{ marginBottom: qrcodeData ? "1em" : "5em" }}>
                 <div className="w-100">
-                {ordersState?.setOrder?.order?.map((data, index) => {
+                  {ordersState?.setOrder?.order?.map((data, index) => {
                     return (
                       <div
                         key={data?.id}
@@ -607,8 +611,7 @@ export default function payment() {
                           display: "flex",
                           justifyContent: "space-between",
                           alignItems: "center",
-                        }}
-                      >
+                        }}>
                         <div className="cartImage">
                           <img
                             src={
@@ -629,8 +632,7 @@ export default function payment() {
                               display: "flex",
                               justifyContent: "space-between",
                               alignItems: "start",
-                            }}
-                          >
+                            }}>
                             <div>
                               <h6>{numberFormat(data?.price ?? 0)} ກີບ</h6>
                               <h6>
@@ -679,10 +681,7 @@ export default function payment() {
                 <br />
                 <div className="action-price-amounts">
                   <h5>ເງິນລວມທີ່ຕ້ອງຈ່າຍ:</h5>
-                  <h5>
-                    {numberFormat(ordersState?.setOrder?.priceToPay)} {' '}
-                    ກີບ
-                  </h5>
+                  <h5>{numberFormat(ordersState?.setOrder?.priceToPay)} ກີບ</h5>
                 </div>
 
                 {/* <div className="action-price-amounts">
@@ -750,7 +749,7 @@ export default function payment() {
                       textColor="#ff0000"
                       img={
                         <Image
-                          src={bcelOne}
+                          src="/assets/images/bcelOne.png"
                           alt="bankIcon"
                           width={40}
                           height={40}
@@ -769,7 +768,12 @@ export default function payment() {
                     {loadingSubscripe || loadingPayment ? (
                       <div className="loadingButton">
                         {/* <Spinner /> */}
-                        <Image src={loading77} width={"100%"} height={'100%'} style={{ height: '2em'}} /> 
+                        <Image
+                          src="/assets/images/loading77.gif"
+                          width={"100%"}
+                          height={"100%"}
+                          style={{ height: "2em" }}
+                        />
                       </div>
                     ) : (
                       <ButtonComponent
@@ -782,7 +786,7 @@ export default function payment() {
                         textColor="#ff0000"
                         img={
                           <Image
-                            src={bcelOne}
+                            src="/assets/images/bcelOne.png"
                             alt="bankIcon"
                             width={40}
                             height={40}
