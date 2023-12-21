@@ -121,7 +121,7 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
@@ -146,7 +146,7 @@ const App = ({ Component, pageProps }) => {
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
-      </Head>
+      </Head> */}
       {/* <DefaultSeo
         title={shopDetail?.shop?.name}
         description="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
