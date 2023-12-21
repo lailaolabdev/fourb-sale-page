@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Modal, Spinner } from "react-bootstrap";
-import warningImage from "../../images/warningImage_purple.png";
+// import warningImage from "assets/images/warningImage_purple.png";
 import Image from "next/image";
 import { CORLOR_APP, CORLOR_WHITE } from "../../helper";
 
@@ -34,9 +34,14 @@ export default function ModalConfirmComponent({
             style={{
               width: "5em",
               height: "5em",
-              marginBottom:'.5em'
+              marginBottom: ".5em",
             }}>
-            <Image src={warningImage} alt="wninngImage" />
+            <Image
+              src="assets/images/warningImage_purple.png"
+              width={"100%"}
+              height={"100%"}
+              alt="wninngImage"
+            />
           </div>
           <h4>{title ?? "ແຈ້ງເຕືອນ"}</h4>
           <p>{text}</p>

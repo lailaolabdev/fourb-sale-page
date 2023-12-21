@@ -150,6 +150,8 @@ export default function ProductDetail(props) {
             }
             layout="fill"
             alt="emptyImage"
+            width={'100%'}
+            height={"100%"}
           />
         </div>
         <div className="viewDescription">

@@ -1,12 +1,12 @@
 import Button from "react-bootstrap/Button";
 import React, { useRef } from "react";
-import successIcon2 from "../../images/successIcon2.png"
+// import successIcon2 from "../../images/successIcon2.png"
 import moment from "moment"
 import { Watermark } from "@hirohe/react-watermark";
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";  
 import { CORLOR_APP, numberFormat } from "../../helper";
-import mainLogo from "../../images/mainLogo.png"
+// import mainLogo from "/assets/images/mainLogo.png"
 import { MdArrowBack, MdSimCardDownload } from "react-icons/md";
 import { useRouter } from "next/router"; 
 import Image from "next/image";
@@ -88,7 +88,7 @@ export default function CompletedOrder() {
     <>
       <div ref={captureElementRef} style={{ width: "100%", height: "100vh", position:'relative' }}>
         <div className="logoBusness2">
-          <Image src={mainLogo} alt="mainLogo" />
+          <Image src="/assets/images/mainLogo.png" width={'100%'} height={'100%'} alt="mainLogo" />
         </div>
         <Watermark
           text={txtWatermark}
@@ -101,7 +101,7 @@ export default function CompletedOrder() {
           <div className="p-2">
             <div className="successPaymentCart">
               <div className="imageAnimationsuccess">
-                <Image src={successIcon2} alt="successImage" />
+                <Image src="/assets/images/successIcon2.png" width={"100%"} height={'100%'} alt="successImage" />
               </div>
               <h2>ສຳເລັດການສັ່ງຊື້ສິນຄ້າ</h2>
               <p>💖ຂອບໃຈສຳລັບລູກຄ້າ💖</p>

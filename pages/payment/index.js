@@ -769,7 +769,7 @@ export default function payment() {
                     {loadingSubscripe || loadingPayment ? (
                       <div className="loadingButton">
                         {/* <Spinner /> */}
-                        <Image src={loading77} style={{ height: '2em'}} /> 
+                        <Image src={loading77} width={"100%"} height={'100%'} style={{ height: '2em'}} /> 
                       </div>
                     ) : (
                       <ButtonComponent
