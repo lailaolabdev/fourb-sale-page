@@ -633,19 +633,15 @@ function ProductSalePage({ initialShop }) {
           name="description"
           content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
         />
-        {initialShop?.image?.length > 0 ?(
         <link
           rel="icon"
-          href={S3_URL + initialShop?.image}
+          href={
+            initialShop?.image?.length > 0
+              ? S3_URL + initialShop?.image
+              : "/assets/images/emptyProfileShop.png"
+          }
           type="image/icon type"
         />
-        ):(
-          <link
-            rel="icon"
-            href="/assets/images/emptyProfileShop.png"
-            type="image/icon type"
-          />
-        )}
         <meta charSet="UTF-8" />
 
         <link
@@ -660,7 +656,7 @@ function ProductSalePage({ initialShop }) {
           href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
-      </Head> 
+      </Head>
 
       <HeaderSalePage
         enableSearch={enableSearch}
