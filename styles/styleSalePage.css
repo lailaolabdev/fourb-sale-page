@@ -184,7 +184,7 @@
     top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 60%;
+    width: 80%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -193,8 +193,8 @@
   
   .logoBusness2 img {
     opacity: 0.08;
-    width: 50%;
-    height: 50%;
+    width: 75%;
+    height: 75%;
   }
   
   .boxInputSearching {
@@ -1172,7 +1172,7 @@
     align-items: center;
     width: 40%;
     height: auto;
-    border: 0.01em solid var(--colorDefaultcf);
+    border: 0.01em solid #dfd4fc;
     flex-direction: column;
     padding: 2em;
     border-radius: 0.5em;

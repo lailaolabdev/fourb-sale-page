@@ -31,14 +31,13 @@ export default function Home() {
             alignItems: "center",
             overflow: "hidden",
           }}>
-          <img src="../images/mainLogo.png" style={{ width: "100%" }} />
-          {/* <img src={mainLogo} style={{ width: "100%" }} /> */}
+          <img src="/assets/images/mainLogo.png" style={{ width: "100%" }} />
         </div>
         <h2>
           <b>4B Sale Page</b>
         </h2>
         <p>
-          ✨Sale Page ✨ແມ່ນ ໜ້າເວັບໄຊຣທີ່ອອກແບບມາເພື່ອ ກະຕຸ້ນການຂາຍ ຫຼື ບໍລິການ
+          ✨Sale Page ✨ແມ່ນ ໜ້າເວັບໄຊຣ໌ທີ່ອອກແບບມາເພື່ອ ກະຕຸ້ນການຂາຍ ຫຼື ບໍລິການ
           ແລະ ມີເນື້ອໃນທີ່ກະທັດຮັດ , ຕົງປະເດັນ
           ເພື່ອໃຫ້ລູກຄ້າທີ່ເຂົ້າເບິ່ງຕັດສິນໃຈ ຊື້ໄດ້ງ່າຍຂື້ນ.
         </p>

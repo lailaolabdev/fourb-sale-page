@@ -88,7 +88,7 @@ export default function CompletedOrder() {
     <>
       <div ref={captureElementRef} style={{ width: "100%", height: "100vh", position:'relative' }}>
         <div className="logoBusness2">
-          <Image src="/assets/images/mainLogo.png" width={'100%'} height={'100%'} alt="mainLogo" />
+          <img src="/assets/images/mainLogo.png" alt="mainLogo" />
         </div>
         <Watermark
           text={txtWatermark}
@@ -100,7 +100,7 @@ export default function CompletedOrder() {
           style={{ height: "100vh" }}>
           <div className="p-2">
             <div className="successPaymentCart">
-              <div className="imageAnimationsuccess">
+              <div className="imageAnimationsuccess" style={{border:'1px solid #ddd', justifyContent:'center', display:'flex', padding:'1.8em'}}>
                 <Image src="/assets/images/successIcon2.png" width={"100%"} height={'100%'} alt="successImage" />
               </div>
               <h2>ສຳເລັດການສັ່ງຊື້ສິນຄ້າ</h2>
@@ -140,6 +140,7 @@ export default function CompletedOrder() {
           onClick={handleCaptureAndDownload}
           style={{
             backgroundColor: CORLOR_APP,
+            border:`1px solid ${CORLOR_APP}`,
             color: "white",
             cursor: "pointer",
           }}>

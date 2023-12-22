@@ -121,62 +121,6 @@ const App = ({ Component, pageProps }) => {
 
   return (
     <>
-      {/* <Head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-        />
-        <meta name="theme-color" content="#000000" />
-        <meta
-          name="description"
-          content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
-        />
-        <link rel="icon" href="./mainLogo.png" type="image/icon type" />
-        <meta charSet="UTF-8" />
-
-        <link
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-          rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-          crossOrigin="anonymous"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800;900&display=swap"
-          rel="stylesheet"
-        />
-      </Head> */}
-      {/* <DefaultSeo
-        title={shopDetail?.shop?.name}
-        description="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
-        // url="https://client.appzap.la/"
-        openGraph={{
-          type: "website",
-          url: "http://18.141.228.151/",
-          site_name: "SiteName",
-          images: [
-            {
-              url:
-                shopDetail?.shop?.image?.length > 0
-                  ? S3_URL + shopDetail?.shop?.image
-                  : `/assets/images/mainLogo.png`,
-              // url: `/assets/images/mainLogo.png`,
-              width: 800,
-              height: 600,
-              alt: "4B Sale Page Alt",
-            },
-          ],
-        }}
-        // facebook={{
-        //   appId: "694959341044795",
-        // }}
-        twitter={{
-          handle: "@handle",
-          site: "@site",
-          cardType: "summary_large_image",
-        }}
-      /> */}
       <Script
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
