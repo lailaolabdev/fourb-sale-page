@@ -618,7 +618,11 @@ function ProductSalePage({ initialShop }) {
     window.open(whatsappUrl);
   };
 
-  console.log("shop data to SEO:-->", initialShop?.name);
+  // console.log("shop data to SEO:-->", initialShop?.name);
+  const ogImageUrl =
+    initialShop?.image?.length > 0
+      ? `${S3_URL}${initialShop?.image}`
+      : '/assets/images/emptyProfileShop.png';
 
   return (
     <div>
@@ -635,11 +639,7 @@ function ProductSalePage({ initialShop }) {
         />
         <link
           rel="icon"
-          href={
-            initialShop?.image?.length > 0
-              ? S3_URL + initialShop?.image
-              : "/assets/images/emptyProfileShop.png"
-          }
+          href={ogImageUrl}
           type="image/icon type"
         />
         <meta charSet="UTF-8" />
