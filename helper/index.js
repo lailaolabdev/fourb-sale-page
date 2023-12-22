@@ -7,7 +7,7 @@ export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 export const EMPTY_USER_PROFILE = "assets/images/emptyProfile.jpg";
 
-export const SERVER_IP = "http://18.141.228.151/";
+export const SERVER_IP = "https://sale-page.bbbb.com.la/";
 
 // convert price
 export const calculateRoundedValue = (price) => {

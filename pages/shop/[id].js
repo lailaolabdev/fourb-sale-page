@@ -620,9 +620,9 @@ function ProductSalePage({ initialShop }) {
 
   // console.log("shop data to SEO:-->", initialShop?.name);
   const ogImageUrl =
-    initialShop?.image?.length > 0
+    initialShop?.image 
       ? `${S3_URL}${initialShop?.image}`
-      : `${S3_URL}${"c20f6485-4f3c-4df7-8473-88470ae62584.png"}`;
+      : `${S3_URL}${'c20f6485-4f3c-4df7-8473-88470ae62584.png'}`;
 
   return (
     <div>
