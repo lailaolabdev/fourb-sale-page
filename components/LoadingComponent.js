@@ -2,7 +2,7 @@ import React from "react";
 
 import { TwinSpin } from "react-cssfx-loading";
 
-export default function LoadingComponent({ titleLoading }) {
+export default function LoadingComponent({ titleLoading, height, width }) {
   return (
     <div
       style={{
@@ -15,7 +15,7 @@ export default function LoadingComponent({ titleLoading }) {
         flexDirection: "column",  
         gap: 10,
       }}>
-      <TwinSpin color="#3c169b" width="90px" height="90px" duration="0.6s" />
+      <TwinSpin color="#3c169b" width={width ?? '90px'} height={height ?? '90px'} duration="0.6s" />
       {titleLoading}
     </div>
   );

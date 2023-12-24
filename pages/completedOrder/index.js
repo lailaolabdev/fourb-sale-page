@@ -1,21 +1,21 @@
 import Button from "react-bootstrap/Button";
 import React, { useRef } from "react";
 // import successIcon2 from "../../images/successIcon2.png"
-import moment from "moment"
-import { Watermark } from "@hirohe/react-watermark";
+import moment from "moment";
 import html2canvas from "html2canvas";
-import { saveAs } from "file-saver";  
+import { saveAs } from "file-saver";
 import { CORLOR_APP, numberFormat } from "../../helper";
 // import mainLogo from "/assets/images/mainLogo.png"
 import { MdArrowBack, MdSimCardDownload } from "react-icons/md";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { removeStateCompleted } from "../../redux/completedOrder/dataOrder";
+import { Watermark } from "antd";
 
 export default function CompletedOrder() {
-  const navigate = useRouter()
-  const dispatch = useDispatch()
+  const navigate = useRouter();
+  const dispatch = useDispatch();
   // const params =
   // const { location } = useReactRouter();
   // const { match } = useReactRouter();
@@ -37,15 +37,15 @@ export default function CompletedOrder() {
   // console.log("influencerId99999====>", influencerId);
 
   const handleBack = () => {
- 
+    const destinationPathBack =
+      idPreState?.affiliateId && idPreState?.shopId
+        ? `../shop/${idPreState.shopId}?affiliateId=${
+            idPreState.affiliateId
+          }&commissionForShopId=${idPreState.commissionForShopId || ""}`
+        : `../shop/${idPreState?.shopId}`;
 
-    const destinationPathBack = idPreState?.affiliateId && idPreState?.shopId
-    ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId || ''}`
-    : `../shop/${idPreState?.shopId}`;
-
-      navigate.push(destinationPathBack);
-      // dispatch(removeStateCompleted(2))
-
+    navigate.push(destinationPathBack);
+    // dispatch(removeStateCompleted(2))
   };
   // let text = info?.code, moment(info?.createdAt).format("DD/MM/YYYY HH:mm"),
   // {moment(info?.createdAt).format("DD/MM/YYYY HH:mm")} {info?.code}{" "}
@@ -60,10 +60,22 @@ export default function CompletedOrder() {
         const dataURL = canvas.toDataURL("image/jpeg");
 
         // Create a Blob from the data URL
-        const blob = dataURLtoBlob(dataURL);
+        // const blob = dataURLtoBlob(dataURL);
 
         // Save the Blob as a file
-        saveAs(blob, "ບິນສັ່ງຊື້ສິນຄ້າ.jpg");
+        // saveAs(blob, "ບິນສັ່ງຊື້ສິນຄ້າ.jpg");
+        fetch(dataURL)
+          .then((response) => response.blob())
+          .then((blob) => {
+            const url = URL.createObjectURL(new Blob([blob]));
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "ບິນສັ່ງຊື້ສິນຄ້າ.jpg";
+            document.body.appendChild(link);
+            link.click();
+            URL.revokeObjectURL(url);
+            link.remove();
+          });
       });
     }
   };
@@ -86,25 +98,38 @@ export default function CompletedOrder() {
 
   return (
     <>
-      <div ref={captureElementRef} style={{ width: "100%", height: "100vh", position:'relative' }}>
+      <div
+        ref={captureElementRef}
+        style={{ width: "100%", height: "100vh", position: "relative" }}>
         <div className="logoBusness2">
           <img src="/assets/images/mainLogo.png" alt="mainLogo" />
         </div>
         <Watermark
-          text={txtWatermark}
-          rotate={-20}
-          textSize={12}
-          fontFamily={"Times New Roman"}
-          multiline={true}
-          opacity={0.4}
-          style={{ height: "100vh" }}>
+          gap={[10, 10]}
+          fontSize="8px"
+          content={[
+            info?.code,
+            moment(info?.createdAt).format("DD/MM/YYYY HH:mm"),
+            numberFormat(info?.amountPaided) + " KIP",
+          ]}>
           <div className="p-2">
             <div className="successPaymentCart">
-              <div className="imageAnimationsuccess" style={{border:'1px solid #ddd', justifyContent:'center', display:'flex', padding:'1.8em'}}>
-                <Image src="/assets/images/successIcon2.png" width={"100%"} height={'100%'} alt="successImage" />
+              <div
+                className="imageAnimationsuccess"
+                style={{
+                  justifyContent: "center",
+                  display: "flex",
+                  padding: "2em",
+                }}>
+                <Image
+                  src="/assets/images/successIcon3.png"
+                  width={"100%"}
+                  height={"100%"}
+                  alt="successImage"
+                />
               </div>
               <h2>ສຳເລັດການສັ່ງຊື້ສິນຄ້າ</h2>
-              <p>💖ຂອບໃຈສຳລັບລູກຄ້າ💖</p>
+              <p>ຂອບໃຈສຳລັບລູກຄ້າ</p>
               <div className="card-completed-order">
                 <div className="card-display-all">
                   <div className="actionView">
@@ -124,8 +149,10 @@ export default function CompletedOrder() {
                 </div>
                 <br />
                 <div style={{ fontSize: 13 }}>
-                  <span style={{ color: "red", fontSize: 13 }}>ໝາຍເຫດ </span>{" "}
-                  ກະລຸນາແຄັບໜ້ານີ້ໄວ້ ເພື່ອເປັນຫຼັກຖານໃນການສັ່ງຊື້ສິນຄ້າ!
+                  <span style={{ color: CORLOR_APP, fontSize: 13 }}>
+                    ໝາຍເຫດ{" "}
+                  </span>{" "}
+                  ກະລຸນາແຄັບ ຫຼື ດາວໂຫລດ ບິນນີ້ໄວ້ເພື່ອເປັນຫຼັກຖານໃນການສັ່ງຊື້ສິນຄ້າ!
                 </div>
               </div>
             </div>
@@ -140,7 +167,7 @@ export default function CompletedOrder() {
           onClick={handleCaptureAndDownload}
           style={{
             backgroundColor: CORLOR_APP,
-            border:`1px solid ${CORLOR_APP}`,
+            border: `1px solid ${CORLOR_APP}`,
             color: "white",
             cursor: "pointer",
           }}>

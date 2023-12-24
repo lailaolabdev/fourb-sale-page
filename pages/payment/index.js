@@ -30,6 +30,8 @@ import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutati
 // import loading77 from "/assets/images/loading77.gif";
 import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
 import EmptyImage from "../../components/salePage/EmptyImage";
+import { Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
 
 export default function payment() {
   const router = useRouter();
@@ -767,13 +769,19 @@ export default function payment() {
                   <>
                     {loadingSubscripe || loadingPayment ? (
                       <div className="loadingButton">
-                        {/* <Spinner /> */}
-                        <Image
-                          src="/assets/images/loading77.gif"
-                          width={"100%"}
-                          height={"100%"}
-                          style={{ height: "2em" }}
+                        <Spin
+                          indicator={
+                            <LoadingOutlined
+                              style={{
+                                fontSize: 24,
+                                color:'#fff'
+                              }}
+                              spin
+                            />
+                          }
                         />
+                        &nbsp;
+                        ກຳລັງລໍຖ້າ...
                       </div>
                     ) : (
                       <ButtonComponent
@@ -826,6 +834,7 @@ export default function payment() {
       </div>
 
       <ToastContainer />
+
     </>
   );
 }

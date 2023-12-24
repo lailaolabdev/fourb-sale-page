@@ -26,6 +26,7 @@ import {
 import ModalConfirmComponent from "../../components/salePage/ModalConfirmComponent";
 import Image from "next/image";
 import EmptyImage from "../../components/salePage/EmptyImage";
+import FooterComponent from "../../components/salePage/FooterComponent";
 
 export default function CartDetail() {
   // const { match, location } = useReactRouter();
@@ -291,6 +292,8 @@ export default function CartDetail() {
         title="ແຈ້ງເຕືອນ"
         text="ຕ້ອງການລົບສິນຄ້າອອກຈາກກະຕ່າທັງໝົດບໍ່?"
       />
+
+      <FooterComponent />
     </>
   );
 }

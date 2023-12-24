@@ -38,7 +38,7 @@ import useWindowDimensions from "../../helper/useWindowDimensions";
 import { AiOutlineClose } from "react-icons/ai";
 // import emptyProfile from "../../images/emptyProfile.jpg";
 // import whatsAppIcon from "../../images/whatsAppIcon.png";
-import { Avatar } from "@mui/material";
+import { Avatar, Pagination } from "@mui/material";
 import PaginationComponent from "../../components/salePage/PaginationComponent";
 import LoadingComponent from "../../components/LoadingComponent";
 import authClient from "../../autClient";
@@ -764,7 +764,7 @@ function ProductSalePage({ initialShop }) {
       <FooterComponent />
       {/* Footer */}
 
-      {width > 700 && (
+      {/* {width > 700 && (
         <>
           {cartList?.length > 0 ? (
             <div className="bage-details" onClick={hadleCartProducts}>
@@ -777,7 +777,7 @@ function ProductSalePage({ initialShop }) {
             ""
           )}
         </>
-      )}
+      )} */}
 
       {/* {cartList?.length > 0 ? (
           <div className="bage-details" onClick={hadleCartProducts}>

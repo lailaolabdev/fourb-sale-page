@@ -7,6 +7,7 @@ import patchBack from "./setPatch/patchBack";
 import { setNotiOrders } from "./notiorder/getNotiorder";
 import getIds from "./predata/getIds";
 import dataOrder from "./completedOrder/dataOrder";
+import trackOrder from "./setOrder/trackOrder";
 
 const rootReducer = combineReducers({
   fbdata: fbdataReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
   setpatch: patchBack,
   predata: getIds,
   completedOrder: dataOrder,
+  setorder: trackOrder,
 });
  
 
