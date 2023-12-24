@@ -31,6 +31,7 @@ import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutati
 import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
 import EmptyImage from "../../components/salePage/EmptyImage";
 import { LoadingOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
 
 export default function payment() {
   const router = useRouter();
