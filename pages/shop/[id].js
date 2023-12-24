@@ -503,8 +503,8 @@ function ProductSalePage({ initialShop }) {
   // ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າ
   const handleAddProduct = (data) => {
     if (data?.amount <= 0) {
-      return toast.warning(`${data?.name} ໝົດອໍເດີແລ້ວ!`, {
-        autoClose: 1000,
+      return toast.warning(`ສິນຄ້າ ${data?.name} ໝົດສະຕ໋ອກແລ້ວ!`, {
+        autoClose: 1500,
       });
     } else {
       let _price = 0;

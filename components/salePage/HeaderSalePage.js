@@ -41,16 +41,16 @@ function HeaderSalePage({
 }) {
   const { height, width } = useWindowDimensions();
   const [openMyDrawer, setOpenMyDrawer] = useState(false);
-  const [trackOrder, setTrackOrder] = useState();
-  const [orderId, setOrderId] = useState();
+  const [trackOrder, setTrackOrder] = useState("");
+  const [orderId, setOrderId] = useState("");
   const [enableData, setEnableData] = useState(false);
   const dispatch = useDispatch();
   const navigate = useRouter();
 
   const oncloseDrawer = () => {
     setOpenMyDrawer(false);
-    setOrderId();
-    setTrackOrder();
+    setOrderId("");
+    setTrackOrder("");
   };
 
   // useLazyQuery -------------------------------------------------->
@@ -113,7 +113,12 @@ function HeaderSalePage({
               <Avatar
                 alt={loadShopData?.name}
                 src={S3_URL + loadShopData?.image}
-                sx={{ width: 56, height: 56, backgroundColor: CORLOR_WHITE, color: CORLOR_APP }}
+                sx={{
+                  width: 56,
+                  height: 56,
+                  backgroundColor: CORLOR_WHITE,
+                  color: CORLOR_APP,
+                }}
               />
             </div>
             &nbsp;
@@ -210,7 +215,7 @@ function HeaderSalePage({
       <Drawer
         title="ເມນູທັງໝົດ"
         placement="right"
-        onClose={() => setOpenMyDrawer(false)}
+        onClose={oncloseDrawer}
         open={openMyDrawer}>
         <ul onClick={oncloseDrawer} className="menu-drawer">
           <li onClick={() => handleIsStockZero()}>
@@ -222,13 +227,13 @@ function HeaderSalePage({
             <p>ສະແດງສິນຄ້າຍັງເຫຼືອ</p>
           </li>
 
-          <li onClick={() => navigate.push('/policy')}>
+          <li onClick={() => navigate.push("/policy")}>
             <SafetyOutlined style={{ fontSize: 23 }} />
             <p>ນະໂຍບາຍການນຳໃຊ້</p>
           </li>
 
           <li onClick={() => handleIsStockThenZero()}>
-          <QuestionCircleOutlined  style={{ fontSize: 20, paddingLeft:3 }} />
+            <QuestionCircleOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
             <p>ວິທີການນຳໃຊ້ 4B Sale Page </p>
           </li>
         </ul>
@@ -280,8 +285,9 @@ function HeaderSalePage({
             <Alert
               message={`ຄົ້ນຫາບໍ່ພົບອໍເດີ້ ${orderId}`}
               description="ອໍເດີ້ນີ້ບໍ່ມີຢູ່ໃນລະບົບ ກະລຸນາປ້ອນລະຫັດອໍເດີ້ທີ່ຖຶກຕ້ອງ!"
-              type="error"
+              type="warning"
               showIcon
+              closable
             />
           )}
         </div>

@@ -11,8 +11,8 @@ function PrivatePolicy() {
         <img
           src="/assets/images/mainLogo.png"
           style={{
-            width: "75px",
-            height: "75px",
+            width: "65px",
+            height: "65px",
             marginBottom: "-120px",
             borderRadius: "5em",
             paddingLeft: "-80px",
