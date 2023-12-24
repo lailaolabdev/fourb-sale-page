@@ -134,6 +134,7 @@ export default function CartDetail() {
       orderGroup: calculatorAll,
       priceToPay: priceToPay,
     };
+    console.log("combineField:---->", combineField)
     dispatch(setOrders(combineField));
     // const destinationPath = affiliateId
     //   ? "/payment/" + shopId + "/" + affiliateId
