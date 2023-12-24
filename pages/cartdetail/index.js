@@ -108,16 +108,17 @@ export default function CartDetail() {
 
     //     const roundedValue = calculateRoundedValue(amountKip/1000)*1000;
 
-    // return {
-    //   totalLak,
-    //   totalBaht,
-    //   totalUsd,
-    //   amountKip,
-    //   // roundedValue,
-    //   priceAllPaid
-    //   // modelType: "",
-    //   // shop: shopId,
-    // };
+    return {
+      // totalLak,
+      // totalBaht,
+      // totalUsd,
+      amountKip,
+      // sumpriceRecord,
+      // roundedValue,
+      // priceAqllPaid
+      // modelType: "",
+      // shop: shopId,
+    };
   }, [cartList, isExChangeRate]);
 
   // console.log("roundedValue---------------->", calculatorAll?.roundedValue)
@@ -130,9 +131,12 @@ export default function CartDetail() {
   const handleConfirmCart = () => {
     const combineField = {
       order: cartList,
-      orderGroup: calculatorAll,
+      // orderGroup: calculatorAll?.sumpriceRecord,
+      // orderGroup: priceToPay,
       priceToPay: priceToPay,
     };
+    console.log("orderGroups---->", calculatorAll)
+    console.log("orderGroups---66->", priceToPay)
     dispatch(setOrders(combineField));
     // const destinationPath = affiliateId
     //   ? "/payment/" + shopId + "/" + affiliateId
