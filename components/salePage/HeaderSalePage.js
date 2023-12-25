@@ -165,6 +165,7 @@ function HeaderSalePage({
                 alignItems: "center",
                 padding: 5,
                 backgroundColor: "#ddd",
+                color: CORLOR_APP,
                 cursor: "pointer",
                 borderRadius: "50%",
               }}
@@ -273,6 +274,7 @@ function HeaderSalePage({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            marginTop:20
           }}>
           {orderGroupLoading && (
             <LoadingComponent
@@ -281,6 +283,7 @@ function HeaderSalePage({
               width={"50px"}
             />
           )}
+          
           {orderGroupData?.orderGroups?.total <= 0 && (
             <Alert
               message={`ຄົ້ນຫາບໍ່ພົບອໍເດີ້ ${orderId}`}

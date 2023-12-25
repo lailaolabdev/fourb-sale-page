@@ -26,6 +26,7 @@ export default function CompletedOrder() {
   const { dataCompleted } = useSelector((state) => state?.completedOrder);
   const { idPreState } = setId || {};
   const info = dataCompleted;
+   
 
   // console.log("idPreState--6-->", setId?.idPreState?.shopId)
   // console.log("compeletedData999999-->", dataCompleted?.code)

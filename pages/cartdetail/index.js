@@ -128,29 +128,11 @@ export default function CartDetail() {
     setCheckPaid(!checkPaid);
   };
 
-  const handleConfirmCart = () => {
-    const combineField = {
-      order: cartList,
-      orderGroup: calculatorAll,
-      priceToPay: priceToPay,
-    };
-    console.log("combineField:---->", combineField)
-    dispatch(setOrders(combineField));
-    // const destinationPath = affiliateId
-    //   ? "/payment/" + shopId + "/" + affiliateId
-    //   : "/payment/" + shopId;
+  const handleConfirmCart = () => { 
 
-    // const destinationPath = affiliateId
-    // ? `../payment/${shopId}?affiliateId=${affiliateId}`
-    // : `../payment/${shopId}`;
-
-    // let compareData = {
-    //   commision: commision,
-    // };
-
-    router.push("../payment");
-    // router.push(destinationPath);
-  };
+  // Navigate to the payment page with the query string
+  router.push("/payment")
+  }; 
 
   // console.log("cartList---->", cartList);
   const [showConfirmRemove, setShowConfirmRemove] = React.useState(false);
@@ -173,6 +155,7 @@ export default function CartDetail() {
 
   const handleConfirmRemoveCart = () => {
     dispatch(removeCartItem());
+    dispatch(setOrders([]));
     setShowConfirmRemove(false);
     router.back();
   };
