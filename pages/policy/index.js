@@ -20,7 +20,7 @@ function PrivatePolicy() {
           }}
           alt="profile"
         />
-        <h1
+        <h2
           style={{
             backgroundColor: "#422F90",
             borderRadius: 5,
@@ -36,7 +36,7 @@ function PrivatePolicy() {
             }}>
             4B Social - Policy{" "}
           </a>
-        </h1>
+        </h2>
       </div>
       <h4>
         <strong>1. ພາກສະເໜີ</strong>

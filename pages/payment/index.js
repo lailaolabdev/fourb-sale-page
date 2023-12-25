@@ -62,7 +62,7 @@ export default function payment() {
   // console.log("cartList=---->", cartList)  
   // console.log("combineField Payment55=---->", totalPrice)  
 
-  // console.log("ordersState----->", ordersState?.setOrder);
+  // console.log("check price9999---->", totalPrice);
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
@@ -100,7 +100,7 @@ export default function payment() {
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        sumPrice: ordersState?.setOrder?.priceToPay, // ຈຳນວນເງິນຕາມຕົວຈິງ
+        sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
         // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
         amount: cartList?.length,
