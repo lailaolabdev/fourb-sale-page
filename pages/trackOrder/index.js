@@ -1,6 +1,6 @@
 import { setOrderGroups } from "../../redux/setOrder/trackOrder";
 import { CORLOR_APP, numberFormat } from "../../helper";
-import { List, Timeline } from "antd";
+import { Card, List, Timeline } from "antd";
 import moment from "moment";
 import { useRouter } from "next/router";
 import React from "react";
@@ -8,17 +8,20 @@ import { Badge, ListGroup } from "react-bootstrap";
 import { MdArrowBack } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
 
+const statusTitle = <h5 style={{color:'green'}}>ສະຖານະອໍເດີ້</h5>
+
 export default function index() {
   const { orderGroups } = useSelector((state) => state?.setorder);
   const navigate = useRouter();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const orderInfo = orderGroups[0];
-  //   console.log("orderInfo----->", orderInfo);
+  console.log("orderInfo----->", orderInfo);
   const handleBack = () => {
-    dispatch(setOrderGroups([]))
-    navigate.back()
+    dispatch(setOrderGroups([]));
+    navigate.back();
   };
+
 
   return (
     <div className="track-order-card">
@@ -35,6 +38,19 @@ export default function index() {
         <h4>ລາຍລະອຽດອໍເດີ້ ຂອງທ່ານ</h4>
         <div></div>
       </div>
+      <Card
+        title={statusTitle}
+        bordered={false}
+        style={{
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          flexDirection: "column",
+        }}>
+          <img src="/assets/images/mainLogo2.png" style={{width:50}} />
+          <p>ກຳລັງຈັດສົ່ງ</p>
+        </Card>
       <br />
       <div className="track-header">
         <div
@@ -45,7 +61,7 @@ export default function index() {
             alignItems: "center",
           }}>
           <p>ເລກບິນ: </p>
-        <h6>{orderInfo?.code}</h6>
+          <h6>{orderInfo?.code}</h6>
         </div>
         <div
           style={{
@@ -118,7 +134,6 @@ export default function index() {
         </div>
       </div>
       <div className="track-order-status">
-        <p>ສະຖານະການຈັດສົ່ງ ອໍເດີ້</p>
         {/* <Timeline
           items={[
             {

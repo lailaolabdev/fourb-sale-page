@@ -30,7 +30,9 @@ export default function FooterComponent() {
         </div>
         <div className="footer-title">
           <div>
-            <p>ການດູເລລູກຄ້າ</p>
+            <p>
+              <b>ການດູແລລູກຄ້າ</b>
+            </p>
 
             <ol>
               {/* <li onClick={()=> navigate.back()}>ໜ້າຫລັກ ເຊວເພຈ</li> */}
@@ -40,7 +42,9 @@ export default function FooterComponent() {
             </ol>
           </div>
           <div>
-            <p>ຟີເຈີີຂອງ 4B</p>
+            <p>
+              <b>ຟີເຈີີຂອງ 4B</b>
+            </p>
             <ul>
               <li>4B Shop</li>
               <li>4B POS</li>
@@ -61,10 +65,40 @@ export default function FooterComponent() {
         </div>
         <div>
           <h4>ຂົນສົ່ງ</h4>
-          <ul>
-            <li>ບໍລິສັດ ຂົນສົ່ງ ຮຸ່ງອາລຸນ</li>
-            <li>ບໍລິສັດ ຂົນສົ່ງ ອານຸສິດ (ກຳລັງພັດທະນາ)</li>
-          </ul>
+          <div style={{ display: "flex", gap: 20, flexDirection: "column" }}>
+            <div style={{display:'flex', justifyContent:'start', alignItems:'center'}}>
+              <div
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                }}>
+                <img
+                  src="/assets/images/halLogo.png"
+                  style={{ width: "100%" }}
+                />
+              </div>
+              {/* &nbsp;
+              <small>ບໍລິສັດ ຂົນສົ່ງ ຮຸ່ງອາລຸນ</small> */}
+            </div>
+            <div style={{display:'flex', justifyContent:'start', alignItems:'center'}}>
+              <div
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "50%",
+                  overflow: "hidden",
+                }}>
+                <img
+                  src="/assets/images/anusit2.png"
+                  style={{ width: "100%" }}
+                />
+              </div>
+              {/* &nbsp;
+              <small>ບໍລິສັດ ຂົນສົ່ງ ອານຸສິດ (ກຳລັງພັດທະນາ)</small> */}
+            </div>
+          </div>
         </div>
         <div>
           <h4>ຕິດຕາມພວກເຮົາ</h4>

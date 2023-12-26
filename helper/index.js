@@ -8,6 +8,7 @@ export const emptyImage =
 export const EMPTY_USER_PROFILE = "assets/images/emptyProfile.jpg";
 
 export const SERVER_IP = "https://sale-page.bbbb.com.la/";
+export const LINK_AFFILIATE = "https://affiliate.bbbb.com.la/";
 
 // convert price
 export const calculateRoundedValue = (price) => {

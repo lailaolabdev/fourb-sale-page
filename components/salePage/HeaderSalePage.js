@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { MdDns, MdOutlineClose, MdTurnedIn } from "react-icons/md";
 import useWindowDimensions from "../../helper/useWindowDimensions";
-import { CORLOR_APP, CORLOR_WHITE, S3_URL } from "../../helper";
+import { CORLOR_APP, CORLOR_WHITE, LINK_AFFILIATE, S3_URL } from "../../helper";
 import { Avatar } from "@mui/material";
-import { Alert, Badge, Button, Drawer, Input, Space } from "antd";
+import { Alert, Badge, Button, Drawer, Dropdown, Input, Space } from "antd";
 import {
   AlignRightOutlined,
   FileSearchOutlined,
@@ -13,7 +13,9 @@ import {
   SafetyOutlined,
   SearchOutlined,
   SendOutlined,
+  ShopOutlined,
   ShoppingCartOutlined,
+  UserSwitchOutlined,
 } from "@ant-design/icons";
 import { GET_ORDERGROUPS } from "../../apollo/order/query";
 import { useLazyQuery } from "@apollo/client";
@@ -44,8 +46,14 @@ function HeaderSalePage({
   const [trackOrder, setTrackOrder] = useState("");
   const [orderId, setOrderId] = useState("");
   const [enableData, setEnableData] = useState(false);
+  const [openTagTrack, setOpenTagTrack] = useState(false);
+
   const dispatch = useDispatch();
   const navigate = useRouter();
+
+  const handelTrackOrderNow = () => {
+    setOpenTagTrack(!openTagTrack);
+  };
 
   const oncloseDrawer = () => {
     setOpenMyDrawer(false);
@@ -190,6 +198,21 @@ function HeaderSalePage({
               />
             </div>
             &nbsp;
+            <div className="openMenu-dropdown" onClick={handelTrackOrderNow}>
+              <FileSearchOutlined
+                style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
+              />
+            </div>
+            {/* <Dropdown>
+              <a onClick={(e) => e.preventDefault()}>
+                <Space>
+                  <FileSearchOutlined
+                    style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
+                  />
+                </Space>
+              </a>
+            </Dropdown> */}
+            &nbsp; &nbsp;
             <div className="openMenu-dropdown" onClick={hadleCartProducts}>
               <Badge
                 overflowCount={10}
@@ -213,33 +236,35 @@ function HeaderSalePage({
         )}
       </div>
 
-      <Drawer
-        title="ເມນູທັງໝົດ"
-        placement="right"
-        onClose={oncloseDrawer}
-        open={openMyDrawer}>
-        <ul onClick={oncloseDrawer} className="menu-drawer">
-          <li onClick={() => handleIsStockZero()}>
-            <MdDns style={{ fontSize: 23 }} />
-            <p>ສະແດງສິນຄ້າທັງໝົດ</p>
-          </li>
-          <li onClick={() => handleIsStockThenZero()}>
-            <MdTurnedIn style={{ fontSize: 23 }} />
-            <p>ສະແດງສິນຄ້າຍັງເຫຼືອ</p>
-          </li>
+      {/* track order for me */}
+      <div
+        className="card-track-order-now"
+        style={{ right: openTagTrack ? 0 : "-100%" }}>
 
-          <li onClick={() => navigate.push("/policy")}>
-            <SafetyOutlined style={{ fontSize: 23 }} />
-            <p>ນະໂຍບາຍການນຳໃຊ້</p>
-          </li>
+        <div
+          style={{
+            position: "absolute",
+            right: 7,
+            top: 7,
+            transform: "traslate(50%, 50%)",
+            height: "1.5em",
+            width: "1.5em",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 5,
+            backgroundColor: "#ddd",
+            color: CORLOR_APP,
+            cursor: "pointer",
+            borderRadius: "50%",
+          }}
+          onClick={()=> setOpenTagTrack(false)}>
+          <MdOutlineClose />
+        </div>
 
-          <li onClick={() => handleIsStockThenZero()}>
-            <QuestionCircleOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
-            <p>ວິທີການນຳໃຊ້ 4B Sale Page </p>
-          </li>
-        </ul>
-        <hr />
-        <p>ປ້ອນເລກບິນ ເພື່ອກວດສອບອໍເດີ້ຂອງທ່ານ</p>
+        <p style={{ width: "100%", textAlign: "center" }}>
+          ປ້ອນເລກບິນ ເພື່ອກວດສອບອໍເດີ້ຂອງທ່ານ
+        </p>
         <div>
           <Space.Compact
             style={{
@@ -270,20 +295,20 @@ function HeaderSalePage({
         </div>
         <div
           style={{
-            height: "10em",
+            height: "5em",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            marginTop:20
+            marginTop: 20,
           }}>
           {orderGroupLoading && (
             <LoadingComponent
               titleLoading="ກຳລັງຄົ້ນຫາອໍເດີ້..."
-              height={"50px"}
-              width={"50px"}
+              height={"40px"}
+              width={"40px"}
             />
           )}
-          
+
           {orderGroupData?.orderGroups?.total <= 0 && (
             <Alert
               message={`ຄົ້ນຫາບໍ່ພົບອໍເດີ້ ${orderId}`}
@@ -294,6 +319,47 @@ function HeaderSalePage({
             />
           )}
         </div>
+      </div>
+      {/* track order for me */}
+
+      <Drawer
+        title="ເມນູທັງໝົດ"
+        placement="right"
+        onClose={oncloseDrawer}
+        open={openMyDrawer}>
+        <ul onClick={oncloseDrawer} className="menu-drawer">
+          <li onClick={() => handleIsStockZero()}>
+            <MdDns style={{ fontSize: 23 }} />
+            <p>ສະແດງສິນຄ້າທັງໝົດ</p>
+          </li>
+          <li onClick={() => handleIsStockThenZero()}>
+            <MdTurnedIn style={{ fontSize: 23 }} />
+            <p>ສະແດງສິນຄ້າຍັງເຫຼືອ</p>
+          </li>
+
+          <li onClick={() => navigate.push("/policy")}>
+            <SafetyOutlined style={{ fontSize: 23 }} />
+            <p>ນະໂຍບາຍການນຳໃຊ້</p>
+          </li>
+
+          <li onClick={() => handleIsStockThenZero()}>
+            <QuestionCircleOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
+            <p>ວິທີການນຳໃຊ້ 4B Sale Page </p>
+          </li>
+
+          <li>
+            <ShopOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
+            <p>ສະໝັກ ເປີດຮ້ານ </p>
+          </li>
+
+          <li
+            onClick={() => {
+              window.open(LINK_AFFILIATE);
+            }}>
+            <UserSwitchOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
+            <p>ສະໝັກນຳໃຊ້ ອາຟຣີລີເອດ </p>
+          </li>
+        </ul>
       </Drawer>
     </div>
   );

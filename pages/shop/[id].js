@@ -694,7 +694,7 @@ function ProductSalePage({ initialShop }) {
               xs={width > 320 ? 3 : 2}
               sm={4}
               lg={5}
-              style={{ padding: "0" }}>
+              style={{ padding: "0", }}>
               {productLists?.map((data, index) => (
                 <Col
                   key={index}
