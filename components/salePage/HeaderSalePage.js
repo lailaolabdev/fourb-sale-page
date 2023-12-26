@@ -5,7 +5,16 @@ import { MdDns, MdOutlineClose, MdTurnedIn } from "react-icons/md";
 import useWindowDimensions from "../../helper/useWindowDimensions";
 import { CORLOR_APP, CORLOR_WHITE, LINK_AFFILIATE, S3_URL } from "../../helper";
 import { Avatar } from "@mui/material";
-import { Alert, Badge, Button, Drawer, Dropdown, Input, Space } from "antd";
+import {
+  Alert,
+  Badge,
+  Button,
+  Divider,
+  Drawer,
+  Dropdown,
+  Input,
+  Space,
+} from "antd";
 import {
   AlignRightOutlined,
   FileSearchOutlined,
@@ -197,7 +206,7 @@ function HeaderSalePage({
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
               />
             </div>
-            &nbsp;
+            &nbsp; 
             <div className="openMenu-dropdown" onClick={handelTrackOrderNow}>
               <FileSearchOutlined
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
@@ -212,7 +221,7 @@ function HeaderSalePage({
                 </Space>
               </a>
             </Dropdown> */}
-            &nbsp; &nbsp;
+            &nbsp;
             <div className="openMenu-dropdown" onClick={hadleCartProducts}>
               <Badge
                 overflowCount={10}
@@ -239,9 +248,8 @@ function HeaderSalePage({
       {/* track order for me */}
       <div
         className="card-track-order-now"
-        style={{ right: openTagTrack ? 0 : "-100%" }}>
-
-        <div
+        style={{ top: openTagTrack ? 0 : "-100%" }}>
+        {/* <div
           style={{
             position: "absolute",
             right: 7,
@@ -258,10 +266,58 @@ function HeaderSalePage({
             cursor: "pointer",
             borderRadius: "50%",
           }}
-          onClick={()=> setOpenTagTrack(false)}>
+          onClick={() => setOpenTagTrack(false)}>
           <MdOutlineClose />
+        </div> */}
+
+        <div className="tag-query-data">
+          <ul onClick={() => setOpenTagTrack(false)}>
+            <li onClick={() => handleIsStockZero()}>
+              <MdDns style={{ fontSize: 23 }} />
+              <p>ສະແດງສິນຄ້າທັງໝົດ</p>
+            </li>
+            <li onClick={() => handleIsStockThenZero()}>
+              <MdTurnedIn style={{ fontSize: 23 }} />
+              <p>ສະແດງສິນຄ້າຍັງເຫຼືອ</p>
+            </li>
+          </ul>
         </div>
 
+       
+      </div>
+      {/* track order for me */}
+
+      <Drawer
+        title="ເມນູທັງໝົດ"
+        placement="right"
+        onClose={oncloseDrawer}
+        open={openMyDrawer}>
+        <ul onClick={oncloseDrawer} className="menu-drawer">
+          <li onClick={() => navigate.push("/policy")}>
+            <SafetyOutlined style={{ fontSize: 23 }} />
+            <p>ນະໂຍບາຍການນຳໃຊ້</p>
+          </li>
+
+          <li onClick={() => handleIsStockThenZero()}>
+            <QuestionCircleOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
+            <p>ວິທີການນຳໃຊ້ 4B Sale Page </p>
+          </li>
+
+          <li onClick={() => navigate.push("/ebook/Collapse4bShop")}>
+            <ShopOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
+            <p>ວິທີສະໝັກ ເປີດຮ້ານ </p>
+          </li>
+
+          <li
+            onClick={() => {
+              window.open(LINK_AFFILIATE);
+            }}>
+            <UserSwitchOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
+            <p>ສະໝັກນຳໃຊ້ ອາຟຣີລີເອດ </p>
+          </li>
+        </ul>
+
+        <Divider />
         <p style={{ width: "100%", textAlign: "center" }}>
           ປ້ອນເລກບິນ ເພື່ອກວດສອບອໍເດີ້ຂອງທ່ານ
         </p>
@@ -292,14 +348,14 @@ function HeaderSalePage({
               icon={<SendOutlined />}
             />
           </Space.Compact>
-        </div>
-        <div
+
+          <div
           style={{
             height: "5em",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            marginTop: 20,
+            marginTop: '5em',
           }}>
           {orderGroupLoading && (
             <LoadingComponent
@@ -319,47 +375,7 @@ function HeaderSalePage({
             />
           )}
         </div>
-      </div>
-      {/* track order for me */}
-
-      <Drawer
-        title="ເມນູທັງໝົດ"
-        placement="right"
-        onClose={oncloseDrawer}
-        open={openMyDrawer}>
-        <ul onClick={oncloseDrawer} className="menu-drawer">
-          <li onClick={() => handleIsStockZero()}>
-            <MdDns style={{ fontSize: 23 }} />
-            <p>ສະແດງສິນຄ້າທັງໝົດ</p>
-          </li>
-          <li onClick={() => handleIsStockThenZero()}>
-            <MdTurnedIn style={{ fontSize: 23 }} />
-            <p>ສະແດງສິນຄ້າຍັງເຫຼືອ</p>
-          </li>
-
-          <li onClick={() => navigate.push("/policy")}>
-            <SafetyOutlined style={{ fontSize: 23 }} />
-            <p>ນະໂຍບາຍການນຳໃຊ້</p>
-          </li>
-
-          <li onClick={() => handleIsStockThenZero()}>
-            <QuestionCircleOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
-            <p>ວິທີການນຳໃຊ້ 4B Sale Page </p>
-          </li>
-
-          <li>
-            <ShopOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
-            <p>ສະໝັກ ເປີດຮ້ານ </p>
-          </li>
-
-          <li
-            onClick={() => {
-              window.open(LINK_AFFILIATE);
-            }}>
-            <UserSwitchOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
-            <p>ສະໝັກນຳໃຊ້ ອາຟຣີລີເອດ </p>
-          </li>
-        </ul>
+        </div>
       </Drawer>
     </div>
   );

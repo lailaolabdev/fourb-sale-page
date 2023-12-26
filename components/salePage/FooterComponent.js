@@ -65,8 +65,13 @@ export default function FooterComponent() {
         </div>
         <div>
           <h4>ຂົນສົ່ງ</h4>
-          <div style={{ display: "flex", gap: 20, flexDirection: "column" }}>
-            <div style={{display:'flex', justifyContent:'start', alignItems:'center'}}>
+          <div style={{ display: "flex", gap: 20 }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "start",
+                alignItems: "center",
+              }}>
               <div
                 style={{
                   width: 30,
@@ -82,7 +87,12 @@ export default function FooterComponent() {
               {/* &nbsp;
               <small>ບໍລິສັດ ຂົນສົ່ງ ຮຸ່ງອາລຸນ</small> */}
             </div>
-            <div style={{display:'flex', justifyContent:'start', alignItems:'center'}}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "start",
+                alignItems: "center",
+              }}>
               <div
                 style={{
                   width: 30,
@@ -103,18 +113,33 @@ export default function FooterComponent() {
         <div>
           <h4>ຕິດຕາມພວກເຮົາ</h4>
           <div style={{ display: "flex", gap: 20 }}>
-            <img
-              src="https://www.facebook.com/images/fb_icon_325x325.png"
-              style={{ width: 30 }}
-            />
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
-              style={{ width: 30 }}
-            />
-            <img
-              src="https://play-lh.googleusercontent.com/Ui_-OW6UJI147ySDX9guWWDiCPSq1vtxoC-xG17BU2FpU0Fi6qkWwuLdpddmT9fqrA"
-              style={{ width: 30 }}
-            />
+            <div
+              onClick={() => {
+                window.open("https://www.facebook.com/LailaoCF");
+              }}>
+              <img
+                src="https://www.facebook.com/images/fb_icon_325x325.png"
+                style={{ width: 30 }}
+              />
+            </div>
+            <div
+              onClick={() => {
+                window.open("https://www.youtube.com/@cflivebylailaocf2342");
+              }}>
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png"
+                style={{ width: 30 }}
+              />
+            </div>
+            <div
+              onClick={() => {
+                window.open("https://www.tiktok.com/@4bforbusiness");
+              }}>
+              <img
+                src="https://play-lh.googleusercontent.com/Ui_-OW6UJI147ySDX9guWWDiCPSq1vtxoC-xG17BU2FpU0Fi6qkWwuLdpddmT9fqrA"
+                style={{ width: 30 }}
+              />
+            </div>
             {/* <img src="/assets/images/bcelOne.png" style={{ width: 30 }} /> */}
           </div>
         </div>
