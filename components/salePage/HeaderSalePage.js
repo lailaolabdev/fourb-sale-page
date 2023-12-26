@@ -303,7 +303,9 @@ function HeaderSalePage({
             <p>ວິທີການນຳໃຊ້ 4B Sale Page </p>
           </li>
 
-          <li onClick={() => navigate.push("/ebook/Collapse4bShop")}>
+          <li 
+          // onClick={() => navigate.push("/ebook/Collapse4bShop")}
+          >
             <ShopOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
             <p>ວິທີສະໝັກ ເປີດຮ້ານ </p>
           </li>
