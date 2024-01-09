@@ -30,13 +30,8 @@ import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutati
 // import loading77 from "/assets/images/loading77.gif";
 import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
 import EmptyImage from "../../components/salePage/EmptyImage";
-<<<<<<< HEAD
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
-=======
-import { Spin } from "antd";
-import { LoadingOutlined } from '@ant-design/icons';
->>>>>>> origin/add-package-system
 
 export default function payment() {
   const router = useRouter();
@@ -779,11 +774,7 @@ export default function payment() {
                   <>
                     {loadingSubscripe || loadingPayment ? (
                       <div className="loadingButton">
-<<<<<<< HEAD
                        <Spin
-=======
-                        <Spin
->>>>>>> origin/add-package-system
                           indicator={
                             <LoadingOutlined
                               style={{

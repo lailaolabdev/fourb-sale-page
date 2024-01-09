@@ -129,7 +129,6 @@ export default function CartDetail() {
     setCheckPaid(!checkPaid);
   };
 
-<<<<<<< HEAD
   const handleConfirmCart = () => {
     const combineField = {
       order: cartList,
@@ -143,9 +142,6 @@ export default function CartDetail() {
     // const destinationPath = affiliateId
     //   ? "/payment/" + shopId + "/" + affiliateId
     //   : "/payment/" + shopId;
-=======
-  const handleConfirmCart = () => { 
->>>>>>> origin/add-package-system
 
   // Navigate to the payment page with the query string
   router.push("/payment")
