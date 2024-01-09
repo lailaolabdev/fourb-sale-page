@@ -254,22 +254,22 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
             </div>
           ) : (
             <div className="card-check-confirm">
-              <h4>ກະລຸນາກວດສອບບັນຊີນຳໃຊ້ລະບົບອິກຄັ້ງ </h4>
+              <h5>ກວດສອບບັນຊີນຳໃຊ້ລະບົບອິກຄັ້ງ</h5>
 
               <br />
-              <Avatar size={64} src={S3_URL + dataReponse?.shop?.image} />
+              <Avatar size={80} style={{border:'1px solid #f2f2f2'}} src={S3_URL + dataReponse?.shop?.image} />
               <br />
               <div style={{ lineHeight: 1, marginTop: 10 }}>
                 {/* <p>ID SHOP: {dataReponse?.shop?.id}</p> */}
-                <p>ຊື່ຮ້ານ: {dataReponse?.shop?.name}</p>
-                <p>ເບີໂທລະສັບ: {dataReponse?.shop?.phone}</p>
-                <p>ຊື່ນຳໃຊ້ລະບົບ: {dataReponse?.username}</p>
+                <h5>ຊື່ຮ້ານ: <b>{dataReponse?.shop?.name}</b></h5>
+                <h5>ເບີໂທລະສັບ: <b>{dataReponse?.shop?.phone}</b></h5>
+                <h5>ລາຍລະອຽດ: <b>{dataReponse?.note ?? "................."}</b></h5>
                 {/* <p>ຊື່ນຳໃຊ້ລະບົບ: {dataReponse?.phone}</p> */}
               </div>
               <br />
               <p>
-                ໝາຍເຫດ: ຖ້າຫາກວ່າທ່ານຊຳລະຄ່າລະບົບໄປແລ້ວ
-                ຈະບໍ່ສາມາດຄືນເງິນໄດ້ໃນທຸກກໍລະນີ
+                <b>ໝາຍເຫດ:</b> ຖ້າຫາກວ່າທ່ານຊຳລະຄ່າລະບົບໄປແລ້ວ
+                ຈະບໍ່ສາມາດຄືນເງິນໄດ້ໃນທຸກກໍລະນີ.
               </p>
             </div>
           )}
