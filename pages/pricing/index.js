@@ -9,18 +9,17 @@ const titleModal = (
 );
 
 const useStyle = createStyles(({ token }) => ({
-  
-  'my-modal-mask': {
+  "my-modal-mask": {
     boxShadow: `inset 0 0 15px #fff`,
   },
-  'my-modal-header': {
+  "my-modal-header": {
     borderBottom: `1px dotted ${token.colorPrimary}`,
   },
-  'my-modal-footer': {
+  "my-modal-footer": {
     color: token.colorPrimary,
   },
-  'my-modal-content': {
-    border: '1px solid #333',
+  "my-modal-content": {
+    border: "1px solid #333",
   },
 }));
 
@@ -58,11 +57,11 @@ export default function index() {
   };
 
   const classNames = {
-    body: styles['my-modal-body'],
-    mask: styles['my-modal-mask'],
-    header: styles['my-modal-header'],
-    footer: styles['my-modal-footer'],
-    content: styles['my-modal-content'],
+    body: styles["my-modal-body"],
+    mask: styles["my-modal-mask"],
+    header: styles["my-modal-header"],
+    footer: styles["my-modal-footer"],
+    content: styles["my-modal-content"],
   };
   const modalStyles = {
     header: {
@@ -75,16 +74,15 @@ export default function index() {
     //   borderRadius: 5,
     // },
     mask: {
-      backdropFilter: 'blur(10px)',
+      backdropFilter: "blur(10px)",
     },
     footer: {
-      borderTop: '1px solid #333',
+      borderTop: "1px solid #333",
     },
     content: {
-      boxShadow: '0 0 30px #999',
+      boxShadow: "0 0 30px #999",
     },
   };
-
 
   return (
     <>
@@ -94,10 +92,11 @@ export default function index() {
         <div className="card-package">
           <div className="card-ps">
             <div className="card-type">
-          {/* <div class="ping"></div> */}
+              {/* <div class="ping"></div> */}
               <p>1</p>
               <p>ເດືອນ</p>
             </div>
+            <h6>1.000.000 ກີບ</h6>
             <h3>500.000 ກີບ</h3>
             <ul>
               <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
@@ -123,15 +122,16 @@ export default function index() {
               <p>3</p>
               <p>ເດືອນ</p>
             </div>
+            <h6>2.850.000 ກີບ</h6>
             <h3>1.440.000 ກີບ</h3>
             <ul>
               <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
               <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-              <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li>
+              {/* <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li> */}
               <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
               <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
               <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-              <li>ຈັດການລູກຄ້າຊີເອຟ</li>
+              {/* <li>ຈັດການລູກຄ້າຊີເອຟ</li> */}
             </ul>
 
             <div className="card-footer-ps">
@@ -148,15 +148,16 @@ export default function index() {
               <p>6</p>
               <p>ເດືອນ</p>
             </div>
+            <h6>5.650.000 ກີບ</h6>
             <h3>2.790.000 ກີບ</h3>
             <ul>
               <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
               <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-              <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li>
+              {/* <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li> */}
               <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
               <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
               <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-              <li>ຈັດການລູກຄ້າຊີເອຟ</li>
+              {/* <li>ຈັດການລູກຄ້າຊີເອຟ</li> */}
             </ul>
 
             <div className="card-footer-ps">
@@ -173,15 +174,16 @@ export default function index() {
               <p>1</p>
               <p>ປີ</p>
             </div>
+            <h6>11.250.000 ກີບ</h6>
             <h3>4.900.000 ກີບ</h3>
             <ul>
               <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
               <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-              <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li>
+              {/* <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li> */}
               <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
               <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
               <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-              <li>ຈັດການລູກຄ້າຊີເອຟ</li>
+              {/* <li>ຈັດການລູກຄ້າຊີເອຟ</li> */}
             </ul>
 
             <div className="card-footer-ps">
@@ -199,18 +201,17 @@ export default function index() {
         footer={null}
         // title={titleModal}
         width={700}
-        closable={false} 
+        closable={false}
         open={isModalOpen}
         onOk={handleOk}
         // onCancel={handleCancel}
         classNames={classNames}
-        styles={modalStyles}
-      >
+        styles={modalStyles}>
         <div className="p-2">
-        <BuyPackageSystem
-          handleCancel={handleCancel}
-          packageType={packageType}
-        />
+          <BuyPackageSystem
+            handleCancel={handleCancel}
+            packageType={packageType}
+          />
         </div>
       </Modal>
     </>
