@@ -8,7 +8,7 @@ import rootReducer from "./rootReducer";
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["fbdata", "salepage", "setorder", "setpatch", "notiorder", "predata", "completedOrder"],
+  whitelist: ["fbdata", "salepage", "setorder", "setpatch", "notiorder", 'qrcode', "predata", "completedOrder"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
