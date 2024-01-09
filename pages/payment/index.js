@@ -30,16 +30,19 @@ import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutati
 // import loading77 from "/assets/images/loading77.gif";
 import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
 import EmptyImage from "../../components/salePage/EmptyImage";
+<<<<<<< HEAD
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
+=======
+import { Spin } from "antd";
+import { LoadingOutlined } from '@ant-design/icons';
+>>>>>>> origin/add-package-system
 
 export default function payment() {
   const router = useRouter();
   const { liveId, live, affiliateId, id, shopForAffiliateId } = router.query;
   const shopId = id;
   const dispatch = useDispatch();
-
-  // console.log("shopId In Payment=---->", id)
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -52,12 +55,19 @@ export default function payment() {
   const [file, setFile] = useState();
   const [isValidate, setIsValidate] = useState(false);
   const [enableExpress, setEnableExpress] = useState(true);
-  const [dataCompleted, setDataCompleted] = useState();
+  const [dataCompleted, setDataCompleted] = useState(); 
 
   const ordersState = useSelector((state) => state?.setorder);
   const { cartList } = useSelector((state) => state?.salepage);
+  
+  const totalPrice = cartList.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
-  // console.log("ordersState----->", ordersState?.setOrder);
+  
+
+  // console.log("cartList=---->", cartList)  
+  // console.log("combineField Payment55=---->", totalPrice)  
+
+  // console.log("check price9999---->", totalPrice);
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
@@ -95,7 +105,7 @@ export default function payment() {
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        sumPrice: ordersState?.setOrder?.priceToPay, // ຈຳນວນເງິນຕາມຕົວຈິງ
+        sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
         // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
         amount: cartList?.length,
@@ -174,7 +184,7 @@ export default function payment() {
           let compareData = {
             ...dataResponse,
             shopId: shopId,
-            amountPaided: amountPaided,
+            amountPaided: totalPrice,
           };
           dispatch(setDataCompleteds(compareData));
           setDataCompleted(compareData);
@@ -604,7 +614,7 @@ export default function payment() {
                 className="action-cart-product-footer"
                 style={{ marginBottom: qrcodeData ? "1em" : "5em" }}>
                 <div className="w-100">
-                  {ordersState?.setOrder?.order?.map((data, index) => {
+                  {cartList?.map((data, index) => {
                     return (
                       <div
                         key={data?.id}
@@ -651,7 +661,7 @@ export default function payment() {
 
                 <div className="action-price-amounts">
                   <h6>ຈຳນວນສິນຄ້າທັງໝົດ:</h6>
-                  <h6>{ordersState?.setOrder?.order?.length} ລາຍການ</h6>
+                  <h6>{cartList?.length} ລາຍການ</h6>
                 </div>
                 {/* <div className="action-price-amounts">
                     <h6>ຈຳນວນເງິນ:</h6>
@@ -683,7 +693,7 @@ export default function payment() {
                 <br />
                 <div className="action-price-amounts">
                   <h5>ເງິນລວມທີ່ຕ້ອງຈ່າຍ:</h5>
-                  <h5>{numberFormat(ordersState?.setOrder?.priceToPay)} ກີບ</h5>
+                  <h5>{numberFormat(totalPrice)} ກີບ</h5>
                 </div>
 
                 {/* <div className="action-price-amounts">
@@ -769,7 +779,11 @@ export default function payment() {
                   <>
                     {loadingSubscripe || loadingPayment ? (
                       <div className="loadingButton">
+<<<<<<< HEAD
                        <Spin
+=======
+                        <Spin
+>>>>>>> origin/add-package-system
                           indicator={
                             <LoadingOutlined
                               style={{
@@ -834,6 +848,7 @@ export default function payment() {
       </div>
 
       <ToastContainer />
+
     </>
   );
 }

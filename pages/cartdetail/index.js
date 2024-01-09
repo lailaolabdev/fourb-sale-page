@@ -26,6 +26,7 @@ import {
 import ModalConfirmComponent from "../../components/salePage/ModalConfirmComponent";
 import Image from "next/image";
 import EmptyImage from "../../components/salePage/EmptyImage";
+import FooterComponent from "../../components/salePage/FooterComponent";
 
 export default function CartDetail() {
   // const { match, location } = useReactRouter();
@@ -128,6 +129,7 @@ export default function CartDetail() {
     setCheckPaid(!checkPaid);
   };
 
+<<<<<<< HEAD
   const handleConfirmCart = () => {
     const combineField = {
       order: cartList,
@@ -141,18 +143,13 @@ export default function CartDetail() {
     // const destinationPath = affiliateId
     //   ? "/payment/" + shopId + "/" + affiliateId
     //   : "/payment/" + shopId;
+=======
+  const handleConfirmCart = () => { 
+>>>>>>> origin/add-package-system
 
-    // const destinationPath = affiliateId
-    // ? `../payment/${shopId}?affiliateId=${affiliateId}`
-    // : `../payment/${shopId}`;
-
-    // let compareData = {
-    //   commision: commision,
-    // };
-
-    router.push("../payment");
-    // router.push(destinationPath);
-  };
+  // Navigate to the payment page with the query string
+  router.push("/payment")
+  }; 
 
   // console.log("cartList---->", cartList);
   const [showConfirmRemove, setShowConfirmRemove] = React.useState(false);
@@ -175,6 +172,7 @@ export default function CartDetail() {
 
   const handleConfirmRemoveCart = () => {
     dispatch(removeCartItem());
+    dispatch(setOrders([]));
     setShowConfirmRemove(false);
     router.back();
   };
@@ -295,6 +293,8 @@ export default function CartDetail() {
         title="ແຈ້ງເຕືອນ"
         text="ຕ້ອງການລົບສິນຄ້າອອກຈາກກະຕ່າທັງໝົດບໍ່?"
       />
+
+      <FooterComponent />
     </>
   );
 }

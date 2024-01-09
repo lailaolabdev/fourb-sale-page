@@ -38,7 +38,7 @@ import useWindowDimensions from "../../helper/useWindowDimensions";
 import { AiOutlineClose } from "react-icons/ai";
 // import emptyProfile from "../../images/emptyProfile.jpg";
 // import whatsAppIcon from "../../images/whatsAppIcon.png";
-import { Avatar } from "@mui/material";
+import { Avatar, Pagination } from "@mui/material";
 import PaginationComponent from "../../components/salePage/PaginationComponent";
 import LoadingComponent from "../../components/LoadingComponent";
 import authClient from "../../autClient";
@@ -503,8 +503,8 @@ function ProductSalePage({ initialShop }) {
   // ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າ
   const handleAddProduct = (data) => {
     if (data?.amount <= 0) {
-      return toast.warning(`${data?.name} ໝົດອໍເດີແລ້ວ!`, {
-        autoClose: 1000,
+      return toast.warning(`ສິນຄ້າ ${data?.name} ໝົດສະຕ໋ອກແລ້ວ!`, {
+        autoClose: 1500,
       });
     } else {
       let _price = 0;
@@ -694,7 +694,7 @@ function ProductSalePage({ initialShop }) {
               xs={width > 320 ? 3 : 2}
               sm={4}
               lg={5}
-              style={{ padding: "0" }}>
+              style={{ padding: "0", }}>
               {productLists?.map((data, index) => (
                 <Col
                   key={index}
@@ -764,7 +764,7 @@ function ProductSalePage({ initialShop }) {
       <FooterComponent />
       {/* Footer */}
 
-      {width > 700 && (
+      {/* {width > 700 && (
         <>
           {cartList?.length > 0 ? (
             <div className="bage-details" onClick={hadleCartProducts}>
@@ -777,7 +777,7 @@ function ProductSalePage({ initialShop }) {
             ""
           )}
         </>
-      )}
+      )} */}
 
       {/* {cartList?.length > 0 ? (
           <div className="bage-details" onClick={hadleCartProducts}>

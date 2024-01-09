@@ -7,6 +7,8 @@ import patchBack from "./setPatch/patchBack";
 import { setNotiOrders } from "./notiorder/getNotiorder";
 import getIds from "./predata/getIds";
 import dataOrder from "./completedOrder/dataOrder";
+import trackOrder from "./setOrder/trackOrder";
+import getqrcode from "./qrcode/getqrcode";
 
 const rootReducer = combineReducers({
   fbdata: fbdataReducer,
@@ -16,6 +18,8 @@ const rootReducer = combineReducers({
   setpatch: patchBack,
   predata: getIds,
   completedOrder: dataOrder,
+  setorder: trackOrder,
+  qrcode: getqrcode,
 });
  
 

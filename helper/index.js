@@ -8,6 +8,7 @@ export const emptyImage =
 export const EMPTY_USER_PROFILE = "assets/images/emptyProfile.jpg";
 
 export const SERVER_IP = "https://sale-page.bbbb.com.la/";
+export const LINK_AFFILIATE = "https://affiliate.bbbb.com.la/";
 
 // convert price
 export const calculateRoundedValue = (price) => {
@@ -30,12 +31,12 @@ export const numberFormat = (_number) => {
 
 // ======================================= link upoint ================================
 // Dev
-// export const SERVER_URI = "https://cf-dev-api.lailaolab.com/";
-// export const SOCKET_SERVER_URI = "wss://cf-dev-api.lailaolab.com/";
+export const SERVER_URI = "https://cf-dev-api.lailaolab.com/";
+export const SOCKET_SERVER_URI = "wss://cf-dev-api.lailaolab.com/";
 
 // Production
-export const SERVER_URI = "https://cf-api-dev.lailaolab.com/";
-export const SOCKET_SERVER_URI = "wss://cf-api-dev.lailaolab.com/";
+// export const SERVER_URI = "https://cf-api-dev.lailaolab.com/";
+// export const SOCKET_SERVER_URI = "wss://cf-api-dev.lailaolab.com/";
 
 // localhost
 // export const SERVER_URI = "http://localhost:7070/";

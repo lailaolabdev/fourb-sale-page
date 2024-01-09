@@ -5,14 +5,12 @@ import { AiOutlineClose } from "react-icons/ai";
 import ProductDetail from "./ProductDetail";
 import { Image, Modal } from "antd";
 import { S3_URL, calculateRoundedValue, emptyImage, numberFormat } from "../../helper";
-import useWindowDimensions from "../../helper/useWindowDimensions";
-import { GET_EXCHANGRATE } from "../../apollo/exchanrage";
-import { useLazyQuery } from "@apollo/client";
-import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE } from "../../apollo";
+import useWindowDimensions from "../../helper/useWindowDimensions"; 
 import { useRouter } from "next/router";
 import { IoMdAdd } from "react-icons/io";
 import { useDispatch } from "react-redux";
 import { addCartItem } from "../../redux/salepage/cartReducer";
+import { toast } from "react-toastify";
 
 function CartModal(props) {
   const productView = props?.viewProduct;
@@ -28,7 +26,7 @@ function CartModal(props) {
   
   const handleAddProduct = (stateView) => {
     if (stateView?.amount <= 0) {
-      toast.warning("ສິນຄ້ານີ້ບໍ່ພໍຂາຍ!", {
+      toast.warning("ສິນຄ້າໝົດສະຕ໋ອກແລ້ວ!", {
         autoClose: 800,
       });
     } else {
