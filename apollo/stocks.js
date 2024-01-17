@@ -24,6 +24,7 @@ export const GET_STOCKS = gql`
           value
           isDeleted
         }
+        isUsingSalePage
         createdAt
         updatedAt
         note

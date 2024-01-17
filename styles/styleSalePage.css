@@ -28,13 +28,26 @@ Modal.Footer {
 
   & li {
     display: flex; 
-    flex-direction: column;
+    /* flex-direction: column; */
     width: 23em;
-    border: 1px solid var(--colorShadow);
+    /* border: 1px solid var(--colorShadow); */
     background: var(--colorWhite);
     /* box-shadow: 2px 3px 2px var(--colorGray); */
     gap: 0.5em;
-    transition: 1s all ease-in-out;
+    transition: .3s all ease-in-out;
+    padding: 0 1em;
+    cursor: pointer;
+    border-radius: .4em;
+    margin: .2em 0;
+
+    & p {
+      margin-top: 1em;
+    }
+  }
+
+  & li:hover {
+    background: var(--colorDefaultcf);
+    color: var(--colorWhite);
   }
   
   .openMenu-dropdown {

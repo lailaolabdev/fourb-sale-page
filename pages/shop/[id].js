@@ -288,6 +288,7 @@ function ProductSalePage({ initialShop }) {
       let _where = {
         shop: shopId,
         isDeleted: false,
+        isUsingSalePage: true,
       };
 
       if (isInStock === 1)
@@ -325,6 +326,8 @@ function ProductSalePage({ initialShop }) {
       let where = {
         shop: shopId,
         isDeleted: false,
+        
+        isUsingSalePage: true,
         live: live === "LIVE" ? liveId : null,
         isPublished: live === "LIVE",
       };

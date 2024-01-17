@@ -31,12 +31,12 @@ export const numberFormat = (_number) => {
 
 // ======================================= link upoint ================================
 // Dev
-export const SERVER_URI = "https://cf-dev-api.lailaolab.com/";
-export const SOCKET_SERVER_URI = "wss://cf-dev-api.lailaolab.com/";
+// export const SERVER_URI = "https://cf-dev-api.lailaolab.com/";
+// export const SOCKET_SERVER_URI = "wss://cf-dev-api.lailaolab.com/";
 
 // Production
-// export const SERVER_URI = "https://cf-api-dev.lailaolab.com/";
-// export const SOCKET_SERVER_URI = "wss://cf-api-dev.lailaolab.com/";
+export const SERVER_URI = "https://cf-api-dev.lailaolab.com/";
+export const SOCKET_SERVER_URI = "wss://cf-api-dev.lailaolab.com/";
 
 // localhost
 // export const SERVER_URI = "http://localhost:7070/";
