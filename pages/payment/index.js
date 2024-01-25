@@ -101,7 +101,7 @@ export default function payment() {
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
         sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
-        sumPrice: 1, // ຈຳນວນເງິນ ເທສ
+        // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
         amount: cartList?.length,
         customerName,
