@@ -100,7 +100,7 @@ export default function payment() {
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        // sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
+        sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
         sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
         amount: cartList?.length,
