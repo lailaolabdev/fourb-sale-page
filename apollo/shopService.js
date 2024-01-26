@@ -38,6 +38,9 @@ export const GET_SHOP = gql`
         createdAt
         updatedAt
         note
+        commissionAffiliate
+        commissionService
+        commision
     }
 }
 `;

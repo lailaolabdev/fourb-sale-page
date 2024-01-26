@@ -58,7 +58,7 @@ export default function payment() {
   const _shopId = setId?.idPreState?.shopId;
   const _affiliateId = setId?.idPreState?.affiliateId;
   
-  const totalPrice = cartList.reduce((acc, item) => acc + (item.price * item.qty), 0);
+  const  totalPrice = cartList.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
   
 
@@ -347,11 +347,10 @@ export default function payment() {
 
     // Check if ordersState and setOrder are defined and if order is iterable
     if (
-      ordersState?.setOrder?.order &&
-      Symbol.iterator in Object(ordersState?.setOrder?.order)
+      cartList
     ) {
       // Iterate over orders
-      for (let order of ordersState?.setOrder?.order) {
+      for (let order of cartList) {
         const { currency, qty, price } = order;
 
         if (currency === "LAK" || currency === "ກີບ") {

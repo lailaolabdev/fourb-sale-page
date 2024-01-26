@@ -383,7 +383,9 @@ function ProductSalePage({ initialShop }) {
   const _calculatePriceWithExchangeRate = (price, currency) => {
     // console.log("currency import------->", currency)
     // console.log("price import55------->", price)
-    // console.log("isExChangeRate55------->", isExChangeRate?.baht)
+    // console.log("shopDetail------->", shopDetail)
+
+
 
     let _price = 0;
 
