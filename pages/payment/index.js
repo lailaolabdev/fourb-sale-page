@@ -117,16 +117,18 @@ export default function payment() {
       console.log("orders-9-8-6--->", convertedOrders)
       console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      if (_affiliateId) {
-        _orderGroup = {
-          ..._orderGroup,
-          infulancer: _affiliateId,
-          commissionAffiliate: compareData?.commision,
-          infulancer_percent: compareData?.commision,
-        };
-      } else {
-        _orderGroup = { ..._orderGroup };
-      }
+      // if (_affiliateId) {
+      //   _orderGroup = {
+      //     ..._orderGroup,
+      //     infulancer: _affiliateId,
+      //     commissionAffiliate: compareData?.commision,
+      //     infulancer_percent: compareData?.commision,
+      //   };
+      // } else {
+      //   _orderGroup = { ..._orderGroup };
+      // }
+
+      console.log("orderGroupo---56789-->", _orderGroup)
 
       // Create an order
       await createOrderSalepage({
@@ -182,12 +184,12 @@ export default function payment() {
           setDestinationLogistic("");
           const dataResponse = message?.data?.createOrderSalePage;
 
-          // console.log("amountPaided=====>", amountPaided);
           let compareData = {
             ...dataResponse,
             shopId: _shopId,
             amountPaided: totalPrice,
           };
+            console.log("compareData=====>", compareData);
           dispatch(setDataCompleteds(compareData));
           setDataCompleted(compareData);
           // history.push("/completed-payment", { compareData });
