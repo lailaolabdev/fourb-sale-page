@@ -62,6 +62,7 @@ function ProductSalePage({ initialShop }) {
   } = router.query;
   const shopId = id;
 
+
   const { height, width } = useWindowDimensions();
 
   // console.log("testId---->", id);
@@ -596,6 +597,8 @@ function ProductSalePage({ initialShop }) {
         idPreState = idPreState;
       }
 
+      // console.log({idPreState})
+
       router.push("../cartdetail"); // Use shallow: true if needed
       // console.log("idPreState---5--->", idPreState);
 
@@ -673,6 +676,7 @@ function ProductSalePage({ initialShop }) {
         handleShowBoxSearch={handleShowBoxSearch}
         handleHideBoxSearch={handleHideBoxSearch}
         // handleSearchOrder={handleSearchOrder}
+        shopId={shopId}
         toggleMenu={toggleMenu}
         isMenuOpen={isMenuOpen}
         ButtonStyleFilter={ButtonStyleFilter}

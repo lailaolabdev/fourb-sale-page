@@ -46,6 +46,7 @@ export default function CartDetail() {
   // Access query parameters from the router
   const { shopId, affiliateId } = router.query;
   // console.log("affiliateId:--->", affiliateId)
+  // console.log("shopId:--->", shopId)
 
   const dispatch = useDispatch();
   const [checkPaid, setCheckPaid] = React.useState(true);
@@ -136,8 +137,8 @@ export default function CartDetail() {
       // orderGroup: priceToPay,
       priceToPay: priceToPay,
     };
-    console.log("orderGroups---->", calculatorAll)
-    console.log("orderGroups---66->", priceToPay)
+    console.log("orders---->", combineField)
+    // console.log("orderGroups---66->", priceToPay)
     dispatch(setOrders(combineField));
     // const destinationPath = affiliateId
     //   ? "/payment/" + shopId + "/" + affiliateId

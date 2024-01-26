@@ -49,6 +49,7 @@ function HeaderSalePage({
   handleIsStockThenZero,
   cartList,
   hadleCartProducts,
+  shopId
 }) {
   const { height, width } = useWindowDimensions();
   const [openMyDrawer, setOpenMyDrawer] = useState(false);

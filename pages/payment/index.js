@@ -36,8 +36,8 @@ import { Spin } from "antd";
 export default function payment() {
   const router = useRouter();
   const { liveId, live, affiliateId, id, shopForAffiliateId } = router.query;
-  const shopId = id;
   const dispatch = useDispatch();
+
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -54,12 +54,15 @@ export default function payment() {
 
   const ordersState = useSelector((state) => state?.setorder);
   const { cartList } = useSelector((state) => state?.salepage);
+  const { setId } = useSelector((state) => state?.predata);
+  const _shopId = setId?.idPreState?.shopId;
+  const _affiliateId = setId?.idPreState?.affiliateId;
   
   const totalPrice = cartList.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
   
 
-  // console.log("cartList=---->", cartList)  
+  console.log("shopStateId=---->", setId)  
   // console.log("combineField Payment55=---->", totalPrice)  
 
   // console.log("check price9999---->", totalPrice);
@@ -83,8 +86,9 @@ export default function payment() {
     try {
       if (loadingSubscripe || loadingPayment) return;
 
+
       // Convert the orders into the required format
-      const convertedOrders = await (ordersState?.setOrder?.order || []).map(
+      const convertedOrders = await (cartList || []).map(
         (order) => ({
           stock: order?.id,
           amount: order?.qty,
@@ -96,7 +100,7 @@ export default function payment() {
       );
 
       let _orderGroup = {
-        shop: shopId,
+        shop: _shopId,
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
@@ -110,10 +114,13 @@ export default function payment() {
         destinationLogistic,
       };
 
-      if (affiliateId) {
+      console.log("orders-9-8-6--->", convertedOrders)
+      console.log("orderGroup-9-8-7--->", _orderGroup)
+
+      if (_affiliateId) {
         _orderGroup = {
           ..._orderGroup,
-          infulancer: affiliateId,
+          infulancer: _affiliateId,
           commissionAffiliate: compareData?.commision,
           infulancer_percent: compareData?.commision,
         };
@@ -178,7 +185,7 @@ export default function payment() {
           // console.log("amountPaided=====>", amountPaided);
           let compareData = {
             ...dataResponse,
-            shopId: shopId,
+            shopId: _shopId,
             amountPaided: totalPrice,
           };
           dispatch(setDataCompleteds(compareData));
@@ -246,17 +253,17 @@ export default function payment() {
 
   useEffect(() => {
     // initSetting();
-    _getBank(shopId);
-  }, [shopId]);
+    _getBank(_shopId);
+  }, [_shopId]);
 
   // get bank
-  const _getBank = async (shopId) => {
+  const _getBank = async (_shopId) => {
     try {
       // let SHOP_ID = await localStorage.getItem("SHOP");
       // await getBank({
       //   variables: {
       //     where: {
-      //       shop: shopId,
+      //       shop: _shopId
       //       isDeleted: false,
       //     },
       //     skip: 0,
@@ -268,7 +275,7 @@ export default function payment() {
       await getExchangeRate({
         variables: {
           where: {
-            shop: shopId,
+            shop: _shopId
           },
         },
       });
@@ -825,8 +832,8 @@ export default function payment() {
                   qrcodeData={qrcodeData}
                   handleGoback={handleGoback}
                   getOrderId={getOrderId}
-                  shopId={shopId}
-                  affiliateId={affiliateId}
+                  shopId={_shopId}
+                  affiliateId={_affiliateId}
                   dataCompleted={dataCompleted}
                 />
                 <span>Qr ຊຳລະ</span>

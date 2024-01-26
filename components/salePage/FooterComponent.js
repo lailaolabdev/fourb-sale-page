@@ -36,9 +36,9 @@ export default function FooterComponent() {
 
             <ol>
               {/* <li onClick={()=> navigate.back()}>ໜ້າຫລັກ ເຊວເພຈ</li> */}
-              <li>ວິທີການສັ່ງຊື້</li>
+              {/* <li>ວິທີການສັ່ງຊື້</li> */}
               <li onClick={() => navigate.push("/policy")}>ນະໂຍບາຍການນຳໃຊ້</li>
-              <li>ຕິດຕໍ່ພວກເຮົາ</li>
+              {/* <li>ຕິດຕໍ່ພວກເຮົາ</li> */}
             </ol>
           </div>
           <div>
