@@ -104,8 +104,8 @@ export default function payment() {
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
-        // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
+        // sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
+        sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
         amount: cartList?.length,
         customerName,
@@ -114,8 +114,8 @@ export default function payment() {
         destinationLogistic,
       };
 
-      console.log("orders-9-8-6--->", convertedOrders)
-      console.log("orderGroup-9-8-7--->", _orderGroup)
+      // console.log("orders-9-8-6--->", convertedOrders)
+      // console.log("orderGroup-9-8-7--->", _orderGroup)
 
       // if (_affiliateId) {
       //   _orderGroup = {
