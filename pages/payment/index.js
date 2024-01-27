@@ -104,8 +104,8 @@ export default function payment() {
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        // sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
-        sumPrice: 1, // ຈຳນວນເງິນ ເທສ
+        sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
+        // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
         amount: cartList?.length,
         customerName,
@@ -117,16 +117,16 @@ export default function payment() {
       // console.log("orders-9-8-6--->", convertedOrders)
       // console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      // if (_affiliateId) {
-      //   _orderGroup = {
-      //     ..._orderGroup,
-      //     infulancer: _affiliateId,
-      //     commissionAffiliate: compareData?.commision,
-      //     infulancer_percent: compareData?.commision,
-      //   };
-      // } else {
-      //   _orderGroup = { ..._orderGroup };
-      // }
+      if (_affiliateId) {
+        _orderGroup = {
+          ..._orderGroup,
+          infulancer: _affiliateId,
+          // commissionAffiliate: compareData?.commision,
+          // infulancer_percent: compareData?.commision,
+        };
+      } else {
+        _orderGroup = { ..._orderGroup };
+      }
 
       console.log("orderGroupo---56789-->", _orderGroup)
 
