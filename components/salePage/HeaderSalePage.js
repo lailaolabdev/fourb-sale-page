@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { FiSearch } from "react-icons/fi";
+import { FaUserAlt } from "react-icons/fa";
 import { MdDns, MdOutlineClose, MdTurnedIn } from "react-icons/md";
 import useWindowDimensions from "../../helper/useWindowDimensions";
 import { CORLOR_APP, CORLOR_WHITE, LINK_AFFILIATE, S3_URL } from "../../helper";
@@ -49,7 +50,7 @@ function HeaderSalePage({
   handleIsStockThenZero,
   cartList,
   hadleCartProducts,
-  shopId
+  shopId,
 }) {
   const { height, width } = useWindowDimensions();
   const [openMyDrawer, setOpenMyDrawer] = useState(false);
@@ -127,17 +128,30 @@ function HeaderSalePage({
         {!enableSearch && (
           <div className="shopProfile">
             <div className="imgShop" onClick={handleShowProfile}>
-              {/* <FiSearch /> */}
-              <Avatar
-                alt={loadShopData?.name}
-                src={S3_URL + loadShopData?.image}
-                sx={{
-                  width: 56,
-                  height: 56,
-                  backgroundColor: CORLOR_WHITE,
-                  color: CORLOR_APP,
-                }}
-              />
+              {/* <FaUserAlt /> */}
+              {loadShopData?.image ? (
+                <Avatar
+                  alt={loadShopData?.name}
+                  src={S3_URL + loadShopData?.image}
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    backgroundColor: CORLOR_WHITE,
+                    color: CORLOR_APP,
+                  }}
+                />
+              ) : (
+                <Avatar
+                  sx={{
+                    width: 56,
+                    height: 56,
+                    backgroundColor: CORLOR_WHITE,
+                    color: CORLOR_APP,
+                  }}
+                  alt="emptyImage"
+                  icon={<FaUserAlt />}
+                />
+              )}
             </div>
             &nbsp;
             {width > 410 && (
@@ -207,7 +221,7 @@ function HeaderSalePage({
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
               />
             </div>
-            &nbsp; 
+            &nbsp;
             <div className="openMenu-dropdown" onClick={handelTrackOrderNow}>
               <FileSearchOutlined
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
@@ -283,8 +297,6 @@ function HeaderSalePage({
             </li>
           </ul>
         </div>
-
-       
       </div>
       {/* track order for me */}
 
@@ -304,7 +316,7 @@ function HeaderSalePage({
             <p>ວິທີການນຳໃຊ້ 4B Sale Page </p>
           </li>
 
-          <li   
+          <li
           // onClick={() => navigate.push("/ebook/Collapse4bShop")}
           >
             <ShopOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
@@ -353,31 +365,31 @@ function HeaderSalePage({
           </Space.Compact>
 
           <div
-          style={{
-            height: "5em",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: '5em',
-          }}>
-          {orderGroupLoading && (
-            <LoadingComponent
-              titleLoading="ກຳລັງຄົ້ນຫາອໍເດີ້..."
-              height={"40px"}
-              width={"40px"}
-            />
-          )}
+            style={{
+              height: "5em",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "5em",
+            }}>
+            {orderGroupLoading && (
+              <LoadingComponent
+                titleLoading="ກຳລັງຄົ້ນຫາອໍເດີ້..."
+                height={"40px"}
+                width={"40px"}
+              />
+            )}
 
-          {orderGroupData?.orderGroups?.total <= 0 && (
-            <Alert
-              message={`ຄົ້ນຫາບໍ່ພົບອໍເດີ້ ${orderId}`}
-              description="ອໍເດີ້ນີ້ບໍ່ມີຢູ່ໃນລະບົບ ກະລຸນາປ້ອນລະຫັດອໍເດີ້ທີ່ຖຶກຕ້ອງ!"
-              type="warning"
-              showIcon
-              closable
-            />
-          )}
-        </div>
+            {orderGroupData?.orderGroups?.total <= 0 && (
+              <Alert
+                message={`ຄົ້ນຫາບໍ່ພົບອໍເດີ້ ${orderId}`}
+                description="ອໍເດີ້ນີ້ບໍ່ມີຢູ່ໃນລະບົບ ກະລຸນາປ້ອນລະຫັດອໍເດີ້ທີ່ຖຶກຕ້ອງ!"
+                type="warning"
+                showIcon
+                closable
+              />
+            )}
+          </div>
         </div>
       </Drawer>
     </div>

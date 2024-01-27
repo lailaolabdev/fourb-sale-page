@@ -25,6 +25,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { addCartItem } from "../../redux/salepage/cartReducer";
 import {
   COMMISSION_OFFICE,
+  CORLOR_APP,
+  CORLOR_WHITE,
   EMPTY_USER_PROFILE,
   S3_URL,
   SERVER_IP,
@@ -46,6 +48,7 @@ import Image from "next/image";
 import { DefaultSeo } from "next-seo";
 import EmptyImage from "../../components/salePage/EmptyImage";
 import Head from "next/head";
+import { FaUserAlt } from "react-icons/fa";
 //   import '../../styles/styleSalePage.css'
 
 const versionWeb = require("../../package.json");
@@ -827,26 +830,38 @@ function ProductSalePage({ initialShop }) {
           <div className="viewProfile p-4">
             <div className="shop-profile">
               <div className="imgShow">
-                {/* <img
-                      src={
-                        loadShopData?.shop?.image?.length > 0
-                          ? S3_URL + loadShopData?.shop?.image
-                          : emptyProfile
-                      }
-                      alt="profile shop"
-                    /> */}
+              {initialShop?.image ? (
                 <Avatar
                   alt={initialShop?.name}
                   src={S3_URL + initialShop?.image}
-                  sx={{ width: "100%", height: "100%" }}
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: CORLOR_WHITE,
+                    color: CORLOR_APP,
+                    border:'1px solid #f2f2f2'
+                  }}
                 />
+              ) : (
+                <Avatar
+                  sx={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: CORLOR_WHITE,
+                    color: CORLOR_APP,
+                    border:'1px solid #f2f2f2'
+                  }}
+                  alt="emptyImage"
+                  icon={<FaUserAlt />}
+                />
+              )}
               </div>
               <br />
               <h4>{initialShop?.name}</h4>
             </div>
             <br />
             <div className="show-contact-info">
-              <p>ຂໍ້ມູນພື້ນຖານ ຮ້ານ: {initialShop?.name}</p>
+              <p>ຊື່ຮ້ານ: {initialShop?.name}</p>
               <ul style={{ marginTop: "-.5em", marginLeft: "-.8em" }}>
                 <li>ເບີໂທລະສັບ: +856 20 {initialShop?.phone ?? "........"}</li>
                 <li>ທີ່ຢູ່ປັດຈຸບັນ ບ້ານ: {initialShop?.address?.village}</li>
