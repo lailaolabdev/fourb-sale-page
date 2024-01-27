@@ -62,11 +62,10 @@ function ProductSalePage({ initialShop }) {
   } = router.query;
   const shopId = id;
 
-
   const { height, width } = useWindowDimensions();
 
   // console.log("testId---->", id);
-  // console.log("initialShop909090---->", initialShop?.name);
+  console.log("commissionForShopId---->", commissionForShopId);
 
   const [openProfileShop, setOpenProfileShop] = useState(false);
   const handleCloseProfile = () => setOpenProfileShop(false);
@@ -81,7 +80,7 @@ function ProductSalePage({ initialShop }) {
   const [productTotal, setProductTotal] = useState(0);
   const [filter, setFilter] = useState();
   const { cartList } = useSelector((state) => state?.salepage);
-  const [shopDetail, setShopDetail] = useState(initialShop);
+  const [shopDetail, setShopDetail] = useState('');
 
   const [isInStock, setIsInStock] = useState(1);
 
@@ -132,14 +131,14 @@ function ProductSalePage({ initialShop }) {
   const [getStocksGeneral, { loading: loadingStock }] = useLazyQuery(
     GET_STOCKS,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: "network-only",  
     }
   );
 
   // stocks is live
   const [getLiveStockData, { data: liveStocks, loading: loadingLiveStock }] =
     useLazyQuery(GET_SALE_PAGE_LIVE_STOCKS, {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "network-only",
     });
 
   // commission for affilite
@@ -147,16 +146,16 @@ function ProductSalePage({ initialShop }) {
     getShopCommissionFor,
     { data: shopDataCommissionFor, loading: shopLoading },
   ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "network-only",
   });
 
-  // const [getShopData, { data: loadShopData }] = useLazyQuery(SHOP, {
-  //   fetchPolicy: "network-only",
-  // });
+  const [getShopData, { data: loadShopData }] = useLazyQuery(SHOP, {
+    fetchPolicy: "network-only",
+  });
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
-    { fetchPolicy: "cache-and-network" }
+    { fetchPolicy: "network-only" }
   );
 
   // console.log('loadExchangeRate---->', loadExchangeRate)
@@ -165,6 +164,9 @@ function ProductSalePage({ initialShop }) {
   // ຕົວປ່ຽນຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານ ກຳນົດໃຫ້ ອາຟຣິລີເອດ
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
+
+    console.log({_commissionForAffiliate, shopDetail})
+
 
   // pagination all =======================================================================>
   const rowsPerPage = 100;
@@ -186,15 +188,23 @@ function ProductSalePage({ initialShop }) {
   }, [commissionForShopId]);
 
   // fetch shop commission for shop
-  // useEffect(() => {
-  //   getShopData({
-  //     variables: {
-  //       where: {
-  //         id: shopId,
-  //       },
-  //     },
-  //   });
-  // }, [shopId]);
+  useEffect(() => {
+    getShopData({
+      variables: {
+        where: {
+          id: shopId,
+        },
+      },
+    });
+
+    getExchangeRate({
+      variables: {
+        where: {
+          shop: shopId,
+        },
+      },
+    });
+  }, [shopId]);
 
   useEffect(() => {
     if (live === "LIVE") {
@@ -205,22 +215,12 @@ function ProductSalePage({ initialShop }) {
   }, [liveId, shopId, page, live, isInStock]);
 
   // get shop data
-  // useEffect(() => {
-  //   if (loadShopData?.shop) {
-  //     setShopDetail(loadShopData?.shop);
-  //   }
-  // }, [loadShopData]);
-
-  // get exchangerate
   useEffect(() => {
-    getExchangeRate({
-      variables: {
-        where: {
-          shop: shopId,
-        },
-      },
-    });
-  }, [shopId]);
+    if (loadShopData?.shop) {
+      setShopDetail(loadShopData?.shop);
+    }
+  }, [loadShopData]);
+ 
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
@@ -383,7 +383,6 @@ function ProductSalePage({ initialShop }) {
   const _calculatePriceWithExchangeRate = (price, currency) => {
     // console.log("currency import------->", currency)
     // console.log("price import55------->", price)
-    // console.log("shopDetail------->", shopDetail)
 
 
 
@@ -416,11 +415,11 @@ function ProductSalePage({ initialShop }) {
       shopDetail?.commissionService &&
       shopDetail?.commissionAffiliate
     ) {
-      const affiliateCommission =
-        commissionForShopId !== undefined
-          ? _price * _commissioinForInflu
-          : _price * commissionRate;
+      
+      const affiliateCommission = commissionForShopId !== undefined ? _price * _commissioinForInflu : _price * commissionRate;
+
       priceProduct = _price + affiliateCommission + baseCommission;
+      
     } else {
       priceProduct = _price + baseCommission;
     }

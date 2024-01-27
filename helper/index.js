@@ -24,6 +24,7 @@ export const calculateRoundedValue = (price) => {
     return integerPart + 1;
   }
 };
+
 export const COMMISSION_OFFICE = 0.03;
 export const numberFormat = (_number) => {
   return new Intl.NumberFormat("en-US").format(_number);
