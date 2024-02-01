@@ -64,7 +64,7 @@ export default function index() {
           alignItems: "center",
           padding: "1em",
         }}>
-        <div className="removeIcon1" onClick={() => router.back()}>
+        <div className="removeIcon1" onClick={() => navigate.back()}>
           <MdArrowBack style={{ fontSize: 20 }} />
         </div>
         <div>
