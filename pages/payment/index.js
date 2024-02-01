@@ -32,12 +32,13 @@ import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
 import EmptyImage from "../../components/salePage/EmptyImage";
 import { LoadingOutlined } from "@ant-design/icons";
 import { Spin } from "antd";
+import { LaoAddress } from "../../const/LaoAddress";
+import _ from "lodash";
 
 export default function payment() {
   const router = useRouter();
   const { liveId, live, affiliateId, id, shopForAffiliateId } = router.query;
   const dispatch = useDispatch();
-
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -50,20 +51,42 @@ export default function payment() {
   const [file, setFile] = useState();
   const [isValidate, setIsValidate] = useState(false);
   const [enableExpress, setEnableExpress] = useState(true);
-  const [dataCompleted, setDataCompleted] = useState(); 
+  const [dataCompleted, setDataCompleted] = useState();
+
+  const [selectedOriginalProvice, setSelectedOriginalProvice] = useState();
+  const [selectedOriginalDistrict, setSelectedOriginalDistrict] = useState();
+  const [selectedDestinationProvice, setSelectedDestinationProvice] =
+    useState();
+  const [selectedDestinationDistrict, setSelectedDestinationDistrict] =
+    useState();
+  const [selectedOriginalLogisticBranch, setSelectedOriginalLogisticBranch] =
+    useState();
+
+    const [destinationLogisticBranches, setDestinationLogisticBranches] =
+    useState([]);
+
+    
+  const [logisticBranches, setLogisticBranches] = useState([]);
+  const [originalLogisticBranches, setOriginalLogisticBranches] = useState([]);
+
+  const [
+    selectedDestinationLogisticBranch,
+    setSelectedDestinationLogisticBranch,
+  ] = useState();
 
   const ordersState = useSelector((state) => state?.setorder);
   const { cartList } = useSelector((state) => state?.salepage);
   const { setId } = useSelector((state) => state?.predata);
   const _shopId = setId?.idPreState?.shopId;
   const _affiliateId = setId?.idPreState?.affiliateId;
-  
-  const  totalPrice = cartList.reduce((acc, item) => acc + (item.price * item.qty), 0);
 
-  
+  const totalPrice = cartList.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  );
 
-  console.log("shopStateId=---->", setId)  
-  // console.log("combineField Payment55=---->", totalPrice)  
+  // console.log("shopStateId=---->", setId)
+  // console.log("combineField Payment55=---->", totalPrice)
 
   // console.log("check price9999---->", totalPrice);
 
@@ -86,32 +109,34 @@ export default function payment() {
     try {
       if (loadingSubscripe || loadingPayment) return;
 
-
       // Convert the orders into the required format
-      const convertedOrders = await (cartList || []).map(
-        (order) => ({
-          stock: order?.id,
-          amount: order?.qty,
-          price: order?.price,
-          productName: order?.name,
-          currency: order?.currency,
-          totalPrice: order?.qty * order?.price,
-        })
-      );
+      const convertedOrders = await (cartList || []).map((order) => ({
+        stock: order?.id,
+        shop: _shopId,
+        amount: order?.qty,
+        price: order?.price,
+        originPrice: order?.price,
+        productName: order?.name,
+        currency: order?.currency,
+        totalPrice: order?.qty * order?.price,
+      }));
+
+      
+      const connectField = "ແຂວງ " + selectedOriginalProvice?.province_name + ", " + "ເມືອງ " +  selectedOriginalDistrict?.district + ", " + "ສາຂາປາຍທາງ " + destinationLogistic
 
       let _orderGroup = {
         shop: _shopId,
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
-        // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
+        // sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
+        sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
         amount: cartList?.length,
         customerName,
         phone,
         logistic,
-        destinationLogistic,
+        destinationLogistic: connectField,
       };
 
       // console.log("orders-9-8-6--->", convertedOrders)
@@ -128,7 +153,7 @@ export default function payment() {
         _orderGroup = { ..._orderGroup };
       }
 
-      console.log("orderGroupo---56789-->", _orderGroup)
+      console.log("check orders:-->", _orderGroup, convertedOrders);
 
       // Create an order
       await createOrderSalepage({
@@ -189,7 +214,7 @@ export default function payment() {
             shopId: _shopId,
             amountPaided: totalPrice,
           };
-            console.log("compareData=====>", compareData);
+          console.log("compareData=====>", compareData);
           dispatch(setDataCompleteds(compareData));
           setDataCompleted(compareData);
           // history.push("/completed-payment", { compareData });
@@ -277,7 +302,7 @@ export default function payment() {
       await getExchangeRate({
         variables: {
           where: {
-            shop: _shopId
+            shop: _shopId,
           },
         },
       });
@@ -307,6 +332,7 @@ export default function payment() {
       });
     } else {
       setIsValidate(false);
+      // console.log("check array:-->" , connectField )
       _createOrderOnSalePage();
     }
   };
@@ -346,9 +372,7 @@ export default function payment() {
     let amountKip = 0;
 
     // Check if ordersState and setOrder are defined and if order is iterable
-    if (
-      cartList
-    ) {
+    if (cartList) {
       // Iterate over orders
       for (let order of cartList) {
         const { currency, qty, price } = order;
@@ -397,7 +421,18 @@ export default function payment() {
     return price;
   };
 
-  // console.log("amountPaided4445566====>", amountPaided)
+  const _filterOriginalLogisticBranches = (district, isOriginal) => {
+    let _newBranches = [];
+    _newBranches = logisticBranches.filter(
+      (branch) => branch.district.name === district
+    );
+    isOriginal
+      ? setOriginalLogisticBranches(_newBranches)
+      : setDestinationLogisticBranches(_newBranches);
+  };
+
+  // console.log("selectedOriginalProvice====>", selectedOriginalProvice)
+  const compulsory = "(ບັງຄັບ)";
 
   return (
     <>
@@ -417,7 +452,7 @@ export default function payment() {
                 <Col>
                   <Form.Group className="mb-3">
                     <Form.Label style={{ margin: 0 }}>
-                      ຊື່ ແລະ ນາມສະກຸນ
+                      ຊື່ ແລະ ນາມສະກຸນ {compulsory}
                     </Form.Label>
                     <Form.Control
                       size="lg"
@@ -440,7 +475,9 @@ export default function payment() {
                     className="mb-3"
                     style={{ position: "relative" }}
                     controlId="validationCustom01">
-                    <Form.Label style={{ margin: 0 }}>ເບີໂທລະສັບ</Form.Label>
+                    <Form.Label style={{ margin: 0 }}>
+                      ເບີໂທລະສັບ {compulsory}
+                    </Form.Label>
                     <span
                       style={{
                         position: "absolute",
@@ -464,6 +501,7 @@ export default function payment() {
                         width: "100%",
                         border: ".02em solid #ddd",
                         paddingLeft: "3em",
+                        fontSize:'1.3em'
                       }}
                       onChange={(e) => {
                         let phone = e?.target?.value;
@@ -496,7 +534,7 @@ export default function payment() {
                 </Col>
               </Row>
 
-              {enableExpress && (
+              {/* {enableExpress && (
                 <ButtonComponent
                   onClick={handleShowExpress}
                   backgroundColor="#fff"
@@ -513,29 +551,116 @@ export default function payment() {
                   padding=".6em"
                   type="button"
                 />
-              )}
+              )} */}
 
-              <Form.Group className="mb-3" hidden={enableExpress}>
-                <Form.Label style={{ margin: 0 }}>ບໍລິການຂົນສົ່ງ</Form.Label>
-                <Form.Control
-                  size="lg"
-                  type="text"
-                  placeholder="ປ້ອນການລິການຂົນສົ່ງ"
-                  value={logistic}
-                  onChange={(e) => setLogistic(e?.target?.value)}
-                />
-              </Form.Group>
-
-              <Form.Group className="mb-3" hidden={enableExpress}>
-                <Form.Label style={{ margin: 0 }}>ທີ່ຢູ່ປາຍທາງ</Form.Label>
-                <Form.Control
-                  size="lg"
-                  type="text"
-                  placeholder="ຊື່ສາຂາ, ບ້ານ, ເມືອງ ແລະ ແຂວງ"
-                  value={destinationLogistic}
-                  onChange={(e) => setDestinationLogistic(e?.target?.value)}
-                />
-              </Form.Group>
+              <Row sm={1}>
+                <Col>
+                  <Form.Group className="mb-3">
+                    <Form.Label style={{ margin: 0 }}>
+                      ຊື່ຂົນສົ່ງ {compulsory}
+                    </Form.Label>
+                    <Form.Control
+                      size="lg"
+                      type="text"
+                      placeholder="ປ້ອນຊື່ຂົນສົ່ງ"
+                      value={logistic}
+                      onChange={(e) => setLogistic(e?.target?.value)}
+                    />
+                  </Form.Group>
+                </Col>
+                {/* <Col>
+                  <Form.Group className="mb-3">
+                    <Form.Label style={{ margin: 0 }}>
+                      ສາຂາປາຍທາງ {compulsory}
+                    </Form.Label>
+                    <Form.Control
+                      size="lg"
+                      type="text"
+                      placeholder="ປ້ອນສາຂາປາຍທາງ"
+                      value={destinationLogistic}
+                      onChange={(e) => setDestinationLogistic(e?.target?.value)}
+                    />
+                  </Form.Group>
+                </Col> */}
+              </Row>
+              <Row xs={1} sm={3}>
+                <Col>
+                  <Form.Label style={{ margin: 5 }}>
+                    ແຂວງ {compulsory}
+                  </Form.Label>
+                  <Form.Select
+                    name="selectedOriginalProvice"
+                    as="select"
+                    size="lg"
+                    value={selectedOriginalProvice?.code}
+                    onChange={(e) => {
+                      const _newProvince = _.find(LaoAddress, {
+                        code: e.target.value,
+                      });
+                      setSelectedOriginalProvice(_newProvince);
+                    }}>
+                    <option value="">--ເລືອກ--</option>
+                    {LaoAddress?.map((province, pIndex) => {
+                      return (
+                        <option
+                          value={province?.code}
+                          key={"province" + pIndex}>
+                          {province?.province_name}
+                        </option>
+                      );
+                    })}
+                  </Form.Select>
+                </Col>
+                <Col>
+                  <Form.Label style={{ margin: 5 }}> 
+                    ເມືອງ {compulsory}
+                  </Form.Label>
+                  <Form.Select
+                    name="selectedOriginalDistrict"
+                    as="select"
+                    size="lg"
+                    value={selectedOriginalDistrict?.code}
+                    onChange={(e) => {
+                      const _newDistrict = _.find(
+                        selectedOriginalProvice?.district_list,
+                        { code: e.target.value }
+                      );
+                      _filterOriginalLogisticBranches(
+                        _newDistrict?.district,
+                        true
+                      );
+                      setSelectedOriginalDistrict(_newDistrict);
+                    }}
+                  >
+                    <option value="">--ເລືອກ--</option>
+                    {selectedOriginalProvice?.district_list?.map(
+                      (district, dIndex) => {
+                        return (
+                          <option
+                            value={district?.code}
+                            key={"district" + dIndex}>
+                            {district?.district}
+                          </option>
+                        );
+                      }
+                    )}
+                  </Form.Select>
+                </Col>
+                <Col>
+                <Form.Group className="mb-3">
+                    <Form.Label style={{ margin: 5 }}>
+                      ສາຂາປາຍທາງ {compulsory}
+                    </Form.Label>
+                    <Form.Control
+                      size="lg"
+                      type="text"
+                      placeholder="ປ້ອນສາຂາປາຍທາງ"
+                      value={destinationLogistic}
+                      onChange={(e) => setDestinationLogistic(e?.target?.value)}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
 
               {/* <Form.Group className="mb-3 mt-2">
                   <Form.Label style={{ margin: 0 }}>
@@ -782,19 +907,18 @@ export default function payment() {
                   <>
                     {loadingSubscripe || loadingPayment ? (
                       <div className="loadingButton">
-                       <Spin
+                        <Spin
                           indicator={
                             <LoadingOutlined
                               style={{
                                 fontSize: 24,
-                                color:'#fff'
+                                color: "#fff",
                               }}
                               spin
                             />
                           }
                         />
-                        &nbsp;
-                        ກຳລັງລໍຖ້າ...
+                        &nbsp; ກຳລັງລໍຖ້າ...
                       </div>
                     ) : (
                       <ButtonComponent
@@ -847,7 +971,6 @@ export default function payment() {
       </div>
 
       <ToastContainer />
-
     </>
   );
 }

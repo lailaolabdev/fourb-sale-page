@@ -22,6 +22,15 @@ Modal.Footer {
   border-top: none;
 }
 
+.contact-shop {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: .4em;
+  padding: 1em;
+  cursor: pointer;
+  display: flex;justify-content: center;align-items: center;
+}
+
 .menu-drawer {
   list-style: none;
   margin-left: -2em;
@@ -1606,10 +1615,10 @@ input::placeholder {
   justify-content: center;
   align-items: center;
   gap: 1em;
-  position: absolute;
+  /* position: absolute;
   left: 0;
   bottom: 6em;
-  width: 100%;
+  width: 100%; */
 }
 
 .action-footer-button Button {
@@ -1699,9 +1708,12 @@ input::placeholder {
     justify-content: center;
     align-items: center;
     gap: 1em;
-    position: absolute;
-    left: 0;
-    bottom: 2.75em;
+    padding: 1em;
+    margin-top: -2.5em;
+    /* border: 1px solid red; */
+    /* position: absolute; */
+    /* left: 0; */
+    /* bottom: 0em; */
     width: 100%;
   }
   .openMenu-dropdown {

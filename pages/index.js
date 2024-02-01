@@ -37,7 +37,9 @@ export default function Home() {
         <h1>
           <b>4B Sale Page</b>
         </h1>
-        <h5 style={{ textAlign:'justify', width:'100%' }}>
+        <h5 style={{  width:'100%', display: "flex",
+            justifyContent: "center",
+            alignItems: "center", }}>
           ✨Sale Page ✨ແມ່ນ ໜ້າເວັບໄຊຣ໌ທີ່ອອກແບບມາເພື່ອ ກະຕຸ້ນການຂາຍ ຫຼື ບໍລິການ <br />
           ແລະ ມີເນື້ອໃນທີ່ກະທັດຮັດ , ຕົງປະເດັນ
           ເພື່ອໃຫ້ລູກຄ້າທີ່ເຂົ້າເບິ່ງຕັດສິນໃຈ ຊື້ໄດ້ງ່າຍຂື້ນ.

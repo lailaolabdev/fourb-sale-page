@@ -1,4 +1,4 @@
-import '../styles/globals.css'
+import "../styles/globals.css";
 
 // export default function App({ Component, pageProps }) {
 //   return <Component {...pageProps} />
@@ -38,6 +38,8 @@ import { StateProvider } from "../store";
 import { S3_URL, SERVER_URI, SOCKET_SERVER_URI } from "../helper";
 import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "react-toast-notifications";
+// import HeaderSalePage from "../components/salePage/HeaderSalePage";
+import NavbarComponent from "../components/salePage/NavbarComponent";
 
 // config.autoAddCss = false;
 
@@ -45,8 +47,6 @@ import { ToastProvider } from "react-toast-notifications";
 // ReactGA.initialize(TRACKING_ID);
 
 const App = ({ Component, pageProps }) => {
-
-
   const httpLink = new HttpLink({
     uri: SERVER_URI, // use https for secure endpoint
   });
@@ -117,7 +117,6 @@ const App = ({ Component, pageProps }) => {
       }
     },
   });
- 
 
   return (
     <>
@@ -143,7 +142,10 @@ const App = ({ Component, pageProps }) => {
         <ApolloProvider client={client}>
           <ToastProvider>
             <StateProvider>
-              <Component {...pageProps} />
+                <Component {...pageProps} />
+              {/* <div style={{ display: "flex", flexDirection: "column" }}>
+                <NavbarComponent/>
+              </div> */}
             </StateProvider>
           </ToastProvider>
         </ApolloProvider>

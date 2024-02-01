@@ -6,12 +6,13 @@ import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
 import { CORLOR_APP, numberFormat } from "../../helper";
 // import mainLogo from "/assets/images/mainLogo.png"
-import { MdArrowBack, MdSimCardDownload } from "react-icons/md";
+import { MdArrowBack, MdPageview, MdSimCardDownload } from "react-icons/md";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { removeStateCompleted } from "../../redux/completedOrder/dataOrder";
 import { Watermark } from "antd";
+import { FaFileDownload } from "react-icons/fa";
 
 export default function CompletedOrder() {
   const navigate = useRouter();
@@ -26,7 +27,6 @@ export default function CompletedOrder() {
   const { dataCompleted } = useSelector((state) => state?.completedOrder);
   const { idPreState } = setId || {};
   const info = dataCompleted;
-   
 
   // console.log("idPreState--6-->", setId?.idPreState?.shopId)
   // console.log("compeletedData999999-->", dataCompleted?.code)
@@ -95,13 +95,17 @@ export default function CompletedOrder() {
     return new Blob([ab], { type: mimeString });
   }
 
+  const handleCheckOrder = () => {
+    navigate.push(`../trackOrder/detail/${info?.code}`);
+  };
+
   const txtWatermark = info?.code + "-" + numberFormat(info?.amountPaided);
 
   return (
     <>
       <div
         ref={captureElementRef}
-        style={{ width: "100%", height: "100vh", position: "relative" }}>
+        style={{ width: "100%", position: "relative" }}>
         <div className="logoBusness2">
           <img src="/assets/images/mainLogo.png" alt="mainLogo" />
         </div>
@@ -129,8 +133,16 @@ export default function CompletedOrder() {
                   alt="successImage"
                 />
               </div>
-              <h2>ສຳເລັດການສັ່ງຊື້ສິນຄ້າ</h2>
-              <p>ຂອບໃຈສຳລັບລູກຄ້າ</p>
+              <div
+                style={{
+                  width: "100%",
+                  background: "#fff",
+                  padding: '2em',
+                  textAlign: "center",color:'green', marginTop:'-2em'
+                }}>
+                <h1><b>ສຳເລັດການສັ່ງຊື້ສິນຄ້າ</b></h1>
+                <h5>ຂອບໃຈສຳລັບລູກຄ້າ</h5>
+              </div>
               <div className="card-completed-order">
                 <div className="card-display-all">
                   <div className="actionView">
@@ -153,7 +165,8 @@ export default function CompletedOrder() {
                   <span style={{ color: CORLOR_APP, fontSize: 13 }}>
                     ໝາຍເຫດ{" "}
                   </span>{" "}
-                  ກະລຸນາແຄັບ ຫຼື ດາວໂຫລດ ບິນນີ້ໄວ້ເພື່ອເປັນຫຼັກຖານໃນການສັ່ງຊື້ສິນຄ້າ!
+                  ກະລຸນາແຄັບ ຫຼື ດາວໂຫລດ
+                  ບິນນີ້ໄວ້ເພື່ອເປັນຫຼັກຖານໃນການສັ່ງຊື້ສິນຄ້າ!
                 </div>
               </div>
             </div>
@@ -172,7 +185,17 @@ export default function CompletedOrder() {
             color: "white",
             cursor: "pointer",
           }}>
-          <MdSimCardDownload style={{ fontSize: 20 }} /> &nbsp; ດາວໂຫລດ
+          <FaFileDownload style={{ fontSize: 20 }} />
+        </Button>
+        <Button
+          onClick={() => handleCheckOrder()}
+          style={{
+            backgroundColor: CORLOR_APP,
+            border: `1px solid ${CORLOR_APP}`,
+            color: "white",
+            cursor: "pointer",
+          }}>
+          <MdPageview style={{ fontSize: 22 }} />
         </Button>
       </div>
     </>

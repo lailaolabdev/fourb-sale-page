@@ -1,14 +1,23 @@
 import { createStore } from "redux";
 import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; 
-
+import storage from "redux-persist/lib/storage";
 
 import rootReducer from "./rootReducer";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["fbdata", "salepage", "setorder", "setpatch", "notiorder", 'qrcode', "predata", "completedOrder"],
+  whitelist: [
+    "fbdata",
+    "salepage",
+    "setorder",
+    "setpatch",
+    "notiorder",
+    "qrcode",
+    "predata",
+    "completedOrder",
+    "productView",
+  ],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

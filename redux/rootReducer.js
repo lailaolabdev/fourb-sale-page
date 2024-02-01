@@ -9,6 +9,7 @@ import getIds from "./predata/getIds";
 import dataOrder from "./completedOrder/dataOrder";
 import trackOrder from "./setOrder/trackOrder";
 import getqrcode from "./qrcode/getqrcode";
+import getData from "./productView/getData";
 
 const rootReducer = combineReducers({
   fbdata: fbdataReducer,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   completedOrder: dataOrder,
   setorder: trackOrder,
   qrcode: getqrcode,
+  productView: getData,
 });
  
 

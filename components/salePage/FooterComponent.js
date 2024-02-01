@@ -20,7 +20,7 @@ export default function FooterComponent() {
               style={{ width: "100%", height: "100%" }}
             />
           </div>
-          <h5>4B Sale Page</h5>
+          <h5>Sale Page</h5>
           <small>Lailaolab ICT Solutions CO.,LTD</small>
           <br />
           <small style={{ fontSize: 13 }}>
@@ -37,7 +37,8 @@ export default function FooterComponent() {
             <ol>
               {/* <li onClick={()=> navigate.back()}>ໜ້າຫລັກ ເຊວເພຈ</li> */}
               {/* <li>ວິທີການສັ່ງຊື້</li> */}
-              <li onClick={() => navigate.push("/policy")}>ນະໂຍບາຍການນຳໃຊ້</li>
+              <li onClick={() => navigate.push("/policy")}><u>ນະໂຍບາຍການນຳໃຊ້</u></li>
+              <li onClick={() => window.open("https://sp.bbbb.com.la/pricing")}><u>ແພັກເກັດລະບົບ</u></li>
               {/* <li>ຕິດຕໍ່ພວກເຮົາ</li> */}
             </ol>
           </div>
@@ -46,10 +47,11 @@ export default function FooterComponent() {
               <b>ຟີເຈີີຂອງ 4B</b>
             </p>
             <ul>
-              <li>4B Shop</li>
-              <li>4B POS</li>
-              <li>4B Affiliate</li>
-              <li>4B Sale Page</li>
+              <li style={{cursor:'pointer'}} onClick={()=> window.open("https://shop.bbbb.com.la")}><u>4B Live</u></li>
+              <li style={{cursor:'pointer'}} onClick={()=> window.open("https://pos.bbbb.com.la")}><u>4B POS</u></li>
+              <li style={{cursor:'pointer'}} onClick={()=> window.open("https://affiliate.bbbb.com.la")}><u>4B Affiliate</u></li>
+              <li style={{cursor:'pointer'}} onClick={()=> window.open("https://sp.bbbb.com.la")}><u>4B Sale Page</u></li>
+              
             </ul>
           </div>
         </div>

@@ -49,6 +49,8 @@ import { DefaultSeo } from "next-seo";
 import EmptyImage from "../../components/salePage/EmptyImage";
 import Head from "next/head";
 import { FaUserAlt } from "react-icons/fa";
+import { setStateView } from "../../redux/productView/getData";
+import btoa from "btoa-lite";
 //   import '../../styles/styleSalePage.css'
 
 const versionWeb = require("../../package.json");
@@ -68,7 +70,7 @@ function ProductSalePage({ initialShop }) {
   const { height, width } = useWindowDimensions();
 
   // console.log("testId---->", id);
-  console.log("commissionForShopId---->", commissionForShopId);
+  // console.log("commissionForShopId---->", commissionForShopId);
 
   const [openProfileShop, setOpenProfileShop] = useState(false);
   const handleCloseProfile = () => setOpenProfileShop(false);
@@ -83,7 +85,7 @@ function ProductSalePage({ initialShop }) {
   const [productTotal, setProductTotal] = useState(0);
   const [filter, setFilter] = useState();
   const { cartList } = useSelector((state) => state?.salepage);
-  const [shopDetail, setShopDetail] = useState('');
+  const [shopDetail, setShopDetail] = useState("");
 
   const [isInStock, setIsInStock] = useState(1);
 
@@ -134,7 +136,7 @@ function ProductSalePage({ initialShop }) {
   const [getStocksGeneral, { loading: loadingStock }] = useLazyQuery(
     GET_STOCKS,
     {
-      fetchPolicy: "network-only",  
+      fetchPolicy: "network-only",
     }
   );
 
@@ -168,8 +170,7 @@ function ProductSalePage({ initialShop }) {
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
-    console.log({_commissionForAffiliate, shopDetail})
-
+  // console.log({_commissionForAffiliate, shopDetail})
 
   // pagination all =======================================================================>
   const rowsPerPage = 100;
@@ -223,7 +224,6 @@ function ProductSalePage({ initialShop }) {
       setShopDetail(loadShopData?.shop);
     }
   }, [loadShopData]);
- 
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
@@ -330,7 +330,7 @@ function ProductSalePage({ initialShop }) {
       let where = {
         shop: shopId,
         isDeleted: false,
-        
+
         isUsingSalePage: true,
         live: live === "LIVE" ? liveId : null,
         isPublished: live === "LIVE",
@@ -387,8 +387,6 @@ function ProductSalePage({ initialShop }) {
     // console.log("currency import------->", currency)
     // console.log("price import55------->", price)
 
-
-
     let _price = 0;
 
     if (["BAHT", "ບາດ"].includes(currency)) {
@@ -418,11 +416,12 @@ function ProductSalePage({ initialShop }) {
       shopDetail?.commissionService &&
       shopDetail?.commissionAffiliate
     ) {
-      
-      const affiliateCommission = commissionForShopId !== undefined ? _price * _commissioinForInflu : _price * commissionRate;
+      const affiliateCommission =
+        commissionForShopId !== undefined
+          ? _price * _commissioinForInflu
+          : _price * commissionRate;
 
       priceProduct = _price + affiliateCommission + baseCommission;
-      
     } else {
       priceProduct = _price + baseCommission;
     }
@@ -458,7 +457,7 @@ function ProductSalePage({ initialShop }) {
 
   // ເປີດໂປຣຟາຍຮ້ານໃນໜ້າ sale page
   const handleViewProduct = (data) => {
-    setModalShow(true);
+    // setModalShow(true);
 
     let _price = 0;
 
@@ -503,9 +502,23 @@ function ProductSalePage({ initialShop }) {
       ...data,
       price: roundedValue,
     };
-    // console.log("_data return cart--->", _data)
+    
+    
+    
+  // const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(_data))));
+  
+  // Decode string from Base64
+  // const decodedString = atob(JSON.parse(encodedData));
+  
+  // console.log("_data--->",_data )
+  // console.log("check encode and decode--->", encodedString, decodedString )
 
-    setViewProduct(_data);
+  // setViewProduct(_data);
+
+  
+  
+  router.push("/shop/detailProduct")
+  dispatch(setStateView(_data))
   };
 
   // ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າ
@@ -614,7 +627,7 @@ function ProductSalePage({ initialShop }) {
     // Replace '1234567890' with the recipient's phone number.
     // const phoneNumber = "020" + loadShopData?.shop?.phone;
     // const phoneNumber = "+85602094293951";
-    const phoneNumber = "+856020" + initialShop?.phone;
+    const phoneNumber = "+856020" + shopDetail?.phone;
 
     // You can also include a message using the 'text' parameter.
     const message = "ສະບາຍດີ🙏";
@@ -629,45 +642,44 @@ function ProductSalePage({ initialShop }) {
   };
 
   // console.log("shop data to SEO:-->", initialShop?.name);
-  const ogImageUrl =
-    initialShop?.image 
-      ? `${S3_URL}${initialShop?.image}`
-      : `${S3_URL}${'c20f6485-4f3c-4df7-8473-88470ae62584.png'}`;
+  const ogImageUrl = initialShop?.image
+    ? `${S3_URL}${initialShop?.image}`
+    : `${S3_URL}${"c20f6485-4f3c-4df7-8473-88470ae62584.png"}`;
 
   return (
     <div>
-        <Head>
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-          />
-          <title>{initialShop?.name}</title>
-          <meta name="theme-color" content="#000000" />
-          <meta
-            name="description"
-            content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
-          />
-          <link
-            rel="icon"
-            // href="/assets/images/ecommerce_seo.png"
-            href={ogImageUrl}
-            type="image/icon type"
-          />
-          <meta charSet="UTF-8" />
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+        />
+        <title>{initialShop?.name}</title>
+        <meta name="theme-color" content="#000000" />
+        <meta
+          name="description"
+          content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
+        />
+        <link
+          rel="icon"
+          // href="/assets/images/ecommerce_seo.png"
+          href={ogImageUrl}
+          type="image/icon type"
+        />
+        <meta charSet="UTF-8" />
 
-          <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
-            crossOrigin="anonymous"
-          />
-          <link rel="preconnect" href="https://fonts.googleapis.com" />
-          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
-          <link
-            href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800;900&display=swap"
-            rel="stylesheet"
-          />
-        </Head>
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1"
+          crossOrigin="anonymous"
+        />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
+      </Head>
 
       <HeaderSalePage
         enableSearch={enableSearch}
@@ -705,14 +717,15 @@ function ProductSalePage({ initialShop }) {
               xs={width > 320 ? 3 : 2}
               sm={4}
               lg={5}
-              style={{ padding: "0", }}>
+              style={{ padding: "0" }}>
               {productLists?.map((data, index) => (
                 <Col
                   key={index}
                   className="col-producct-card"
-                  style={{ padding: width > 700 ? 10 : 2 }}
-                  onClick={() => handleViewProduct(data)}>
-                  <div className="productSalePage">
+                  style={{ padding: width > 700 ? 10 : 2 }}>
+                  <div
+                    onClick={() => handleViewProduct(data)}
+                    className="productSalePage">
                     <div className="imageViews">
                       {data?.image?.length > 0 ? (
                         <img src={S3_URL + data?.image} alt="productImage" />
@@ -830,31 +843,31 @@ function ProductSalePage({ initialShop }) {
           <div className="viewProfile p-4">
             <div className="shop-profile">
               <div className="imgShow">
-              {initialShop?.image ? (
-                <Avatar
-                  alt={initialShop?.name}
-                  src={S3_URL + initialShop?.image}
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: CORLOR_WHITE,
-                    color: CORLOR_APP,
-                    border:'1px solid #f2f2f2'
-                  }}
-                />
-              ) : (
-                <Avatar
-                  sx={{
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: CORLOR_WHITE,
-                    color: CORLOR_APP,
-                    border:'1px solid #f2f2f2'
-                  }}
-                  alt="emptyImage"
-                  icon={<FaUserAlt />}
-                />
-              )}
+                {initialShop?.image ? (
+                  <Avatar
+                    alt={initialShop?.name}
+                    src={S3_URL + initialShop?.image}
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: CORLOR_WHITE,
+                      color: CORLOR_APP,
+                      border: "1px solid #f2f2f2",
+                    }}
+                  />
+                ) : (
+                  <Avatar
+                    sx={{
+                      width: "100%",
+                      height: "100%",
+                      backgroundColor: CORLOR_WHITE,
+                      color: CORLOR_APP,
+                      border: "1px solid #f2f2f2",
+                    }}
+                    alt="emptyImage"
+                    icon={<FaUserAlt />}
+                  />
+                )}
               </div>
               <br />
               <h4>{initialShop?.name}</h4>
