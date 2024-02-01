@@ -129,8 +129,8 @@ export default function payment() {
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        // sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
-        sumPrice: 1, // ຈຳນວນເງິນ ເທສ
+        sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
+        // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
         amount: cartList?.length,
         customerName,
@@ -207,6 +207,8 @@ export default function payment() {
           setPhone("");
           setLogistic("");
           setDestinationLogistic("");
+          setSelectedOriginalProvice("")
+          setSelectedOriginalDistrict("")
           const dataResponse = message?.data?.createOrderSalePage;
 
           let compareData = {
@@ -314,28 +316,89 @@ export default function payment() {
   };
 
   // ຟັງເຊິນບັນທຶກຢູ່ໜ້າຟອມ
+  // const handlePayment = (event) => {
+  //   event.preventDefault();
+  //   if (customerName?.length === 0) {
+  //     // setIsValidate(true);
+  //     toast.warning("ກາລຸນາປ້ອນຊື່ ແລະ ນາມສະກຸນ ລູກຄ້າກ່ອນ", {
+  //       autoClose: 700,
+  //     });
+  //     // router.push(`../completedOrder`);
+  //   } else if (phone?.length === 0) {
+  //     toast.warning("ກາລຸນາປ້ອນເບີໂທລະສັບກ່ອນ", {
+  //       autoClose: 700,
+  //     });
+  //   } else if (logistic === "") {
+  //     toast.warning("ກາລູນາປ້ອນ ຊື່ຂົນສົ່ງກ່ອນ", {
+  //       autoClose: 700,
+  //     });
+  //   } else if(selectedOriginalProvice?.province_name === undefined){
+  //     toast.warning("ກາລຸນາເລືອກແຂວງກ່ອນ", {
+  //       autoClose: 700,
+  //     });
+      
+  //   } else if(selectedOriginalDistrict?.district === undefined){
+  //     toast.warning("ກາລຸນາເລືອກເມືອງກ່ອນ", {
+  //       autoClose: 700,
+  //     });
+      
+  //   } else if(destinationLogistic === ""){
+  //     toast.warning("ກາລຸນາປ້ອນສາຂາປາຍທາງກ່ອນ", {
+  //       autoClose: 800,
+  //     });
+
+  //   } else {
+  //     setIsValidate(false);
+  //     const connectField = "ແຂວງ " + selectedOriginalProvice?.province_name + ", " + "ເມືອງ " +  selectedOriginalDistrict?.district + ", " + "ສາຂາປາຍທາງ " + destinationLogistic
+
+  //     console.log("check array:-->" , connectField )
+  //     // _createOrderOnSalePage();
+  //   }
+  // };
+
   const handlePayment = (event) => {
     event.preventDefault();
-    if (customerName?.length === 0) {
-      // setIsValidate(true);
-      toast.warning("ກາລຸນາປ້ອນຊື່ ແລະ ນາມສະກຸນ ລູກຄ້າກ່ອນ", {
-        autoClose: 700,
-      });
-      // router.push(`../completedOrder`);
-    } else if (phone?.length === 0) {
-      toast.warning("ກາລຸນາປ້ອນເບີໂທລະສັບກ່ອນ", {
-        autoClose: 700,
-      });
-    } else if (file === "") {
-      toast.warning("ກາລຸນາເລືອກຮູບ qr ຊຳລະກ່ອນ", {
-        autoClose: 700,
-      });
-    } else {
+  
+    const showWarning = (message) => {
+      toast.warning(message, { autoClose: 700 });
+    };
+  
+    const validateField = (value, message) => {
+      if (!value || value.length === 0) {
+        showWarning(message);
+        return false;
+      }
+      return true;
+    };
+  
+    const validateProvinceAndDistrict = (value, message) => {
+      if (value === undefined) {
+        showWarning(message);
+        return false;
+      }
+      return true;
+    };
+  
+    if (
+      validateField(customerName, "ກາລຸນາປ້ອນຊື່ ແລະ ນາມສະກຸນ ລູກຄ້າກ່ອນ") &&
+      validateField(phone, "ກາລຸນາປ້ອນເບີໂທລະສັບກ່ອນ") &&
+      validateField(logistic, "ກາລູນາປ້ອນ ຊື່ຂົນສົ່ງກ່ອນ") &&
+      validateProvinceAndDistrict(selectedOriginalProvice, "ກາລຸນາເລືອກແຂວງກ່ອນ") &&
+      validateProvinceAndDistrict(selectedOriginalDistrict, "ກາລຸນາເລືອກເມືອງກ່ອນ") &&
+      validateField(destinationLogistic, "ກາລຸນາປ້ອນສາຂາປາຍທາງກ່ອນ")
+    ) {
       setIsValidate(false);
-      // console.log("check array:-->" , connectField )
+  
+      // const connectField =
+      //   `ແຂວງ ${selectedOriginalProvice.province_name}, ` +
+      //   `ເມືອງ ${selectedOriginalDistrict.district}, ` +
+      //   `ສາຂາປາຍທາງ ${destinationLogistic}`;
+  
+      // console.log("check array:-->", connectField);
       _createOrderOnSalePage();
     }
   };
+  
 
   // ຄັດລ໋ອກເລກບັນຊີຂອງຮ້ານ
   const handleCopyCodeBanks = async () => {
@@ -649,7 +712,7 @@ export default function payment() {
                 <Col>
                 <Form.Group className="mb-3">
                     <Form.Label style={{ margin: 5 }}>
-                      ສາຂາປາຍທາງ {compulsory}
+                      ສາຂາປາຍທາງ ຢູ່ບ້ານ {compulsory}
                     </Form.Label>
                     <Form.Control
                       size="lg"
