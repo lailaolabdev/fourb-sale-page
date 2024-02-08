@@ -105,6 +105,19 @@ export const CREATE_ORDER_ON_SALE_PAGE = gql`
   }
 `;
 
+export const CRATE_QR_WITH_PAYMENT_GATEWAY = gql`
+mutation CreateQrWithPaymentGateway($data: PaymentInput!) {
+  createQrWithPaymentGateway(data: $data) {
+    qrCode
+    appLink
+    data {
+      id
+      code
+    }
+  }
+}
+`;
+
 export const UPDATE_MANY_ORDERGROUPS = gql`
   mutation UpdateManyOrderGroups(
     $data: OrderGroupInput!

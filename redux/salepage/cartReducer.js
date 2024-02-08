@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { message } from "antd";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -17,21 +18,24 @@ const cartSlice = createSlice({
 
       if (existingItem) {
         if (product?.amount <= existingItem?.qty) {
-          toast.warning("ຈຳນວນສິນຄ້າໝົດແລ້ວ!", {
-            autoClose: 700,
-          });
+          // toast.warning("ຈຳນວນສິນຄ້າໝົດແລ້ວ!", {
+          //   autoClose: 700,
+          // });
+          message.warning('ຈຳນວນສິນຄ້າໝົດແລ້ວ!')
           return
         }
 
         existingItem.qty += 1;
-        toast.success("ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ", {
-          autoClose: 700,
-        });
+        message.success('ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ')
+        // toast.success("ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ", {
+        //   autoClose: 700,
+        // });
       } else {
         state.cartList.push({ ...product, qty: 1, modelType: action.payload.modelType || "LIVE" });
-        toast.success("ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ", {
-          autoClose: 700,
-        });
+        // toast.success("ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ", {
+        //   autoClose: 700,
+        // });
+        message.success('ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ')
       }
     },
 

@@ -51,6 +51,16 @@ import Head from "next/head";
 import { FaUserAlt } from "react-icons/fa";
 import { setStateView } from "../../redux/productView/getData";
 import btoa from "btoa-lite";
+import { Divider, FloatButton, List, Skeleton } from "antd";
+import {
+  CommentOutlined,
+  CustomerServiceOutlined,
+  FileSearchOutlined,
+  PhoneOutlined,
+  PlusOutlined,
+  SearchOutlined,
+} from "@ant-design/icons";
+import InfiniteScroll from "react-infinite-scroll-component";
 //   import '../../styles/styleSalePage.css'
 
 const versionWeb = require("../../package.json");
@@ -173,7 +183,7 @@ function ProductSalePage({ initialShop }) {
   // console.log({_commissionForAffiliate, shopDetail})
 
   // pagination all =======================================================================>
-  const rowsPerPage = 100;
+  const rowsPerPage = 10;
   const pageAll = productTotal > 0 ? Math.ceil(productTotal / rowsPerPage) : 1;
   const handleChangePage = useCallback((newPage) => {
     setPage(newPage);
@@ -502,23 +512,19 @@ function ProductSalePage({ initialShop }) {
       ...data,
       price: roundedValue,
     };
-    
-    
-    
-  // const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(_data))));
-  
-  // Decode string from Base64
-  // const decodedString = atob(JSON.parse(encodedData));
-  
-  // console.log("_data--->",_data )
-  // console.log("check encode and decode--->", encodedString, decodedString )
 
-  // setViewProduct(_data);
+    // const encodedData = btoa(unescape(encodeURIComponent(JSON.stringify(_data))));
 
-  
-  
-  router.push("/shop/detailProduct")
-  dispatch(setStateView(_data))
+    // Decode string from Base64
+    // const decodedString = atob(JSON.parse(encodedData));
+
+    // console.log("_data--->",_data )
+    // console.log("check encode and decode--->", encodedString, decodedString )
+
+    // setViewProduct(_data);
+
+    router.push("/shop/detailProduct");
+    dispatch(setStateView(_data));
   };
 
   // ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າ
@@ -641,6 +647,12 @@ function ProductSalePage({ initialShop }) {
     window.open(whatsappUrl);
   };
 
+  const handleTrackOrderNow = () => {
+    toast.info("ກຳລັງພັດທະນາຢູ່!", {
+      autoClose: 1000,
+    });
+  };
+
   // console.log("shop data to SEO:-->", initialShop?.name);
   const ogImageUrl = initialShop?.image
     ? `${S3_URL}${initialShop?.image}`
@@ -748,7 +760,6 @@ function ProductSalePage({ initialShop }) {
                           )
                         )}{" "}
                         ກີບ
-                        {/* {numberFormat(data?.price)} */}
                       </p>
                       <div
                         onClick={(e) => e.stopPropagation()}
@@ -783,7 +794,7 @@ function ProductSalePage({ initialShop }) {
           />
         </div>
       </div>
-
+ 
       {/* Footer */}
       <FooterComponent />
       {/* Footer */}
@@ -821,14 +832,14 @@ function ProductSalePage({ initialShop }) {
         shopDetail={shopDetail}
       />
 
-      <div className="contactWhatsapp" onClick={openWhatsApp}>
+      {/* <div className="contactWhatsapp" >
         <Image
           src="/assets/images/whatsAppIcon.png"
           alt="imageContact"
           width={50} // Set the width as per your requirement
           height={50}
         />
-      </div>
+      </div> */}
 
       {/* profile shop */}
       <Modal
@@ -927,6 +938,27 @@ function ProductSalePage({ initialShop }) {
             </Button>
           </Modal.Footer> */}
       </Modal>
+
+      <FloatButton.Group
+        trigger="click"
+        type="primary" // Change type to primary
+        style={{
+          right: 24,
+        }}
+        icon={<CustomerServiceOutlined />}>
+        <FloatButton
+          tooltip={"ຕິດຕໍ່ຮ້ານ"}
+          onClick={openWhatsApp}
+          icon={<PhoneOutlined />}
+        />
+        <FloatButton
+          tooltip={"ຕິດຕາມອໍເດີ້"}
+          onClick={handleTrackOrderNow}
+          icon={<FileSearchOutlined />}
+        />
+      </FloatButton.Group>
+
+      {/* <FloatButton.BackTop /> */}
     </div>
   );
 }

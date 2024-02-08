@@ -62,7 +62,9 @@ export default function FooterComponent() {
         <div>
           <h4>ປະເພດການຊຳລະ</h4>
           <div style={{ display: "flex", gap: 10 }}>
-            <img src="/assets/images/bcelOne.png" style={{ width: 50 }} />
+            <img src="/assets/images/bcel_one.png" style={{ width: 45,height:45 }} />
+            <img src="/assets/images/jdbIco.png" style={{ width: 40,height: 40 }} />
+            <img src="/assets/images/lapnet.png" style={{ width: 40, height:40 }} />
           </div>
         </div>
         <div>

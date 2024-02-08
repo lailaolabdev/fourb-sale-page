@@ -96,7 +96,8 @@ export default function CompletedOrder() {
   }
 
   const handleCheckOrder = () => {
-    navigate.push(`../trackOrder/detail/${info?.code}`);
+    navigate.push(`../trackOrder/detail/${info?.data?.code}`);
+    // console.log("check code:--->",info?.data?.code)
   };
 
   const txtWatermark = info?.code + "-" + numberFormat(info?.amountPaided);
@@ -113,7 +114,7 @@ export default function CompletedOrder() {
           gap={[10, 10]}
           fontSize="8px"
           content={[
-            info?.code,
+            info?.data?.code,
             moment(info?.createdAt).format("DD/MM/YYYY HH:mm"),
             numberFormat(info?.amountPaided) + " KIP",
           ]}>
@@ -147,7 +148,7 @@ export default function CompletedOrder() {
                 <div className="card-display-all">
                   <div className="actionView">
                     <h6>ເລກບິນ:</h6>
-                    <h6>{info?.code}</h6>
+                    <h6>{info?.data?.code}</h6>
                   </div>
                   <div className="actionView">
                     <h6>ວັນທີ ເວລາ:</h6>

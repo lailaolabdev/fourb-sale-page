@@ -181,7 +181,7 @@ function HeaderSalePage({
               onChange={(e) => setFilter(e?.target?.value)}
               onKeyDown={searchProduct}
               type="text"
-              placeholder="ປ້ອນຊື່ສິນຄ້າ ແລ້ວກົດ Enter"
+              placeholder="What are you looking for"
               className="formSearching"
             />
             <div

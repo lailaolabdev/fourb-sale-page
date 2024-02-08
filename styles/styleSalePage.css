@@ -25,10 +25,12 @@ Modal.Footer {
 .contact-shop {
   width: 100%;
   background-color: #ddd;
-  border-radius: .4em;
+  border-radius: 0.4em;
   padding: 1em;
   cursor: pointer;
-  display: flex;justify-content: center;align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .menu-drawer {
@@ -36,18 +38,18 @@ Modal.Footer {
   margin-left: -2em;
 
   & li {
-    display: flex; 
+    display: flex;
     /* flex-direction: column; */
     width: 23em;
     /* border: 1px solid var(--colorShadow); */
     background: var(--colorWhite);
     /* box-shadow: 2px 3px 2px var(--colorGray); */
     gap: 0.5em;
-    transition: .3s all ease-in-out;
+    transition: 0.3s all ease-in-out;
     padding: 0 1em;
     cursor: pointer;
-    border-radius: .4em;
-    margin: .2em 0;
+    border-radius: 0.4em;
+    margin: 0.2em 0;
 
     & p {
       margin-top: 1em;
@@ -58,7 +60,7 @@ Modal.Footer {
     background: var(--colorDefaultcf);
     color: var(--colorWhite);
   }
-  
+
   .openMenu-dropdown {
     padding: 0.5em;
     border-radius: 50%;
@@ -66,7 +68,7 @@ Modal.Footer {
     color: var(--colorDefaultcf);
     cursor: pointer;
   }
-  
+
   .containerPayment {
     position: relative;
   }
@@ -83,13 +85,13 @@ Modal.Footer {
     /* transform: rotate(-5deg); */
     margin-top: -3em;
   }
-  
+
   .backgroundPayment .txtBackground {
     transform: rotate(-25deg);
     text-align: justify;
     text-justify: inter-word;
   }
-  
+
   .successPaymentCart {
     width: 100%;
     height: 90vh;
@@ -97,11 +99,11 @@ Modal.Footer {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-  
+
     background: #ffffff30;
     padding: 1em;
   }
-  
+
   .imageAnimationsuccess {
     width: 10em;
     height: 10em;
@@ -111,17 +113,17 @@ Modal.Footer {
     padding: 0.5em;
     z-index: 999;
   }
-  
+
   .imageAnimationsuccess img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
+
   .loadingButton {
     width: 100%;
     height: 3.5em;
-    padding-top: .3em;
+    padding-top: 0.3em;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -131,9 +133,7 @@ Modal.Footer {
     border-radius: 0.5em;
     overflow: hidden;
   }
-  
-  
-  
+
   .form-check {
     display: flex;
     justify-content: start;
@@ -142,11 +142,11 @@ Modal.Footer {
     cursor: pointer;
     margin-top: -0.5em;
   }
-  
+
   .btnBottclose {
     display: none;
   }
-  
+
   .buttonCloseModal {
     border: none;
     outline: none;
@@ -158,24 +158,24 @@ Modal.Footer {
     justify-content: center;
     align-items: center;
   }
-  
+
   /* Target the modal dialog component */
   .modal-dialog {
     border-radius: 8px;
   }
-  
+
   /* Target the modal content component within the dialog */
   .modal-content {
     border-radius: 8px;
   }
-  
+
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
-  
+
   /* Firefox */
   input[type="number"] {
     -moz-appearance: textfield;
@@ -183,14 +183,14 @@ Modal.Footer {
   input[type="file"]::file-selector-button {
     display: none;
   }
-  
+
   .card-search-order {
     width: 100%;
     height: 100vh;
     background: var(--colorShadow);
     padding-top: 4em;
   }
-  
+
   .box-search-order {
     width: 100%;
     padding: 1em 2em;
@@ -198,7 +198,7 @@ Modal.Footer {
     justify-content: center;
     align-items: center;
   }
-  
+
   .logoBusness2 {
     position: absolute;
     top: 60%;
@@ -210,13 +210,13 @@ Modal.Footer {
     align-items: center;
     /* padding-top:4em; */
   }
-  
+
   .logoBusness2 img {
     opacity: 0.08;
     width: 75%;
     height: 75%;
   }
-  
+
   .boxInputSearching {
     width: 100%;
     position: relative;
@@ -226,7 +226,7 @@ Modal.Footer {
     padding-left: 2em;
     transition: 1s ease-in-out;
   }
-  
+
   .boxInputSearching .iconSearchinng {
     position: absolute;
     left: 1em;
@@ -234,7 +234,7 @@ Modal.Footer {
     color: var(--colorDefaultcf);
     font-weight: bold;
   }
-  
+
   .boxInputSearching .formSearching {
     border-radius: 0.5em;
     width: 100%;
@@ -242,7 +242,7 @@ Modal.Footer {
     border: none;
     outline: none;
   }
-  
+
   .paid-successfully-card {
     width: 100%;
     height: 80vh;
@@ -252,37 +252,37 @@ Modal.Footer {
     flex-direction: column;
     user-select: none;
   }
-  
+
   .paid-successfully-card .paid-img {
     width: 30%;
     height: 30%;
     margin-bottom: -1em;
   }
-  
+
   .paid-successfully-card .paid-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
-  
+
   .paid-successfully-card h3 {
     font-weight: bold;
     font-size: 2.25em;
     margin-top: 1em;
   }
-  
+
   .errorValidation {
     color: red;
     font-size: 0.75em;
   }
-  
+
   .tabHeaderProduct {
     width: 100%;
     display: flex;
     justify-content: start;
     align-items: start;
   }
-  
+
   .removeCart {
     width: 100%;
     display: flex;
@@ -291,13 +291,13 @@ Modal.Footer {
     margin-bottom: 0.4em;
     border-radius: 0.4em;
   }
-  
+
   .containerCartItems {
     display: flex;
     gap: 2em;
     padding: 3em;
   }
-  
+
   .removeIcon2 {
     border: 1px solid var(--colorWhite);
     cursor: pointer;
@@ -305,7 +305,7 @@ Modal.Footer {
     border-radius: 0.3em;
     display: flex;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
     transition: 0.3s all ease-in-out;
     justify-items: center;
     align-items: center;
@@ -853,6 +853,8 @@ input[type="file"]::file-selector-button {
   }
 }
 
+
+
 .btn-goback {
   padding: 0.7em;
   background: var(--colorShadow);
@@ -1227,22 +1229,106 @@ input::placeholder {
 /* ==================> Pay ment ================== */
 .sectionSubmitButton {
   width: 100%;
-  position: fixed;
-  z-index: 90;
+  /* position: fixed; */
+  /* z-index: 90;
   left: 0;
-  bottom: -0.3em;
+  bottom: -0.3em; */
   padding: 1em;
   background-color: var(--colorWhite);
   border: none;
+}
+
+.btn-open-select-banks {
+  width: 100%;
+  /* margin-top: -4em; */
+  display: flex;
+  flex-direction: column;
+  gap: 12px 0;
+
+  & .btn-goBack {
+    width: 100%;
+    padding: 0.8em;
+    border: 1px solid var(--colorGray);
+    border-radius: 0.5em;
+    background-color: var(--colorWhite);
+    color: var(--colorDefaultcf);
+    font-size: 1.1em;
+    font-weight: 500;
+  }
+
+  & .btn-confirm-bank {
+    padding: 1em;
+    background: var(--colorDefaultcf);
+    color: var(--colorWhite);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border:none;
+    cursor: pointer;
+    border-radius: 0.5em;
+    gap: .6em;
+  }
+}
+
+.textHeadSelect {
+  width: 100%;
+  /* position: absolute; */
+  /* top: -3em; */
+  display: flex;
+  justify-content: center;align-items: center;
+  /* z-index: 999999999999999999; */
+  padding-bottom: .7em;
+
+  & b {
+    margin-top: -.3em;
+  }
+}
+
+.card-button-banks {
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+
+  & .bank-actions {
+    width: 100%;
+    padding: .5em 1em;
+    border-radius: .8em;
+    border: 1px solid var(--colorGray);
+    gap: .4em;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    & img {
+      width: 35px;
+      height: 35px;
+    }
+
+    h4 {
+      padding-top: .4em;
+      font-weight: bold;
+      font-size: 1em;
+      width:100%;
+    }
+  }
+
+  & .bank-actions:hover {
+    background: var(--colorShadow);
+  }
 }
 .payment-page {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f1f1f1;
+  background: #fcfcfc;
   padding: 2em;
   height: auto;
-  margin-top: -2em;
+  /* margin-top: -2em; */
   overflow-x: hidden;
 }
 
@@ -1258,9 +1344,10 @@ input::placeholder {
   padding: 2.55em;
   width: 45em;
   height: auto;
-  background: var(--colorWhite);
-  border-radius: 0.85em;
-  box-shadow: 3px 3px 8px var(--colorShadow);
+  /* background: var(--colorWhite); */
+  border-radius: 0.5em;
+  border: 1px solid var(--colorShadow);
+  /* box-shadow: 3px 3px 8px var(--colorShadow); */
 }
 
 .payment-page .payment-form .header-form {
@@ -1489,13 +1576,15 @@ input::placeholder {
   color: var(--colorDefaultcf);
 }
 
+
+
 .qrcode-scanner-media {
   width: 100%;
-  height: 35em;
-  margin-bottom: 3em;
-  padding: 2em;
+  /* height: 35em; */
+  margin-bottom: .5em;
+  padding: 3em;
   border: 1px solid var(--colorDefaultcf);
-  border-radius: 1em;
+  border-radius: .5em;
   display: block;
   display: flex;
   justify-content: center;
@@ -1808,9 +1897,9 @@ input::placeholder {
 
   .qrcode-scanner-media {
     width: 100%;
-    height: 21em;
-    padding: 3em;
-    margin-bottom: 5em;
+    /* height: 21em; */
+    padding: 1em;
+    /* margin-bottom: 5em; */
   }
 
   .onpay-app {
@@ -2000,7 +2089,7 @@ input::placeholder {
 
   .action-cart-product-footer .paid-buy {
     padding: 0;
-    margin-top: 1em;
+    /* margin-top: 1em; */
   }
 
   .footer-sale-page {
