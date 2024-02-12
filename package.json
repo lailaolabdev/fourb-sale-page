@@ -33,6 +33,7 @@
     "next-images": "^1.8.5",
     "next-seo": "^6.4.0",
     "nextjs-google-analytics": "^2.3.3",
+    "primereact": "^10.5.0",
     "pubnub": "^7.4.5",
     "qrcode.react": "^3.1.0",
     "react": "^18",

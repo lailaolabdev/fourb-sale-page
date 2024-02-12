@@ -10,8 +10,8 @@ export const bankDatas = [
         type:'JDB',
     },
     {
-        title:'Lap Net',
-        image:'/assets/images/lapnet.png',
+        title:'INDOCHINA BANK',
+        image:'/assets/images/indochina.png',
         type:'IB',
     },
 ]

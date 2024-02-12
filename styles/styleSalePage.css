@@ -1240,7 +1240,7 @@ input::placeholder {
 
 .btn-open-select-banks {
   width: 100%;
-  /* margin-top: -4em; */
+  margin-top: 2em;
   display: flex;
   flex-direction: column;
   gap: 12px 0;
@@ -1270,6 +1270,11 @@ input::placeholder {
   }
 }
 
+.custom-float-button-group {
+  background-color: purple;
+}
+
+
 .textHeadSelect {
   width: 100%;
   /* position: absolute; */
@@ -1278,10 +1283,30 @@ input::placeholder {
   justify-content: center;align-items: center;
   /* z-index: 999999999999999999; */
   padding-bottom: .7em;
+  margin-top: -.4em;
 
   & b {
     margin-top: -.3em;
   }
+}
+
+.download-qrcode-element {
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  
+}
+
+
+.btn-download-qrcode {
+  padding: .6em;
+  background: var(--colorShadow);
+  color: var(--colorDefaultcf);
+  border: 1px solid var(--colorGray);
+  width: 50%;
+  border-radius: .4em;
+  /* margin-top: -2em; */
 }
 
 .card-button-banks {
@@ -1291,28 +1316,30 @@ input::placeholder {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 10px;
+  gap: 5px;
 
   & .bank-actions {
     width: 100%;
-    padding: .5em 1em;
-    border-radius: .8em;
+    padding: 1.15em 1em;
+    border-radius: .5em;
     border: 1px solid var(--colorGray);
     gap: .4em;
     cursor: pointer;
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
 
     & img {
       width: 35px;
       height: 35px;
+      /* border: 1px solid red; */
     }
-
-    h4 {
+    
+    h5 {
+      /* border: 1px solid red; */
       padding-top: .4em;
-      font-weight: bold;
-      font-size: 1em;
+      font-weight: 500;
+      font-size: .9em;
       width:100%;
     }
   }

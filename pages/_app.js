@@ -40,6 +40,8 @@ import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "react-toast-notifications";
 // import HeaderSalePage from "../components/salePage/HeaderSalePage";
 import NavbarComponent from "../components/salePage/NavbarComponent";
+import { PrimeReactProvider } from "primereact/api";
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 // config.autoAddCss = false;
 
@@ -142,10 +144,9 @@ const App = ({ Component, pageProps }) => {
         <ApolloProvider client={client}>
           <ToastProvider>
             <StateProvider>
+              <PrimeReactProvider>
                 <Component {...pageProps} />
-              {/* <div style={{ display: "flex", flexDirection: "column" }}>
-                <NavbarComponent/>
-              </div> */}
+              </PrimeReactProvider>
             </StateProvider>
           </ToastProvider>
         </ApolloProvider>

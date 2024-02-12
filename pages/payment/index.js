@@ -594,7 +594,7 @@ export default function payment() {
             link.click();
             URL.revokeObjectURL(url);
             link.remove();
-            message.success("ແຄັບຮູບ QR ສຳເລັດແລ້ວ");
+            message.success("ດາວໂຫລດ QR ສຳເລັດແລ້ວ");
           });
       });
     }
@@ -630,7 +630,7 @@ export default function payment() {
             )}
 
             <Form onSubmit={handleCheckToPaid}>
-              <Row xs={1} sm={2}>
+              <Row sm={2}>
                 <Col>
                   <Form.Group className="mb-3">
                     <Form.Label style={{ margin: 0 }}>
@@ -822,7 +822,7 @@ export default function payment() {
                   </Form.Group>
                 </Col>
               </Row>
-              <Row sm={12}>
+              {/* <Row sm={12}>
                 <Col>
                   <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>ລາຍລະອຽດ (ບໍ່ບັງຄັບ)</Form.Label>
@@ -835,7 +835,7 @@ export default function payment() {
                     />
                   </Form.Group>
                 </Col>
-              </Row>
+              </Row> */}
 
               {file && (
                 <div
@@ -877,7 +877,7 @@ export default function payment() {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1-content"
                   id="panel1-header">
-                  ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ
+                  ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ  {cartList?.length} ລາຍການ
                 </AccordionSummary>
                 <AccordionDetails>
                   <div className="w-100">
@@ -962,10 +962,10 @@ export default function payment() {
                       />
                     </div>
                   </div>
-                  <div className="pb-4 pt-2 w-100">
-                    <Button type="button" onClick={captureScreen}>
-                      Capture Qr
-                    </Button>
+                  <div className="download-qrcode-element">
+                    <button  type="button" className="btn-download-qrcode" onClick={captureScreen}>
+                      ດາວໂຫລດ qr
+                    </button>
                   </div>
                 </>
               ) : (
@@ -1021,9 +1021,8 @@ export default function payment() {
                   className="bank-actions"
                   onClick={() => handleOpenBank(bank)}>
                   <img src={bank?.image} />
-                  <h4>
-                    <b>{bank?.title}</b>
-                  </h4>
+                  <h5>{bank?.title}
+                  </h5>
                 </div>
               ))}
 

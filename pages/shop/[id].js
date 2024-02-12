@@ -59,9 +59,17 @@ import {
   PhoneOutlined,
   PlusOutlined,
   SearchOutlined,
+  WhatsAppOutlined,
 } from "@ant-design/icons";
 import InfiniteScroll from "react-infinite-scroll-component";
 //   import '../../styles/styleSalePage.css'
+
+import { SpeedDial } from 'primereact/speeddial';
+import { Tooltip } from 'primereact/tooltip';
+// import { useRouter } from 'next/router';
+import { Toast } from 'primereact/toast';
+import { message } from "antd";
+
 
 const versionWeb = require("../../package.json");
 
@@ -103,6 +111,26 @@ function ProductSalePage({ initialShop }) {
   const [page, setPage] = useState(0);
 
   const elementRef = useRef(null);
+
+  const toast = useRef(null);
+  // const router = useRouter();
+  const items = [
+      {
+          label: 'Add',
+          icon: <WhatsAppOutlined />,
+          command: () => {
+            toast.current.show({ severity: 'info', summary: 'Add', detail: 'Data Added' });
+          }
+        },
+        {
+          label: 'Update',
+          icon: <WhatsAppOutlined />,
+          command: () => {
+              toast.current.show({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
+          }
+      },
+      
+  ];
 
   function onIntersection(entries) {
     const firstEntery = entries[0];
@@ -183,7 +211,7 @@ function ProductSalePage({ initialShop }) {
   // console.log({_commissionForAffiliate, shopDetail})
 
   // pagination all =======================================================================>
-  const rowsPerPage = 10;
+  const rowsPerPage = 50;
   const pageAll = productTotal > 0 ? Math.ceil(productTotal / rowsPerPage) : 1;
   const handleChangePage = useCallback((newPage) => {
     setPage(newPage);
@@ -602,9 +630,11 @@ function ProductSalePage({ initialShop }) {
 
   const hadleCartProducts = () => {
     if (cartList?.length <= 0) {
-      toast.warning("ກະຕ່າຂອງທ່ານຍັງບໍ່ມີສິນຄ້າ!", {
-        autoClose: 1000,
-      });
+      // toast.warning("ກະຕ່າຂອງທ່ານຍັງບໍ່ມີສິນຄ້າ!", {
+      //   autoClose: 1000,
+      // });
+    message.info("ກະຕ່າຂອງທ່ານຍັງບໍ່ມີສິນຄ້າ!")
+
     } else {
       let idPreState = {
         shopId: shopId,
@@ -648,9 +678,10 @@ function ProductSalePage({ initialShop }) {
   };
 
   const handleTrackOrderNow = () => {
-    toast.info("ກຳລັງພັດທະນາຢູ່!", {
-      autoClose: 1000,
-    });
+    message.info("ກຳລັງພັດທະນາຢູ່!")
+    // toast.info("ກຳລັງພັດທະນາຢູ່!", {
+    //   autoClose: 1000,
+    // });
   };
 
   // console.log("shop data to SEO:-->", initialShop?.name);
@@ -832,14 +863,16 @@ function ProductSalePage({ initialShop }) {
         shopDetail={shopDetail}
       />
 
-      {/* <div className="contactWhatsapp" >
+      <div className="contactWhatsapp" >
         <Image
           src="/assets/images/whatsAppIcon.png"
           alt="imageContact"
           width={50} // Set the width as per your requirement
           height={50}
+          onClick={openWhatsApp}
         />
-      </div> */}
+      </div>
+ 
 
       {/* profile shop */}
       <Modal
@@ -939,24 +972,24 @@ function ProductSalePage({ initialShop }) {
           </Modal.Footer> */}
       </Modal>
 
-      <FloatButton.Group
+      {/* <FloatButton.Group 
         trigger="click"
-        type="primary" // Change type to primary
+        // type="primary" // Change type to primary
         style={{
           right: 24,
         }}
         icon={<CustomerServiceOutlined />}>
-        <FloatButton
+        <FloatButton 
           tooltip={"ຕິດຕໍ່ຮ້ານ"}
           onClick={openWhatsApp}
-          icon={<PhoneOutlined />}
+          icon={<WhatsAppOutlined />}
         />
-        <FloatButton
+        <FloatButton 
           tooltip={"ຕິດຕາມອໍເດີ້"}
           onClick={handleTrackOrderNow}
           icon={<FileSearchOutlined />}
         />
-      </FloatButton.Group>
+      </FloatButton.Group> */}
 
       {/* <FloatButton.BackTop /> */}
     </div>
