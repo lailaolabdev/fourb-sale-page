@@ -27,6 +27,7 @@ export default function FooterComponent() {
             {" "}
             ບ້ານ ປາກ​ທ້າງ, ເມືອງ​ສີ​ໂຄດ​ຕະ​ບອງ, ນະ​ຄອນ​ຫຼວງວຽງ​ຈັນ, ປະ​ເທດ​ລາວ
           </small>
+          <p>Call: +856 20 95 119 036</p>
         </div>
         <div className="footer-title">
           <div>
@@ -64,7 +65,7 @@ export default function FooterComponent() {
           <div style={{ display: "flex", gap: 10 }}>
             <img src="/assets/images/bcel_one.png" style={{ width: 45,height:45 }} />
             <img src="/assets/images/jdbIco.png" style={{ width: 40,height: 40 }} />
-            <img src="/assets/images/lapnet.png" style={{ width: 40, height:40 }} />
+            <img src="/assets/images/indochina.png" style={{ width: 40, height:40 }} />
           </div>
         </div>
         <div>

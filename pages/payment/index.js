@@ -608,26 +608,19 @@ export default function payment() {
       <div className="payment-page">
         <div className="payment-form">
           <>
-            {width < 700 ? (
-              <div className="header-form">
-                <div className="removeIcon1" onClick={handleGoback}>
-                  <MdArrowBack style={{ fontSize: 20 }} />
-                </div>
-                <h4 style={{ marginTop: ".6em" }}>ປ້ອນຂໍ້ມູນຂອງລູກຄ້າ</h4>
-                <p></p>
+            <div className="header-form">
+              <div className="removeIcon1" onClick={handleGoback}>
+                <MdArrowBack style={{ fontSize: 20 }} />
               </div>
-            ) : (
-              <div
-                style={{
-                  paddingBottom: "1em",
-                  width: "100%",
-                  textAlign: "center",
-                }}>
-                <h4 style={{ marginTop: ".6em" }}>
-                  ປ້ອນຂໍ້ມູນລູກຄ້າເພື່ອຢືນຢັນ ການສັ່ງຊື້ ສິນຄ້າ
-                </h4>
-              </div>
-            )}
+              <h4 style={{ marginTop: ".6em" }}>
+                <b>
+                  {width < 700
+                    ? "ປ້ອນຂໍ້ມູນຂອງລູກຄ້າ"
+                    : "ປ້ອນຂໍ້ມູນລູກຄ້າເພື່ອຢືນຢັນ ການສັ່ງຊື້ ສິນຄ້າ"}
+                </b>
+              </h4>
+              <p></p>
+            </div>
 
             <Form onSubmit={handleCheckToPaid}>
               <Row sm={2}>
@@ -877,7 +870,8 @@ export default function payment() {
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1-content"
                   id="panel1-header">
-                  ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ  {cartList?.length} ລາຍການ
+                  ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ {cartList?.length} ລາຍການ. &nbsp;
+                  <b> ເງິນລວມ: {numberFormat(totalPrice)} ກີບ</b>
                 </AccordionSummary>
                 <AccordionDetails>
                   <div className="w-100">
@@ -949,9 +943,7 @@ export default function payment() {
                     <div className="d-flex w-100 justify-content-center align-items-center p-2">
                       Qr {typeBanks} ສຳຫຼັບການຈ່າຍເງິນ
                     </div>
-                    <div
-                      className="qrcode-scanner-media"
-                      >
+                    <div className="qrcode-scanner-media">
                       <GenQrCode
                         qrcodeData={qrcodeData}
                         handleGoback={handleGoback}
@@ -963,7 +955,10 @@ export default function payment() {
                     </div>
                   </div>
                   <div className="download-qrcode-element">
-                    <button  type="button" className="btn-download-qrcode" onClick={captureScreen}>
+                    <button
+                      type="button"
+                      className="btn-download-qrcode"
+                      onClick={captureScreen}>
                       ດາວໂຫລດ qr
                     </button>
                   </div>
@@ -1021,8 +1016,7 @@ export default function payment() {
                   className="bank-actions"
                   onClick={() => handleOpenBank(bank)}>
                   <img src={bank?.image} />
-                  <h5>{bank?.title}
-                  </h5>
+                  <h5>{bank?.title}</h5>
                 </div>
               ))}
 

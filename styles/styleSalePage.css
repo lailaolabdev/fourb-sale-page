@@ -1381,7 +1381,9 @@ input::placeholder {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: -0.5em;
+  margin-top: -1em;
+  /* border: 1px solid red; */
+  padding-bottom: 2em;
 }
 
 .payment-page .payment-form .header-form p {
@@ -2146,7 +2148,7 @@ input::placeholder {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 2em 0;
+    padding: 1em 0;
     width: 100%;
   }
 
