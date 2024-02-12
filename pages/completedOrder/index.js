@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { removeStateCompleted } from "../../redux/completedOrder/dataOrder";
-import { Watermark } from "antd";
+import { Watermark, message } from "antd";
 import { FaFileDownload } from "react-icons/fa";
 
 export default function CompletedOrder() {
@@ -76,6 +76,8 @@ export default function CompletedOrder() {
             link.click();
             URL.revokeObjectURL(url);
             link.remove();
+            message.success("ດາວໂຫລດ ບິນ ສຳເລັດແລ້ວ")
+            console.log({url})
           });
       });
     }
@@ -125,7 +127,7 @@ export default function CompletedOrder() {
                 style={{
                   justifyContent: "center",
                   display: "flex",
-                  padding: "2em",
+                  padding: "3em",
                 }}>
                 <Image
                   src="/assets/images/successIcon3.png"
