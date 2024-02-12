@@ -682,7 +682,7 @@ export default function payment() {
                         backgroundColor: "#fff",
                         width: "100%",
                         border: ".02em solid #ddd",
-                        paddingLeft: "3em",
+                        paddingLeft: "2.3em",
                         fontSize: "1.3em",
                       }}
                       onChange={(e) => {

@@ -863,7 +863,7 @@ function ProductSalePage({ initialShop }) {
         shopDetail={shopDetail}
       />
 
-      <div className="contactWhatsapp" >
+      {/* <div className="contactWhatsapp" >
         <Image
           src="/assets/images/whatsAppIcon.png"
           alt="imageContact"
@@ -871,7 +871,7 @@ function ProductSalePage({ initialShop }) {
           height={50}
           onClick={openWhatsApp}
         />
-      </div>
+      </div> */}
  
 
       {/* profile shop */}
@@ -972,24 +972,24 @@ function ProductSalePage({ initialShop }) {
           </Modal.Footer> */}
       </Modal>
 
-      {/* <FloatButton.Group 
+      <FloatButton.Group 
         trigger="click"
         // type="primary" // Change type to primary
         style={{
           right: 24,
         }}
-        icon={<CustomerServiceOutlined />}>
+        icon={<CustomerServiceOutlined style={{ color: CORLOR_APP}} />}>
         <FloatButton 
           tooltip={"ຕິດຕໍ່ຮ້ານ"}
           onClick={openWhatsApp}
-          icon={<WhatsAppOutlined />}
+          icon={<WhatsAppOutlined style={{color:'green'}} />}
         />
         <FloatButton 
           tooltip={"ຕິດຕາມອໍເດີ້"}
           onClick={handleTrackOrderNow}
-          icon={<FileSearchOutlined />}
+          icon={<FileSearchOutlined style={{color:CORLOR_APP}} />}
         />
-      </FloatButton.Group> */}
+      </FloatButton.Group>
 
       {/* <FloatButton.BackTop /> */}
     </div>

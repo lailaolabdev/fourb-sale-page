@@ -1240,7 +1240,7 @@ input::placeholder {
 
 .btn-open-select-banks {
   width: 100%;
-  margin-top: 2em;
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
   gap: 12px 0;
@@ -1320,7 +1320,7 @@ input::placeholder {
 
   & .bank-actions {
     width: 100%;
-    padding: 1.15em 1em;
+    padding: 1em;
     border-radius: .5em;
     border: 1px solid var(--colorGray);
     gap: .4em;

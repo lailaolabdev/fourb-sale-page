@@ -19,21 +19,22 @@ export default function ModalConfirmComponent({
       backdrop="static"
       centered
       zIndex={9999}
+      size="sm"
       keyboard={false}>
       <Modal.Body>
         <div
           style={{
             width: "100%",
-            height: "12em",
+            height: "10em",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            flexDirection: "column",
+            flexDirection: "column", 
           }}>
           <div
             style={{
-              width: "5em",
-              height: "5em",
+              width: "4em",
+              height: "4em",
               marginBottom: ".5em",
             }}>
             <Image
@@ -46,27 +47,33 @@ export default function ModalConfirmComponent({
           <h4>{title ?? "ແຈ້ງເຕືອນ"}</h4>
           <p>{text}</p>
         </div>
-      </Modal.Body>
-      <Modal.Footer
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          border: "none",
-        }}>
-        <Button variant="outline-secondary" onClick={handleCancel}>
-          ຍົກເລິກ
-        </Button>
-        <Button
+        <div
           style={{
-            backgroundColor: CORLOR_APP,
-            color: CORLOR_WHITE,
-            border: `1px solid ${CORLOR_APP}`,
-          }}
-          onClick={handleConfirm}>
-          {loadingConfirm ? <Spinner size="sm" /> : "ຢືນຢັນ"}
-        </Button>
-      </Modal.Footer>
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            border: "none",
+            width: "100%",
+            gap: 10,
+          }}>
+          <Button variant="outline-secondary" onClick={handleCancel}>
+            ຍົກເລິກ
+          </Button>
+          <Button
+            style={{
+              backgroundColor: CORLOR_APP,
+              color: CORLOR_WHITE,
+              border: `1px solid ${CORLOR_APP}`,
+            }}
+            onClick={handleConfirm}>
+            {loadingConfirm ? <Spinner size="sm" /> : "ຢືນຢັນ"}
+          </Button>
+        </div>
+      </Modal.Body>
+      {/* <Modal.Footer
+        >
+       
+      </Modal.Footer> */}
     </Modal>
   );
 }
