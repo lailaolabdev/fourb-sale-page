@@ -87,7 +87,7 @@ export default function index() {
   return (
     <>
       <div className="main-package-ps">
-        <h2>Package System 4B</h2>
+        <h2>ແພັກເກັດລະບົບ</h2>
         <p>ເລືອກຊື້ແພັກເກັດລາຄາລະບົບ 4B ໂຟບີ ເພື່ອທຸລະກິດຂອງທ່ານ</p>
         <div className="card-package">
           <div className="card-ps">

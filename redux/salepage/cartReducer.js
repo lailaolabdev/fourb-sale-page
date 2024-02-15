@@ -18,23 +18,17 @@ const cartSlice = createSlice({
 
       if (existingItem) {
         if (product?.amount <= existingItem?.qty) {
-          // toast.warning("ຈຳນວນສິນຄ້າໝົດແລ້ວ!", {
-          //   autoClose: 700,
-          // });
+          
           message.warning('ຈຳນວນສິນຄ້າໝົດແລ້ວ!')
           return
         }
 
         existingItem.qty += 1;
         message.success('ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ')
-        // toast.success("ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ", {
-        //   autoClose: 700,
-        // });
+        
       } else {
         state.cartList.push({ ...product, qty: 1, modelType: action.payload.modelType || "LIVE" });
-        // toast.success("ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ", {
-        //   autoClose: 700,
-        // });
+         
         message.success('ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ')
       }
     },
@@ -42,6 +36,11 @@ const cartSlice = createSlice({
     // ລືບຈຳນວນສິນຄ້າທັງໝົດບາດດຽວ
     removeCartItem: (state, action) => {
       state.cartList.splice(action.payload);
+    },
+
+    // ລືບເທື່ອລະລາຍການ
+    removeSingleItem: (state, action) => {
+      state.cartList.splice(action.payload, 1);
     },
 
     // ບວກຈຳນວນເທື່ອລະໜຶ່ງ
@@ -73,5 +72,6 @@ export const {
   updateCartItemQuantity,
   incrementCartItem,
   decrementCartItem,
+  removeSingleItem
 } = cartSlice.actions;
 export default cartSlice.reducer;

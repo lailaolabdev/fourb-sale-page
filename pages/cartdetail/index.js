@@ -9,6 +9,7 @@ import {
   decrementCartItem,
   incrementCartItem,
   removeCartItem,
+  removeSingleItem,
   updateCartItemQuantity,
 } from "../../redux/salepage/cartReducer";
 import { setOrders } from "../../redux/setOrder/orders";
@@ -27,6 +28,7 @@ import ModalConfirmComponent from "../../components/salePage/ModalConfirmCompone
 import Image from "next/image";
 import EmptyImage from "../../components/salePage/EmptyImage";
 import FooterComponent from "../../components/salePage/FooterComponent";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 export default function CartDetail() {
   // const { match, location } = useReactRouter();
@@ -137,16 +139,16 @@ export default function CartDetail() {
       // orderGroup: priceToPay,
       priceToPay: priceToPay,
     };
-    console.log("orders---->", combineField)
+    console.log("orders---->", combineField);
     // console.log("orderGroups---66->", priceToPay)
     dispatch(setOrders(combineField));
     // const destinationPath = affiliateId
     //   ? "/payment/" + shopId + "/" + affiliateId
     //   : "/payment/" + shopId;
 
-  // Navigate to the payment page with the query string
-  router.push("/payment")
-  }; 
+    // Navigate to the payment page with the query string
+    router.push("/payment");
+  };
 
   // console.log("cartList---->", cartList);
   const [showConfirmRemove, setShowConfirmRemove] = React.useState(false);
@@ -196,6 +198,10 @@ export default function CartDetail() {
           {cartList?.map((data, index) => {
             return (
               <div key={data?.id} className="cartItem-product">
+                <div className="remove-single-item" onClick={() => dispatch(removeSingleItem(index))}>
+                  <CloseCircleOutlined style={{fontSize:20, cursor:'pointer'}} />
+                </div>
+
                 <div className="cartImage">
                   {data?.image?.length > 0 ? (
                     <img src={S3_URL + data?.image} alt="productImage" />
@@ -209,15 +215,26 @@ export default function CartDetail() {
                   </h5>
                   <div className="amounts-and-qty">
                     <h6>{numberFormat(data?.price)} ກີບ</h6>
-                    <h6>{numberFormat(data?.price * data?.qty)} ກີບ</h6>
+                    <h6>
+                      {isNaN(data?.price * data?.qty)
+                        ? 0
+                        : numberFormat(data?.price * data?.qty)}{" "}
+                      ກີບ
+                    </h6>
                   </div>
 
                   <div className="action-button">
-                    <div
-                      className="decrement"
-                      onClick={() => dispatch(decrementCartItem(index))}>
-                      <IoMdRemove />
-                    </div>
+                    {data?.qty >= 2 ? (
+                      <div
+                        className="decrement"
+                        onClick={() => dispatch(decrementCartItem(index))}>
+                        <IoMdRemove />
+                      </div>
+                    ) : (
+                      <div className="decrement">
+                        <IoMdRemove />
+                      </div>
+                    )}
                     <input
                       type="number"
                       className="amount-product"

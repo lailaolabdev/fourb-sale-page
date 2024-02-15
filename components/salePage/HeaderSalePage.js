@@ -19,6 +19,7 @@ import {
 import {
   AlignRightOutlined,
   FileSearchOutlined,
+  PieChartOutlined,
   QuestionCircleOutlined,
   SafetyOutlined,
   SearchOutlined,
@@ -35,6 +36,26 @@ import { useDispatch } from "react-redux";
 import { setOrderGroups } from "../../redux/setOrder/trackOrder";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+
+const itemsQueryProduct = [
+  {
+    key: "1",
+    label: (
+      <Button icon={<PieChartOutlined />} size="large">
+        ສະແດງສິນຄ້າຍັງເຫຼືອ
+      </Button>
+    ),
+  },
+  {
+    key: "2",
+    label: (
+      <Button icon={<PieChartOutlined />} size="large">
+        ສະແດງສິນຄ້າທັງໝົດ
+      </Button>
+    ),
+  },
+   
+];
 
 function HeaderSalePage({
   enableSearch,
@@ -58,12 +79,20 @@ function HeaderSalePage({
   const [orderId, setOrderId] = useState("");
   const [enableData, setEnableData] = useState(false);
   const [openTagTrack, setOpenTagTrack] = useState(false);
+  const [openQueryProduct, setOpenQueryProduct] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useRouter();
 
   const handelTrackOrderNow = () => {
     setOpenTagTrack(!openTagTrack);
+  };
+
+  const onCloseQueryProduct = () => {
+    setOpenQueryProduct(false);
+  };
+  const onOpenQueryProduct = () => {
+    setOpenQueryProduct(true);
   };
 
   const oncloseDrawer = () => {
@@ -116,7 +145,10 @@ function HeaderSalePage({
 
   if (orderGroupData?.orderGroups?.total >= 1) {
     dispatch(setOrderGroups(orderGroupData?.orderGroups?.data));
-    if (orderGroupData?.orderGroups?.data[0]?.code === orderId) {
+    if (
+      orderGroupData?.orderGroups?.data[0]?.code === orderId ||
+      orderGroupData?.orderGroups?.data[0]?.phone === orderId
+    ) {
       navigate.push("/trackOrder");
     }
     // return;
@@ -181,7 +213,7 @@ function HeaderSalePage({
               onChange={(e) => setFilter(e?.target?.value)}
               onKeyDown={searchProduct}
               type="text"
-              placeholder="What are you looking for"
+              placeholder="ປ້ອນຊື່ສິນຄ້າ ແລ້ວ enter"
               className="formSearching"
             />
             <div
@@ -214,29 +246,28 @@ function HeaderSalePage({
             style={{
               display: "flex",
               justifyContent: "center",
-              alignItems: "center",
+              alignItems: "center", gap: 20
             }}>
             <div className="btnSearchData" onClick={handleShowBoxSearch}>
               <SearchOutlined
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
               />
             </div>
-            &nbsp;
-            <div className="openMenu-dropdown" onClick={handelTrackOrderNow}>
+
+            <Dropdown
+              menu={{
+                itemsQueryProduct,
+              }}
+              placement="bottomLeft"
+              arrow={{
+                pointAtCenter: true,
+              }}
+              trigger={["click"]}>
               <FileSearchOutlined
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
               />
-            </div>
-            {/* <Dropdown>
-              <a onClick={(e) => e.preventDefault()}>
-                <Space>
-                  <FileSearchOutlined
-                    style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
-                  />
-                </Space>
-              </a>
-            </Dropdown> */}
-            &nbsp;
+            </Dropdown>
+            
             <div className="openMenu-dropdown" onClick={hadleCartProducts}>
               <Badge
                 overflowCount={10}
@@ -246,7 +277,6 @@ function HeaderSalePage({
                 />
               </Badge>
             </div>
-            &nbsp; &nbsp;
             <div
               className="openMenu-dropdown"
               onClick={() => setOpenMyDrawer(true)}>
@@ -264,27 +294,6 @@ function HeaderSalePage({
       <div
         className="card-track-order-now"
         style={{ top: openTagTrack ? 0 : "-100%" }}>
-        {/* <div
-          style={{
-            position: "absolute",
-            right: 7,
-            top: 7,
-            transform: "traslate(50%, 50%)",
-            height: "1.5em",
-            width: "1.5em",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            padding: 5,
-            backgroundColor: "#ddd",
-            color: CORLOR_APP,
-            cursor: "pointer",
-            borderRadius: "50%",
-          }}
-          onClick={() => setOpenTagTrack(false)}>
-          <MdOutlineClose />
-        </div> */}
-
         <div className="tag-query-data">
           <ul onClick={() => setOpenTagTrack(false)}>
             <li onClick={() => handleIsStockZero()}>
@@ -391,6 +400,18 @@ function HeaderSalePage({
             )}
           </div>
         </div>
+      </Drawer>
+
+      {/* query product all */}
+      <Drawer
+        title={"ສະແດງຂໍ້ມູນ"}
+        placement="top"
+        style={{ height: 200, boxShadow: "none", border: "none" }}
+        onClose={onCloseQueryProduct}
+        open={openQueryProduct}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
       </Drawer>
     </div>
   );

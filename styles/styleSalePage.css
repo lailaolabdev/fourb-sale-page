@@ -1133,6 +1133,18 @@ input::placeholder {
   background: var(--colorWhite);
   overflow: hidden;
   margin: 0.66em 0;
+  position: relative;
+
+  & .remove-single-item {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 9999;
+
+  }
 }
 .cartItem-product .cartImage {
   width: 9em;
@@ -1166,7 +1178,7 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.5em;
+  gap: .2em;
   position: absolute;
   right: 1em;
   bottom: 1.7em;
