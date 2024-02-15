@@ -37,25 +37,7 @@ import { setOrderGroups } from "../../redux/setOrder/trackOrder";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
-const itemsQueryProduct = [
-  {
-    key: "1",
-    label: (
-      <Button icon={<PieChartOutlined />} size="large">
-        ສະແດງສິນຄ້າຍັງເຫຼືອ
-      </Button>
-    ),
-  },
-  {
-    key: "2",
-    label: (
-      <Button icon={<PieChartOutlined />} size="large">
-        ສະແດງສິນຄ້າທັງໝົດ
-      </Button>
-    ),
-  },
-   
-];
+
 
 function HeaderSalePage({
   enableSearch,
@@ -83,18 +65,11 @@ function HeaderSalePage({
 
   const dispatch = useDispatch();
   const navigate = useRouter();
-
-  const handelTrackOrderNow = () => {
-    setOpenTagTrack(!openTagTrack);
-  };
+ 
 
   const onCloseQueryProduct = () => {
     setOpenQueryProduct(false);
-  };
-  const onOpenQueryProduct = () => {
-    setOpenQueryProduct(true);
-  };
-
+  }; 
   const oncloseDrawer = () => {
     setOpenMyDrawer(false);
     setOrderId("");
@@ -153,6 +128,26 @@ function HeaderSalePage({
     }
     // return;
   }
+
+  const itemsQueryProducts = [
+    {
+      key: "1",
+      label: (
+        <Button onClick={() => handleIsStockThenZero()} icon={<PieChartOutlined />} size="large">
+          ສະແດງສິນຄ້າຍັງເຫຼືອ
+        </Button>
+      ),
+    },
+    {
+      key: "2",
+      label: (
+        <Button onClick={() => handleIsStockZero()} icon={<PieChartOutlined />} size="large">
+          ສະແດງສິນຄ້າທັງໝົດ
+        </Button>
+      ),
+    },
+     
+  ];
 
   return (
     <div>
@@ -254,20 +249,20 @@ function HeaderSalePage({
               />
             </div>
 
-            <Dropdown
+            {/* <Dropdown
               menu={{
-                itemsQueryProduct,
-              }}
-              placement="bottomLeft"
-              arrow={{
-                pointAtCenter: true,
+                itemsQueryProducts,
               }}
               trigger={["click"]}>
+                <Space>
+
               <FileSearchOutlined
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
-              />
-            </Dropdown>
-            
+                />
+                </Space>
+            </Dropdown> */}
+
+                       
             <div className="openMenu-dropdown" onClick={hadleCartProducts}>
               <Badge
                 overflowCount={10}
