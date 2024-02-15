@@ -36,6 +36,7 @@ import { useDispatch } from "react-redux";
 import { setOrderGroups } from "../../redux/setOrder/trackOrder";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
+import { URL_PACKAGE_SYSTEM } from "../../const";
 
 
 
@@ -315,10 +316,14 @@ function HeaderSalePage({
             <p>ນະໂຍບາຍການນຳໃຊ້</p>
           </li>
 
-          <li onClick={() => handleIsStockThenZero()}>
+          <li onClick={() => window.open(URL_PACKAGE_SYSTEM)}>
+            <QuestionCircleOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
+            <p>ແພັກເກັດລະບົບ</p>
+          </li>
+          {/* <li onClick={() => handleIsStockThenZero()}>
             <QuestionCircleOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
             <p>ວິທີການນຳໃຊ້ 4B Sale Page </p>
-          </li>
+          </li> */}
 
           {/* <li
           // onClick={() => navigate.push("/ebook/Collapse4bShop")}
@@ -338,7 +343,7 @@ function HeaderSalePage({
 
         <Divider />
         <p style={{ width: "100%", textAlign: "center" }}>
-          ປ້ອນເລກບິນ ເພື່ອກວດສອບອໍເດີ້ຂອງທ່ານ
+          ປ້ອນເລກບິນ ຫຼື ເບີໂທ ເພື່ອກວດສອບອໍເດີ້ຂອງທ່ານ
         </p>
         <div>
           <Space.Compact
@@ -350,7 +355,7 @@ function HeaderSalePage({
               onChange={(e) => setTrackOrder(e?.target?.value)}
               status={CORLOR_APP}
               size="large"
-              placeholder="ORDER-XXXXXX"
+              placeholder="ເລກບິນອໍເດີ້ ຫຼື ເບີໂທລະສັບ"
               onKeyPress={(e) => {
                 if (e.key === "Enter") {
                   if (trackOrder === undefined) return;

@@ -2,6 +2,7 @@ import useWindowDimensions from "../../helper/useWindowDimensions";
 import { CORLOR_APP, CORLOR_WHITE } from "../../helper";
 import React from "react";
 import { useRouter } from "next/router";
+import { URL_PACKAGE_SYSTEM } from "../../const";
 const versionWeb = require("../../package.json");
 
 export default function FooterComponent() {
@@ -39,7 +40,7 @@ export default function FooterComponent() {
               {/* <li onClick={()=> navigate.back()}>ໜ້າຫລັກ ເຊວເພຈ</li> */}
               {/* <li>ວິທີການສັ່ງຊື້</li> */}
               <li onClick={() => navigate.push("/policy")}><u>ນະໂຍບາຍການນຳໃຊ້</u></li>
-              <li onClick={() => window.open("https://sp.bbbb.com.la/pricing")}><u>ແພັກເກັດລະບົບ</u></li>
+              <li onClick={() => window.open(URL_PACKAGE_SYSTEM)}><u>ແພັກເກັດລະບົບ</u></li>
               {/* <li>ຕິດຕໍ່ພວກເຮົາ</li> */}
             </ol>
           </div>

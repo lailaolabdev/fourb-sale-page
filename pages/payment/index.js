@@ -534,6 +534,7 @@ export default function payment() {
             const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
             if (isIOS) {
+              
               // For iOS, use window.location.href to open the app
               window.location.href = onPayLink.href;
             } else {
@@ -623,7 +624,7 @@ export default function payment() {
             </div>
 
             <Form onSubmit={handleCheckToPaid}>
-              <Row sm={2}>
+              <Row xs={1} sm={2}>
                 <Col>
                   <Form.Group className="mb-3">
                     <Form.Label style={{ margin: 0 }}>
@@ -871,7 +872,7 @@ export default function payment() {
                   aria-controls="panel1-content"
                   id="panel1-header">
                   ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ {cartList?.length} ລາຍການ. &nbsp;
-                  <b> ເງິນລວມ: {numberFormat(totalPrice)} ກີບ</b>
+                  {/* <b> ເງິນລວມ: {numberFormat(totalPrice)} ກີບ</b> */}
                 </AccordionSummary>
                 <AccordionDetails>
                   <div className="w-100">
