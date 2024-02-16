@@ -107,7 +107,7 @@ export default function FooterComponent() {
                   overflow: "hidden",
                 }}>
                 <img
-                  src="/assets/images/anusit2.png"
+                  src="/assets/images/mixay.png"
                   style={{ width: "100%" }}
                 />
               </div>
