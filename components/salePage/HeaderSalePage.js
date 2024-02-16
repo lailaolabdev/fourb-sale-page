@@ -11,20 +11,22 @@ import {
   Badge,
   Button,
   Divider,
-  Drawer,
-  Dropdown,
+  Drawer, 
   Input,
+  Menu,
   Space,
 } from "antd";
 import {
   AlignRightOutlined,
+  AppstoreOutlined,
   FileSearchOutlined,
+  MailOutlined,
   PieChartOutlined,
   QuestionCircleOutlined,
   SafetyOutlined,
   SearchOutlined,
   SendOutlined,
-  ShopOutlined,
+  SettingOutlined, 
   ShoppingCartOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
@@ -34,11 +36,9 @@ import _ from "lodash";
 import LoadingComponent from "../LoadingComponent";
 import { useDispatch } from "react-redux";
 import { setOrderGroups } from "../../redux/setOrder/trackOrder";
-import { useRouter } from "next/router";
-import { toast } from "react-toastify";
+import { useRouter } from "next/router"; 
 import { URL_PACKAGE_SYSTEM } from "../../const";
-
-
+import Dropdown from 'react-bootstrap/Dropdown';
 
 function HeaderSalePage({
   enableSearch,
@@ -66,11 +66,10 @@ function HeaderSalePage({
 
   const dispatch = useDispatch();
   const navigate = useRouter();
- 
 
   const onCloseQueryProduct = () => {
     setOpenQueryProduct(false);
-  }; 
+  };
   const oncloseDrawer = () => {
     setOpenMyDrawer(false);
     setOrderId("");
@@ -130,11 +129,20 @@ function HeaderSalePage({
     // return;
   }
 
+  const [current, setCurrent] = useState("mail");
+  const onClick = (e) => {
+    console.log("click ", e);
+    setCurrent(e.key);
+  };
+
   const itemsQueryProducts = [
     {
       key: "1",
       label: (
-        <Button onClick={() => handleIsStockThenZero()} icon={<PieChartOutlined />} size="large">
+        <Button
+          onClick={() => handleIsStockThenZero()}
+          icon={<PieChartOutlined />}
+          size="large">
           ສະແດງສິນຄ້າຍັງເຫຼືອ
         </Button>
       ),
@@ -142,12 +150,14 @@ function HeaderSalePage({
     {
       key: "2",
       label: (
-        <Button onClick={() => handleIsStockZero()} icon={<PieChartOutlined />} size="large">
+        <Button
+          onClick={() => handleIsStockZero()}
+          icon={<PieChartOutlined />}
+          size="large">
           ສະແດງສິນຄ້າທັງໝົດ
         </Button>
       ),
     },
-     
   ];
 
   return (
@@ -242,13 +252,15 @@ function HeaderSalePage({
             style={{
               display: "flex",
               justifyContent: "center",
-              alignItems: "center", gap: 20
+              alignItems: "center",
+              gap: 20,
             }}>
             <div className="btnSearchData" onClick={handleShowBoxSearch}>
               <SearchOutlined
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
               />
             </div>
+ 
 
             {/* <Dropdown
               menu={{
@@ -263,7 +275,6 @@ function HeaderSalePage({
                 </Space>
             </Dropdown> */}
 
-                       
             <div className="openMenu-dropdown" onClick={hadleCartProducts}>
               <Badge
                 overflowCount={10}

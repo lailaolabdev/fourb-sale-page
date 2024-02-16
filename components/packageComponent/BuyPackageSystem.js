@@ -213,7 +213,7 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
               <h3 style={{width:'100%', textAlign:'center'}}>ສະໝັກແພັດເກັດ ລະບົບ</h3>
               <br />
               <Form.Label htmlFor="username">
-                ຊື່ນຳໃຊ້ລະບົບ 4B ໂຟບີ: (ບັງຄັບ)
+                ຊື່ນຳໃຊ້ລະບົບ 4B Live: (ບັງຄັບ)
               </Form.Label>
               <Form.Control
                 value={objectData?.username}
@@ -231,7 +231,7 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
               />
               <br />
               <Form.Label htmlFor="password">
-                ລະຫັດຜ່ານ ເຂົ້າລະບົບ 4B ໂຟບີ: (ບັງຄັບ)
+                ລະຫັດຜ່ານ ເຂົ້າລະບົບ 4B Live: (ບັງຄັບ)
               </Form.Label>
               <Form.Control
                 value={objectData?.password}
@@ -247,9 +247,8 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
                 required
               />
               <br />
-              <Form.Text id="passwordHelpBlock" muted>
-                ປ້ອນຊື່ຮ້ານ, ເບີໂທລະສັບ ເພື່ອຊື້ ແລະ ຕໍ່ອາຍຸການໃຊ້ງານ ລະບົບ 4B
-                ເຊັ່ນ: 4B Shop, 4B POS, 4B Sale Page
+              <Form.Text id="passwordHelpBlock" muted> 
+                ປ້ອນຊື່ນຳໃຊ້ລະບົບ 4B Live ແລະ ລະຫັດຜ່ານ ເພື່ອຢືນຢັນການກວດສອບ ຕໍ່ອາຍຸການໃຊ້ງານ ລະບົບ 4B Live ຂອງທ່ານ ( ຂອບໃຈ ທີ່ໃຊ້ບໍລິການຂອງພວກເຮົາ)
               </Form.Text>
             </div>
           ) : (
@@ -266,11 +265,11 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
                 <h5>ລາຍລະອຽດ: <b>{dataReponse?.note ?? "................."}</b></h5>
                 {/* <p>ຊື່ນຳໃຊ້ລະບົບ: {dataReponse?.phone}</p> */}
               </div>
-              <br />
+              {/* <br />
               <p>
                 <b>ໝາຍເຫດ:</b> ຖ້າຫາກວ່າທ່ານຊຳລະຄ່າລະບົບໄປແລ້ວ
                 ຈະບໍ່ສາມາດຄືນເງິນໄດ້ໃນທຸກກໍລະນີ.
-              </p>
+              </p> */}
             </div>
           )}
 
