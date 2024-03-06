@@ -413,7 +413,7 @@ export default function payment() {
 
   // actoin open bank to paid
 
-  const handleOpenBank = async (values) => {
+  const handleConfirmBank = async (values) => {
     // console.log("check type bank---->", values);
     // setTypeBanks(data?.type)
 
@@ -481,8 +481,8 @@ export default function payment() {
       await createOrderSalepage({
         variables: {
           data: {
-            amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            // amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            // amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
             paymentMethod: values?.type,
             description: descriptions ?? "",
             orders: convertedOrders,
@@ -1015,7 +1015,7 @@ export default function payment() {
                 <div
                   key={index}
                   className="bank-actions"
-                  onClick={() => handleOpenBank(bank)}>
+                  onClick={() => handleConfirmBank(bank)}>
                   <img src={bank?.image} />
                   <h5>{bank?.title}</h5>
                 </div>

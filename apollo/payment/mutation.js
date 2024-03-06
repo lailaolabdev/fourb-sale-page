@@ -16,6 +16,14 @@ export const GEN_QR_AND_SUBSCRIPE_FOR_PAYMENT_ADD_PACKAGE = gql`
   }
 `;
 
+export const CREATE_QR_PAYMENTGATEWAY_TO_ADD_PACKAGE = gql`
+  mutation GenQrAndSubscripeForPaymentAddPackage($data: PaymentInput!) {
+    genQrAndSubscripeForPaymentAddPackage(data: $data) {
+      qrCode
+    }
+  }
+`;
+
 export const ON_SHOP_SUPSCIPTION = gql`
   subscription Subscription($shopId: ID!) {
     onShopUpdatedPackage(shopId: $shopId) {

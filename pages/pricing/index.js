@@ -112,7 +112,7 @@ export default function index() {
               <button
                 onClick={handleShowModalOneMonth}
                 className="btn-buy-package">
-                <span>Buy Now</span>
+                <span>ເລືອກຊື້ເລີຍ</span>
               </button>
             </div>
           </div>
@@ -138,7 +138,7 @@ export default function index() {
               <button
                 onClick={handleShowModalThreeMonth}
                 className="btn-buy-package">
-                <span>Buy Now</span>
+                <span>ເລືອກຊື້ເລີຍ</span>
               </button>
             </div>
           </div>
@@ -164,7 +164,7 @@ export default function index() {
               <button
                 onClick={handleShowModalSixMonth}
                 className="btn-buy-package">
-                <span>Buy Now</span>
+                <span>ເລືອກຊື້ເລີຍ</span>
               </button>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function index() {
               <button
                 onClick={handleShowModal1YearMonth}
                 className="btn-buy-package">
-                <span>Buy Now</span>
+                <span>ເລືອກຊື້ເລີຍ</span>
               </button>
             </div>
           </div>

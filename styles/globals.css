@@ -1,3 +1,7 @@
+/* :root {
+  --color-purple-default #3c169b;
+} */
+
 .main-package-ps {
   width: 100%;
   height: 100vh;
@@ -31,7 +35,6 @@
       padding: 1em;
       position: relative;
       flex-direction: column;
-
 
       & h3 {
         color: #0fa70f;
@@ -80,24 +83,31 @@
         & .btn-buy-package {
           width: 100%;
           padding: 1em;
-          background-color: #3c169b;
-          color: #fff;
+          background: #f2f2f2;
+          color: #3c169b;
           display: flex;
           justify-content: center;
           align-content: center;
           border: none;
           border-radius: 0.6em;
-          transition: 0.3s all ease;
+          transition: all 0.5s ease-in-out;
         }
 
         & .btn-buy-package:active {
           transform: scale(1.08);
         }
+
+ 
       }
     }
 
     & .card-ps:last-child {
       border: 4px solid #3c169b;
+
+      & .card-footer-ps .btn-buy-package {
+        background-color: #3c169b;
+        color: #fff;
+      }
     }
 
     & .card-ps:hover {
@@ -105,15 +115,18 @@
       transition: all 0.35s ease-in-out;
       box-shadow: 1px 1px 10px 10px rgba(0, 0, 0, 0.275);
       z-index: 888;
-      
-      & .card-type, & h3 {
-        transform:scale(1.08);
-        transition: all 0.3s ease-in-out;
+
+      & .btn-buy-package {
+        background-color: #3c169b;
+        color: #fff;
       }
 
-      
+      & .card-type,
+      & h3 {
+        transform: scale(1.08);
+        transition: all 0.3s ease-in-out;
+      }
     }
-    
   }
 }
 
@@ -152,7 +165,7 @@
 
 .btn-package-cancel {
   width: auto;
-  padding: .7em 1.2em;
+  padding: 0.7em 1.2em;
   background-color: #f3f3f3;
   color: #3c169b;
   display: flex;
@@ -164,7 +177,7 @@
 }
 .btn-package-confirm {
   width: auto;
-  padding: .7em 1.2em;
+  padding: 0.7em 1.2em;
   background-color: #3c169b;
   color: #fff;
   display: flex;
@@ -189,7 +202,6 @@
     height: 100%;
     overflow: hidden;
     /* border: 1px solid red; */
-
   }
 
   & .card-action-image {
@@ -198,13 +210,12 @@
     gap: 2px 20px;
     margin-top: 1em;
 
-
     & div {
       width: 100%;
       height: 5em;
       border: 1px solid red;
       background-color: #fff;
-      border-radius: .5em;
+      border-radius: 0.5em;
       overflow: hidden;
     }
   }
@@ -223,8 +234,6 @@
     gap: 2px;
   }
 }
-
-
 
 /* md */
 @media screen and (max-width: 700px) {

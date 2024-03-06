@@ -210,7 +210,7 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
         <Form onSubmit={handleConfirmPackage}>
           {!isDataShop ? (
             <div className="form-packag-ps">
-              <h3 style={{width:'100%', textAlign:'center'}}>ສະໝັກແພັດເກັດ ລະບົບ</h3>
+              <h3 style={{width:'100%', textAlign:'center'}}>ເຕີມແພັກເກັດ ລະບົບ</h3>
               <br />
               <Form.Label htmlFor="username">
                 ຊື່ນຳໃຊ້ລະບົບ 4B Live: (ບັງຄັບ)
