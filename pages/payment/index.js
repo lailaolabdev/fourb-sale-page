@@ -718,7 +718,7 @@ export default function payment() {
                       placeholder="XXX-XXX-XX"
                       value={phone}
                       style={{
-                        backgroundColor: "#fff",
+                        background: "#fff",
                         width: "100%",
                         border: ".02em solid #ddd",
                         paddingLeft: "2.3em",

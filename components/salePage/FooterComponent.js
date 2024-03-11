@@ -154,7 +154,7 @@ export default function FooterComponent() {
       <div
         style={{
           textAlign: "center",
-          backgroundColor: CORLOR_APP,
+          background: CORLOR_APP,
           color: CORLOR_WHITE,
         }}>
         {versionWeb?.version}

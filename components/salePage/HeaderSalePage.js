@@ -158,7 +158,7 @@ function HeaderSalePage({
                   sx={{
                     width: 56,
                     height: 56,
-                    backgroundColor: CORLOR_WHITE,
+                    background: CORLOR_WHITE,
                     color: CORLOR_APP,
                   }}
                 />
@@ -167,7 +167,7 @@ function HeaderSalePage({
                   sx={{
                     width: 56,
                     height: 56,
-                    backgroundColor: CORLOR_WHITE,
+                    background: CORLOR_WHITE,
                     color: CORLOR_APP,
                   }}
                   alt="emptyImage"
@@ -193,7 +193,7 @@ function HeaderSalePage({
             className="boxInputSearching"
             style={{
               marginLeft: isMenuOpen ? "-100%" : "0",
-              backgroundColor: CORLOR_WHITE,
+              background: CORLOR_WHITE,
             }}
           >
             <div className="iconSearchinng">
@@ -219,7 +219,7 @@ function HeaderSalePage({
                 justifyContent: "center",
                 alignItems: "center",
                 padding: 5,
-                backgroundColor: "#ddd",
+                background: "#ddd",
                 color: CORLOR_APP,
                 cursor: "pointer",
                 borderRadius: "50%",

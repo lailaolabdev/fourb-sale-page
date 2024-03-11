@@ -3,6 +3,7 @@ import { CheckOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import { createStyles, useTheme } from "antd-style";
 import React, { useState } from "react";
+import { RiErrorWarningLine } from "react-icons/ri";
 
 const titleModal = (
   <span style={{ color: "green" }}>ຕໍ່ອາຍຸການໃຊ້ງານລະບົບ</span>
@@ -87,12 +88,11 @@ export default function index() {
   return (
     <>
       <div className="main-package-ps">
-        <h2>ແພັກເກັດລະບົບ</h2>
+        {/* <h1><b>ແພັກເກັດລະບົບ</b></h1>
         <p>ເລືອກຊື້ແພັກເກັດລາຄາລະບົບ 4B ໂຟບີ ເພື່ອທຸລະກິດຂອງທ່ານ</p>
         <div className="card-package">
           <div className="card-ps">
             <div className="card-type">
-              {/* <div class="ping"></div> */}
               <p>1</p>
               <p>ເດືອນ</p>
             </div>
@@ -100,12 +100,10 @@ export default function index() {
             <h3>500.000 ກີບ</h3>
             <ul>
               <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
-              {/* <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li> */}
               <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li>
               <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
               <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
               <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-              {/* <li>ຈັດການລູກຄ້າຊີເອຟ</li> */}
             </ul>
 
             <div className="card-footer-ps">
@@ -127,11 +125,9 @@ export default function index() {
             <ul>
               <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
               <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-              {/* <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li> */}
               <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
               <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
               <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-              {/* <li>ຈັດການລູກຄ້າຊີເອຟ</li> */}
             </ul>
 
             <div className="card-footer-ps">
@@ -153,11 +149,9 @@ export default function index() {
             <ul>
               <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
               <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-              {/* <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li> */}
               <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
               <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
               <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-              {/* <li>ຈັດການລູກຄ້າຊີເອຟ</li> */}
             </ul>
 
             <div className="card-footer-ps">
@@ -179,11 +173,9 @@ export default function index() {
             <ul>
               <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
               <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-              {/* <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li> */}
               <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
               <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
               <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-              {/* <li>ຈັດການລູກຄ້າຊີເອຟ</li> */}
             </ul>
 
             <div className="card-footer-ps">
@@ -194,7 +186,11 @@ export default function index() {
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
+        <RiErrorWarningLine style={{fontSize:'8em', color:'orange'}} />
+        <h1><b>ແຈ້ງການ</b></h1>
+        <h4>ປັດຈຸບັນນີ້ທັງ ບໍລິສັດ 4B ກຳລັງມີການປັບປ່ຽນເລື່ອງລາຄາແພັກເກັດລະບົບ</h4>
+        <p>ສອບຖາມຂໍ້ມູນເພິ່ມເຕີມ ໂທ: 020 29 933 969</p>
       </div>
 
       <Modal

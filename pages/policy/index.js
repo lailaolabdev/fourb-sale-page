@@ -12,7 +12,7 @@ function PrivatePolicy() {
             display: "flex",
             justifyContent: "start",
             alignItems: "center",
-            backgroundColor: "#422F90",
+            background: "#422F90",
             color:'#ffff',
             borderRadius: 5,
             border: "1px #3c169b",
@@ -26,7 +26,7 @@ function PrivatePolicy() {
               height: "65px",
               borderRadius: "5em",
               paddingLeft: "-80px",
-              backgroundColor: "#fff",
+              background: "#fff",
             }}
             alt="profile"
           />

@@ -173,8 +173,8 @@ export default function index() {
                     <Col sm={6} sx={12}>
                       <div className="p-2">
                         <ButtonComponent
-                          backgroundColor={CORLOR_APP}
-                          hoverBackgroundColor={CORLOR_APP}
+                          background={CORLOR_APP}
+                          hoverbackground={CORLOR_APP}
                           border={`1px solid ${CORLOR_APP}`}
                           cursor="pointer"
                           textColor="#FFF"

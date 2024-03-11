@@ -5,7 +5,7 @@
     left: 0;
     right: 0;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5);
     transition: height ease-in-out;
     z-index: 1001;
     overflow-y: auto;
@@ -63,7 +63,7 @@
     left: 0;
     right: 0;
     min-height: 80%;
-    background-color: #fff;
+    background: #fff;
     overflow: hidden;
     font-size: 18px;
     font-weight: bold;
@@ -141,7 +141,7 @@
 }
 
 .buttonOkay {
-    background-color: #fff;
+    background: #fff;
     border-radius: 8px;
     border-width: 0px;
     height: 40px;

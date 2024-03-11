@@ -20,6 +20,7 @@ import { GET_EXCHANGRATE } from "../../apollo/exchanrage";
 import ButtonComponent from "../../components/ButtonComponent";
 import {
   calculateRoundedValue,
+  CORLOR_APP,
   emptyImage,
   numberFormat,
   S3_URL,
@@ -283,8 +284,8 @@ export default function CartDetail() {
           </div>
           <div className="paid-buy">
             <ButtonComponent
-              backgroundColor="#3c169b"
-              hoverBackgroundColor="#3c169b"
+              background={CORLOR_APP}
+              hoverbackground={CORLOR_APP}
               cursor={checkPaid ? "no-drop" : "pointer"}
               textColor="#fff"
               text="ສັ່ງຊື້"

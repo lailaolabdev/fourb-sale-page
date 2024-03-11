@@ -19,13 +19,12 @@ export default function ModalConfirmComponent({
       backdrop="static"
       centered
       zIndex={9999}
-      size="sm"
       keyboard={false}>
       <Modal.Body>
         <div
           style={{
             width: "100%",
-            height: "10em",
+            height: "15em",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -61,7 +60,7 @@ export default function ModalConfirmComponent({
           </Button>
           <Button
             style={{
-              backgroundColor: CORLOR_APP,
+              background: CORLOR_APP,
               color: CORLOR_WHITE,
               border: `1px solid ${CORLOR_APP}`,
             }}

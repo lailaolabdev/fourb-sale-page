@@ -22,7 +22,7 @@ export default function BottomBar({ onChange, disabled }) {
       style={{
         minHieght: 60,
         height: 60,
-        backgroundColor: "#ccc",
+        background: "#ccc",
         zIndex: 1000,
       }}
     >

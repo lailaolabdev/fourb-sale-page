@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React from "react";
 
 const StyledButton = styled.button`
-  background-color: ${(props) => props.backgroundColor || "#007bff"};
+  background: ${(props) => props.background || "#007bff"};
   color: ${(props) => props.textColor || "#fff"};
   padding: ${(props) => props.padding || "5px"};
   font-size: ${(props) => props.fontSize || "1em"};
@@ -17,7 +17,7 @@ const StyledButton = styled.button`
   gap: .4em;
 
   &:hover {
-    background-color: ${(props) => props.hoverBackgroundColor || "#0056b3"};
+    background: ${(props) => props.hoverbackground || "#0056b3"};
     color:${(props) => props.hoverColor || "#fff"};
   }
 `;

@@ -894,7 +894,7 @@ function ProductSalePage({ initialShop }) {
                     sx={{
                       width: "100%",
                       height: "100%",
-                      backgroundColor: CORLOR_WHITE,
+                      background: CORLOR_WHITE,
                       color: CORLOR_APP,
                       border: "1px solid #f2f2f2",
                     }}
@@ -904,7 +904,7 @@ function ProductSalePage({ initialShop }) {
                     sx={{
                       width: "100%",
                       height: "100%",
-                      backgroundColor: CORLOR_WHITE,
+                      background: CORLOR_WHITE,
                       color: CORLOR_APP,
                       border: "1px solid #f2f2f2",
                     }}

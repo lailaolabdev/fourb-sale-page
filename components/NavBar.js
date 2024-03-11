@@ -44,7 +44,7 @@ function NavBar() {
 
         position: "fixed",
         width: "100%",
-        backgroundColor: "white",
+        background: "white",
         zIndex: 10,
       }}
     >

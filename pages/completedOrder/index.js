@@ -183,7 +183,7 @@ export default function CompletedOrder() {
         <Button
           onClick={handleCaptureAndDownload}
           style={{
-            backgroundColor: CORLOR_APP,
+            background: CORLOR_APP,
             border: `1px solid ${CORLOR_APP}`,
             color: "white",
             cursor: "pointer",
@@ -193,7 +193,7 @@ export default function CompletedOrder() {
         <Button
           onClick={() => handleCheckOrder()}
           style={{
-            backgroundColor: CORLOR_APP,
+            background: CORLOR_APP,
             border: `1px solid ${CORLOR_APP}`,
             color: "white",
             cursor: "pointer",

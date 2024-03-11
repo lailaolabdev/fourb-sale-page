@@ -1,3 +1,4 @@
+import { CORLOR_APP } from '../../helper';
 import React from 'react'
 import { Pagination, Row, Col } from "react-bootstrap";
 
@@ -48,6 +49,7 @@ export default function PaginationComponent({
           />
           {getPageNumbers().map((pageNumber) => (
             <Pagination.Item
+            style={{background:CORLOR_APP}}
               active={pageNumber === page}
               key={pageNumber}
               onClick={() => onPageChange(pageNumber)}>
