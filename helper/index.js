@@ -8,7 +8,7 @@ export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 export const EMPTY_USER_PROFILE = "assets/images/emptyProfile.jpg";
 
-export const SERVER_IP = "https://sale-page.bbbb.com.la/";
+export const SERVER_IP = "https://sp.bbbb.com.la/";
 export const LINK_AFFILIATE = "https://affiliate.bbbb.com.la/";
 
 // convert price
