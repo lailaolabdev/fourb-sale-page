@@ -54,6 +54,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { bankDatas } from "../../const/selectBankData";
 import html2canvas from "html2canvas";
+import { removeCartItem } from "../../redux/salepage/cartReducer";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -140,7 +141,8 @@ export default function payment() {
   );
 
   const [createOrderSalepage, { loading: loadingPayment }] = useMutation(
-    CRATE_QR_WITH_PAYMENT_GATEWAY
+    // CRATE_QR_WITH_PAYMENT_GATEWAY
+    CREATE_ORDER_ON_SALE_PAGE
   );
   const [createQrPayment, { loading: loadingSubscripe }] = useMutation(
     CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT
@@ -477,14 +479,22 @@ export default function payment() {
       // console.log("check orders:-->", _orderGroup, convertedOrders);
       // console.log("check bank type:--->", values?.type);
 
-      // Create an order
+      // Create an order 
       await createOrderSalepage({
         variables: {
-          data: {
-            // amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            paymentMethod: values?.type,
-            description: descriptions ?? "",
+
+          // use Payment Gateway
+          // data: {
+          //   amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+          //   amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+          //   paymentMethod: values?.type,
+          //   description:  "",
+          //   orders: convertedOrders,
+          //   orderGroup: _orderGroup,
+          // },
+
+          // use Bcel One defult
+          data: { 
             orders: convertedOrders,
             orderGroup: _orderGroup,
           },
@@ -494,7 +504,8 @@ export default function payment() {
         // const _req = message?.data?.createQrWithPaymentGateway;
 
         // console.log("check order Id:--->", typeof(_req?.data?.id));
-        const dataResponse = message?.data?.createQrWithPaymentGateway;
+        // const dataResponse = message?.data?.createQrWithPaymentGateway; 
+        const dataResponse = message?.data?.createOrderSalePage; 
 
         let compareData = {
           ...dataResponse,
@@ -504,49 +515,47 @@ export default function payment() {
         console.log("compareData=====>", compareData);
         dispatch(setDataCompleteds(compareData));
         setDataCompleted(compareData);
-        // history.push("/completed-payment", { compareData });
-        // const handleBackSalePage = () => {
-        // };
-        setGetOrderId(dataResponse?.data?.id);
-        setQrCodeData(dataResponse?.qrCode);
-        // const genqrCode = await createQrPayment({
-        //   variables: {
-        //     data: {
-        //       order: message?.data?.createOrderSalePage?.id,
-        //     },
-        //   },
-        // });
-        // console.log({ genqrCode });
+      
+        /* ------ use bcel one defalt ---------- */
+        setGetOrderId(message?.data?.createOrderSalePage?.id);
+        // setQrCodeData(dataResponse?.qrCode);
+        const genqrCode = await createQrPayment({
+          variables: {
+            data: {
+              order: message?.data?.createOrderSalePage?.id,
+            },
+          },
+        });
+        console.log({ genqrCode });
         // Check if a QR code was generated successfully
         // const qrCodeValue =
         //   genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode;
         // console.log("check qrcode ---->", _req?.qrCode);
-
-        if (dataResponse) {
+        if (genqrCode) {
           // Set the QR code data
 
-          if (dataResponse?.appLink) {
+          if (genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode) {
             // console.log("check appLink ---->", _req?.appLink);
+        setQrCodeData(genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode);
+
             // Create an anchor element
             const onPayLink = document.createElement("a");
-            onPayLink.href = dataResponse?.appLink;
-            // Check if it's an iOS device
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        onPayLink.href = "onepay://qr/" + genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode
+        // Check if it's an iOS device
+        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-            if (isIOS) {
-              
-              // For iOS, use window.location.href to open the app
-              window.location.href = onPayLink.href;
-            } else {
-              // For non-iOS devices, programmatically trigger a click event
-              const event = new MouseEvent("click", {
-                view: window,
-                bubbles: true,
-                cancelable: true,
-              });
-              onPayLink.dispatchEvent(event);
-            }
-
+        if (isIOS) {
+          // For iOS, use window.location.href to open the app
+          window.location.href = onPayLink.href;
+        } else {
+          // For non-iOS devices, programmatically trigger a click event
+          const event = new MouseEvent("click", {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+          });
+          onPayLink.dispatchEvent(event);
+        }
             // dispatch(removeCartItem());
             // setCustomerName("");
             // setPhone("");
@@ -556,6 +565,42 @@ export default function payment() {
             // setSelectedOriginalDistrict("");
           }
         }
+
+        /* ------ use payment gateway ---------- */
+        // if (dataResponse) {
+        //   // Set the QR code data
+
+        //   if (dataResponse?.appLink) {
+        //     // console.log("check appLink ---->", _req?.appLink);
+        //     // Create an anchor element
+        //     const onPayLink = document.createElement("a");
+        //     onPayLink.href = dataResponse?.appLink;
+        //     // Check if it's an iOS device
+        //     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+        //     if (isIOS) {
+              
+        //       // For iOS, use window.location.href to open the app
+        //       window.location.href = onPayLink.href;
+        //     } else {
+        //       // For non-iOS devices, programmatically trigger a click event
+        //       const event = new MouseEvent("click", {
+        //         view: window,
+        //         bubbles: true,
+        //         cancelable: true,
+        //       });
+        //       onPayLink.dispatchEvent(event);
+        //     }
+
+        //     dispatch(removeCartItem());
+        //     setCustomerName("");
+        //     setPhone("");
+        //     setLogistic("");
+        //     setDestinationLogistic("");
+        //     setSelectedOriginalProvice("");
+        //     setSelectedOriginalDistrict("");
+        //   }
+        // }
         return;
       });
       return;

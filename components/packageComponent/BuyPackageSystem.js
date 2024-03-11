@@ -301,7 +301,7 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
         </Form>
       ) : (
         <div className="card-qr-package">
-          <p>{getQrcode && "ຊຳລະຊື້ລະບົບ 4B ໂຟບີ ເພື່ອທຸລະກິດຂອງທ່ານ"}</p>
+          <p>{getQrcode && "ຊຳລະເງິນຜ່ານ bcel One"}</p>
           <div>
             {getQrcode ? (
               <QRCode

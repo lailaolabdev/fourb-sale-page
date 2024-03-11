@@ -11,7 +11,7 @@ import {
   Badge,
   Button,
   Divider,
-  Drawer, 
+  Drawer,
   Input,
   Menu,
   Space,
@@ -19,6 +19,7 @@ import {
 import {
   AlignRightOutlined,
   AppstoreOutlined,
+  CloseCircleOutlined,
   FileSearchOutlined,
   MailOutlined,
   PieChartOutlined,
@@ -26,7 +27,7 @@ import {
   SafetyOutlined,
   SearchOutlined,
   SendOutlined,
-  SettingOutlined, 
+  SettingOutlined,
   ShoppingCartOutlined,
   UserSwitchOutlined,
 } from "@ant-design/icons";
@@ -36,9 +37,9 @@ import _ from "lodash";
 import LoadingComponent from "../LoadingComponent";
 import { useDispatch } from "react-redux";
 import { setOrderGroups } from "../../redux/setOrder/trackOrder";
-import { useRouter } from "next/router"; 
+import { useRouter } from "next/router";
 import { URL_PACKAGE_SYSTEM } from "../../const";
-import Dropdown from 'react-bootstrap/Dropdown';
+import Dropdown from "react-bootstrap/Dropdown";
 
 function HeaderSalePage({
   enableSearch,
@@ -63,6 +64,11 @@ function HeaderSalePage({
   const [enableData, setEnableData] = useState(false);
   const [openTagTrack, setOpenTagTrack] = useState(false);
   const [openQueryProduct, setOpenQueryProduct] = useState(false);
+
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const toggleDropdown = () => {
+    setIsOpenMenu(!isOpenMenu);
+  };
 
   const dispatch = useDispatch();
   const navigate = useRouter();
@@ -129,36 +135,14 @@ function HeaderSalePage({
     // return;
   }
 
-  const [current, setCurrent] = useState("mail");
-  const onClick = (e) => {
-    console.log("click ", e);
-    setCurrent(e.key);
+  const onFetchDataRest = () => {
+    handleIsStockThenZero();
+    setIsOpenMenu(false);
   };
-
-  const itemsQueryProducts = [
-    {
-      key: "1",
-      label: (
-        <Button
-          onClick={() => handleIsStockThenZero()}
-          icon={<PieChartOutlined />}
-          size="large">
-          ສະແດງສິນຄ້າຍັງເຫຼືອ
-        </Button>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <Button
-          onClick={() => handleIsStockZero()}
-          icon={<PieChartOutlined />}
-          size="large">
-          ສະແດງສິນຄ້າທັງໝົດ
-        </Button>
-      ),
-    },
-  ];
+  const onFetchDataNoRest = () => {
+    handleIsStockZero();
+    setIsOpenMenu(false);
+  };
 
   return (
     <div>
@@ -210,7 +194,8 @@ function HeaderSalePage({
             style={{
               marginLeft: isMenuOpen ? "-100%" : "0",
               backgroundColor: CORLOR_WHITE,
-            }}>
+            }}
+          >
             <div className="iconSearchinng">
               <FiSearch />
             </div>
@@ -239,7 +224,8 @@ function HeaderSalePage({
                 cursor: "pointer",
                 borderRadius: "50%",
               }}
-              onClick={handleHideBoxSearch}>
+              onClick={handleHideBoxSearch}
+            >
               <MdOutlineClose />
             </div>
           </div>
@@ -254,13 +240,13 @@ function HeaderSalePage({
               justifyContent: "center",
               alignItems: "center",
               gap: 20,
-            }}>
+            }}
+          >
             <div className="btnSearchData" onClick={handleShowBoxSearch}>
               <SearchOutlined
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
               />
             </div>
- 
 
             {/* <Dropdown
               menu={{
@@ -275,10 +261,48 @@ function HeaderSalePage({
                 </Space>
             </Dropdown> */}
 
+            <div className="dropdown">
+              <button
+                onClick={toggleDropdown}
+                className="dropbtn"
+              >
+                {isOpenMenu ? (
+                  <CloseCircleOutlined 
+                  style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
+                  
+                  />
+                ) : (
+                  <FileSearchOutlined
+                    style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
+                  />
+                )}
+              </button>
+              {isOpenMenu && (
+                <div className="dropdown-content">
+                  <Button
+                    onClick={onFetchDataRest}
+                    icon={<PieChartOutlined />}
+                    size="large"
+                  >
+                    ສະແດງສິນຄ້າຍັງເຫຼືອ
+                  </Button>
+                  <Button
+                    style={{ marginTop: 10 }}
+                    onClick={onFetchDataNoRest}
+                    icon={<PieChartOutlined />}
+                    size="large"
+                  >
+                    ສະແດງສິນຄ້າທັງໝົດ
+                  </Button>
+                </div>
+              )}
+            </div>
+
             <div className="openMenu-dropdown" onClick={hadleCartProducts}>
               <Badge
                 overflowCount={10}
-                count={isNaN(totalQuantity) ? 0 : totalQuantity ?? 0}>
+                count={isNaN(totalQuantity) ? 0 : totalQuantity ?? 0}
+              >
                 <ShoppingCartOutlined
                   style={{ fontSize: "1.7em", color: CORLOR_WHITE }}
                 />
@@ -286,7 +310,8 @@ function HeaderSalePage({
             </div>
             <div
               className="openMenu-dropdown"
-              onClick={() => setOpenMyDrawer(true)}>
+              onClick={() => setOpenMyDrawer(true)}
+            >
               <AlignRightOutlined
                 style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
               />
@@ -300,7 +325,8 @@ function HeaderSalePage({
       {/* track order for me */}
       <div
         className="card-track-order-now"
-        style={{ top: openTagTrack ? 0 : "-100%" }}>
+        style={{ top: openTagTrack ? 0 : "-100%" }}
+      >
         <div className="tag-query-data">
           <ul onClick={() => setOpenTagTrack(false)}>
             <li onClick={() => handleIsStockZero()}>
@@ -320,7 +346,8 @@ function HeaderSalePage({
         title="ເມນູທັງໝົດ"
         placement="right"
         onClose={oncloseDrawer}
-        open={openMyDrawer}>
+        open={openMyDrawer}
+      >
         <ul onClick={oncloseDrawer} className="menu-drawer">
           <li onClick={() => navigate.push("/policy")}>
             <SafetyOutlined style={{ fontSize: 23 }} />
@@ -346,7 +373,8 @@ function HeaderSalePage({
           <li
             onClick={() => {
               window.open(LINK_AFFILIATE);
-            }}>
+            }}
+          >
             <UserSwitchOutlined style={{ fontSize: 20, paddingLeft: 3 }} />
             <p>ສະໝັກນຳໃຊ້ ອາຟຣີລີເອດ </p>
           </li>
@@ -360,7 +388,8 @@ function HeaderSalePage({
           <Space.Compact
             style={{
               width: "100%",
-            }}>
+            }}
+          >
             <Input
               value={trackOrder}
               onChange={(e) => setTrackOrder(e?.target?.value)}
@@ -391,7 +420,8 @@ function HeaderSalePage({
               justifyContent: "center",
               alignItems: "center",
               marginTop: "5em",
-            }}>
+            }}
+          >
             {orderGroupLoading && (
               <LoadingComponent
                 titleLoading="ກຳລັງຄົ້ນຫາອໍເດີ້..."
@@ -419,7 +449,8 @@ function HeaderSalePage({
         placement="top"
         style={{ height: 200, boxShadow: "none", border: "none" }}
         onClose={onCloseQueryProduct}
-        open={openQueryProduct}>
+        open={openQueryProduct}
+      >
         <p>Some contents...</p>
         <p>Some contents...</p>
         <p>Some contents...</p>

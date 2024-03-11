@@ -20,7 +20,7 @@ export default function GenQrCode({ qrcodeData, getOrderId }) {
   console.log("orderSubscription1111====>", orderSubscription);
   useEffect(() => {
     if (orderSubscription) {
-      console.log("orderSubscription222====>", orderSubscription);
+      // console.log("orderSubscription222====>", orderSubscription);
       if (orderSubscription?.onOrderUpdated?.id === getOrderId) {
         // console.log("successfully");
 

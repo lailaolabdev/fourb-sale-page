@@ -34,7 +34,7 @@ export default function CompletedOrder() {
   // const info = navigate?.query?.dataCompleted;
   const influencerId = navigate?.query?.influencerId;
 
-  // console.log("compareData====>", info);
+  console.log("compareData====>", info);
   // console.log("influencerId99999====>", influencerId);
 
   const handleBack = () => {
@@ -102,7 +102,7 @@ export default function CompletedOrder() {
     // console.log("check code:--->",info?.data?.code)
   };
 
-  const txtWatermark = info?.code + "-" + numberFormat(info?.amountPaided);
+  // const txtWatermark = info?.code + "-" + numberFormat(info?.amountPaided);
 
   return (
     <>
@@ -116,7 +116,7 @@ export default function CompletedOrder() {
           gap={[10, 10]}
           fontSize="8px"
           content={[
-            info?.data?.code,
+            info?.code,
             moment(info?.createdAt).format("DD/MM/YYYY HH:mm"),
             numberFormat(info?.amountPaided) + " KIP",
           ]}>
@@ -150,7 +150,7 @@ export default function CompletedOrder() {
                 <div className="card-display-all">
                   <div className="actionView">
                     <h6>ເລກບິນ:</h6>
-                    <h6>{info?.data?.code}</h6>
+                    <h6>{info?.code}</h6>
                   </div>
                   <div className="actionView">
                     <h6>ວັນທີ ເວລາ:</h6>
