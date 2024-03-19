@@ -126,13 +126,13 @@ function HeaderSalePage({
 
   if (orderGroupData?.orderGroups?.total >= 1) {
     console.log("checkOrder6789:---->", orderGroupData)
-    // dispatch(setOrderGroups(orderGroupData?.orderGroups?.data));
-    // if (
-    //   orderGroupData?.orderGroups?.data[0]?.code === orderId ||
-    //   orderGroupData?.orderGroups?.data[0]?.phone === orderId
-    // ) {
-    //   navigate.push("/trackOrder");
-    // }
+    dispatch(setOrderGroups(orderGroupData?.orderGroups?.data));
+    if (
+      orderGroupData?.orderGroups?.data[0]?.code === orderId ||
+      orderGroupData?.orderGroups?.data[0]?.phone === orderId
+    ) {
+      navigate.push("/trackOrder");
+    }
     // return;
   }
 
