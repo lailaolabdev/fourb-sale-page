@@ -515,6 +515,8 @@ export default function payment() {
         // console.log("compareData=====>", compareData);
         dispatch(setDataCompleteds(compareData));
         setDataCompleted(compareData);
+        setQrCodeData(genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode);
+
       
         /* ------ use bcel one defalt ---------- */
         // setGetOrderId(message?.data?.createOrderSalePage?.id);
@@ -536,7 +538,6 @@ export default function payment() {
 
         //   if (genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode) {
         //     // console.log("check appLink ---->", _req?.appLink);
-        // setQrCodeData(genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode);
 
         //     // Create an anchor element
         //     const onPayLink = document.createElement("a");
@@ -565,6 +566,8 @@ export default function payment() {
         //     // setSelectedOriginalDistrict("");
         //   }
         // }
+
+
 
         /* ------ use payment gateway ---------- */
         if (dataResponse) {
