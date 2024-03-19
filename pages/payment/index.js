@@ -515,7 +515,7 @@ export default function payment() {
         // console.log("compareData=====>", compareData);
         dispatch(setDataCompleteds(compareData));
         setDataCompleted(compareData);
-        setQrCodeData(genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode);
+        setQrCodeData(dataResponse?.qrCode);
 
       
         /* ------ use bcel one defalt ---------- */
