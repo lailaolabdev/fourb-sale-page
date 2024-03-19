@@ -728,7 +728,7 @@ function ProductSalePage({ initialShop }) {
         enableSearch={enableSearch}
         cartList={cartList}
         handleShowProfile={handleShowProfile}
-        loadShopData={initialShop}
+        loadShopData={shopDetail}
         filter={filter}
         setFilter={setFilter}
         searchProduct={searchProduct}
@@ -887,10 +887,10 @@ function ProductSalePage({ initialShop }) {
           <div className="viewProfile p-4">
             <div className="shop-profile">
               <div className="imgShow">
-                {initialShop?.image ? (
+                {shopDetail?.image ? (
                   <Avatar
-                    alt={initialShop?.name}
-                    src={S3_URL + initialShop?.image}
+                    alt={shopDetail?.name}
+                    src={S3_URL + shopDetail?.image}
                     sx={{
                       width: "100%",
                       height: "100%",
@@ -914,16 +914,16 @@ function ProductSalePage({ initialShop }) {
                 )}
               </div>
               <br />
-              <h4>{initialShop?.name}</h4>
+              <h4>{shopDetail?.name}</h4>
             </div>
             <br />
             <div className="show-contact-info">
-              <p>ຊື່ຮ້ານ: {initialShop?.name}</p>
+              <p>ຊື່ຮ້ານ: {shopDetail?.name}</p>
               <ul style={{ marginTop: "-.5em", marginLeft: "-.8em" }}>
-                <li>ເບີໂທລະສັບ: +856 20 {initialShop?.phone ?? "........"}</li>
-                <li>ທີ່ຢູ່ປັດຈຸບັນ ບ້ານ: {initialShop?.address?.village}</li>
-                <li>ເມືອງ:{initialShop?.address?.district}</li>
-                <li>ແຂວງ:{initialShop?.address?.province}</li>
+                <li>ເບີໂທລະສັບ: +856 20 {shopDetail?.phone ?? "........"}</li>
+                <li>ທີ່ຢູ່ປັດຈຸບັນ ບ້ານ: {shopDetail?.address?.village}</li>
+                <li>ເມືອງ:{shopDetail?.address?.district}</li>
+                <li>ແຂວງ:{shopDetail?.address?.province}</li>
               </ul>
             </div>
             <div
