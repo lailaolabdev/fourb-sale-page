@@ -1064,7 +1064,7 @@ export default function payment() {
                   key={index}
                   className="bank-actions"
                   onClick={() => handleConfirmBank(bank)}>
-                  <img src={bank?.image} />
+                  <img src={bank?.image} style={{minWidth:50, maxWidth:80, height:'auto'}} />
                   <h5>{bank?.title}</h5>
                 </div>
               ))}
