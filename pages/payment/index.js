@@ -488,7 +488,7 @@ export default function payment() {
             amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
             // amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
             paymentMethod: values?.type,
-            description:  "test",
+            // description:  "test",
             orders: convertedOrders,
             orderGroup: _orderGroup,
           },
@@ -519,7 +519,7 @@ export default function payment() {
 
       
         /* ------ use bcel one defalt ---------- */
-        // setGetOrderId(message?.data?.createOrderSalePage?.id);
+        setGetOrderId(message?.data?.createQrWithPaymentGateway?.data?.id);
         // // setQrCodeData(dataResponse?.qrCode);
         // const genqrCode = await createQrPayment({
         //   variables: {
@@ -595,13 +595,13 @@ export default function payment() {
               onPayLink.dispatchEvent(event);
             }
 
-            dispatch(removeCartItem());
-            setCustomerName("");
-            setPhone("");
-            setLogistic("");
-            setDestinationLogistic("");
-            setSelectedOriginalProvice("");
-            setSelectedOriginalDistrict("");
+            // dispatch(removeCartItem());
+            // setCustomerName("");
+            // setPhone("");
+            // setLogistic("");
+            // setDestinationLogistic("");
+            // setSelectedOriginalProvice("");
+            // setSelectedOriginalDistrict("");
           }
         }
         return;

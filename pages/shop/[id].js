@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import HeaderSalePage from "../../components/salePage/HeaderSalePage";
 import SlideProduct from "../../components/salePage/SlideProduct";
 import FooterComponent from "../../components/salePage/FooterComponent";
-import { Col, Modal, Row } from "react-bootstrap";
+import { Button, Col, Modal, Row } from "react-bootstrap";
 import { BsCartCheckFill, BsPlus } from "react-icons/bs";
 import {
   GET_SHOP,
