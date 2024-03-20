@@ -1,6 +1,7 @@
 // export const CORLOR_APP = "#3c169b";
 export const CORLOR_APP = "linear-gradient(23deg, rgba(47,110,163,1) 0%, rgba(90,81,160,1) 58%)";
 export const CORLOR_WHITE = "#FFF";
+export const COLOR_TEXT = "rgba(47,110,163,1)";
 
 export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/files/";
 

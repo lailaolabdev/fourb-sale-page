@@ -90,7 +90,6 @@ export default function FooterComponent() {
       </div>
       <div
         className="footer-second"
-        style={{ padding: width > 700 ? "1em 3em" : "1em" }}
       >
         <div>
           <h4>ປະເພດການຊຳລະ</h4>
@@ -193,17 +192,16 @@ export default function FooterComponent() {
             {/* <img src="/assets/images/bcelOne.png" style={{ width: 30 }} /> */}
           </div>
         </div>
-      </div>
 
-      <div
-        style={{
-          textAlign: "center",
-          background: CORLOR_APP,
-          color: CORLOR_WHITE,
-        }}
-      >
-        {versionWeb?.version}
+        <div className="card-copy-right">
+<p>© 4B, All Right Reserved | By Lailaolab</p>
+      {versionWeb?.version}
+        </div>
+       
       </div>
+      {/* <p style={{display:'flex',background:'none',border:'1px solid red', width:'100%', justifyContent:'center', alignItems:'center', padding:'3em 0'}}>
+
+        </p>  */}
     </div>
   );
 }

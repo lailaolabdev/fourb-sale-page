@@ -15,6 +15,7 @@
   --colorBorder: #ddd;
   --colorBlack: #000;
   --colorGray: #c4c4c4;
+  --colorPurple: #2a58d6;
 }
 
 * {
@@ -23,7 +24,7 @@
 }
 
 Modal.Footer {
-  border-top: none;
+  border-top: none; 
 }
 
 .contact-shop {
@@ -221,21 +222,11 @@ Modal.Footer {
     height: 75%;
   }
 
-  .boxInputSearching {
-    width: 100%;
-    position: relative;
-    border: 1px solid #ddd;
-    border-radius: 0.5em;
-    overflow: hidden;
-    padding-left: 2em;
-    transition: 1s ease-in-out;
-  }
-
   .boxInputSearching .iconSearchinng {
     position: absolute;
     left: 1em;
     top: 0.4em;
-    color: var(--colorDefaultcf);
+    color: var(--colorBlack);
     font-weight: bold;
   }
 
@@ -751,7 +742,7 @@ input[type="file"]::file-selector-button {
     width: 100%;
     position: absolute;
     left: 0;
-    top: -1em;
+    top: -2em;
 
     display: flex;
     justify-content: center;
@@ -759,8 +750,8 @@ input[type="file"]::file-selector-button {
 
     & .my-marquee {
       width: 100%;
-      padding: .5em 2em;
-      background:var(--colorGray);
+      padding: 0.5em 2em;
+      background: var(--colorGray);
 
       & h1 {
         font-size: 2.35em;
@@ -770,10 +761,7 @@ input[type="file"]::file-selector-button {
       justify-content: center;
       align-items: center; */
       }
-
     }
-    
-   
   }
 
   & .footer-first {
@@ -785,7 +773,7 @@ input[type="file"]::file-selector-button {
 
     & .footer-title {
       width: 100%;
-      padding-top:3em;
+      padding-top: 3em;
 
       & h5 {
         color: var(--colorDefaultcf);
@@ -842,6 +830,23 @@ input[type="file"]::file-selector-button {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 16px 8px;
+    padding: 1em 3em;
+    padding-bottom: 7em;
+    position: relative;
+
+    & .card-copy-right {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: none;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 2em 0;
+      line-height: 5px;
+    }
   }
 }
 
@@ -950,13 +955,116 @@ input[type="file"]::file-selector-button {
   align-items: center;
   /* box-shadow: 5px 5px 12px var(--colorShadow); */
   position: fixed;
-  z-index: 999;
+  z-index: 99;
   width: 100%;
   left: 0;
   top: 0;
   padding: 0em 2.5em;
   background: var(--colorDefaultcf);
   color: var(--colorWhite);
+
+  .card-search-data {
+    width: 100%;
+    transition: all 0.3s ease-in-out;
+   
+    z-index: 9999999;
+    background: var(--colorWhite);
+    height: 3.85em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 1.2em;
+    padding: 0 3em;
+
+    & .icon-search-data {
+      color: var(--colorBlack);
+      padding: 1em;
+      border-radius: 10em;
+    }
+
+    & .icon-close-search {
+      color: var(--colorBlack);
+      border-radius: .2em;
+      cursor: pointer;
+      width: 4em;
+      height: 2em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: var(--colorDefaultcf);
+      color: var(--colorWhite);
+    }
+
+    & .form-control-search {
+      width: 100%;
+      padding: 1em;
+      border: none;
+      margin-left: -1em;
+    }
+
+    & .form-control-search:focus {
+      outline: none;
+    }
+  }
+
+  & .menu-navs {
+    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 2em;
+
+    & div {
+      display: flex;
+      gap: 0.5em;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      & .card-query-product {
+        width: 20em;
+        background: var(--colorWhite);
+        border-radius: .5em;
+        box-shadow: 3px 3px 15px var(--colorGray);
+        padding: .5em;
+ 
+
+        & ul {
+          line-height: 1.75em;
+          width: 100%;
+          margin-left: -2em;
+
+         & li {
+            width: 100%;
+            font-size: 1em;
+            color:var(--colorPurple);
+            list-style: none;
+            padding: .55em;
+            border-radius: .2em;
+  
+          }
+
+          & li:hover {
+            background: var(--colorDefaultcf);
+            color: var(--colorWhite);
+          }
+        }
+        
+        
+       
+
+      }
+
+      & p {
+        margin-top: 1em;
+      }
+    }
+
+    & div:hover {
+      color: var(--colorShadow);
+    }
+  }
 }
 
 input::placeholder {
@@ -1064,9 +1172,9 @@ input::placeholder {
   width: 100%;
   height: auto;
   padding: 0px;
-  /* border: 1px solid var(--colorBorder); */
+  border: 1px solid #f1f1f1;
   background: #efefef;
-  border-radius: 0.5em;
+  border-radius: 0.1em;
   transition: 0.3s all ease;
   position: relative;
   margin: 0.5em 0;
@@ -1099,11 +1207,17 @@ input::placeholder {
 }
 
 .productSalePage:hover {
-  transform: scale(1.02);
-  box-shadow: 1px 1px 5px 5px rgba(0, 0, 0, 0.275);
-  /* border: 1px dashed var(--colorDefaultcf); */
-  border-radius: 0.5em;
+  transform: scale(1.05);
+  box-shadow: 1px 1px 5px 5px rgba(48, 48, 48, 0.161);
   cursor: pointer;
+  border: none;
+  z-index: 90;
+
+  & .btn-add-to-cart {
+    background: var(--colorDefaultcf);
+    border: none;
+    color: var(--colorWhite);
+  }
 }
 
 .productSalePage:hover .amountAll {
@@ -1112,7 +1226,7 @@ input::placeholder {
 
 .productSalePage .imageViews {
   width: 100%;
-  height: 10em;
+  height: 12em;
   overflow: hidden;
   display: flex;
   justify-content: center;
@@ -1175,7 +1289,8 @@ input::placeholder {
     width: 20px;
     height: 20px;
     cursor: pointer;
-    z-index: 9999;
+    z-index: 9;
+    color: #ddd;
   }
 }
 .cartItem-product .cartImage {
@@ -1210,7 +1325,7 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 0.2em;
+  gap: 0.1em;
   position: absolute;
   right: 1em;
   bottom: 1.7em;
@@ -1267,7 +1382,7 @@ input::placeholder {
 
 .action-cart-product-footer .paid-buy {
   width: 100%;
-  padding: 1em 0;
+  padding: 2em 0;
 }
 
 /* ==================> Pay ment ================== */
@@ -1694,13 +1809,7 @@ input::placeholder {
   color: var(--colorDefaultcf);
   border: 1px solid var(--colorDefaultcf);
   outline: none;
-  transition: 0.4s all ease-in-out;
-}
-
-.btn-add-to-cart:hover {
-  background: var(--colorDefaultcf);
-  border: none;
-  color: var(--colorWhite);
+  transition: 0.2s all ease-in-out;
 }
 
 .btnSuccess {
@@ -1860,8 +1969,6 @@ input::placeholder {
     & .btn-register-now {
     }
   }
-
-  
 
   .action-footer-button {
     background: #ffffff5b;
@@ -2060,6 +2167,10 @@ input::placeholder {
   .headerSalePage {
     padding: 0.5em;
     /* height: auto; */
+
+    & .card-search-data {
+      padding: 0 .5em;
+    }
   }
 
   .containerSalepage {
@@ -2094,7 +2205,7 @@ input::placeholder {
   .action-button {
     right: 0.8em;
     bottom: 0.8em;
-    gap: 1em;
+    gap: 0.2em;
   }
 
   .action-button .increment,
@@ -2122,9 +2233,9 @@ input::placeholder {
     border: 1px solid rgba(128, 128, 128, 0.29);
   }
 
-  .productSalePage:hover {
+  /* .productSalePage:hover {
     transform: none;
-  }
+  } */
 
   .productSalePage .imageViews {
     width: 100%;
@@ -2160,29 +2271,25 @@ input::placeholder {
   }
 
   .action-cart-product-footer .paid-buy {
-    padding: 0;
+    padding: 2em 0;
     /* margin-top: 1em; */
   }
 
   .footer-sale-page {
-    
     & .card-slo-can {
       padding-top: 1.55em;
 
       & .my-marquee {
         width: 100%;
-        padding: .5em;
-        background:var(--colorDefaultcf);
-     
+        padding: 0.5em;
+        background: var(--colorDefaultcf);
+
         & h1 {
           font-size: 1.25em;
           font-weight: bold;
-          color:white; 
+          color: white;
         }
-    
       }
-
-
     }
     & .footer-first {
       grid-template-columns: 1fr;

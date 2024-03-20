@@ -4,7 +4,13 @@ import { FiSearch } from "react-icons/fi";
 import { FaUserAlt } from "react-icons/fa";
 import { MdDns, MdOutlineClose, MdTurnedIn } from "react-icons/md";
 import useWindowDimensions from "../../helper/useWindowDimensions";
-import { CORLOR_APP, CORLOR_WHITE, LINK_AFFILIATE, S3_URL } from "../../helper";
+import {
+  COLOR_TEXT,
+  CORLOR_APP,
+  CORLOR_WHITE,
+  LINK_AFFILIATE,
+  S3_URL,
+} from "../../helper";
 import { Avatar } from "@mui/material";
 import {
   Alert,
@@ -125,7 +131,7 @@ function HeaderSalePage({
   };
 
   if (orderGroupData?.orderGroups?.total >= 1) {
-    console.log("checkOrder6789:---->", orderGroupData)
+    console.log("checkOrder6789:---->", orderGroupData);
     dispatch(setOrderGroups(orderGroupData?.orderGroups?.data));
     if (
       orderGroupData?.orderGroups?.data[0]?.code === orderId ||
@@ -145,182 +151,125 @@ function HeaderSalePage({
     setIsOpenMenu(false);
   };
 
+  const onSearchDataInput = () => {
+    handleShowBoxSearch();
+    setIsOpenMenu(false);
+  };
+  const onCloseCardSearch = () => {
+    handleHideBoxSearch();
+    setFilter("");
+    setIsOpenMenu(false);
+  };
+
   return (
     <div>
       <div className="headerSalePage">
-        {!enableSearch && (
-          <div className="shopProfile">
-            <div className="imgShop" onClick={handleShowProfile}>
-              {/* <FaUserAlt /> */}
-              {loadShopData?.image ? (
-                <Avatar
-                  alt={loadShopData?.name}
-                  src={S3_URL + loadShopData?.image}
-                  sx={{
-                    width: 56,
-                    height: 56,
-                    background: CORLOR_WHITE,
-                    color: CORLOR_APP,
-                  }}
-                />
-              ) : (
-                <Avatar
-                  sx={{
-                    width: 56,
-                    height: 56,
-                    background: CORLOR_WHITE,
-                    color: CORLOR_APP,
-                  }}
-                  alt="emptyImage"
-                  icon={<FaUserAlt />}
-                />
-              )}
-            </div>
-            &nbsp;
-            {width > 410 && (
-              <div className="shopName">
-                <span>{loadShopData?.name}</span>
+        <div className="shopProfile">
+          <div className="imgShop" onClick={handleShowProfile}>
+            {/* <FaUserAlt /> */}
+            {loadShopData?.image ? (
+              <Avatar
+                alt={loadShopData?.name}
+                src={S3_URL + loadShopData?.image}
+                sx={{
+                  width: 56,
+                  height: 56,
+                  background: CORLOR_WHITE,
+                  color: CORLOR_APP,
+                }}
+              />
+            ) : (
+              <Avatar
+                sx={{
+                  width: 56,
+                  height: 56,
+                  background: CORLOR_WHITE,
+                  color: COLOR_TEXT,
+                }}
+                alt="emptyImage"
+                icon={<FaUserAlt />}
+              />
+            )}
+          </div>
+          &nbsp;
+          {width > 410 && (
+            <div className="shopName">
+              <span>{loadShopData?.name}</span>
 
-                <span style={{ fontSize: "13px" }}>
-                  020 {loadShopData?.phone ?? "-"}
-                </span>
+              <span style={{ fontSize: "13px" }}>
+                020 {loadShopData?.phone ?? "-"}
+              </span>
+            </div>
+          )}
+        </div>
+
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            top: enableSearch ? 0 : "-10em",
+          }}
+          className="card-search-data"
+        >
+          <div className="icon-search-data">
+            <FiSearch />
+          </div>
+          <input
+            value={filter}
+            onChange={(e) => setFilter(e?.target?.value)}
+            onKeyDown={searchProduct}
+            type="text"
+            placeholder="ປ້ອນຊື່ສິນຄ້າ ແລ້ວ enter"
+            className="form-control-search"
+          />
+          <div onClick={onCloseCardSearch} className="icon-close-search">
+            <MdOutlineClose />
+          </div>
+        </div>
+
+        <div className="menu-navs">
+          <div onClick={onSearchDataInput}>
+            <SearchOutlined />
+            {width > 800 && <p>ຄົ້ນຫາສິນຄ້າ</p>}
+          </div>
+          <div style={{ position: "relative" }} onClick={toggleDropdown}>
+            <FileSearchOutlined />
+            {width > 800 && <p>ສິນຄ້າເພິ່ມເຕີມ</p>}
+
+            {isOpenMenu && (
+              <div
+                className="card-query-product"
+                style={{
+                  position: "absolute",
+                  top: width > 700 ? 60 : 35,
+                  right: width > 700 ? 0 : "-6em",
+                  zIndex: 999,
+                }}
+              >
+                <ul onClick={(e) => e.stopPropagation()}>
+                  <li onClick={onFetchDataRest}>ສະແດງສິນຄ້າຍັງເຫຼືອ</li>
+                  <li onClick={onFetchDataNoRest}>ສະແດງສິນຄ້າທັງໝົດ</li>
+                </ul>
               </div>
             )}
           </div>
-        )}
-
-        {enableSearch ? (
-          <div
-            className="boxInputSearching"
-            style={{
-              marginLeft: isMenuOpen ? "-100%" : "0",
-              background: CORLOR_WHITE,
-            }}
-          >
-            <div className="iconSearchinng">
-              <FiSearch />
-            </div>
-            <input
-              value={filter}
-              onChange={(e) => setFilter(e?.target?.value)}
-              onKeyDown={searchProduct}
-              type="text"
-              placeholder="ປ້ອນຊື່ສິນຄ້າ ແລ້ວ enter"
-              className="formSearching"
-            />
-            <div
-              style={{
-                position: "absolute",
-                right: 7,
-                top: 7,
-                transform: "traslate(50%, 50%)",
-                height: "1.5em",
-                width: "1.5em",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                padding: 5,
-                background: "#ddd",
-                color: CORLOR_APP,
-                cursor: "pointer",
-                borderRadius: "50%",
-              }}
-              onClick={handleHideBoxSearch}
+          <div onClick={hadleCartProducts}>
+            <Badge
+              offset={[10, -7]}
+              overflowCount={10}
+              count={isNaN(totalQuantity) ? 0 : totalQuantity ?? 0}
             >
-              <MdOutlineClose />
-            </div>
+              <ShoppingCartOutlined
+                style={{ fontSize: "1.4em", color: CORLOR_WHITE }}
+              />{" "}
+            </Badge>
+            {width > 800 && <p>ກະຕ່າຂອງຂ້ອຍ</p>}
           </div>
-        ) : (
-          ""
-        )}
-
-        {!enableSearch ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              gap: 20,
-            }}
-          >
-            <div className="btnSearchData" onClick={handleShowBoxSearch}>
-              <SearchOutlined
-                style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
-              />
-            </div>
-
-            {/* <Dropdown
-              menu={{
-                itemsQueryProducts,
-              }}
-              trigger={["click"]}>
-                <Space>
-
-              <FileSearchOutlined
-                style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
-                />
-                </Space>
-            </Dropdown> */}
-
-            <div className="dropdown">
-              <button
-                onClick={toggleDropdown}
-                className="dropbtn"
-              >
-                {isOpenMenu ? (
-                  <CloseCircleOutlined 
-                  style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
-                  
-                  />
-                ) : (
-                  <FileSearchOutlined
-                    style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
-                  />
-                )}
-              </button>
-              {isOpenMenu && (
-                <div className="dropdown-content">
-                  <Button
-                    onClick={onFetchDataRest}
-                    icon={<PieChartOutlined />}
-                    size="large"
-                  >
-                    ສະແດງສິນຄ້າຍັງເຫຼືອ
-                  </Button>
-                  <Button
-                    style={{ marginTop: 10 }}
-                    onClick={onFetchDataNoRest}
-                    icon={<PieChartOutlined />}
-                    size="large"
-                  >
-                    ສະແດງສິນຄ້າທັງໝົດ
-                  </Button>
-                </div>
-              )}
-            </div>
-
-            <div className="openMenu-dropdown" onClick={hadleCartProducts}>
-              <Badge
-                overflowCount={10}
-                count={isNaN(totalQuantity) ? 0 : totalQuantity ?? 0}
-              >
-                <ShoppingCartOutlined
-                  style={{ fontSize: "1.7em", color: CORLOR_WHITE }}
-                />
-              </Badge>
-            </div>
-            <div
-              className="openMenu-dropdown"
-              onClick={() => setOpenMyDrawer(true)}
-            >
-              <AlignRightOutlined
-                style={{ fontSize: "1.2em", color: CORLOR_WHITE }}
-              />
-            </div>
+          &nbsp;&nbsp;
+          <div onClick={() => setOpenMyDrawer(true)}>
+            <AlignRightOutlined />
           </div>
-        ) : (
-          ""
-        )}
+        </div>
       </div>
 
       {/* track order for me */}

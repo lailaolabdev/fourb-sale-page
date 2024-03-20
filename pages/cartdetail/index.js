@@ -30,6 +30,7 @@ import Image from "next/image";
 import EmptyImage from "../../components/salePage/EmptyImage";
 import FooterComponent from "../../components/salePage/FooterComponent";
 import { CloseCircleOutlined } from "@ant-design/icons";
+import { message } from "antd";
 
 export default function CartDetail() {
   // const { match, location } = useReactRouter();
@@ -60,6 +61,8 @@ export default function CartDetail() {
     GET_EXCHANGRATE,
     { fetchPolicy: "cache-and-network" }
   );
+
+  console.log("checkCartList:--->", cartList);
 
   //   fetch exchange ret
   useEffect(() => {
@@ -185,7 +188,8 @@ export default function CartDetail() {
           justifyContent: "space-between",
           alignItems: "center",
           padding: "1em",
-        }}>
+        }}
+      >
         <div className="removeIcon1" onClick={() => router.back()}>
           <MdArrowBack style={{ fontSize: 20 }} />
         </div>
@@ -199,8 +203,13 @@ export default function CartDetail() {
           {cartList?.map((data, index) => {
             return (
               <div key={data?.id} className="cartItem-product">
-                <div className="remove-single-item" onClick={() => dispatch(removeSingleItem(index))}>
-                  <CloseCircleOutlined style={{fontSize:20, cursor:'pointer'}} />
+                <div
+                  className="remove-single-item"
+                  onClick={() => dispatch(removeSingleItem(index))}
+                >
+                  <CloseCircleOutlined
+                    style={{ fontSize: 20, cursor: "pointer" }}
+                  />
                 </div>
 
                 <div className="cartImage">
@@ -228,7 +237,8 @@ export default function CartDetail() {
                     {data?.qty >= 2 ? (
                       <div
                         className="decrement"
-                        onClick={() => dispatch(decrementCartItem(index))}>
+                        onClick={() => dispatch(decrementCartItem(index))}
+                      >
                         <IoMdRemove />
                       </div>
                     ) : (
@@ -242,6 +252,10 @@ export default function CartDetail() {
                       value={data?.qty}
                       onChange={(e) => {
                         const newQty = parseInt(e?.target?.value);
+                        if (data?.qty >= data?.amount) {
+                          message.error("ຈຳນວນທີຊື້ຫຼາຍກວ່າໃນສະຕ໋ອກແລ້ວ");
+                          return;
+                        }
                         dispatch(
                           updateCartItemQuantity({
                             index,
@@ -252,7 +266,14 @@ export default function CartDetail() {
                     />
                     <div
                       className="increment"
-                      onClick={() => dispatch(incrementCartItem(index))}>
+                      onClick={() => {
+                        if (data?.qty >= data?.amount) {
+                          message.error("ຈຳນວນທີຊື້ຫຼາຍກວ່າໃນສະຕ໋ອກແລ້ວ");
+                          return;
+                        }
+                        dispatch(incrementCartItem(index));
+                      }}
+                    >
                       <IoMdAdd />
                     </div>
                   </div>
@@ -265,7 +286,8 @@ export default function CartDetail() {
             <div></div>
             <div
               className="removeIcon2"
-              onClick={() => handleShowConfirmProduct()}>
+              onClick={() => handleShowConfirmProduct()}
+            >
               <RiDeleteBin6Line style={{ fontSize: 20 }} />{" "}
               &nbsp;ຍົກເລີກສິນຄ້າທັງໝົດ
             </div>

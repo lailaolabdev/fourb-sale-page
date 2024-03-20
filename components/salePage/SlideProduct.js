@@ -71,7 +71,7 @@ function SlideProduct({ shopId }) {
             <div key={index}>
               <div
                 style={{
-                  height: width < 700 ? "15em" : "auto",
+                  height: width < 700 ? "18em" : "auto",
                   width: "100%",
                 }}>
                 <img
