@@ -100,7 +100,7 @@ function HeaderSalePage({
       getOrderGroupsData({
         variables: {
           isDeleted: false,
-          invoiceStatus: "WAITING",
+          type: "SALE_PAGE",
           where: {
             searchKeyWord: orderId,
           },
