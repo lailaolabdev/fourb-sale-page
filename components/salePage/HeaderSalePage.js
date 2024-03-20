@@ -99,9 +99,9 @@ function HeaderSalePage({
       }
       getOrderGroupsData({
         variables: {
-          isDeleted: false,
-          type: "SALE_PAGE",
           where: {
+            isDeleted: false,
+            type: "SALE_PAGE",
             searchKeyWord: orderId,
           },
         },
