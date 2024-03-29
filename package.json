@@ -24,6 +24,7 @@
     "btoa-lite": "^1.0.0",
     "clipboard-copy": "^4.0.1",
     "file-saver": "^2.0.5",
+    "graphql": "^16.8.1",
     "graphql-ws": "^5.15.0",
     "html2canvas": "^1.4.1",
     "lodash": "^4.17.21",
@@ -61,5 +62,5 @@
     "react-toast-notifications": {
       "react": "^18.2.0"
     }
-  }  
+  }
 }
