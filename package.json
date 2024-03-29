@@ -55,5 +55,10 @@
   },
   "engines": {
     "node": "20.x"
-  }
+  },
+  "overrides": {
+    "react-toast-notifications": {
+      "react": "^18.2.0"
+    }
+  }  
 }
