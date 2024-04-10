@@ -2,8 +2,18 @@ import BuyPackageSystem from "../../components/packageComponent/BuyPackageSystem
 import { CheckOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import { createStyles, useTheme } from "antd-style";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { RiErrorWarningLine } from "react-icons/ri";
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import { Form, Spinner } from 'react-bootstrap';
+import { TbClockSearch } from "react-icons/tb";
+import { ADD_PACKAGE_SYSTEM } from "@/apollo/addpackage/mutation";
+import { useLazyQuery, useMutation } from "@apollo/client";
+import Button from 'react-bootstrap/Button';
+import Swal from "sweetalert2";
+import { SHOP } from "@/apollo";
+import moment from "moment";
+
 
 const titleModal = (
   <span style={{ color: "green" }}>ຕໍ່ອາຍຸການໃຊ້ງານລະບົບ</span>
@@ -29,6 +39,118 @@ export default function index() {
   const [packageType, setPackageType] = useState();
   const token = useTheme();
   const { styles } = useStyle();
+  const [objectData, setObjectData] = useState({
+    username: "",
+    password: "",
+  });
+  const [dataReponse, setDataResponse] = useState()
+
+  const [addPackageSystem, { loading: loadingAddPackage }] = useMutation(
+    ADD_PACKAGE_SYSTEM,
+    { fetchPolicy: "network-only" }
+  );
+
+
+  const [getShopData, { data: shopData }] = useLazyQuery(SHOP, {
+    fetchPolicy: "cache-and-network",
+  });
+
+
+
+  const _addPackageFunction = async () => {
+    try {
+      // check loading
+      if (loadingAddPackage) return;
+
+      const req = await addPackageSystem({
+        variables: {
+          data: {
+            typepackage: packageType,
+          },
+          where: {
+            username: objectData?.username,
+            password: objectData?.password,
+          },
+        },
+      });
+
+      if (req?.data?.addSystemPackages?.data) {
+        // setIsDataShop(true);
+        console.log("response----->", req)
+        setDataResponse(req?.data?.addSystemPackages?.data);
+
+      }
+    } catch (error) {
+      console.log("error:", error);
+      Swal.fire({
+        title: 'Oops...!',
+        text: 'ຊື່ນຳໃຊ້ ແລະ ລະຫັດຜ່ານບໍ່ຖຶກຕ້ອງ',
+        icon: 'error',
+        timer: 5000,
+        showConfirmButton: false,
+      })
+    }
+  };
+
+  const onConfirmForm = (e) => {
+    e.preventDefault();
+    if (objectData?.username?.length === "") {
+      alert('username undefind')
+      return
+    }
+    // console.log("ObjectData: ---->", objectData);
+    // console.log("type: ---->", packageType);
+    // setIsDataShop(!isDataShop);
+    _addPackageFunction();
+  };
+
+  // find shop
+  useEffect(() => {
+    getShopData({
+      variables: {
+        where: {
+          id: dataReponse?.shop?.id,
+        },
+      },
+    });
+
+  }, [dataReponse]);
+
+  
+  
+  console.log("createdAt:====>", shopData?.shop?.createdAt)
+  
+  const getCreatedAtShop = moment(shopData?.shop?.createdAt).format(
+    "DD/MM/YYYY"
+  )
+  console.log("getCreatedAtShop=======>", getCreatedAtShop)
+
+
+  // useEffect(() => {
+    let date = new Date(2024, 3, 1);  
+
+    // Format the date as DD/MM/YYYY
+    let formattedDate = ("0" + date.getDate()).slice(-2) + '/'
+                      + ("0" + (date.getMonth() + 1)).slice(-2) + '/'
+                      + date.getFullYear();
+
+// console.log("check Monht:----->",formattedDate); 
+
+
+    // if(getCreatedAtShop && getCreatedAtShop > formattedDate) {
+    //   console.log("ຮ້ານໃໝ່....ຄຄຄຄ......")
+    // }else {
+    //   console.log("shopData===555====>", shopData)
+    // }
+ 
+
+
+  // }, [shopData?.shop?.createdAt]);
+
+
+
+
+
 
   const handleShowModalOneMonth = () => {
     setPackageType("ONE_MONTH");
@@ -87,9 +209,44 @@ export default function index() {
 
   return (
     <>
-      <div className="main-package-ps">
-        {/* <h1><b>ແພັກເກັດລະບົບ</b></h1>
+      {/* <div className="card-check-shop">
+        <TbClockSearch style={{ fontSize: '6em', marginBottom: 20 }} />
+        <h2><b>ປ້ອນລະຫັດເຂົ້າລະບົບ ໄລຟ ເພື່ອການເລືອກໃຊ້ແພັກເກັດ</b></h2>
+
+        <Form onSubmit={onConfirmForm} style={{ width: '30em', padding: 20 }}>
+          <FloatingLabel
+            controlId="floatingInput"
+            label="ຊື່ນຳໃຊ້"
+            className="mb-3"
+
+          >
+            <Form.Control value={objectData?.username}
+              onChange={(e) =>
+                setObjectData({
+                  ...objectData,
+                  username: e?.target?.value,
+                })
+              } type="text" placeholder="......" />
+          </FloatingLabel>
+          <FloatingLabel controlId="floatingPassword" label="ລະຫັດຜ່ານ">
+            <Form.Control value={objectData?.password}
+              onChange={(e) =>
+                setObjectData({
+                  ...objectData,
+                  password: e?.target?.value,
+                })
+              } type="text" placeholder="......." />
+          </FloatingLabel>
+
+          <br />
+          <Button type="submit">{loadingAddPackage ? <Spinner /> : "save"}</Button>
+
+        </Form>
+      </div> */}
+      {/* <div className="main-package-ps">
+        <h1><b>ແພັກເກັດລະບົບ</b></h1>
         <p>ເລືອກຊື້ແພັກເກັດລາຄາລະບົບ 4B ໂຟບີ ເພື່ອທຸລະກິດຂອງທ່ານ</p>
+
         <div className="card-package">
           <div className="card-ps">
             <div className="card-type">
@@ -186,12 +343,13 @@ export default function index() {
               </button>
             </div>
           </div>
-        </div> */}
-        <RiErrorWarningLine style={{fontSize:'8em', color:'orange'}} />
+        </div>
+
+      </div> */}
+      <RiErrorWarningLine style={{fontSize:'8em', color:'orange'}} />
         <h1><b>ແຈ້ງການ</b></h1>
         <h4>ປັດຈຸບັນນີ້ທັງ ບໍລິສັດ 4B ກຳລັງມີການປັບປ່ຽນເລື່ອງລາຄາແພັກເກັດລະບົບ</h4>
         <p>ສອບຖາມຂໍ້ມູນເພິ່ມເຕີມ ໂທ: 020 29 933 969</p>
-      </div>
 
       <Modal
         footer={null}
@@ -210,6 +368,11 @@ export default function index() {
           />
         </div>
       </Modal>
+
+      {/* <RiErrorWarningLine style={{fontSize:'8em', color:'orange'}} />
+        <h1><b>ແຈ້ງການ</b></h1>
+        <h4>ປັດຈຸບັນນີ້ທັງ ບໍລິສັດ 4B ກຳລັງມີການປັບປ່ຽນເລື່ອງລາຄາແພັກເກັດລະບົບ</h4>
+        <p>ສອບຖາມຂໍ້ມູນເພິ່ມເຕີມ ໂທ: 020 29 933 969</p> */}
     </>
   );
 }
