@@ -112,25 +112,7 @@ function ProductSalePage({ initialShop }) {
 
   const elementRef = useRef(null);
 
-  const toast = useRef(null);
-  // const router = useRouter();
-  const items = [
-      {
-          label: 'Add',
-          icon: <WhatsAppOutlined />,
-          command: () => {
-            toast.current.show({ severity: 'info', summary: 'Add', detail: 'Data Added' });
-          }
-        },
-        {
-          label: 'Update',
-          icon: <WhatsAppOutlined />,
-          command: () => {
-              toast.current.show({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
-          }
-      },
-      
-  ];
+  const toast = useRef(null); 
 
   function onIntersection(entries) {
     const firstEntery = entries[0];
@@ -174,14 +156,14 @@ function ProductSalePage({ initialShop }) {
   const [getStocksGeneral, { loading: loadingStock }] = useLazyQuery(
     GET_STOCKS,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-and-network",
     }
   );
 
   // stocks is live
   const [getLiveStockData, { data: liveStocks, loading: loadingLiveStock }] =
     useLazyQuery(GET_SALE_PAGE_LIVE_STOCKS, {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-and-network",
     });
 
   // commission for affilite

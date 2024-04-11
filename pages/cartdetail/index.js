@@ -320,7 +320,7 @@ export default function CartDetail() {
               icon={<BsCreditCard2BackFill style={{ fontSize: 27 }} />}
             />
           </div>
-        </div>
+        </div>  
       </div>
 
       <ModalConfirmComponent
@@ -328,7 +328,7 @@ export default function CartDetail() {
         handleCancel={handleCloseRemoveProduct}
         handleConfirm={handleConfirmRemoveCart}
         title="ແຈ້ງເຕືອນ"
-        text="ຕ້ອງການລົບສິນຄ້າອອກຈາກກະຕ່າທັງໝົດບໍ່?"
+        text="ສິນຄ້າຢູ່ໃນກະຕ່າຂອງທ່ານຈະຖຶກລົບອອກທັງໝົດ?"
       />
 
       <FooterComponent />

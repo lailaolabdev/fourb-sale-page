@@ -9,63 +9,23 @@ import { useDispatch } from "react-redux";
 import { GEN_QR_AND_SUBSCRIPE_FOR_PAYMENT_ADD_PACKAGE, ON_SHOP_SUPSCIPTION } from "../../apollo/payment/mutation";
 import Swal from "sweetalert2";
 
-export default function BuyPackageSystem({ handleCancel, packageType }) {
+export default function BuyPackageSystem({ handleCancel, setObjectData, setGetShop, packageType, setStatusShop, previewData, transactionId }) {
   const [isDataShop, setIsDataShop] = useState(false);
   const [enableQr, setEnableQr] = useState(false);
   const [enableCompleted, setEnableCompleted] = useState(false);
   const [dataReponse, setDataResponse] = useState();
   const [getQrcode, setGetQrcode] = useState();
-  const [objectData, setObjectData] = useState({
-    username: "",
-    password: "",
-  });
+
   const navigate = useRouter();
   const dispatch = useDispatch();
 
-  const [addPackageSystem, { loading: loadingAddPackage }] = useMutation(
-    ADD_PACKAGE_SYSTEM,
-    { fetchPolicy: "network-only" }
-  );
+  console.log("check previewData :--->", previewData)
+
 
   const [createQrPayment, { loading: loadingSubscripe }] = useMutation(
     GEN_QR_AND_SUBSCRIPE_FOR_PAYMENT_ADD_PACKAGE
   );
 
-  // add package system function
-  const _addPackageFunction = async () => {
-    try {
-      // check loading
-      if (loadingAddPackage) return;
-
-      const req = await addPackageSystem({
-        variables: {
-          data: {
-            typepackage: packageType,
-          },
-          where: {
-            username: objectData?.username,
-            password: objectData?.password,
-          },
-        },
-      });       
-
-      if (req?.data?.addSystemPackages?.data) {
-        setIsDataShop(true);
-        console.log("response----->", req)
-        setDataResponse(req?.data?.addSystemPackages?.data);
-
-      }
-    } catch (error) {
-      console.log("error:", error); 
-      Swal.fire({
-        title:'Oops...!',
-        text:'ຊື່ນຳໃຊ້ ແລະ ລະຫັດຜ່ານບໍ່ຖຶກຕ້ອງ',
-        icon:'error',
-        timer:5000,
-        showConfirmButton:false,
-      })
-    }
-  };
 
   const handleInputNew = () => {
     setIsDataShop(false);
@@ -76,53 +36,33 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
     });
   };
 
-  const handleConfirmPackage = (e) => {
-    e.preventDefault();
-    if(objectData?.username?.length === "") {
-      alert('username undefind')
-      return
-    }
-    // console.log("ObjectData: ---->", objectData);
-    // console.log("type: ---->", packageType);
-    // setIsDataShop(!isDataShop);
-    _addPackageFunction();
-  };
 
-  
+
   // go to open app bcel
-  const handleNext = async () => { 
-
-  // console.log("transactionId: ", dataReponse?.shop?.transactionId)
-
+  const handleNext = async () => {
     try {
       const genqrCode = await createQrPayment({
         variables: {
           data: {
-            order: dataReponse?.shop?.transactionId,
+            order: transactionId,
             typePackage: packageType,
           },
         },
       });
       console.log({ genqrCode });
-      // Check if a QR code was generated successfully
       const qrCodeValue =
         genqrCode?.data?.genQrAndSubscripeForPaymentAddPackage?.qrCode;
 
       if (qrCodeValue) {
-        // Set the QR code data
         setGetQrcode(qrCodeValue);
         setEnableQr(true);
-        // Create an anchor element
         const onPayLink = document.createElement("a");
         onPayLink.href = "onepay://qr/" + qrCodeValue;
-        // Check if it's an iOS device
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
         if (isIOS) {
-          // For iOS, use window.location.href to open the app
           window.location.href = onPayLink.href;
         } else {
-          // For non-iOS devices, programmatically trigger a click event
           const event = new MouseEvent("click", {
             view: window,
             bubbles: true,
@@ -136,7 +76,6 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
     }
   };
 
-  console.log("qrCode====>", getQrcode);
 
   const handleCancelPayment = () => {
     setObjectData({
@@ -157,48 +96,45 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
 
   // ເປີດແອັບ bcel ຄືນອິກຄັ້ງ
   const handleOpenBcelNew = () => {
-    // setEnableCompleted(false);
-    // setObjectData({
-    //   username: "",
-    //   password: "",
-    //   typepackage: "",
-    // });
-    // setIsDataShop(false);
-    // setEnableQr(false);
-    // setGetQrcode("");
-    console.log({getQrcode})
-    const onPayLink = document.createElement("a");
-          onPayLink.href = "onepay://qr/" + getQrcode;
-          // Check if it's an iOS device
-          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
-          if (isIOS) {
-            // For iOS, use window.location.href to open the app
-            window.location.href = onPayLink.href;
-          } else {
-            // For non-iOS devices, programmatically trigger a click event
-            const event = new MouseEvent("click", {
-              view: window,
-              bubbles: true,
-              cancelable: true,
-            });
-            onPayLink.dispatchEvent(event);
-          }
+    const onPayLink = document.createElement("a");
+    onPayLink.href = "onepay://qr/" + getQrcode;
+    // Check if it's an iOS device
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    if (isIOS) {
+      // For iOS, use window.location.href to open the app
+      window.location.href = onPayLink.href;
+    } else {
+      // For non-iOS devices, programmatically trigger a click event
+      const event = new MouseEvent("click", {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+      });
+      onPayLink.dispatchEvent(event);
+    }
   };
 
   // subscription -------------------->
   const { data: orderSubscription } = useSubscription(ON_SHOP_SUPSCIPTION, {
     variables: {
-      shopId: dataReponse?.shop?.transactionId,
+      shopId: transactionId,
     },
   });
 
   useEffect(() => {
     if (orderSubscription) {
       // console.log("orderSubscription55====>", orderSubscription);
-      if (orderSubscription?.onShopUpdatedPackage?.transactionId === dataReponse?.shop?.transactionId) {
-        console.log("Completed Paid Package......"); 
+      if (orderSubscription?.onShopUpdatedPackage?.transactionId === transactionId) {
+        console.log("Completed Paid Package......");
         setGetQrcode("");
+        setStatusShop(false)
+        setGetShop()
+        setObjectData({  
+          username: "",
+          password: ""
+        })
       }
     }
   }, [JSON.stringify(orderSubscription)]);
@@ -207,9 +143,9 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
   return (
     <>
       {!enableQr ? (
-        <Form onSubmit={handleConfirmPackage}>
-          {!isDataShop ? (
-            <div className="form-packag-ps">
+        <Form>
+
+          {/* <div className="form-packag-ps">
               <h3 style={{width:'100%', textAlign:'center'}}>ເຕີມແພັກເກັດ ລະບົບ</h3>
               <br />
               <Form.Label htmlFor="username">
@@ -250,53 +186,41 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
               <Form.Text id="passwordHelpBlock" muted> 
                 ປ້ອນຊື່ນຳໃຊ້ລະບົບ 4B Live ແລະ ລະຫັດຜ່ານ ເພື່ອຢືນຢັນການກວດສອບ ຕໍ່ອາຍຸການໃຊ້ງານ ລະບົບ 4B Live ຂອງທ່ານ ( ຂອບໃຈ ທີ່ໃຊ້ບໍລິການຂອງພວກເຮົາ)
               </Form.Text>
-            </div>
-          ) : (
-            <div className="card-check-confirm">
-              <h5>ກວດສອບບັນຊີນຳໃຊ້ລະບົບອິກຄັ້ງ</h5>
+            </div> */}
 
-              <br />
-              <Avatar size={80} style={{border:'1px solid #f2f2f2'}} src={S3_URL + dataReponse?.shop?.image} />
-              <br />
-              <div style={{ lineHeight: 1, marginTop: 10 }}>
-                {/* <p>ID SHOP: {dataReponse?.shop?.id}</p> */}
-                <h5>ຊື່ຮ້ານ: <b>{dataReponse?.shop?.name}</b></h5>
-                <h5>ເບີໂທລະສັບ: <b>{dataReponse?.shop?.phone}</b></h5>
-                <h5>ລາຍລະອຽດ: <b>{dataReponse?.note ?? "................."}</b></h5>
-                {/* <p>ຊື່ນຳໃຊ້ລະບົບ: {dataReponse?.phone}</p> */}
-              </div>
-              {/* <br />
+          <div className="card-check-confirm">
+
+            <br />
+            <Avatar size={80} style={{ border: '1px solid #f2f2f2' }} src={S3_URL + previewData?.shopData?.shop?.image} />
+            <br />
+            <div style={{ lineHeight: 1, marginTop: 10 }}>
+              {/* <p>ID SHOP: {previewData?.shopData?.shop?.id}</p> */}
+              <h5>ຊື່ຮ້ານ: <b>{previewData?.shopData?.shop?.name}</b></h5>
+              <h5>ເບີໂທລະສັບ: <b>{previewData?.shopData?.shop?.phone}</b></h5>
+              {/* <h5>ລາຍລະອຽດ: <b>{previewData?.shopData?.note ?? "................."}</b></h5> */}
+              {/* <p>ຊື່ນຳໃຊ້ລະບົບ: {previewData?.shopData?.phone}</p> */}
+            </div>
+            {/* <br />
               <p>
                 <b>ໝາຍເຫດ:</b> ຖ້າຫາກວ່າທ່ານຊຳລະຄ່າລະບົບໄປແລ້ວ
                 ຈະບໍ່ສາມາດຄືນເງິນໄດ້ໃນທຸກກໍລະນີ.
               </p> */}
-            </div>
-          )}
+            <h5>ກະລຸນາກວດສອບບັນຊີນຳໃຊ້ລະບົບອິກຄັ້ງ ເພື່ອຄວາມປອດໄປຂອງທ່ານ!</h5>
+
+          </div>
+
 
           <br />
           <div className="d-flex justify-content-end gap-2 mt-4 w-100">
-            {isDataShop && (
-              <button type="button" onClick={handleInputNew} className="btn-package-cancel">
-                <span>ປ້ອນຂໍ້ມູນໃໝ່</span>
-              </button>
-            )}
-            {!isDataShop ? (
-              <>
-                <button
-                  type="button"
-                  onClick={handleCancel}
-                  className="btn-package-cancel">
-                  <span>ຍົກເລີກ</span>
-                </button>
-                <button type="submit" className="btn-package-confirm">
-                  {loadingAddPackage ? <Spinner size="sm" /> : "ກວດສອບ"}
-                </button>
-              </>
-            ) : (
-              <button type="button" onClick={handleNext} className="btn-package-confirm">
-                {loadingSubscripe ? <Spinner size="sm" /> : "ຢືນຢັນ"}
-              </button>
-            )}
+
+            <button type="button" onClick={handleCancelPayment} className="btn-package-cancel">
+              <span>ຍົກເລີກ</span>
+            </button>
+
+            <button type="button" onClick={handleNext} className="btn-package-confirm">
+              {loadingSubscripe ? <Spinner size="sm" /> : "ຢືນຢັນ"}
+            </button>
+
           </div>
         </Form>
       ) : (
@@ -308,12 +232,12 @@ export default function BuyPackageSystem({ handleCancel, packageType }) {
                 // errorLevel="H"
                 value={getQrcode}
                 size={300}
-                // icon="/assets/images/mainLogo.png"
-                // icon={S3_URL + 'b0c2bbde-fbdd-4d1a-9a4c-e6d6f1a24f51.png'}
+              // icon="/assets/images/mainLogo.png"
+              // icon={S3_URL + 'b0c2bbde-fbdd-4d1a-9a4c-e6d6f1a24f51.png'}
               />
             ) : (
               // <Watermark   gap={[10, 10]} content={['123454345','AD-SERDS']} >
-                <div
+              <div
                 style={{
                   display: "flex",
                   flexDirection: "column",

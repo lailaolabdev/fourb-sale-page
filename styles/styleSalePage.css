@@ -5,7 +5,7 @@
 }
 
 :root {
-  --colorDefaultcf: linear-gradient(
+  --colorMain: linear-gradient(
     23deg,
     rgba(47, 110, 163, 1) 0%,
     rgba(90, 81, 160, 1) 58%
@@ -24,7 +24,48 @@
 }
 
 Modal.Footer {
-  border-top: none; 
+  border-top: none;
+  padding-bottom: 1em;
+}
+
+.custom-modal {
+  border-radius: 1.5em;
+  border: none;
+
+  & .btn-cancel {
+    width: auto;
+    padding: 0.65em 2em;
+    border: none;
+    outline: none;
+    background: var(--colorShadow);
+    border-radius: 0.55em;
+    transition: all 0.2s ease-out;
+  }
+
+  & .btn-confirm {
+    width: auto;
+    padding: 0.65em 2em;
+    border: none;
+    outline: none;
+    background: var(--colorMain);
+    border-radius: 0.55em;
+    transition: all 0.2s ease-out;
+    color: var(--colorWhite);
+  }
+
+  & .btn-cancel:hover {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background: var(--colorWhite);
+  }
+
+  & .btn-confirm:hover {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    background: var(--colorMain);
+  }
+}
+
+.custom-modal .modal-content {
+  border-radius: 1.5em;
 }
 
 .contact-shop {
@@ -62,7 +103,7 @@ Modal.Footer {
   }
 
   & li:hover {
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
     color: var(--colorWhite);
   }
 
@@ -70,7 +111,7 @@ Modal.Footer {
     padding: 0.5em;
     border-radius: 50%;
     margin-left: 1em;
-    color: var(--colorDefaultcf);
+    color: var(--colorMain);
     cursor: pointer;
   }
 
@@ -339,7 +380,7 @@ Modal.Footer {
   & .btn-register-now {
     padding: 0.8em 2em;
     border-radius: 3em;
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
     color: var(--colorWhite);
     font-weight: bold;
     font-size: 1em;
@@ -375,7 +416,7 @@ Modal.Footer {
   padding: 0.5em;
   /* border-radius: 50%; */
   margin-left: 1em;
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
   cursor: pointer;
 }
 
@@ -542,7 +583,7 @@ input[type="file"]::file-selector-button {
   position: absolute;
   left: 1em;
   top: 0.4em;
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
   font-weight: bold;
 }
 
@@ -717,7 +758,7 @@ input[type="file"]::file-selector-button {
   & .track-header {
     width: 100%;
     padding: 0.7em;
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
     color: var(--colorWhite);
     margin-bottom: 2em;
     border-radius: 0.5em;
@@ -776,7 +817,7 @@ input[type="file"]::file-selector-button {
       padding-top: 3em;
 
       & h5 {
-        color: var(--colorDefaultcf);
+        color: var(--colorMain);
         font-weight: bold;
       }
 
@@ -824,7 +865,7 @@ input[type="file"]::file-selector-button {
   }
 
   & .footer-second {
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
     color: var(--colorWhite);
     width: 100%;
     display: grid;
@@ -884,10 +925,10 @@ input[type="file"]::file-selector-button {
     justify-content: center;
     align-items: center;
     padding: 1em;
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
 
     & h1 {
-      color: var(--colorDefaultcf);
+      color: var(--colorMain);
       font-weight: bold;
     }
   }
@@ -896,7 +937,7 @@ input[type="file"]::file-selector-button {
 .btn-goback {
   padding: 0.7em;
   background: var(--colorShadow);
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -910,7 +951,7 @@ input[type="file"]::file-selector-button {
   padding: 0.43em;
   border: none;
   outline: none;
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: #fff;
   display: flex;
   justify-content: center;
@@ -960,13 +1001,48 @@ input[type="file"]::file-selector-button {
   left: 0;
   top: 0;
   padding: 0em 2.5em;
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: var(--colorWhite);
 
-  .card-search-data {
+  & .card-profile-shop {
+    position: absolute;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-bottom-right-radius: 20em;
+    box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+    transition: all .5s ease-in;
+    overflow: hidden;
+    background: #fff;
+    color: #616161;
+
+    & .close-profile {
+      width: 2em;
+      height: 2em;
+      border-radius: 5em;
+      border: 1px solid #f2f2f2;
+      color: #777;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1em;
+      cursor: pointer;
+    }
+  }
+
+  & .card-profile-shop[data-isprofile="true"] {
+    
+    
+    transition: all .5s ease-out;
+
+  }
+
+  & .card-search-data {
     width: 100%;
     transition: all 0.3s ease-in-out;
-   
+
     z-index: 9999999;
     background: var(--colorWhite);
     height: 3.85em;
@@ -985,14 +1061,14 @@ input[type="file"]::file-selector-button {
 
     & .icon-close-search {
       color: var(--colorBlack);
-      border-radius: .2em;
+      border-radius: 0.2em;
       cursor: pointer;
       width: 4em;
       height: 2em;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: var(--colorDefaultcf);
+      background: var(--colorMain);
       color: var(--colorWhite);
     }
 
@@ -1025,35 +1101,29 @@ input[type="file"]::file-selector-button {
       & .card-query-product {
         width: 20em;
         background: var(--colorWhite);
-        border-radius: .5em;
+        border-radius: 0.5em;
         box-shadow: 3px 3px 15px var(--colorGray);
-        padding: .5em;
- 
+        padding: 0.5em;
 
         & ul {
           line-height: 1.75em;
           width: 100%;
           margin-left: -2em;
 
-         & li {
+          & li {
             width: 100%;
             font-size: 1em;
-            color:var(--colorPurple);
+            color: var(--colorPurple);
             list-style: none;
-            padding: .55em;
-            border-radius: .2em;
-  
+            padding: 0.55em;
+            border-radius: 0.2em;
           }
 
           & li:hover {
-            background: var(--colorDefaultcf);
+            background: var(--colorMain);
             color: var(--colorWhite);
           }
         }
-        
-        
-       
-
       }
 
       & p {
@@ -1086,11 +1156,11 @@ input::placeholder {
 }
 
 .headerSalePage .productIsLive:hover {
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: var(--colorWhite);
 }
 .headerSalePage .productNoLive:hover {
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: var(--colorWhite);
 }
 
@@ -1132,7 +1202,7 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: var(--colorWhite);
   cursor: pointer;
   font-size: 1.7em;
@@ -1172,7 +1242,7 @@ input::placeholder {
   width: 100%;
   height: auto;
   padding: 0px;
-  border: 1px solid #f1f1f1;
+  border: 1px solid var(--colorShadow);
   background: #efefef;
   border-radius: 0.1em;
   transition: 0.3s all ease;
@@ -1208,13 +1278,14 @@ input::placeholder {
 
 .productSalePage:hover {
   transform: scale(1.05);
-  box-shadow: 1px 1px 5px 5px rgba(48, 48, 48, 0.161);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   cursor: pointer;
   border: none;
   z-index: 90;
 
   & .btn-add-to-cart {
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
     border: none;
     color: var(--colorWhite);
   }
@@ -1233,7 +1304,7 @@ input::placeholder {
   align-items: center;
   /* padding: 0.15em; */
   background: var(--colorWhite);
-  border-radius: 0.3em 0 0 0;
+  /* border-radius: 0.3em 0 0 0; */
 }
 
 .productSalePage .imageViews img {
@@ -1265,7 +1336,7 @@ input::placeholder {
 }
 .productSalePage .title-product .txtCurrency {
   margin-top: -5em;
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
   font-weight: bold;
   font-size: 0.8em;
 }
@@ -1357,7 +1428,7 @@ input::placeholder {
   border: none;
   outline: none;
   width: 3.5em;
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
   background: var(--colorBorder);
 }
 
@@ -1410,14 +1481,14 @@ input::placeholder {
     border: 1px solid var(--colorGray);
     border-radius: 0.5em;
     background: var(--colorWhite);
-    color: var(--colorDefaultcf);
+    color: var(--colorMain);
     font-size: 1.1em;
     font-weight: 500;
   }
 
   & .btn-confirm-bank {
     padding: 1em;
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
     color: var(--colorWhite);
     display: flex;
     justify-content: center;
@@ -1459,7 +1530,7 @@ input::placeholder {
 .btn-download-qrcode {
   padding: 0.6em;
   background: var(--colorShadow);
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
   border: 1px solid var(--colorGray);
   width: 50%;
   border-radius: 0.4em;
@@ -1547,13 +1618,13 @@ input::placeholder {
 .payment-page .payment-form .header-form p {
   font-size: 1.4em;
   font-weight: bold;
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
 }
 
 .bankPaid {
   width: 100%;
   padding: 0.88em;
-  border: 1px dashed var(--colorDefaultcf);
+  border: 1px dashed var(--colorMain);
   border-radius: 0.66em;
   text-align: center;
   cursor: pointer;
@@ -1564,7 +1635,7 @@ input::placeholder {
 }
 
 .bankPaid:hover {
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: var(--colorWhite);
   transition: 0.3s all ease-in-out;
 }
@@ -1647,7 +1718,7 @@ input::placeholder {
 }
 
 .amount-qty-size .boxShowAction .boxdisplay {
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
   background: var(--colorShadow);
   width: 100%;
   height: 3.3em;
@@ -1661,7 +1732,7 @@ input::placeholder {
   font-size: 1em;
 }
 .amount-qty-size .boxShowAction .boxdisplay-button {
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
   background: var(--colorShadow);
   width: 70%;
   height: 3.3em;
@@ -1681,7 +1752,7 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: var(--colorWhite);
   cursor: pointer;
 }
@@ -1691,7 +1762,7 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: var(--colorWhite);
   cursor: pointer;
 }
@@ -1760,7 +1831,7 @@ input::placeholder {
 .gen-qrcode-salepage h2 {
   font-size: 2em;
   font-weight: bold;
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
 }
 
 .qrcode-scanner-media {
@@ -1768,7 +1839,7 @@ input::placeholder {
   /* height: 35em; */
   margin-bottom: 0.5em;
   padding: 3em;
-  border: 1px solid var(--colorDefaultcf);
+  border: 1px solid var(--colorMain);
   border-radius: 0.5em;
   display: block;
   display: flex;
@@ -1804,10 +1875,10 @@ input::placeholder {
   align-items: center;
   width: 100%;
   padding: 0.45em;
-  border-radius: 0.5em;
+  border-radius: 0.2em;
   background: var(--colorWhite);
-  color: var(--colorDefaultcf);
-  border: 1px solid var(--colorDefaultcf);
+  color: var(--colorMain);
+  border: 1px solid var(--colorMain);
   outline: none;
   transition: 0.2s all ease-in-out;
 }
@@ -1836,6 +1907,39 @@ input::placeholder {
   align-items: center;
 }
 
+.card-product-image {
+  width: 100%;
+  height: 60vh;
+  overflow: hidden;
+  background: #4444;
+  position: relative;
+
+  & .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  & .go-back-page {
+    font-weight: bold;
+    color: #fff;
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    z-index: 9999;
+    width: 5em;
+    border-radius: 1em;
+    background: #fefefe9a;
+    cursor: pointer;
+    padding-left: 1em;
+  }
+
+  & .go-back-page:hover {
+    padding-left: 0;
+    background: #fff;
+    color: #888;
+  }
+}
+
 /* slide product */
 /* Slideshow */
 
@@ -1850,8 +1954,8 @@ input::placeholder {
   font-weight: bold;
   margin-top: -12em;
   color: var(--colorWhite);
-  text-shadow: -1px 0 var(--colorDefaultcf), 0 1px var(--colorDefaultcf),
-    1px 0 var(--colorDefaultcf), 0 -1px var(--colorDefaultcf);
+  text-shadow: -1px 0 var(--colorMain), 0 1px var(--colorMain),
+    1px 0 var(--colorMain), 0 -1px var(--colorMain);
 }
 
 .slide-banner-salePage img {
@@ -1919,22 +2023,22 @@ input::placeholder {
 }
 
 .btn-completed-order {
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
   color: var(--colorWhite);
   border: none;
 }
 
 .btn-completed-order:hover {
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
 }
 .btn-completed-order:active {
-  background: var(--colorDefaultcf);
+  background: var(--colorMain);
 }
 
 .btnSearchData {
   cursor: pointer;
 
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
 }
 
 .btn-filter-order {
@@ -1946,7 +2050,7 @@ input::placeholder {
   align-items: center;
   cursor: pointer;
   margin-right: -0.8em;
-  color: var(--colorDefaultcf);
+  color: var(--colorMain);
 }
 
 /* .openMenu-dropdown:hover,
@@ -2044,7 +2148,7 @@ input::placeholder {
     padding: 0.35em;
     font-size: 0.5em;
     border-radius: 0.4em;
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
     color: var(--colorWhite);
     border: none;
     outline: none;
@@ -2090,7 +2194,7 @@ input::placeholder {
     right: 0.8em;
     width: 1.75em;
     height: 1.75em;
-    background: var(--colorDefaultcf);
+    background: var(--colorMain);
   }
 
   .contactWhatsapp {
@@ -2142,7 +2246,7 @@ input::placeholder {
     padding: 0.7em 1em;
     border-radius: 0.4em;
     /* border: 1px solid rgb(227, 227, 227); */
-    color: var(--colorDefaultcf);
+    color: var(--colorMain);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -2169,7 +2273,7 @@ input::placeholder {
     /* height: auto; */
 
     & .card-search-data {
-      padding: 0 .5em;
+      padding: 0 0.5em;
     }
   }
 
@@ -2282,7 +2386,7 @@ input::placeholder {
       & .my-marquee {
         width: 100%;
         padding: 0.5em;
-        background: var(--colorDefaultcf);
+        background: var(--colorMain);
 
         & h1 {
           font-size: 1.25em;
@@ -2377,7 +2481,7 @@ input::placeholder {
     align-items: center;
     width: 100%;
     height: auto;
-    /* border: 0.01em solid var(--colorDefaultcf); */
+    /* border: 0.01em solid var(--colorMain); */
     flex-direction: column;
     padding: 2em;
     border-radius: 0.5em;
