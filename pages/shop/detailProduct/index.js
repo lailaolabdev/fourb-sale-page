@@ -35,7 +35,7 @@ export default function index() {
 
   //   on click download product image
   const onDownload = () => {
-    fetch(src)
+    fetch(stateData?.image)
       .then((response) => response.blob())
       .then((blob) => {
         const url = URL.createObjectURL(new Blob([blob]));
@@ -58,7 +58,7 @@ export default function index() {
   console.log({ getData });
   return (
     <>
-      <div
+      {/* <div
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -73,65 +73,116 @@ export default function index() {
           <h4 style={{ marginTop: ".4em" }}>ລາຍລະອຽດສິນຄ້ານີ້</h4>
         </div>
         <div></div>
-      </div>
+      </div> */}
+
+      {width < 800 && (
+        <div className="card-product-image">
+          <div className="go-back-page" onClick={() => navigate.back()}>
+            <MdArrowBack style={{ fontSize: 25 }} />
+          </div>
+          {stateData?.image?.length > 0 ? (
+                      <Image
+                        width={"100%"}
+                        height={"100%"}
+                        src={S3_URL + stateData?.image}
+                        preview={{
+                          toolbarRender: (
+                            _,
+                            {
+                              transform: { scale },
+                              actions: {
+                                onFlipY,
+                                onFlipX,
+                                onRotateLeft,
+                                onRotateRight,
+                                onZoomOut,
+                                onZoomIn,
+                              },
+                            }
+                          ) => (
+                            <Space size={12} className="toolbar-wrapper d-flex gap-4">
+                              {/* <DownloadOutlined onClick={onDownload} style={{fontSize:28}} /> */}
+                              <RotateLeftOutlined onClick={onRotateLeft} style={{fontSize:28}} />
+                              <RotateRightOutlined onClick={onRotateRight} style={{fontSize:28}} />
+                              <ZoomOutOutlined
+                                disabled={scale === 1}
+                                onClick={onZoomOut}
+                                style={{fontSize:28}}
+                              />
+                              <ZoomInOutlined
+                                disabled={scale === 50}
+                                onClick={onZoomIn}
+                                style={{fontSize:28}}
+                              />
+                            </Space>
+                          ),
+                        }}
+                      />
+                    ) : (
+                      <EmptyImage />
+                    )}
+        </div>
+      )}
 
       <Container>
         <Row>
-          <Col sm={6}>
-            <div style={style}>
-              <div className="card-product-overview">
-                <div className="card-image">
-                  {stateData?.image?.length > 0 ? (
-                    <Image
-                      width={"100%"}
-                      src={S3_URL + stateData?.image}
-                      preview={{
-                        toolbarRender: (
-                          _,
-                          {
-                            transform: { scale },
-                            actions: {
-                              onFlipY,
-                              onFlipX,
-                              onRotateLeft,
-                              onRotateRight,
-                              onZoomOut,
-                              onZoomIn,
-                            },
-                          }
-                        ) => (
-                          <Space size={12} className="toolbar-wrapper">
-                            <DownloadOutlined onClick={onDownload} />
-                            <SwapOutlined rotate={90} onClick={onFlipY} />
-                            <SwapOutlined onClick={onFlipX} />
-                            <RotateLeftOutlined onClick={onRotateLeft} />
-                            <RotateRightOutlined onClick={onRotateRight} />
-                            <ZoomOutOutlined
-                              disabled={scale === 1}
-                              onClick={onZoomOut}
-                            />
-                            <ZoomInOutlined
-                              disabled={scale === 50}
-                              onClick={onZoomIn}
-                            />
-                          </Space>
-                        ),
-                      }}
-                    />
-                  ) : (
-                    <EmptyImage />
-                  )}
-                </div>
-                {/* <div className="card-action-image">
+          {width > 800 && (
+            <Col sm={6}>
+              <div style={style}>
+                <div className="card-product-overview">
+                  <div className="card-image">
+                    {stateData?.image?.length > 0 ? (
+                      <Image
+                        width={"100%"}
+                        src={S3_URL + stateData?.image}
+                        preview={{
+                          toolbarRender: (
+                            _,
+                            {
+                              transform: { scale },
+                              actions: {
+                                onFlipY,
+                                onFlipX,
+                                onRotateLeft,
+                                onRotateRight,
+                                onZoomOut,
+                                onZoomIn,
+                              },
+                            }
+                          ) => (
+                            <Space size={12} className="toolbar-wrapper d-flex gap-4">
+                              {/* <DownloadOutlined onClick={onDownload} style={{fontSize:28}} /> */}
+                              <RotateLeftOutlined onClick={onRotateLeft}  style={{fontSize:28}}/>
+                              <RotateRightOutlined onClick={onRotateRight} style={{fontSize:28}} />
+                              <ZoomOutOutlined
+                                disabled={scale === 1}
+                                onClick={onZoomOut}
+                                style={{fontSize:28}}
+                              />
+                              <ZoomInOutlined
+                                disabled={scale === 50}
+                                onClick={onZoomIn}
+                                style={{fontSize:28}}
+                              />
+                            </Space>
+                          ),
+                        }}
+                      />
+                    ) : (
+                      <EmptyImage />
+                    )}
+                  </div>
+                  {/* <div className="card-action-image">
                   <div></div>
                   <div></div>
                   <div></div>
                   <div></div>
                 </div> */}
+                </div>
               </div>
-            </div>
-          </Col>
-          <Col sm={6}>
+            </Col>
+          )}
+          <Col sm={ width > 800 ? 6 : 12}>
             <div style={style}>
               <div className="card-product-document">
                 <h1>
@@ -175,7 +226,7 @@ export default function index() {
                         <ButtonComponent
                           background={CORLOR_APP}
                           hoverbackground={CORLOR_APP}
-                          border={`1px solid ${CORLOR_APP}`}
+                          border={"none"}
                           cursor="pointer"
                           textColor="#FFF"
                           icon={<PlusOutlined />}

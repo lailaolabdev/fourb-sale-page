@@ -46,7 +46,7 @@ export default function PaginationComponent({
           <Pagination.Prev
             disabled={page === 0}
             onClick={() => onPageChange(page - 1)}
-          />
+          >ຍ້ອນກັບ</Pagination.Prev>
           {getPageNumbers().map((pageNumber) => (
             <Pagination.Item
             style={{background:CORLOR_APP}}
@@ -59,7 +59,7 @@ export default function PaginationComponent({
           <Pagination.Next
             disabled={page === pageAll - 1}
             onClick={() => onPageChange(page + 1)}
-          />
+          >ຖັດໄປ</Pagination.Next>
            
         </Pagination>
       </Col>

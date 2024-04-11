@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { FiSearch } from "react-icons/fi";
 import { FaUserAlt } from "react-icons/fa";
-import { MdDns, MdOutlineClose, MdTurnedIn } from "react-icons/md";
+import { MdArrowUpward, MdClose, MdDns, MdOutlineClose, MdTurnedIn } from "react-icons/md";
 import useWindowDimensions from "../../helper/useWindowDimensions";
 import {
   COLOR_TEXT,
@@ -71,6 +71,7 @@ function HeaderSalePage({
   const [openTagTrack, setOpenTagTrack] = useState(false);
   const [openQueryProduct, setOpenQueryProduct] = useState(false);
 
+  const [isOn, setIsOne] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const toggleDropdown = () => {
     setIsOpenMenu(!isOpenMenu);
@@ -164,8 +165,47 @@ function HeaderSalePage({
   return (
     <div>
       <div className="headerSalePage">
+        <div
+          className="card-profile-shop"
+          style={{
+            width:'100%',
+            // width: isOn ? (width < 800 ? "100%" : "20em") : "0",
+            height: isOn ? "20em" : "0",
+            borderBottomRightRadius: !isOn ? "1em" : "0",
+          }}
+          data-isprofile={isOn ? "true" : "false"}
+        >
+           
+            
+             <div style={{ lineHeight: 1, padding: 10 }}>
+             {loadShopData?.image &&
+              <Avatar
+                alt={loadShopData?.name}
+                src={S3_URL + loadShopData?.image}
+                sx={{
+                  width: 56,
+                  height: 56,
+                  background: CORLOR_WHITE,
+                  color: CORLOR_APP,
+                  marginBottom:1
+                }}
+              />}
+             <h1>ຊື່ຮ້ານ: {loadShopData?.name}</h1>
+             <h4>ເບີໂທ: {loadShopData?.phone}</h4>
+             <p>ບ້ານ: {loadShopData?.address?.village}</p>
+             <p>ເມືອງ: {loadShopData?.address?.district}</p>
+             <p>ແຂວງ: {loadShopData?.address?.province}</p>
+           </div>
+           
+
+         <div style={{width:'100%',display:'flex', justifyContent:'center'}}>
+         <div className="close-profile" onClick={() => setIsOne(false)}>
+              <MdArrowUpward />
+            </div>
+         </div>
+        </div>
         <div className="shopProfile">
-          <div className="imgShop" onClick={handleShowProfile}>
+          <div className="imgShop" onClick={() => setIsOne(true)}>
             {/* <FaUserAlt /> */}
             {loadShopData?.image ? (
               <Avatar
@@ -391,19 +431,6 @@ function HeaderSalePage({
             )}
           </div>
         </div>
-      </Drawer>
-
-      {/* query product all */}
-      <Drawer
-        title={"ສະແດງຂໍ້ມູນ"}
-        placement="top"
-        style={{ height: 200, boxShadow: "none", border: "none" }}
-        onClose={onCloseQueryProduct}
-        open={openQueryProduct}
-      >
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
       </Drawer>
     </div>
   );
