@@ -8,7 +8,7 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 1em;
+  /* padding: 1em; */
 
   & h2 {
     color: #3c169b;
@@ -21,7 +21,7 @@
     grid-template-columns: repeat(auto-fit, minmax(20em, 1fr));
     gap: 20px;
     width: 100%;
-    padding: 0 2em;
+    /* padding: 0 2em; */
 
     & .card-ps {
       width: 100%;
