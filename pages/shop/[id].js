@@ -666,9 +666,10 @@ function ProductSalePage({ initialShop }) {
     // });
   };
 
-  console.log("shop data to SEO:-->", initialShop);
+  console.log("SEO datas:-->", initialShop);
   const ogImageUrl = initialShop ? `${S3_URL}${initialShop?.image}` : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
-
+  
+  console.log("SEO image:-->", ogImageUrl);
 
   return (
     <div>
@@ -683,12 +684,8 @@ function ProductSalePage({ initialShop }) {
           name="description"
           content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
         />
-        <link
-          rel="icon"
-          // href="/assets/images/ecommerce_seo.png"
-          href={ogImageUrl}
-          type="image/icon type"
-        />
+        {/* SEO image */}
+        <link rel="icon" href={ogImageUrl} type="image/icon type" />
         <meta charSet="UTF-8" />
 
         <link
