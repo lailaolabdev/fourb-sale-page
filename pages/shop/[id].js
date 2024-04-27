@@ -685,9 +685,10 @@ function ProductSalePage({ initialShop }) {
           content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
         />
         {/* SEO image */}
-        <link rel="icon" href={ogImageUrl} type="image/icon type" />
+        {/* <link rel="icon" href={ogImageUrl} type="image/icon type" /> */}
         <meta charSet="UTF-8" />
-
+        <meta property="og:image" content={ogImageUrl} />  
+         <meta name="twitter:image" content={ogImageUrl} />
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -976,6 +977,7 @@ function ProductSalePage({ initialShop }) {
 
 export async function getServerSideProps(context) {
   let { id } = context.query;
+  console.log("context:=====>", context)
 
   try {
     const {
