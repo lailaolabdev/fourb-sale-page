@@ -666,10 +666,10 @@ function ProductSalePage({ initialShop }) {
     // });
   };
 
-  console.log("SEO datas:-->", initialShop);
+  // console.log("SEO datas:-->", initialShop);
   const ogImageUrl = initialShop ? `${S3_URL}${initialShop?.image}` : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
   
-  console.log("SEO image:-->", ogImageUrl);
+  // console.log("SEO image:-->", ogImageUrl);
 
   return (
     <div>
