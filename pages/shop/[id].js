@@ -667,9 +667,7 @@ function ProductSalePage({ initialShop }) {
   };
 
   // console.log("shop data to SEO:-->", initialShop?.name);
-  const ogImageUrl = initialShop?.image
-    ? `${S3_URL}${initialShop?.image}`
-    : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
+  const ogImageUrl = shopDetail?.image ? `${S3_URL}${shopDetail?.image}` : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
 
   return (
     <div>
@@ -678,7 +676,7 @@ function ProductSalePage({ initialShop }) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         />
-        <title>{initialShop?.name}</title>
+        <title>{shopDetail?.name}</title>
         <meta name="theme-color" content="#000000" />
         <meta
           name="description"
