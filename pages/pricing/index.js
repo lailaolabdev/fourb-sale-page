@@ -267,11 +267,15 @@ export default function index() {
     <>
       {!getShop ?
         <div className="card-check-shop">
-          <TbClockSearch style={{ fontSize: '6em', marginBottom: 20 }} />
+         
+         <div style={{width:100,height:100,borderRadius:'50%', overflow:'hidden',padding:10,background:"#f2f2f2"}}>
+         <img src="/assets/images/mainLogo.png" style={{ width:'100%'}} />
+         </div>
+          
           <h2 style={{textAlign:'center'}}><b>ປ້ອນລະຫັດເຂົ້າລະບົບ ໄລຟ ເພື່ອການເລືອກໃຊ້ແພັກເກັດ</b></h2>
 
 
-          <Form onSubmit={onConfirmForm} style={{ width: width > 700 ? '30em': '100%', padding: 20 }}>
+          <Form onSubmit={onConfirmForm} style={{ minWidth:"22em", padding: 20 }}>
             <FloatingLabel
               controlId="floatingInput"
               label="ຊື່ນຳໃຊ້ (ຕ້ອງປ້ອນ)"
@@ -293,7 +297,7 @@ export default function index() {
                     ...objectData,
                     password: e?.target?.value,
                   })
-                } type="text" placeholder="......." />
+                } type="password" placeholder="......." />
             </FloatingLabel>
 
             <br />
@@ -308,10 +312,10 @@ export default function index() {
               <p>ເລືອກຊື້ແພັກເກັດລາຄາລະບົບ 4B ໂຟບີ ເພື່ອທຸລະກິດຂອງທ່ານ</p>
               <div style={{paddingBottom:20}}>
 
-                <Button onClick={() => {
+                {/* <Button onClick={() => {
                   setObjectData({ username: '', password: '' });
                   setGetShop("")
-                }} style={{ background: CORLOR_APP, border: 'none', padding: '.5em 1em' }}  >ລອງໃໝ່</Button>
+                }} style={{ background: CORLOR_APP, border: 'none', padding: '.5em 1em' }}  >ລອງໃໝ່</Button> */}
 
               </div>
               <div className="card-package">

@@ -479,10 +479,9 @@ export default function payment() {
       // console.log("check orders:-->", _orderGroup, convertedOrders);
       // console.log("check bank type:--->", values?.type);
 
-      // Create an order 
+      // Create an order
       await createOrderSalepage({
         variables: {
-
           // use Payment Gateway
           data: {
             amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
@@ -494,7 +493,7 @@ export default function payment() {
           },
 
           // use Bcel One defult
-          // data: { 
+          // data: {
           //   orders: convertedOrders,
           //   orderGroup: _orderGroup,
           // },
@@ -504,8 +503,8 @@ export default function payment() {
         // const _req = message?.data?.createQrWithPaymentGateway;
 
         // console.log("check order Id:--->", typeof(_req?.data?.id));
-        const dataResponse = message?.data?.createQrWithPaymentGateway; 
-        // const dataResponse = message?.data?.createOrderSalePage; 
+        const dataResponse = message?.data?.createQrWithPaymentGateway;
+        // const dataResponse = message?.data?.createOrderSalePage;
 
         let compareData = {
           ...dataResponse,
@@ -517,93 +516,73 @@ export default function payment() {
         setDataCompleted(compareData);
         setQrCodeData(dataResponse?.qrCode);
 
-      
         /* ------ use bcel one defalt ---------- */
         setGetOrderId(message?.data?.createQrWithPaymentGateway?.data?.id);
-        // // setQrCodeData(dataResponse?.qrCode);
-        // const genqrCode = await createQrPayment({
-        //   variables: {
-        //     data: {
-        //       order: message?.data?.createOrderSalePage?.id,
-        //     },
-        //   },
-        // });
-        // console.log({ genqrCode });
-        // // Check if a QR code was generated successfully
-        // // const qrCodeValue =
-        // //   genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode;
-        // // console.log("check qrcode ---->", _req?.qrCode);
-        // if (genqrCode) {
+
+        /* ------ use payment gateway ---------- */
+        // if (dataResponse) {
         //   // Set the QR code data
 
-        //   if (genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode) {
-        //     // console.log("check appLink ---->", _req?.appLink);
+        //   console.log("check appLink ---->", dataResponse);
+        //   console.log("type:======>", values?.type);
+        //   // Create an anchor element
+        //   const onPayLink = document.createElement("a");
+        //   let _deepLink = ""; // Changed from const to let to allow reassignment
 
-        //     // Create an anchor element
-        //     const onPayLink = document.createElement("a");
-        // onPayLink.href = "onepay://qr/" + genqrCode?.data?.createQrAndSubscripeForPayment?.qrCode
-        // // Check if it's an iOS device
-        // const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+        //   if (values?.type === "JDB") {
+        //     _deepLink = dataResponse?.qrCode;
+        //   } else {
+        //     _deepLink = dataResponse?.appLink;
+        //   }
+        //   console.log("_deepLink:======>", _deepLink);
 
-        // if (isIOS) {
-        //   // For iOS, use window.location.href to open the app
-        //   window.location.href = onPayLink.href;
-        // } else {
-        //   // For non-iOS devices, programmatically trigger a click event
-        //   const event = new MouseEvent("click", {
-        //     view: window,
-        //     bubbles: true,
-        //     cancelable: true,
-        //   });
-        //   onPayLink.dispatchEvent(event);
-        // }
-        //     // dispatch(removeCartItem());
-        //     // setCustomerName("");
-        //     // setPhone("");
-        //     // setLogistic("");
-        //     // setDestinationLogistic("");
-        //     // setSelectedOriginalProvice("");
-        //     // setSelectedOriginalDistrict("");
+        //   onPayLink.href = _deepLink;
+        //   // Check if it's an iOS device
+        //   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+        //   if (isIOS) {
+        //     // For iOS, use window.location.href to open the app
+        //     window.location.href = onPayLink.href;
+        //   } else {
+        //     // For non-iOS devices, programmatically trigger a click event
+        //     const event = new MouseEvent("click", {
+        //       view: window,
+        //       bubbles: true,
+        //       cancelable: true,
+        //     });
+        //     onPayLink.dispatchEvent(event);
         //   }
         // }
 
+        if (dataResponse && dataResponse.appLink) {
+          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+          const isDeepLink =
+            dataResponse.appLink.startsWith("onepay://") ||
+            dataResponse.appLink.startsWith("someOtherCustomScheme://"); // Add other schemes as needed
 
-
-        /* ------ use payment gateway ---------- */
-        if (dataResponse) {
-          // Set the QR code data
-
-          if (dataResponse?.appLink) {
-            // console.log("check appLink ---->", _req?.appLink);
-            // Create an anchor element
-            const onPayLink = document.createElement("a");
-            onPayLink.href = dataResponse?.appLink;
-            // Check if it's an iOS device
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-
+          console.log("isDeepLink:----->", isDeepLink);
+          if (isDeepLink) {
             if (isIOS) {
-              
-              // For iOS, use window.location.href to open the app
-              window.location.href = onPayLink.href;
+              window.location.href = dataResponse.appLink;
             } else {
-              // For non-iOS devices, programmatically trigger a click event
-              const event = new MouseEvent("click", {
-                view: window,
-                bubbles: true,
-                cancelable: true,
-              });
-              onPayLink.dispatchEvent(event);
+              const iframe = document.createElement("iframe");
+              iframe.style.display = "none";
+              iframe.src = dataResponse.appLink;
+              document.body.appendChild(iframe);
+              setTimeout(() => {
+                document.body.removeChild(iframe);
+              }, 1000);
             }
-
-            // dispatch(removeCartItem());
-            // setCustomerName("");
-            // setPhone("");
-            // setLogistic("");
-            // setDestinationLogistic("");
-            // setSelectedOriginalProvice("");
-            // setSelectedOriginalDistrict("");
+          } else {
+            // Handle the case where it's not a deep link (optional)
+            // You might not be able to bypass opening a new tab for HTTP/HTTPS links due to browser restrictions
+            console.log(
+              "Not a deep link, might open in a new tab:",
+              dataResponse.appLink
+            );
           }
         }
+
         return;
       });
       return;
@@ -698,7 +677,8 @@ export default function payment() {
                   <Form.Group
                     className="mb-3"
                     style={{ position: "relative" }}
-                    controlId="validationCustom01">
+                    controlId="validationCustom01"
+                  >
                     <Form.Label style={{ margin: 0 }}>
                       ເບີໂທລະສັບ {compulsory}
                     </Form.Label>
@@ -708,7 +688,8 @@ export default function payment() {
                         left: 10,
                         top: "1.6em",
                         fontSize: "1.3em",
-                      }}>
+                      }}
+                    >
                       020{" "}
                     </span>
                     <Form.Control
@@ -802,13 +783,15 @@ export default function payment() {
                         code: e.target.value,
                       });
                       setSelectedOriginalProvice(_newProvince);
-                    }}>
+                    }}
+                  >
                     <option value="">--ເລືອກ--</option>
                     {LaoAddress?.map((province, pIndex) => {
                       return (
                         <option
                           value={province?.code}
-                          key={"province" + pIndex}>
+                          key={"province" + pIndex}
+                        >
                           {province?.province_name}
                         </option>
                       );
@@ -834,14 +817,16 @@ export default function payment() {
                         true
                       );
                       setSelectedOriginalDistrict(_newDistrict);
-                    }}>
+                    }}
+                  >
                     <option value="">--ເລືອກ--</option>
                     {selectedOriginalProvice?.district_list?.map(
                       (district, dIndex) => {
                         return (
                           <option
                             value={district?.code}
-                            key={"district" + dIndex}>
+                            key={"district" + dIndex}
+                          >
                             {district?.district}
                           </option>
                         );
@@ -888,7 +873,8 @@ export default function payment() {
                     justifyContent: "center",
                     alignItems: "center",
                     gap: 3,
-                  }}>
+                  }}
+                >
                   <img
                     // src={fileName}
                     src={URL.createObjectURL(file)}
@@ -918,7 +904,8 @@ export default function payment() {
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
                   aria-controls="panel1-content"
-                  id="panel1-header">
+                  id="panel1-header"
+                >
                   ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ {cartList?.length} ລາຍການ. &nbsp;
                   {/* <b> ເງິນລວມ: {numberFormat(totalPrice)} ກີບ</b> */}
                 </AccordionSummary>
@@ -933,7 +920,8 @@ export default function payment() {
                             display: "flex",
                             justifyContent: "space-between",
                             alignItems: "center",
-                          }}>
+                          }}
+                        >
                           <div className="cartImage">
                             {data?.image?.length > 0 ? (
                               <img
@@ -954,7 +942,8 @@ export default function payment() {
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "start",
-                              }}>
+                              }}
+                            >
                               <div style={{ lineHeight: 3 }}>
                                 <h6>{numberFormat(data?.price ?? 0)} ກີບ</h6>
                                 <h6>
@@ -1007,7 +996,8 @@ export default function payment() {
                     <button
                       type="button"
                       className="btn-download-qrcode"
-                      onClick={captureScreen}>
+                      onClick={captureScreen}
+                    >
                       ດາວໂຫລດ qr
                     </button>
                   </div>
@@ -1020,7 +1010,8 @@ export default function payment() {
                   type={
                     loadingSubscripe || loadingPayment ? "button" : "submit"
                   }
-                  className="btn-confirm-bank">
+                  className="btn-confirm-bank"
+                >
                   {loadingSubscripe || loadingPayment ? (
                     <>
                       <Spinner size="sm" /> ກຳລັງກວດສອບ...
@@ -1049,12 +1040,14 @@ export default function payment() {
         PaperProps={{ style: paperStyle }}
         fullWidth={fullWidth}
         maxWidth={width > 700 ? maxWidth : minWidth}
-        aria-describedby="alert-dialog-slide-description">
+        aria-describedby="alert-dialog-slide-description"
+      >
         {/* <DialogTitle>{"Use Google's location service?"}</DialogTitle> */}
         <DialogContent sx={{ padding: 3 }}>
           <DialogContentText
             sx={{ width: "100%", padding: "1em" }}
-            id="alert-dialog-slide-description">
+            id="alert-dialog-slide-description"
+          >
             <h5 className="textHeadSelect">
               <b>ເລືອກໃຊ້ທະນາຄານ</b>
             </h5>
@@ -1063,8 +1056,12 @@ export default function payment() {
                 <div
                   key={index}
                   className="bank-actions"
-                  onClick={() => handleConfirmBank(bank)}>
-                  <img src={bank?.image} style={{minWidth:50, maxWidth:80, height:'auto'}} />
+                  onClick={() => handleConfirmBank(bank)}
+                >
+                  <img
+                    src={bank?.image}
+                    style={{ minWidth: 50, maxWidth: 80, height: "auto" }}
+                  />
                   <h5>{bank?.title}</h5>
                 </div>
               ))}
