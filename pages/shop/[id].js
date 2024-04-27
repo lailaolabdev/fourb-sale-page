@@ -667,7 +667,9 @@ function ProductSalePage({ initialShop }) {
   };
 
   // console.log("shop data to SEO:-->", initialShop?.name);
-  const ogImageUrl = shopDetail?.image ? `${S3_URL}${shopDetail?.image}` : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
+  const ogImageUrl = initialShop?.image
+    ? `${S3_URL}${initialShop?.image}`
+    : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
 
   return (
     <div>
@@ -682,14 +684,11 @@ function ProductSalePage({ initialShop }) {
           name="description"
           content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
         />
-        <link
-          rel="icon"
-          // href="/assets/images/ecommerce_seo.png"
-          href={ogImageUrl}
-          type="image/icon type"
-        />
+        {/* SEO image */}
+        <link rel="icon" href={ogImageUrl} type="image/icon type" />
         <meta charSet="UTF-8" />
-
+        <meta property="og:image" content={ogImageUrl} />  
+         <meta name="twitter:image" content={ogImageUrl} />
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -978,6 +977,7 @@ function ProductSalePage({ initialShop }) {
 
 export async function getServerSideProps(context) {
   let { id } = context.query;
+  console.log("context:=====>", context)
 
   try {
     const {
