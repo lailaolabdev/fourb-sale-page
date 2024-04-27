@@ -1049,7 +1049,7 @@ export default function payment() {
             id="alert-dialog-slide-description"
           >
             <h5 className="textHeadSelect">
-              <b>ເລືອກໃຊ້ທະນາຄານ</b>
+              <b>ເລືອກໃຊ້ທະນາຄານ ໃນການຊຳລະ</b>
             </h5>
             <div className="card-button-banks">
               {bankDatas.map((bank, index) => (
@@ -1060,7 +1060,7 @@ export default function payment() {
                 >
                   <img
                     src={bank?.image}
-                    style={{ minWidth: 50, maxWidth: 80, height: "auto" }}
+                    style={{ minWidth: 30, maxWidth: 50, height: "auto" }}
                   />
                   <h5>{bank?.title}</h5>
                 </div>

@@ -1,23 +1,24 @@
 import BuyPackageSystem from "../../components/packageComponent/BuyPackageSystem";
 import { CheckOutlined } from "@ant-design/icons";
-import { Modal } from "antd";
+
 import { createStyles, useTheme } from "antd-style";
 import React, { useEffect, useState } from "react";
 import { RiErrorWarningLine } from "react-icons/ri";
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import { Form, Spinner } from 'react-bootstrap';
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+// import { Form, Spinner } from 'react-bootstrap';
 import { TbClockSearch } from "react-icons/tb";
 import { ADD_PACKAGE_SYSTEM } from "@/apollo/addpackage/mutation";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import Button from 'react-bootstrap/Button';
+import { Button, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { SHOP } from "@/apollo";
 import moment from "moment";
 import { CORLOR_APP } from "@/helper";
 import { toast } from "react-toastify";
-import { message } from 'antd';
+import { Checkbox, Form, Input, message, Modal } from "antd";
 import useWindowDimensions from "@/helper/useWindowDimensions";
-
+import ReactiveButton from "reactive-button";
+import CustomButton from "@/components/CustomButton";
 
 const titleModal = (
   <span style={{ color: "green" }}>ຕໍ່ອາຍຸການໃຊ້ງານລະບົບ</span>
@@ -48,24 +49,21 @@ export default function index() {
     password: "",
   });
   const { height, width } = useWindowDimensions();
+  const [state, setState] = useState("idle");
 
-  const [statusShop, setStatusShop] = useState(false)
-  const [previewData, setPreviewData] = useState()
-  const [transactionId, setTransactionId] = useState()
-  const [getShop, setGetShop] = useState()
-
+  const [statusShop, setStatusShop] = useState(false);
+  const [previewData, setPreviewData] = useState();
+  const [transactionId, setTransactionId] = useState();
+  const [getShop, setGetShop] = useState();
 
   const [addPackageSystem, { loading: loadingAddPackage }] = useMutation(
     ADD_PACKAGE_SYSTEM,
     { fetchPolicy: "network-only" }
   );
 
-
   const [getShopData, { data: shopData }] = useLazyQuery(SHOP, {
     fetchPolicy: "cache-and-network",
   });
-
-
 
   const _addPackageFunction = async () => {
     try {
@@ -85,9 +83,11 @@ export default function index() {
       });
 
       if (req?.data?.addSystemPackages?.data) {
-        setTransactionId(req?.data?.addSystemPackages?.data?.shop?.transactionId);
-        const _shopIdRes = req?.data?.addSystemPackages?.data
-        console.log("check req:------>", req?.data)
+        setTransactionId(
+          req?.data?.addSystemPackages?.data?.shop?.transactionId
+        );
+        const _shopIdRes = req?.data?.addSystemPackages?.data;
+        // console.log("check req:------>", req?.data);
 
         getShopData({
           variables: {
@@ -96,37 +96,32 @@ export default function index() {
             },
           },
         });
-
-
       }
     } catch (error) {
       console.log("error:", error);
       Swal.fire({
-        title: 'Oops...!',
-        text: 'ຊື່ນຳໃຊ້ ແລະ ລະຫັດຜ່ານບໍ່ຖຶກຕ້ອງ',
-        icon: 'error',
+        title: "Oops...!",
+        text: "ຊື່ນຳໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖຶກຕ້ອງ",
+        icon: "error",
         timer: 5000,
         showConfirmButton: false,
-      })
+      });
     }
   };
 
-  const onConfirmForm = (e) => {
-    e.preventDefault();
-    console.log("objectData:----->", objectData)
+  const onConfirmForm = () => {
+    setState("loading");
+    // e.preventDefault();
+    // console.log("objectData:----->", objectData);
     if (objectData?.username === "" || objectData?.password == "") {
-      message.warning('ກະລຸນາປ້ອນຊື່ນຳໃຊ້ ແລະ ລະຫັດຜ່ານກ່ອນ!')
-      return
+      message.warning("ກະລຸນາປ້ອນຊື່ນຳໃຊ້ ແລະ ລະຫັດຜ່ານກ່ອນ!");
+      return;
     }
     _addPackageFunction();
   };
 
-
-
-
   useEffect(() => {
-
-    setGetShop(shopData)
+    setGetShop(shopData);
     const momentDate = moment(shopData?.shop?.createdAt);
 
     const year = momentDate.format("YYYY");
@@ -134,32 +129,28 @@ export default function index() {
     const day = momentDate.format("DD");
     const dateNumber = parseInt(year + month + day);
 
-
     let nowDefaut = 20240310;
 
     if (dateNumber > nowDefaut) {
-      console.log("new store.....")
-      setObjectData({ username: '', password: '' }); 
-      setStatusShop(false)
+      console.log("new store.....");
+      setObjectData({ username: "", password: "" });
+      setStatusShop(false);
     } else {
-      setStatusShop(true)
-      setObjectData({ username: '', password: '' }); 
-      console.log("old store.....5555")
+      setStatusShop(true);
+      setObjectData({ username: "", password: "" });
+      console.log("old store.....5555");
     }
-
-  }, [shopData])
-
-
-
+  }, [shopData]);
 
   const handleShowModalOneMonth = () => {
     setPackageType("ONE_MONTH");
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
-        ...shopData, objectData
-      }
-    })
+        ...shopData,
+        objectData,
+      },
+    });
   };
 
   const handleShowModalThreeMonth = () => {
@@ -167,9 +158,10 @@ export default function index() {
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
-        ...shopData, objectData
-      }
-    })
+        ...shopData,
+        objectData,
+      },
+    });
   };
 
   const handleShowModalSixMonth = () => {
@@ -177,9 +169,10 @@ export default function index() {
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
-        ...shopData, objectData
-      }
-    })
+        ...shopData,
+        objectData,
+      },
+    });
   };
 
   const handleShowModal1YearMonth = () => {
@@ -187,9 +180,10 @@ export default function index() {
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
-        ...shopData, objectData
-      }
-    })
+        ...shopData,
+        objectData,
+      },
+    });
   };
 
   // package new
@@ -198,20 +192,21 @@ export default function index() {
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
-        ...shopData, objectData
-      }
-    })
+        ...shopData,
+        objectData,
+      },
+    });
   };
-
 
   const onShowModalThreeMonth = () => {
     setPackageType("THREE_MONTH_NEW");
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
-        ...shopData, objectData
-      }
-    })
+        ...shopData,
+        objectData,
+      },
+    });
   };
 
   const onShowModal1YearMonth = () => {
@@ -219,20 +214,19 @@ export default function index() {
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
-        ...shopData, objectData
-      }
-    })
+        ...shopData,
+        objectData,
+      },
+    });
   };
-
-
 
   const handleOk = () => {
     setIsModalOpen(false);
-    setPreviewData()
+    setPreviewData();
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-    setPreviewData()
+    setPreviewData();
   };
 
   const classNames = {
@@ -265,58 +259,122 @@ export default function index() {
 
   return (
     <>
-      {!getShop ?
+      {!getShop ? (
         <div className="card-check-shop">
-         
-         <div style={{width:100,height:100,borderRadius:'50%', overflow:'hidden',padding:10,background:"#f2f2f2"}}>
-         <img src="/assets/images/mainLogo.png" style={{ width:'100%'}} />
-         </div>
-          
-          <h2 style={{textAlign:'center'}}><b>ປ້ອນລະຫັດເຂົ້າລະບົບ ໄລຟ ເພື່ອການເລືອກໃຊ້ແພັກເກັດ</b></h2>
+          <div
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: "50%",
+              overflow: "hidden",
+              padding: 10,
+              background: "#f2f2f2",
+            }}
+          >
+            <img src="/assets/images/mainLogo.png" style={{ width: "100%" }} />
+          </div>
 
+          <h4 style={{ textAlign: "center" }}>
+            <b>ປ້ອນຊື່ນຳໃຊ້ ແລະ ລະຫັດຜ່ານ ເພື່ອການເລືອກໃຊ້ແພັກເກັດຂອງທ່ານ</b>
+          </h4>
+          <br />
 
-          <Form onSubmit={onConfirmForm} style={{ minWidth:"22em", padding: 20 }}>
-            <FloatingLabel
-              controlId="floatingInput"
-              label="ຊື່ນຳໃຊ້ (ຕ້ອງປ້ອນ)"
-              className="mb-3"
-
+          <Form
+            name="basic"
+            style={{
+              minWidth: "20em",
+              width: "40%",
+            }}
+            initialValues={{
+              remember: true,
+            }}
+            layout="vertical"
+            onFinish={onConfirmForm}
+            // onFinishFailed={onFinishFailed}
+            autoComplete="off"
+          >
+            <Form.Item
+              label="ຊື່ນຳໃຊ້"
+              name="username"
+              rules={[
+                {
+                  required: true,
+                  message: "ກະລຸນາປ້ອນຊື່ນຳໃຊ້ກ່ອນ!",
+                },
+              ]}
             >
-              <Form.Control value={objectData?.username}
+              <Input
+                value={objectData?.username}
                 onChange={(e) =>
                   setObjectData({
                     ...objectData,
                     username: e?.target?.value,
                   })
-                } type="text" placeholder="......" />
-            </FloatingLabel>
-            <FloatingLabel controlId="floatingPassword" label="ລະຫັດຜ່ານ (ຕ້ອງປ້ອນ)">
-              <Form.Control value={objectData?.password}
+                }
+                type="text"
+                placeholder="ປ້ອນຊື່ນຳໃຊ້ລະບົບ"
+                size="large"
+              />
+            </Form.Item>
+
+            <Form.Item
+              label="ລະຫັດຜ່ານ"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "ກະລຸນາປ້ອນລະຫັດຜ່ານກ່ອນ!",
+                },
+              ]}
+            >
+              <Input.Password
+                value={objectData?.password}
                 onChange={(e) =>
                   setObjectData({
                     ...objectData,
                     password: e?.target?.value,
                   })
-                } type="password" placeholder="......." />
-            </FloatingLabel>
+                }
+                type="password"
+                placeholder="******"
+                size="large"
+              />
+            </Form.Item>
 
-            <br />
-            <Button style={{ width: '100%', background: CORLOR_APP, border: 'none', padding: '1em 0' }} type="submit">{loadingAddPackage ? <Spinner /> : "ກົດຕໍ່ໄປ"}</Button>
-
+<CustomButton type="submit" text="ຕົກລົງ" state={state}   background={CORLOR_APP}  rounded width="100%"  />
+            {/* <ReactiveButton
+              buttonState={state}
+              idleText="ຕົກລົງ"
+              loadingText="Loading"
+              type="submit"
+              size="large"
+              color="primary"
+              shadow
+              width='100%'
+              style={{
+                borderRadius: '10px',
+                
+              }}
+            />  */}
           </Form>
+          
         </div>
-        : <>
-          {statusShop ?
-            <div className="main-package-ps">
-              <h1><b>ແພັກເກັດລະບົບ</b></h1>
+      ) : (
+        <>
+          {statusShop ? (
+            <div className="main-package-ps px-2">
+              <h1>
+                <b>ແພັກເກັດລະບົບ</b>
+              </h1>
               <p>ເລືອກຊື້ແພັກເກັດລາຄາລະບົບ 4B ໂຟບີ ເພື່ອທຸລະກິດຂອງທ່ານ</p>
-              <div style={{paddingBottom:20}}>
-
+              <div style={{ paddingBottom: 20 }}>
+                <small style={{ color: "orange" }}>
+                  ໝາຍເຫດ: ລາຄາແພັກເກັດ ຈະຖຶກປັບຂື້ນໃນທ້າຍປີ 2024 ນີ້
+                </small>
                 {/* <Button onClick={() => {
                   setObjectData({ username: '', password: '' });
                   setGetShop("")
                 }} style={{ background: CORLOR_APP, border: 'none', padding: '.5em 1em' }}  >ລອງໃໝ່</Button> */}
-
               </div>
               <div className="card-package">
                 <div className="card-ps">
@@ -337,7 +395,8 @@ export default function index() {
                   <div className="card-footer-ps">
                     <button
                       onClick={handleShowModalOneMonth}
-                      className="btn-buy-package">
+                      className="btn-buy-package"
+                    >
                       <span>ເລືອກຊື້ເລີຍ</span>
                     </button>
                   </div>
@@ -361,7 +420,8 @@ export default function index() {
                   <div className="card-footer-ps">
                     <button
                       onClick={handleShowModalThreeMonth}
-                      className="btn-buy-package">
+                      className="btn-buy-package"
+                    >
                       <span>ເລືອກຊື້ເລີຍ</span>
                     </button>
                   </div>
@@ -385,7 +445,8 @@ export default function index() {
                   <div className="card-footer-ps">
                     <button
                       onClick={handleShowModalSixMonth}
-                      className="btn-buy-package">
+                      className="btn-buy-package"
+                    >
                       <span>ເລືອກຊື້ເລີຍ</span>
                     </button>
                   </div>
@@ -409,23 +470,33 @@ export default function index() {
                   <div className="card-footer-ps">
                     <button
                       onClick={handleShowModal1YearMonth}
-                      className="btn-buy-package">
+                      className="btn-buy-package"
+                    >
                       <span>ເລືອກຊື້ເລີຍ</span>
                     </button>
                   </div>
                 </div>
               </div>
-
             </div>
-            :
-
-            <div className="main-package-ps px-4">
-              <h1><b>ແພັກເກັດລະບົບ</b></h1>
-              <p>ເລືອກຊື້ແພັກເກັດລາຄາລະບົບ 4B ໂຟບີ ເພື່ອທຸລະກິດຂອງທ່ານ</p>
-              <Button onClick={() => {
-                  setObjectData({ username: '', password: '' });
-                  setGetShop("")
-              }} style={{ background: CORLOR_APP, border: 'none', padding: '.5em 1em' }}  >ລອງໃໝ່</Button>
+          ) : (
+            <div className="main-package-ps p-4">
+              <h1>
+                <b>ແພັກເກັດລະບົບ</b>
+              </h1>
+              <p>ເລືອກລາຄາແພັກເກັດ ສຳຫຼັບ ລະບົບດູດ ຂອງທ່ານ</p>
+              {/* <Button
+                onClick={() => {
+                  setObjectData({ username: "", password: "" });
+                  setGetShop("");
+                }}
+                style={{
+                  background: CORLOR_APP,
+                  border: "none",
+                  padding: ".5em 1em",
+                }}
+              >
+                ລອງໃໝ່
+              </Button> */}
               <br />
               <div className="card-package">
                 <div className="card-ps">
@@ -446,7 +517,8 @@ export default function index() {
                   <div className="card-footer-ps">
                     <button
                       onClick={onShowModalOneMonth}
-                      className="btn-buy-package">
+                      className="btn-buy-package"
+                    >
                       <span>ເລືອກຊື້ເລີຍ</span>
                     </button>
                   </div>
@@ -470,7 +542,8 @@ export default function index() {
                   <div className="card-footer-ps">
                     <button
                       onClick={onShowModalThreeMonth}
-                      className="btn-buy-package">
+                      className="btn-buy-package"
+                    >
                       <span>ເລືອກຊື້ເລີຍ</span>
                     </button>
                   </div>
@@ -495,15 +568,17 @@ export default function index() {
                   <div className="card-footer-ps">
                     <button
                       onClick={onShowModal1YearMonth}
-                      className="btn-buy-package">
+                      className="btn-buy-package"
+                    >
                       <span>ເລືອກຊື້ເລີຍ</span>
                     </button>
                   </div>
                 </div>
               </div>
-
-            </div>}
-        </>}
+            </div>
+          )}
+        </>
+      )}
       {/* <RiErrorWarningLine style={{fontSize:'8em', color:'orange'}} />
         <h1><b>ແຈ້ງການ</b></h1>
         <h4>ປັດຈຸບັນນີ້ທັງ ບໍລິສັດ 4B ກຳລັງມີການປັບປ່ຽນເລື່ອງລາຄາແພັກເກັດລະບົບ</h4>
@@ -518,7 +593,8 @@ export default function index() {
         onOk={handleOk}
         // onCancel={handleCancel}
         classNames={classNames}
-        styles={modalStyles}>
+        styles={modalStyles}
+      >
         <div className="p-2">
           <BuyPackageSystem
             handleCancel={handleCancel}
@@ -531,7 +607,6 @@ export default function index() {
           />
         </div>
       </Modal>
-
     </>
   );
 }

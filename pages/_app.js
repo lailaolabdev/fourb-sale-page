@@ -7,7 +7,10 @@ import "../styles/globals.css";
 // }
 
 import "../styles/styleSalePage.css";
-import "../styles/index.scss";
+import "../styles/index.scss"; 
+import "../styles/_customstyle.scss"
+
+ 
 
 // import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
 import "bootstrap/dist/css/bootstrap.css";

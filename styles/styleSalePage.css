@@ -1548,7 +1548,7 @@ input::placeholder {
 
   & .bank-actions {
     width: 100%;
-    padding: 1em;
+    padding:.6em 1em;
     border-radius: 0.5em;
     border: 1px solid var(--colorGray);
     gap: 0.4em;
@@ -1558,8 +1558,8 @@ input::placeholder {
     align-items: center;
 
     & img {
-      width: 35px;
-      height: 35px;
+      width: 30px;
+      height: 30px;
       /* border: 1px solid red; */
     }
 
