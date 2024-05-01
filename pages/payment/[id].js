@@ -133,9 +133,9 @@ export default function payment() {
 
   const ordersState = useSelector((state) => state?.setorder);
   const { cartList } = useSelector((state) => state?.salepage);
-  const { setId } = useSelector((state) => state?.predata);
-  const _shopId = setId?.idPreState?.shopId;
-  const _affiliateId = setId?.idPreState?.affiliateId;
+  // const { setId } = useSelector((state) => state?.predata);
+  // const shopId = setId?.idPreState?.shopId;
+  // const affiliateId = setId?.idPreState?.affiliateId;
 
   const totalPrice = cartDatas.reduce(
     (acc, item) => acc + item.price * item.qty,
@@ -215,17 +215,17 @@ export default function payment() {
 
   useEffect(() => {
     // initSetting();
-    _getBank(_shopId);
-  }, [_shopId]);
+    _getBank(shopId);
+  }, [shopId]);
 
   // get bank
-  const _getBank = async (_shopId) => {
+  const _getBank = async (shopId) => {
     try {
       // let SHOP_ID = await localStorage.getItem("SHOP");
       // await getBank({
       //   variables: {
       //     where: {
-      //       shop: _shopId
+      //       shop: shopId
       //       isDeleted: false,
       //     },
       //     skip: 0,
@@ -237,7 +237,7 @@ export default function payment() {
       await getExchangeRate({
         variables: {
           where: {
-            shop: _shopId,
+            shop: shopId,
           },
         },
       });
@@ -468,7 +468,7 @@ export default function payment() {
       // Convert the orders into the required format
       const convertedOrders = await (cartDatas || []).map((order) => ({
         stock: order?.id,
-        shop: _shopId,
+        shop: shopId,
         amount: order?.qty,
         price: order?.price,
         originPrice: order?.price,
@@ -488,7 +488,7 @@ export default function payment() {
         destinationLogistic;
 
       let _orderGroup = {
-        shop: _shopId,
+        shop: shopId,
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
@@ -505,10 +505,10 @@ export default function payment() {
       // console.log("orders-9-8-6--->", convertedOrders)
       // console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      if (_affiliateId) {
+      if (affiliateId) {
         _orderGroup = {
           ..._orderGroup,
-          infulancer: _affiliateId,
+          infulancer: affiliateId,
           // commissionAffiliate: compareData?.commision,
           // infulancer_percent: compareData?.commision,
         };
@@ -548,7 +548,7 @@ export default function payment() {
 
         let compareData = {
           ...dataResponse,
-          shopId: _shopId,
+          shopId: shopId,
           amountPaided: totalPrice,
         };
         // console.log("compareData=====>", compareData);
@@ -1026,8 +1026,8 @@ export default function payment() {
                         qrcodeData={qrcodeData}
                         handleGoback={handleGoback}
                         getOrderId={getOrderId}
-                        shopId={_shopId}
-                        affiliateId={_affiliateId}
+                        shopId={shopId}
+                        affiliateId={affiliateId}
                         dataCompleted={dataCompleted}
                       />
                     </div>
