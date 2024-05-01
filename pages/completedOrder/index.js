@@ -28,24 +28,29 @@ export default function CompletedOrder() {
   const { idPreState } = setId || {};
   const info = dataCompleted;
 
-  // console.log("idPreState--6-->", setId?.idPreState?.shopId)
+  // console.log("idPreState--6000-->", setId?.shopId)
   // console.log("compeletedData999999-->", dataCompleted?.code)
 
   // const info = navigate?.query?.dataCompleted;
   const influencerId = navigate?.query?.influencerId;
 
-  console.log("compareData====>", info);
+  // console.log("compareData====>", info);
   // console.log("influencerId99999====>", influencerId);
 
   const handleBack = () => {
-    const destinationPathBack =
-      idPreState?.affiliateId && idPreState?.shopId
-        ? `../shop/${idPreState.shopId}?affiliateId=${
-            idPreState.affiliateId
-          }&commissionForShopId=${idPreState.commissionForShopId || ""}`
-        : `../shop/${idPreState?.shopId}`;
+   
+    
+    const destinationPath =
+    setId.shopId && setId.affiliateId &&
+    setId.commissionForShopId
+      ? `../shop/${setId.shopId}?affiliateId=${setId.affiliateId}&commissionForShopId=${setId.commissionForShopId}`
+      : setId.shopId &&
+        setId.affiliateId 
+      ? `../shop/${setId.shopId}?affiliateId=${setId.affiliateId}`
+      : `../shop/${setId?.shopId}`;
 
-    navigate.push(destinationPathBack);
+
+    navigate.push(destinationPath);
     // dispatch(removeStateCompleted(2))
   };
   // let text = info?.code, moment(info?.createdAt).format("DD/MM/YYYY HH:mm"),
@@ -190,7 +195,7 @@ export default function CompletedOrder() {
           }}>
           <FaFileDownload style={{ fontSize: 20 }} />
         </Button>
-        <Button
+        {/* <Button
           onClick={() => handleCheckOrder()}
           style={{
             background: CORLOR_APP,
@@ -199,7 +204,7 @@ export default function CompletedOrder() {
             cursor: "pointer",
           }}>
           <MdPageview style={{ fontSize: 22 }} />
-        </Button>
+        </Button> */}
       </div>
     </>
   );
