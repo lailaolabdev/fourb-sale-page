@@ -24,31 +24,32 @@
 }
 
 Modal.Footer {
-  border-top: none; 
+  border-top: none;
   padding-bottom: 1em;
 }
- 
 
 .custom-modal {
-  border-radius: 1.5em; 
+  border-radius: 1.5em;
   border: none;
 
   & .btn-cancel {
     width: auto;
-    padding: .65em 2em;
-    border: none;outline: none;
+    padding: 0.65em 2em;
+    border: none;
+    outline: none;
     background: var(--colorShadow);
-    border-radius: .55em;
-    transition: all .2s ease-out;
+    border-radius: 0.55em;
+    transition: all 0.2s ease-out;
   }
 
   & .btn-confirm {
     width: auto;
-    padding: .65em 2em;
-    border: none;outline: none;
+    padding: 0.65em 2em;
+    border: none;
+    outline: none;
     background: var(--colorMain);
-    border-radius: .55em;
-    transition: all .2s ease-out;
+    border-radius: 0.55em;
+    transition: all 0.2s ease-out;
     color: var(--colorWhite);
   }
 
@@ -61,12 +62,10 @@ Modal.Footer {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     background: var(--colorMain);
   }
-
-
 }
 
 .custom-modal .modal-content {
-  border-radius: 1.5em; 
+  border-radius: 1.5em;
 }
 
 .contact-shop {
@@ -1005,10 +1004,45 @@ input[type="file"]::file-selector-button {
   background: var(--colorMain);
   color: var(--colorWhite);
 
-  .card-search-data {
+  & .card-profile-shop {
+    position: absolute;
+    z-index: 99999;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-bottom-right-radius: 20em;
+    box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+    transition: all .5s ease-in;
+    overflow: hidden;
+    background: #fff;
+    color: #616161;
+
+    & .close-profile {
+      width: 2em;
+      height: 2em;
+      border-radius: 5em;
+      border: 1px solid #f2f2f2;
+      color: #777;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 1em;
+      cursor: pointer;
+    }
+  }
+
+  & .card-profile-shop[data-isprofile="true"] {
+    
+    
+    transition: all .5s ease-out;
+
+  }
+
+  & .card-search-data {
     width: 100%;
     transition: all 0.3s ease-in-out;
-   
+
     z-index: 9999999;
     background: var(--colorWhite);
     height: 3.85em;
@@ -1027,7 +1061,7 @@ input[type="file"]::file-selector-button {
 
     & .icon-close-search {
       color: var(--colorBlack);
-      border-radius: .2em;
+      border-radius: 0.2em;
       cursor: pointer;
       width: 4em;
       height: 2em;
@@ -1067,24 +1101,22 @@ input[type="file"]::file-selector-button {
       & .card-query-product {
         width: 20em;
         background: var(--colorWhite);
-        border-radius: .5em;
+        border-radius: 0.5em;
         box-shadow: 3px 3px 15px var(--colorGray);
-        padding: .5em;
- 
+        padding: 0.5em;
 
         & ul {
           line-height: 1.75em;
           width: 100%;
           margin-left: -2em;
 
-         & li {
+          & li {
             width: 100%;
             font-size: 1em;
-            color:var(--colorPurple);
+            color: var(--colorPurple);
             list-style: none;
-            padding: .55em;
-            border-radius: .2em;
-  
+            padding: 0.55em;
+            border-radius: 0.2em;
           }
 
           & li:hover {
@@ -1092,10 +1124,6 @@ input[type="file"]::file-selector-button {
             color: var(--colorWhite);
           }
         }
-        
-        
-       
-
       }
 
       & p {
@@ -1250,7 +1278,8 @@ input::placeholder {
 
 .productSalePage:hover {
   transform: scale(1.05);
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
   cursor: pointer;
   border: none;
   z-index: 90;
@@ -1519,7 +1548,7 @@ input::placeholder {
 
   & .bank-actions {
     width: 100%;
-    padding: 1em;
+    padding:.6em 1em;
     border-radius: 0.5em;
     border: 1px solid var(--colorGray);
     gap: 0.4em;
@@ -1529,8 +1558,8 @@ input::placeholder {
     align-items: center;
 
     & img {
-      width: 35px;
-      height: 35px;
+      width: 30px;
+      height: 30px;
       /* border: 1px solid red; */
     }
 
@@ -1846,7 +1875,7 @@ input::placeholder {
   align-items: center;
   width: 100%;
   padding: 0.45em;
-  border-radius: .2em;
+  border-radius: 0.2em;
   background: var(--colorWhite);
   color: var(--colorMain);
   border: 1px solid var(--colorMain);
@@ -1876,6 +1905,39 @@ input::placeholder {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.card-product-image {
+  width: 100%;
+  height: 60vh;
+  overflow: hidden;
+  background: #4444;
+  position: relative;
+
+  & .product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  & .go-back-page {
+    font-weight: bold;
+    color: #fff;
+    position: absolute;
+    top: 1em;
+    left: 1em;
+    z-index: 9999;
+    width: 5em;
+    border-radius: 1em;
+    background: #fefefe9a;
+    cursor: pointer;
+    padding-left: 1em;
+  }
+
+  & .go-back-page:hover {
+    padding-left: 0;
+    background: #fff;
+    color: #888;
+  }
 }
 
 /* slide product */
@@ -2211,7 +2273,7 @@ input::placeholder {
     /* height: auto; */
 
     & .card-search-data {
-      padding: 0 .5em;
+      padding: 0 0.5em;
     }
   }
 

@@ -31,6 +31,7 @@ import EmptyImage from "../../components/salePage/EmptyImage";
 import FooterComponent from "../../components/salePage/FooterComponent";
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { message } from "antd";
+import CustomButton from "@/components/CustomButton";
 
 export default function CartDetail() {
   // const { match, location } = useReactRouter();
@@ -56,6 +57,8 @@ export default function CartDetail() {
   const [checkPaid, setCheckPaid] = React.useState(true);
   const { cartList } = useSelector((state) => state?.salepage);
   const [priceToPay, setPriceToPay] = useState();
+  const [state, setState] = useState("idle");
+
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
@@ -137,21 +140,21 @@ export default function CartDetail() {
   };
 
   const handleConfirmCart = () => {
-    const combineField = {
-      order: cartList,
-      // orderGroup: calculatorAll?.sumpriceRecord,
-      // orderGroup: priceToPay,
-      priceToPay: priceToPay,
-    };
-    console.log("orders---->", combineField);
-    // console.log("orderGroups---66->", priceToPay)
-    dispatch(setOrders(combineField));
-    // const destinationPath = affiliateId
-    //   ? "/payment/" + shopId + "/" + affiliateId
-    //   : "/payment/" + shopId;
 
+    const combineField = {
+      order: cartList, 
+      priceToPay: priceToPay,
+    }; 
+    setState('loading');
+
+    // send an HTTP request
+    setTimeout(() => {
+      setState('success');
+      router.push("/payment");
+      dispatch(setOrders(combineField));  
+    }, 1000);
     // Navigate to the payment page with the query string
-    router.push("/payment");
+   
   };
 
   // console.log("cartList---->", cartList);
@@ -305,7 +308,8 @@ export default function CartDetail() {
             <h5>{isNaN(priceToPay) ? 0 : numberFormat(priceToPay)} ກີບ</h5>
           </div>
           <div className="paid-buy">
-            <ButtonComponent
+          <CustomButton type="submit" text="ສັ່ງຊື້"  state={state}  background={CORLOR_APP} onClick={handleConfirmCart} borderRadius={10} padding={8} width="100%"  />
+            {/* <ButtonComponent
               background={CORLOR_APP}
               hoverbackground={CORLOR_APP}
               cursor={checkPaid ? "no-drop" : "pointer"}
@@ -318,7 +322,7 @@ export default function CartDetail() {
               padding="15px"
               onClick={handleConfirmCart}
               icon={<BsCreditCard2BackFill style={{ fontSize: 27 }} />}
-            />
+            /> */}
           </div>
         </div>  
       </div>

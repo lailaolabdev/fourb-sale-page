@@ -112,25 +112,7 @@ function ProductSalePage({ initialShop }) {
 
   const elementRef = useRef(null);
 
-  const toast = useRef(null);
-  // const router = useRouter();
-  const items = [
-      {
-          label: 'Add',
-          icon: <WhatsAppOutlined />,
-          command: () => {
-            toast.current.show({ severity: 'info', summary: 'Add', detail: 'Data Added' });
-          }
-        },
-        {
-          label: 'Update',
-          icon: <WhatsAppOutlined />,
-          command: () => {
-              toast.current.show({ severity: 'success', summary: 'Update', detail: 'Data Updated' });
-          }
-      },
-      
-  ];
+  const toast = useRef(null); 
 
   function onIntersection(entries) {
     const firstEntery = entries[0];
@@ -174,14 +156,14 @@ function ProductSalePage({ initialShop }) {
   const [getStocksGeneral, { loading: loadingStock }] = useLazyQuery(
     GET_STOCKS,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-and-network",
     }
   );
 
   // stocks is live
   const [getLiveStockData, { data: liveStocks, loading: loadingLiveStock }] =
     useLazyQuery(GET_SALE_PAGE_LIVE_STOCKS, {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-and-network",
     });
 
   // commission for affilite
@@ -684,10 +666,10 @@ function ProductSalePage({ initialShop }) {
     // });
   };
 
-  // console.log("shop data to SEO:-->", initialShop?.name);
-  const ogImageUrl = initialShop?.image
-    ? `${S3_URL}${initialShop?.image}`
-    : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
+  // console.log("SEO datas:-->", initialShop);
+  const ogImageUrl = initialShop ? `${S3_URL}${initialShop?.image}` : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
+  
+  // console.log("SEO image:-->", ogImageUrl);
 
   return (
     <div>
@@ -702,14 +684,11 @@ function ProductSalePage({ initialShop }) {
           name="description"
           content="ເພື່ອທຸລະກິດຂອງທ່ານ, ຊ່ວຍເຫຼືອທຸລະກິດຂອງທ່ານ, ເພີ່ມຄວາມເຊື່ອໝັ້ນໃນທຸລະກິດຂອງທ່ານ ແລະ ຮັກສາຜົນປະໂຫຍດຂອງທຸລະກິດໄດ້ເປັນຢ່າງດີ"
         />
-        <link
-          rel="icon"
-          // href="/assets/images/ecommerce_seo.png"
-          href={ogImageUrl}
-          type="image/icon type"
-        />
+        {/* SEO image */}
+        <link rel="icon" href={ogImageUrl} type="image/icon type" />
         <meta charSet="UTF-8" />
-
+        <meta property="og:image" content={ogImageUrl} />  
+         <meta name="twitter:image" content={ogImageUrl} />
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -998,6 +977,7 @@ function ProductSalePage({ initialShop }) {
 
 export async function getServerSideProps(context) {
   let { id } = context.query;
+  console.log("context:=====>", context)
 
   try {
     const {
