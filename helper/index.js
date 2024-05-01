@@ -3,7 +3,8 @@ export const CORLOR_APP = "linear-gradient(23deg, rgba(47,110,163,1) 0%, rgba(90
 export const CORLOR_WHITE = "#FFF";
 export const COLOR_TEXT = "rgba(47,110,163,1)";
 
-export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/files/";
+export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/resized/small/";
+// export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/files/";
 
 export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
