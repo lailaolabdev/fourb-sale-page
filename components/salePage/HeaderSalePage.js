@@ -59,7 +59,7 @@ function HeaderSalePage({
   isMenuOpen,
   handleIsStockZero,
   handleIsStockThenZero,
-  cartList,
+  cartDatas,
   hadleCartProducts,
   shopId,
 }) {
@@ -117,7 +117,7 @@ function HeaderSalePage({
   }, [enableData, orderId]);
 
   let totalQuantity = 0;
-  for (let item of cartList) {
+  for (let item of cartDatas) {
     totalQuantity += item?.qty;
   }
 

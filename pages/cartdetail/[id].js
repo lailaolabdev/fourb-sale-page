@@ -33,155 +33,234 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import { message } from "antd";
 import CustomButton from "@/components/CustomButton";
 
-export default function CartDetail() {
-  // const { match, location } = useReactRouter();
-  // const { shopId, live, affiliateId } = match?.params;
-  // const { commision } = router.query;
+export default function CartDetail() { 
 
   const router = useRouter();
 
   // Retrieve the compareData from the query parameters
   const compareData = JSON.parse(router.query.compareData || "{}");
-
-  // Access the commision property from compareData
-  // const commision = compareData.commision || 'Default Commision';
-
-  //  const router = useRouter();
+ 
 
   // Access query parameters from the router
-  const { shopId, affiliateId } = router.query;
+  const {
+    liveId,
+    live,
+    affiliateId,
+    id,
+    shopForAffiliateId,
+    commissionForShopId,
+  } = router.query;
+  const shopId = id;
   // console.log("affiliateId:--->", affiliateId)
-  // console.log("shopId:--->", shopId)
+  // console.log("shopId:--cart->", shopId)
 
   const dispatch = useDispatch();
   const [checkPaid, setCheckPaid] = React.useState(true);
   const { cartList } = useSelector((state) => state?.salepage);
   const [priceToPay, setPriceToPay] = useState();
   const [state, setState] = useState("idle");
+  
+  const [showConfirmRemove, setShowConfirmRemove] = React.useState(false);
+  const [cartDatas, setCartDatas] = useState([]) 
+  const handleCloseRemoveProduct = () => setShowConfirmRemove(false);
+  const handleShowConfirmProduct = () => {
+    setShowConfirmRemove(true);
+  };
+
+  // const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
+  //   GET_EXCHANGRATE,
+  //   { fetchPolicy: "cache-and-network" }
+  // );
 
 
-  const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
-    GET_EXCHANGRATE,
-    { fetchPolicy: "cache-and-network" }
-  );
+  // //   fetch exchange ret
+  // useEffect(() => {
+  //   getExchangeRate({
+  //     variables: {
+  //       where: {
+  //         shop: shopId,
+  //       },
+  //     },
+  //   });
+  // }, [shopId]);
 
-  console.log("checkCartList:--->", cartList);
+  // const isExChangeRate = useMemo(() => {
+  //   return loadExchangeRate?.exchangeRate;
+  // }, [loadExchangeRate?.exchangeRate]);
 
-  //   fetch exchange ret
+
   useEffect(() => {
-    getExchangeRate({
-      variables: {
-        where: {
-          shop: shopId,
-        },
-      },
-    });
-  }, [shopId]);
-
-  const isExChangeRate = useMemo(() => {
-    return loadExchangeRate?.exchangeRate;
-  }, [loadExchangeRate?.exchangeRate]);
+    if(cartList) {
+      const _checkdatas = cartList.filter(item => item?.shop === shopId)
+      setCartDatas(_checkdatas)
+      // console.log("checkDtas:-------->", _checkdatas)
+    }
+  },[cartList])
 
   // ຄຳນວນຈຳນວນເງິນຈາມສະກຸນເງິນ
-  const calculatorAll = useMemo(() => {
-    // let totalLak = 0;
-    // let totalBaht = 0;
-    // let totalUsd = 0;
-    let amountKip = 0;
+  // const calculatorAll = useMemo(() => {
+  //   // let totalLak = 0;
+  //   // let totalBaht = 0;
+  //   // let totalUsd = 0;
+  //   let amountKip = 0;
 
-    // ກວດສອບສະກຸນເງິນກ່ອນຄຳນວນ
-    for (let order of cartList) {
-      const { currency, qty, price } = order;
+  //   // ກວດສອບສະກຸນເງິນກ່ອນຄຳນວນ
+  //   for (let order of cartList) {
+  //     const { currency, qty, price } = order;
 
-      const sumpriceRecord = (amountKip += qty * price);
-      setPriceToPay(sumpriceRecord);
+  //     const sumpriceRecord = (amountKip += qty * price);
+  //     setPriceToPay(sumpriceRecord);
 
-      //  console.log("roundedValue4444---------------->", sumpriceRecord)
+  //     //  console.log("roundedValue4444---------------->", sumpriceRecord)
 
-      // console.log("777 new:",amountKip += qty * price)
+  //     // console.log("777 new:",amountKip += qty * price)
 
-      // if (currency === "LAK" || currency === "ກີບ") {
-      //   totalLak += qty * price;
-      // } else if (currency === "BAHT" || currency === "ບາດ") {
-      //   totalBaht += qty * price;
-      // } else if (currency === "USD" || currency === "ໂດລາ") {
-      //   totalUsd += qty * price;
-      // } else {
-      //   totalLak += qty * price;
-      // }
-    }
+  //     // if (currency === "LAK" || currency === "ກີບ") {
+  //     //   totalLak += qty * price;
+  //     // } else if (currency === "BAHT" || currency === "ບາດ") {
+  //     //   totalBaht += qty * price;
+  //     // } else if (currency === "USD" || currency === "ໂດລາ") {
+  //     //   totalUsd += qty * price;
+  //     // } else {
+  //     //   totalLak += qty * price;
+  //     // }
+  //   }
 
-    // ຄິດໄລ່ຈຳນວນເງິນທັງໝົດເປັນເງິນກີບ ໂດຍໃຊ້ອັດຕາແລກປ່ຽນ ຖ້າມີ
-    // amountKip =
-    //   totalLak +
-    //     totalBaht * isExChangeRate?.baht +
-    //     totalUsd * isExChangeRate?.usd || totalLak;
+  //   // ຄິດໄລ່ຈຳນວນເງິນທັງໝົດເປັນເງິນກີບ ໂດຍໃຊ້ອັດຕາແລກປ່ຽນ ຖ້າມີ
+  //   // amountKip =
+  //   //   totalLak +
+  //   //     totalBaht * isExChangeRate?.baht +
+  //   //     totalUsd * isExChangeRate?.usd || totalLak;
 
-    //     const roundedValue = calculateRoundedValue(amountKip/1000)*1000;
+  //   //     const roundedValue = calculateRoundedValue(amountKip/1000)*1000;
 
-    return {
-      // totalLak,
-      // totalBaht,
-      // totalUsd,
-      amountKip,
-      // sumpriceRecord,
-      // roundedValue,
-      // priceAqllPaid
-      // modelType: "",
-      // shop: shopId,
-    };
-  }, [cartList, isExChangeRate]);
+  //   return {
+  //     // totalLak,
+  //     // totalBaht,
+  //     // totalUsd,
+  //     amountKip,
+  //     // sumpriceRecord,
+  //     // roundedValue,
+  //     // priceAqllPaid
+  //     // modelType: "",
+  //     // shop: shopId,
+  //   };
+  // }, [cartList, isExChangeRate]);
+ 
 
-  // console.log("roundedValue---------------->", calculatorAll?.roundedValue)
-  // console.log("roundedValue5555---------------->", calculatorAll?.amountKip)
-
-  const handleCheckPaid = () => {
-    setCheckPaid(!checkPaid);
-  };
+  // const handleCheckPaid = () => {
+  //   setCheckPaid(!checkPaid);
+  // };
 
   const handleConfirmCart = () => {
 
     const combineField = {
-      order: cartList, 
+      order: cartDatas, 
       priceToPay: priceToPay,
     }; 
     setState('loading');
+    let idPreState = {
+      shopId: shopId,
+      affiliateId: affiliateId,
+    };
+
+    if (commissionForShopId) {
+      idPreState = {
+        ...idPreState,
+        commissionForShopId: commissionForShopId,
+      };
+    }
+
+    const destinationPath =
+    idPreState.shopId && idPreState.affiliateId &&
+    idPreState.commissionForShopId
+      ? `/payment/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
+      : idPreState.shopId &&
+        idPreState.affiliateId 
+      ? `/payment/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+      : `/payment/${idPreState?.shopId}`;
 
     // send an HTTP request
     setTimeout(() => {
       setState('success');
-      router.push("/payment");
+      router.push(destinationPath);
       dispatch(setOrders(combineField));  
     }, 1000);
     // Navigate to the payment page with the query string
    
   };
 
-  // console.log("cartList---->", cartList);
-  const [showConfirmRemove, setShowConfirmRemove] = React.useState(false);
 
-  const handleCloseRemoveProduct = () => setShowConfirmRemove(false);
-  const handleShowConfirmProduct = () => {
-    setShowConfirmRemove(true);
-  };
+  // const _calculatePriceWithExchangeRate = (price, currency) => {
+  //   if (["BAHT", "ບາດ"].includes(currency)) {
+  //     return price * isExChangeRate?.baht;
+  //   } else if (["USD", "ໂດລາ"].includes(currency)) {
+  //     // console.log("result:====>", price, isExChangeRate?.usd);
+  //     return price * (isExChangeRate?.usd || 0);
+  //   }
 
-  const _calculatePriceWithExchangeRate = (price, currency) => {
-    if (["BAHT", "ບາດ"].includes(currency)) {
-      return price * isExChangeRate?.baht;
-    } else if (["USD", "ໂດລາ"].includes(currency)) {
-      // console.log("result:====>", price, isExChangeRate?.usd);
-      return price * (isExChangeRate?.usd || 0);
-    }
-
-    return price;
-  };
+  //   return price;
+  // };
 
   const handleConfirmRemoveCart = () => {
-    dispatch(removeCartItem());
-    dispatch(setOrders([]));
-    setShowConfirmRemove(false);
-    router.back();
+   
+    const checkBeforeRemove = cartDatas.map(item => item?.shop === shopId);
+    // console.log("checkBeforeRemoveRemove:---->", checkBeforeRemove[0]);
+    // setCartDatas(checkBeforeRemove)
+    if(checkBeforeRemove[0]) {
+      dispatch(setOrders([]));
+      dispatch(removeCartItem());
+      setShowConfirmRemove(false);
+    }
+
+    let idPreState = {
+      shopId: shopId,
+      affiliateId: affiliateId,
+    };
+
+    if (commissionForShopId) {
+      idPreState = {
+        ...idPreState,
+        commissionForShopId: commissionForShopId,
+      };
+    }
+
+    const destinationPath =
+    idPreState.shopId && idPreState.affiliateId &&
+    idPreState.commissionForShopId
+      ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
+      : idPreState.shopId &&
+        idPreState.affiliateId 
+      ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+      : `../shop/${idPreState?.shopId}`;
+
+    router.push(destinationPath);
   };
+
+  const onBackPage = () => {
+    let idPreState = {
+      shopId: shopId,
+      affiliateId: affiliateId,
+    };
+
+    if (commissionForShopId) {
+      idPreState = {
+        ...idPreState,
+        commissionForShopId: commissionForShopId,
+      };
+    }
+
+    const destinationPath =
+    idPreState.shopId && idPreState.affiliateId &&
+    idPreState.commissionForShopId
+      ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
+      : idPreState.shopId &&
+        idPreState.affiliateId 
+      ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+      : `../shop/${idPreState?.shopId}`;
+
+    router.push(destinationPath);
+  }
 
   return (
     <>
@@ -193,7 +272,7 @@ export default function CartDetail() {
           padding: "1em",
         }}
       >
-        <div className="removeIcon1" onClick={() => router.back()}>
+        <div className="removeIcon1" onClick={onBackPage}>
           <MdArrowBack style={{ fontSize: 20 }} />
         </div>
         <div>
@@ -203,7 +282,7 @@ export default function CartDetail() {
       </div>
       <div className="containerCartItems">
         <div className="w-100">
-          {cartList?.map((data, index) => {
+          {cartDatas?.map((data, index) => {
             return (
               <div key={data?.id} className="cartItem-product">
                 <div
@@ -300,7 +379,7 @@ export default function CartDetail() {
         <div className="action-cart-product-footer">
           <div className="action-price-amounts">
             <h5>ຈຳນວນສິນຄ້າທັງໝົດ:</h5>
-            <h5>{cartList?.length} ລາຍການ</h5>
+            <h5>{cartDatas?.length} ລາຍການ</h5>
           </div>
           <br />
           <div className="action-price-amounts">
@@ -309,20 +388,7 @@ export default function CartDetail() {
           </div>
           <div className="paid-buy">
           <CustomButton type="submit" text="ສັ່ງຊື້"  state={state}  background={CORLOR_APP} onClick={handleConfirmCart} borderRadius={10} padding={8} width="100%"  />
-            {/* <ButtonComponent
-              background={CORLOR_APP}
-              hoverbackground={CORLOR_APP}
-              cursor={checkPaid ? "no-drop" : "pointer"}
-              textColor="#fff"
-              text="ສັ່ງຊື້"
-              fontSize="1.2em"
-              fontWeight={500}
-              // disabled={checkPaid}
-              width="100%"
-              padding="15px"
-              onClick={handleConfirmCart}
-              icon={<BsCreditCard2BackFill style={{ fontSize: 27 }} />}
-            /> */}
+         
           </div>
         </div>  
       </div>

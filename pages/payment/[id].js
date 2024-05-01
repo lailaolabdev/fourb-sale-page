@@ -62,9 +62,19 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function payment() {
   const router = useRouter();
-  const { liveId, live, affiliateId, id, shopForAffiliateId } = router.query;
+  // const { liveId, live, affiliateId, id, shopForAffiliateId } = router.query;
   const dispatch = useDispatch();
   const { height, width } = useWindowDimensions();
+
+  const {
+    liveId,
+    live,
+    affiliateId,
+    id,
+    shopForAffiliateId,
+    commissionForShopId,
+  } = router.query;
+  const shopId = id;
 
   const paperStyle = {
     borderRadius: "1em",
@@ -86,6 +96,8 @@ export default function payment() {
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("sm");
   const [minWidth, setMinWidth] = useState("lg");
+  const [cartDatas, setCartDatas] = useState([]) 
+
 
   const [openSelectBank, setOpenSelectBank] = useState(false);
   const [typeBanks, setTypeBanks] = useState("");
@@ -125,12 +137,12 @@ export default function payment() {
   const _shopId = setId?.idPreState?.shopId;
   const _affiliateId = setId?.idPreState?.affiliateId;
 
-  const totalPrice = cartList.reduce(
+  const totalPrice = cartDatas.reduce(
     (acc, item) => acc + item.price * item.qty,
     0
   );
 
-  // console.log("shopStateId=---->", setId)
+  // console.log("shopStateId=--44545-->", setId)
   // console.log("combineField Payment55=---->", totalPrice)
 
   // console.log("check price9999---->", totalPrice);
@@ -156,6 +168,13 @@ export default function payment() {
       onFileUpload(presignUrlData?.preSignedUrl?.url);
     }
   }, [presignUrlData]);
+
+  useEffect(() => {
+    if(cartList) {
+      const _checkdatas = cartList.filter(item => item?.shop === shopId)
+      setCartDatas(_checkdatas)
+    }
+  },[cartList])
 
   const onFileUpload = async (url) => {
     try {
@@ -320,21 +339,42 @@ export default function payment() {
 
   // ຄັດລ໋ອກເລກບັນຊີຂອງຮ້ານ
 
-  const handleCopyCodeBanks = async () => {
-    try {
-      const urlCodeBanks = bankData?.banks?.data[0].bankAccount;
-      await copy(urlCodeBanks);
-      toast.success("ຄັດລ໋ອກເລກບັນຊີສຳເລັດແລ້ວ", {
-        autoClose: 2000,
-      });
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
+  // const handleCopyCodeBanks = async () => {
+  //   try {
+  //     const urlCodeBanks = bankData?.banks?.data[0].bankAccount;
+  //     await copy(urlCodeBanks);
+  //     toast.success("ຄັດລ໋ອກເລກບັນຊີສຳເລັດແລ້ວ", {
+  //       autoClose: 2000,
+  //     });
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };
 
   // ກັບຄືນ
   const handleGoback = () => {
-    router.back();
+    let idPreState = {
+      shopId: shopId,
+      affiliateId: affiliateId,
+    };
+
+    if (commissionForShopId) {
+      idPreState = {
+        ...idPreState,
+        commissionForShopId: commissionForShopId,
+      };
+    }
+
+    const destinationPath =
+      idPreState.shopId && idPreState.affiliateId &&
+      idPreState.commissionForShopId
+        ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
+        : idPreState.shopId &&
+          idPreState.affiliateId 
+        ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+        : `../cartdetail/${idPreState?.shopId}`;
+        console.log("path_payment:----->", destinationPath)
+    router.push(destinationPath);
   };
 
   // ເພິ່ມຂົນສົ່ງ
@@ -354,9 +394,9 @@ export default function payment() {
     let amountKip = 0;
 
     // Check if ordersState and setOrder are defined and if order is iterable
-    if (cartList) {
+    if (cartDatas) {
       // Iterate over orders
-      for (let order of cartList) {
+      for (let order of cartDatas) {
         const { currency, qty, price } = order;
 
         if (currency === "LAK" || currency === "ກີບ") {
@@ -426,7 +466,7 @@ export default function payment() {
       if (loadingSubscripe || loadingPayment) return;
 
       // Convert the orders into the required format
-      const convertedOrders = await (cartList || []).map((order) => ({
+      const convertedOrders = await (cartDatas || []).map((order) => ({
         stock: order?.id,
         shop: _shopId,
         amount: order?.qty,
@@ -455,7 +495,7 @@ export default function payment() {
         sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
         // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
         type: "SALE_PAGE",
-        amount: cartList?.length,
+        amount: cartDatas?.length,
         customerName,
         phone,
         logistic,
@@ -906,12 +946,12 @@ export default function payment() {
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
-                  ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ {cartList?.length} ລາຍການ. &nbsp;
+                  ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ {cartDatas?.length} ລາຍການ. &nbsp;
                   {/* <b> ເງິນລວມ: {numberFormat(totalPrice)} ກີບ</b> */}
                 </AccordionSummary>
                 <AccordionDetails>
                   <div className="w-100">
-                    {cartList?.map((data, index) => {
+                    {cartDatas?.map((data, index) => {
                       return (
                         <div
                           key={data?.id}
@@ -961,7 +1001,7 @@ export default function payment() {
 
                   <div className="d-flex justify-content-between align-items-center w-100">
                     <h6>ຈຳນວນສິນຄ້າທັງໝົດ:</h6>
-                    <h6>{cartList?.length} ລາຍການ</h6>
+                    <h6>{cartDatas?.length} ລາຍການ</h6>
                   </div>
                   <div className="d-flex justify-content-between align-items-center w-100">
                     <h5>

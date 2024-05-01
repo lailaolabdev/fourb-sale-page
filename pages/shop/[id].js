@@ -106,6 +106,8 @@ function ProductSalePage({ initialShop }) {
   const [shopDetail, setShopDetail] = useState("");
 
   const [isInStock, setIsInStock] = useState(1);
+  const [cartDatas, setCartDatas] = useState([]) 
+
 
   const [hasHore, setHasHore] = useState(true);
   const [page, setPage] = useState(0);
@@ -244,6 +246,15 @@ function ProductSalePage({ initialShop }) {
       setShopDetail(loadShopData?.shop);
     }
   }, [loadShopData]);
+
+  useEffect(() => {
+    if(cartList) {
+      const _checkdatas = cartList.filter(item => item?.shop === shopId)
+      setCartDatas(_checkdatas)
+      // console.log("checkDtas:-------->", _checkdatas)
+    }
+  },[cartList])
+
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
@@ -589,7 +600,7 @@ function ProductSalePage({ initialShop }) {
       };
       // console.log("data return cart--->", roundedValue)
 
-      dispatch(addCartItem({ ..._data, modelType: live }));
+      dispatch(addCartItem({ ..._data, modelType: live,shop: shopId }));
     }
   };
 
@@ -611,35 +622,39 @@ function ProductSalePage({ initialShop }) {
   // };
 
   const hadleCartProducts = () => {
-    if (cartList?.length <= 0) {
-      // toast.warning("ກະຕ່າຂອງທ່ານຍັງບໍ່ມີສິນຄ້າ!", {
-      //   autoClose: 1000,
-      // });
-    message.info("ກະຕ່າຂອງທ່ານຍັງບໍ່ມີສິນຄ້າ!")
-
+    if (cartDatas?.length <= 0) {
+      message.info("ກະຕ່າຂອງທ່ານຍັງບໍ່ມີສິນຄ້າ!");
     } else {
       let idPreState = {
         shopId: shopId,
         affiliateId: affiliateId,
       };
-
+  
       if (commissionForShopId) {
         idPreState = {
           ...idPreState,
           commissionForShopId: commissionForShopId,
         };
-      } else {
-        idPreState = idPreState;
       }
-
-      // console.log({idPreState})
-
-      router.push("../cartdetail"); // Use shallow: true if needed
-      // console.log("idPreState---5--->", idPreState);
-
-      dispatch(setIds({ idPreState }));
+  
+      // console.log({ idPreState });
+  
+      const destinationPath =
+        idPreState.shopId && idPreState.affiliateId &&
+        idPreState.commissionForShopId
+          ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
+          : idPreState.shopId &&
+            idPreState.affiliateId 
+          ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+          : `../cartdetail/${idPreState?.shopId}`;
+  
+      router.push(destinationPath); // Use shallow: true if needed
+      console.log("idPreState---5--->", destinationPath);
+  
+      dispatch(setIds(idPreState));
     }
   };
+  
 
   const openWhatsApp = () => {
     // Replace '1234567890' with the recipient's phone number.
@@ -705,7 +720,7 @@ function ProductSalePage({ initialShop }) {
 
       <HeaderSalePage
         enableSearch={enableSearch}
-        cartList={cartList}
+        cartDatas={cartDatas}
         handleShowProfile={handleShowProfile}
         loadShopData={shopDetail}
         filter={filter}
