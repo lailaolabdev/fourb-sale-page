@@ -67,6 +67,11 @@ export default function CartDetail() {
     setShowConfirmRemove(true);
   };
 
+  const totalPrice = cartDatas.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  );
+
   // const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
   //   GET_EXCHANGRATE,
   //   { fetchPolicy: "cache-and-network" }
@@ -97,7 +102,7 @@ export default function CartDetail() {
     }
   },[cartList])
 
-  // ຄຳນວນຈຳນວນເງິນຈາມສະກຸນເງິນ
+  // // ຄຳນວນຈຳນວນເງິນຈາມສະກຸນເງິນ
   // const calculatorAll = useMemo(() => {
   //   // let totalLak = 0;
   //   // let totalBaht = 0;
@@ -105,7 +110,7 @@ export default function CartDetail() {
   //   let amountKip = 0;
 
   //   // ກວດສອບສະກຸນເງິນກ່ອນຄຳນວນ
-  //   for (let order of cartList) {
+  //   for (let order of cartDatas) {
   //     const { currency, qty, price } = order;
 
   //     const sumpriceRecord = (amountKip += qty * price);
@@ -145,7 +150,7 @@ export default function CartDetail() {
   //     // modelType: "",
   //     // shop: shopId,
   //   };
-  // }, [cartList, isExChangeRate]);
+  // }, [cartDatas, isExChangeRate]);
  
 
   // const handleCheckPaid = () => {
@@ -384,7 +389,7 @@ export default function CartDetail() {
           <br />
           <div className="action-price-amounts">
             <h5>ເງິນລວມທີ່ຕ້ອງຈ່າຍ:</h5>
-            <h5>{isNaN(priceToPay) ? 0 : numberFormat(priceToPay)} ກີບ</h5>
+            <h5>{isNaN(totalPrice) ? 0 : numberFormat(totalPrice)} ກີບ</h5>
           </div>
           <div className="paid-buy">
           <CustomButton type="submit" text="ສັ່ງຊື້"  state={state}  background={CORLOR_APP} onClick={handleConfirmCart} borderRadius={10} padding={8} width="100%"  />
