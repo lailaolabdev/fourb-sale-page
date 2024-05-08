@@ -64,12 +64,11 @@ import {
 import InfiniteScroll from "react-infinite-scroll-component";
 //   import '../../styles/styleSalePage.css'
 
-import { SpeedDial } from 'primereact/speeddial';
-import { Tooltip } from 'primereact/tooltip';
+import { SpeedDial } from "primereact/speeddial";
+import { Tooltip } from "primereact/tooltip";
 // import { useRouter } from 'next/router';
-import { Toast } from 'primereact/toast';
+import { Toast } from "primereact/toast";
 import { message } from "antd";
-
 
 const versionWeb = require("../../package.json");
 
@@ -106,15 +105,14 @@ function ProductSalePage({ initialShop }) {
   const [shopDetail, setShopDetail] = useState("");
 
   const [isInStock, setIsInStock] = useState(1);
-  const [cartDatas, setCartDatas] = useState([]) 
-
+  const [cartDatas, setCartDatas] = useState([]);
 
   const [hasHore, setHasHore] = useState(true);
   const [page, setPage] = useState(0);
 
   const elementRef = useRef(null);
 
-  const toast = useRef(null); 
+  const toast = useRef(null);
 
   function onIntersection(entries) {
     const firstEntery = entries[0];
@@ -192,7 +190,10 @@ function ProductSalePage({ initialShop }) {
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
-  // console.log({_commissionForAffiliate, shopDetail})
+  console.log("commission influen:------>", {
+    shopDataCommissionFor,
+    shopDetail,
+  });
 
   // pagination all =======================================================================>
   const rowsPerPage = 50;
@@ -248,13 +249,12 @@ function ProductSalePage({ initialShop }) {
   }, [loadShopData]);
 
   useEffect(() => {
-    if(cartList) {
-      const _checkdatas = cartList.filter(item => item?.shop === shopId)
-      setCartDatas(_checkdatas)
+    if (cartList) {
+      const _checkdatas = cartList.filter((item) => item?.shop === shopId);
+      setCartDatas(_checkdatas);
       // console.log("checkDtas:-------->", _checkdatas)
     }
-  },[cartList])
-
+  }, [cartList]);
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
@@ -413,6 +413,12 @@ function ProductSalePage({ initialShop }) {
       console.log("Error: ", error);
     }
   };
+
+  console.log("checkCommission:--->", {
+    service: shopDetail?.commissionService,
+    affiliateId: commissionForShopId,
+    affiliateCommission: _commissionForAffiliate,
+  });
   // ຄຳນວນລາຄາສິນຄ້າຕາມ ອາຟຣິລີເອດ
   const _calculatePriceWithExchangeRate = (price, currency) => {
     // console.log("currency import------->", currency)
@@ -428,34 +434,64 @@ function ProductSalePage({ initialShop }) {
       _price = price;
     }
 
-    // console.log("_price out------->", _price)
+    console.log("_price out------->", _price);
 
     let priceProduct = 0;
-    const commissionRate = (shopDetail?.commision ?? 0) / 100; // commission affiliate default
-    const _commissioinForInflu = (_commissionForAffiliate ?? 0) / 100; // commission shop as an affiliate
-    const baseCommission = shopDetail?.commissionService
-      ? _price * COMMISSION_OFFICE
-      : 0; // percent service for Lailaolab
 
-    // console.log("ຄອມມິດຊັ່ນຮ້ານຕັ້ງໃຫ້ affiliate: ", _commissionForAffiliate)
-    // console.log("ຄອມມິດຊັ່ນສຳລັບ affiliate: ", commissionRate)
-    // console.log("ຄອມມິດຊັ່ນສຳລັບ lailaolab: ", COMMISSION_OFFICE)
+    if (commissionForShopId) {
+      priceProduct = _price + (_price * _commissionForAffiliate) / 100;
+    } 
+    
+    if (shopDetail?.commissionService) {
+      priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
+    } 
 
-    if (shopDetail?.commissionAffiliate && !shopDetail?.commissionService) {
-      priceProduct = _price + _price * commissionRate;
-    } else if (
-      shopDetail?.commissionService &&
-      shopDetail?.commissionAffiliate
-    ) {
-      const affiliateCommission =
-        commissionForShopId !== undefined
-          ? _price * _commissioinForInflu
-          : _price * commissionRate;
+    console.log("priceProduct:--------view555--->", priceProduct);
+    // if(commissionForShopId) {
+    //  let isAffiliate = _commissionForAffiliate / 100
+    //  console.log("isAffiliate:-----view--->", isAffiliate)
+    //  _price + isAffiliate;
+    // }
+    // if(shopDetail?.commissionService){
+    //   let _commiss = COMMISSION_OFFICE / 100
+    //   console.log("_commiss:-----view--->", _commiss)
+    //   _price + _commiss;
+    // }
+    // console.log("Price:-----output--->", _price)
+    // priceProduct = _price;
 
-      priceProduct = _price + affiliateCommission + baseCommission;
-    } else {
-      priceProduct = _price + baseCommission;
-    }
+    // const commissionRate = (shopDetail?.commision ?? 0) / 100; // commission affiliate default
+    // const _commissioinForInflu = (_commissionForAffiliate ?? 0) / 100; // commission shop as an affiliate
+    // const baseCommission = shopDetail?.commissionService
+    //   ? _price * COMMISSION_OFFICE
+    //   : 0; // percent service for Lailaolab
+
+    // // console.log("ຄອມມິດຊັ່ນຮ້ານຕັ້ງໃຫ້ affiliate: ", _commissionForAffiliate)
+    // // console.log("ຄອມມິດຊັ່ນສຳລັບ affiliate: ", commissionRate)
+    // // console.log("ຄອມມິດຊັ່ນສຳລັບ lailaolab: ", COMMISSION_OFFICE)
+
+    // if (shopDetail?.commissionAffiliate && !shopDetail?.commissionService) {
+    //   priceProduct = _price + _price * commissionRate;
+    // } else if (
+    //   shopDetail?.commissionService &&
+    //   shopDetail?.commissionAffiliate
+    // ) {
+    //   const affiliateCommission =
+    //     commissionForShopId !== undefined
+    //       ? _price * _commissioinForInflu
+    //       : _price * commissionRate;
+
+    //   priceProduct = _price + affiliateCommission + baseCommission;
+    // } else if(commissionForShopId){
+    //   console.log("commission_affiliate_here.....", {
+    //     conmmission: _commissionForAffiliate,
+    //     price: _price,
+    //     commissionForShopId: commissionForShopId,
+    //   } )
+    //   priceProduct = _price + _commissionForAffiliate;
+    // } else {
+    //   priceProduct = _price + baseCommission;
+    // }
 
     // console.log("priceProduct--99---->", priceProduct);
     // priceProduct = Math.round(priceProduct / 1000) * 1000;
@@ -503,26 +539,38 @@ function ProductSalePage({ initialShop }) {
     // console.log("_price out------->", _price)
 
     let priceProduct = 0;
-    const commissionRate = (shopDetail?.commision ?? 0) / 100; // commission affiliate default
-    const _commissioinForInflu = (_commissionForAffiliate ?? 0) / 100; // commission shop as an affiliate
-    const baseCommission = shopDetail?.commissionService
-      ? _price * COMMISSION_OFFICE
-      : 0; // percent service for Lailaolab
 
-    if (shopDetail?.commissionAffiliate && !shopDetail?.commissionService) {
-      priceProduct = _price + _price * commissionRate;
-    } else if (
-      shopDetail?.commissionService &&
-      shopDetail?.commissionAffiliate
-    ) {
-      const affiliateCommission =
-        commissionForShopId !== undefined
-          ? _price * _commissioinForInflu
-          : _price * commissionRate;
-      priceProduct = _price + affiliateCommission + baseCommission;
+    if (commissionForShopId) {
+      priceProduct = _price + (_price * _commissionForAffiliate) / 100;
+    } 
+    
+    if (shopDetail?.commissionService) {
+      priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
     } else {
-      priceProduct = _price + baseCommission;
+      priceProduct = _price;
     }
+
+    // let priceProduct = 0;
+    // const commissionRate = (shopDetail?.commision ?? 0) / 100; // commission affiliate default
+    // const _commissioinForInflu = (_commissionForAffiliate ?? 0) / 100; // commission shop as an affiliate
+    // const baseCommission = shopDetail?.commissionService
+    //   ? _price * COMMISSION_OFFICE
+    //   : 0; // percent service for Lailaolab
+
+    // if (shopDetail?.commissionAffiliate && !shopDetail?.commissionService) {
+    //   priceProduct = _price + _price * commissionRate;
+    // } else if (
+    //   shopDetail?.commissionService &&
+    //   shopDetail?.commissionAffiliate
+    // ) {
+    //   const affiliateCommission =
+    //     commissionForShopId !== undefined
+    //       ? _price * _commissioinForInflu
+    //       : _price * commissionRate;
+    //   priceProduct = _price + affiliateCommission + baseCommission;
+    // } else {
+    //   priceProduct = _price + baseCommission;
+    // }
 
     // priceProduct = Math.round(priceProduct / 1000) * 1000;
     const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
@@ -568,26 +616,38 @@ function ProductSalePage({ initialShop }) {
       // console.log("_price out------->", _price)
 
       let priceProduct = 0;
-      const commissionRate = (shopDetail?.commision ?? 0) / 100; // commission affiliate default
-      const _commissioinForInflu = (_commissionForAffiliate ?? 0) / 100; // commission shop as an affiliate
-      const baseCommission = shopDetail?.commissionService
-        ? _price * COMMISSION_OFFICE
-        : 0; // percent service for Lailaolab
 
-      if (shopDetail?.commissionAffiliate && !shopDetail?.commissionService) {
-        priceProduct = _price + _price * commissionRate;
-      } else if (
-        shopDetail?.commissionService &&
-        shopDetail?.commissionAffiliate
-      ) {
-        const affiliateCommission =
-          commissionForShopId !== undefined
-            ? _price * _commissioinForInflu
-            : _price * commissionRate;
-        priceProduct = _price + affiliateCommission + baseCommission;
+      if (commissionForShopId) {
+        priceProduct = _price + (_price * _commissionForAffiliate) / 100;
+      } 
+      
+      if (shopDetail?.commissionService) {
+        priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
       } else {
-        priceProduct = _price + baseCommission;
+        priceProduct = _price;
       }
+
+      // let priceProduct = 0;
+      // const commissionRate = (shopDetail?.commision ?? 0) / 100; // commission affiliate default
+      // const _commissioinForInflu = (_commissionForAffiliate ?? 0) / 100; // commission shop as an affiliate
+      // const baseCommission = shopDetail?.commissionService
+      //   ? _price * COMMISSION_OFFICE
+      //   : 0; // percent service for Lailaolab
+
+      // if (shopDetail?.commissionAffiliate && !shopDetail?.commissionService) {
+      //   priceProduct = _price + _price * commissionRate;
+      // } else if (
+      //   shopDetail?.commissionService &&
+      //   shopDetail?.commissionAffiliate
+      // ) {
+      //   const affiliateCommission =
+      //     commissionForShopId !== undefined
+      //       ? _price * _commissioinForInflu
+      //       : _price * commissionRate;
+      //   priceProduct = _price + affiliateCommission + baseCommission;
+      // } else {
+      //   priceProduct = _price + baseCommission;
+      // }
 
       // priceProduct = Math.round(priceProduct / 1000) * 1000;
       const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
@@ -598,9 +658,9 @@ function ProductSalePage({ initialShop }) {
         ...data,
         price: roundedValue,
       };
-      // console.log("data return cart--->", roundedValue)
+      console.log("data return cart--->", _data)
 
-      dispatch(addCartItem({ ..._data, modelType: live,shop: shopId }));
+      dispatch(addCartItem({ ..._data, modelType: live, shop: shopId }));
     }
   };
 
@@ -629,32 +689,31 @@ function ProductSalePage({ initialShop }) {
         shopId: shopId,
         affiliateId: affiliateId,
       };
-  
+
       if (commissionForShopId) {
         idPreState = {
           ...idPreState,
           commissionForShopId: commissionForShopId,
         };
       }
-  
+
       // console.log({ idPreState });
-  
+
       const destinationPath =
-        idPreState.shopId && idPreState.affiliateId &&
+        idPreState.shopId &&
+        idPreState.affiliateId &&
         idPreState.commissionForShopId
           ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
-          : idPreState.shopId &&
-            idPreState.affiliateId 
+          : idPreState.shopId && idPreState.affiliateId
           ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
           : `../cartdetail/${idPreState?.shopId}`;
-  
+
       router.push(destinationPath); // Use shallow: true if needed
       console.log("idPreState---5--->", destinationPath);
-  
+
       dispatch(setIds(idPreState));
     }
   };
-  
 
   const openWhatsApp = () => {
     // Replace '1234567890' with the recipient's phone number.
@@ -675,15 +734,17 @@ function ProductSalePage({ initialShop }) {
   };
 
   const handleTrackOrderNow = () => {
-    message.info("ກຳລັງພັດທະນາຢູ່!")
+    message.info("ກຳລັງພັດທະນາຢູ່!");
     // toast.info("ກຳລັງພັດທະນາຢູ່!", {
     //   autoClose: 1000,
     // });
   };
 
   // console.log("SEO datas:-->", initialShop);
-  const ogImageUrl = initialShop ? `${S3_URL}${initialShop?.image}` : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
-  
+  const ogImageUrl = initialShop
+    ? `${S3_URL}${initialShop?.image}`
+    : `${S3_URL}${"3f84530a-27a1-4591-90f3-72bfcc3d678a.png"}`;
+
   // console.log("SEO image:-->", ogImageUrl);
 
   return (
@@ -702,8 +763,8 @@ function ProductSalePage({ initialShop }) {
         {/* SEO image */}
         <link rel="icon" href={ogImageUrl} type="image/icon type" />
         <meta charSet="UTF-8" />
-        <meta property="og:image" content={ogImageUrl} />  
-         <meta name="twitter:image" content={ogImageUrl} />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta name="twitter:image" content={ogImageUrl} />
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css"
           rel="stylesheet"
@@ -819,7 +880,7 @@ function ProductSalePage({ initialShop }) {
           />
         </div>
       </div>
- 
+
       {/* Footer */}
       <FooterComponent />
       {/* Footer */}
@@ -866,7 +927,6 @@ function ProductSalePage({ initialShop }) {
           onClick={openWhatsApp}
         />
       </div> */}
- 
 
       {/* profile shop */}
       <Modal
@@ -966,22 +1026,22 @@ function ProductSalePage({ initialShop }) {
           </Modal.Footer> */}
       </Modal>
 
-      <FloatButton.Group 
+      <FloatButton.Group
         trigger="click"
         // type="primary" // Change type to primary
         style={{
           right: 24,
         }}
-        icon={<CustomerServiceOutlined style={{ color: CORLOR_APP}} />}>
-        <FloatButton 
+        icon={<CustomerServiceOutlined style={{ color: CORLOR_APP }} />}>
+        <FloatButton
           tooltip={"ຕິດຕໍ່ຮ້ານ"}
           onClick={openWhatsApp}
-          icon={<WhatsAppOutlined style={{color:'green'}} />}
+          icon={<WhatsAppOutlined style={{ color: "green" }} />}
         />
-        <FloatButton 
+        <FloatButton
           tooltip={"ຕິດຕາມອໍເດີ້"}
           onClick={handleTrackOrderNow}
-          icon={<FileSearchOutlined style={{color:CORLOR_APP}} />}
+          icon={<FileSearchOutlined style={{ color: CORLOR_APP }} />}
         />
       </FloatButton.Group>
 
@@ -992,7 +1052,7 @@ function ProductSalePage({ initialShop }) {
 
 export async function getServerSideProps(context) {
   let { id } = context.query;
-  console.log("context:=====>", context)
+  console.log("context:=====>", context);
 
   try {
     const {

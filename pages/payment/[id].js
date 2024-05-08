@@ -55,6 +55,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { bankDatas } from "../../const/selectBankData";
 import html2canvas from "html2canvas";
 import { removeCartItem } from "../../redux/salepage/cartReducer";
+import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE } from "@/apollo";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -161,6 +162,26 @@ export default function payment() {
   );
   const [getPresignUrl, { data: presignUrlData }] =
     useLazyQuery(GET_PRESIGN_URL);
+
+    const [
+      getShopCommissionFor,
+      { data: shopDataCommissionFor, loading: shopLoading },
+    ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
+      fetchPolicy: "network-only",
+    });
+
+    const _commissionForAffiliate =
+    shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
+
+    useEffect(() => {
+      getShopCommissionFor({
+        variables: {
+          where: {
+            id: commissionForShopId,
+          },
+        },
+      });
+    }, [commissionForShopId]);
 
   // ຖ້າບໍ່ມີ onepay ແມ່ນໃຫ້ໃຊ້ໂຕອັບໂຫລດຮູບ qrcode ການຊຳລະ
   useEffect(() => {
@@ -492,8 +513,7 @@ export default function payment() {
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        sumPrice: totalPrice, // ຈຳນວນເງິນຕາມຕົວຈິງ
-        // sumPrice: 1, // ຈຳນວນເງິນ ເທສ
+        sumPrice: totalPrice, 
         type: "SALE_PAGE",
         amount: cartDatas?.length,
         customerName,
@@ -505,12 +525,12 @@ export default function payment() {
       // console.log("orders-9-8-6--->", convertedOrders)
       // console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      if (affiliateId) {
+      if (affiliateId && commissionForShopId) {
         _orderGroup = {
           ..._orderGroup,
           infulancer: affiliateId,
           // commissionAffiliate: compareData?.commision,
-          // infulancer_percent: compareData?.commision,
+          // infulancer_percent: _commissionForAffiliate,
         };
       } else {
         _orderGroup = { ..._orderGroup };
@@ -524,8 +544,8 @@ export default function payment() {
         variables: {
           // use Payment Gateway
           data: {
-            amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            // amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            // amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
             paymentMethod: values?.type,
             // description:  "test",
             orders: convertedOrders,
