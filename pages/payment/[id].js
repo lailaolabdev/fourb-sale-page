@@ -525,12 +525,12 @@ export default function payment() {
       // console.log("orders-9-8-6--->", convertedOrders)
       // console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      if (affiliateId && commissionForShopId) {
+      if (affiliateId) {
         _orderGroup = {
           ..._orderGroup,
           infulancer: affiliateId,
           // commissionAffiliate: compareData?.commision,
-          // infulancer_percent: _commissionForAffiliate,
+          infulancer_percent: _commissionForAffiliate,
         };
       } else {
         _orderGroup = { ..._orderGroup };
