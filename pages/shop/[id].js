@@ -549,7 +549,10 @@ function ProductSalePage({ initialShop }) {
 
     if (commissionForShopId) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
-    } 
+    } else {
+
+      priceProduct = _price
+    }
     
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
@@ -626,7 +629,10 @@ function ProductSalePage({ initialShop }) {
 
       if (commissionForShopId) {
         priceProduct = _price + (_price * _commissionForAffiliate) / 100;
-      } 
+      } else {
+
+        priceProduct = _price
+      }
       
       if (shopDetail?.commissionService) {
         priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
