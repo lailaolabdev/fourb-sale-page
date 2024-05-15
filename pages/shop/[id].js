@@ -434,19 +434,24 @@ function ProductSalePage({ initialShop }) {
       _price = price;
     }
 
-    console.log("_price out------->", _price);
+    // console.log("_price out------->", _price);
 
     let priceProduct = 0;
 
     if (commissionForShopId) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
-    } 
+    }else {
+      priceProduct = _price
+    }
     
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-    } 
+    }  else {
 
-    console.log("priceProduct:--------view555--->", priceProduct);
+      priceProduct = _price
+    }
+
+    // console.log("priceProduct:--------view555--->", priceProduct);
     // if(commissionForShopId) {
     //  let isAffiliate = _commissionForAffiliate / 100
     //  console.log("isAffiliate:-----view--->", isAffiliate)
@@ -496,6 +501,8 @@ function ProductSalePage({ initialShop }) {
     // console.log("priceProduct--99---->", priceProduct);
     // priceProduct = Math.round(priceProduct / 1000) * 1000;
     const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
+
+    console.log("roundedValue:---------->", roundedValue);
 
     return roundedValue;
   };
