@@ -520,21 +520,25 @@ export default function payment() {
         phone,
         logistic,
         destinationLogistic: connectField,
+        infulancer_percent: commissionForShopId ? _commissionForAffiliate : 0
       };
 
       // console.log("orders-9-8-6--->", convertedOrders)
       // console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      if (affiliateId || commissionForShopId) {
+      if (affiliateId) {
         _orderGroup = {
           ..._orderGroup,
           infulancer: affiliateId,
-          // commissionAffiliate: compareData?.commision,
-          infulancer_percent: _commissionForAffiliate,
         };
-      } else {
-        _orderGroup = { ..._orderGroup };
-      }
+      } 
+
+      // if(commissionForShopId) {
+      //   _orderGroup = {
+      //     ..._orderGroup,
+      //     infulancer_percent: _commissionForAffiliate,
+      //   };
+      // }
 
       // console.log("check orders:-->", _orderGroup, convertedOrders);
       // console.log("check bank type:--->", values?.type);
