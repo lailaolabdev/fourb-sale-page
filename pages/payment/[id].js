@@ -525,7 +525,7 @@ export default function payment() {
       // console.log("orders-9-8-6--->", convertedOrders)
       // console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      if (affiliateId) {
+      if (affiliateId || commissionForShopId) {
         _orderGroup = {
           ..._orderGroup,
           infulancer: affiliateId,

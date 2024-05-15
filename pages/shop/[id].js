@@ -190,10 +190,10 @@ function ProductSalePage({ initialShop }) {
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
-  console.log("commission influen:------>", {
-    shopDataCommissionFor,
-    shopDetail,
-  });
+  // console.log("commission influen:------>", {
+  //   shopDataCommissionFor,
+  //   shopDetail,
+  // });
 
   // pagination all =======================================================================>
   const rowsPerPage = 50;
@@ -414,11 +414,11 @@ function ProductSalePage({ initialShop }) {
     }
   };
 
-  console.log("checkCommission:--->", {
-    service: shopDetail?.commissionService,
-    affiliateId: commissionForShopId,
-    affiliateCommission: _commissionForAffiliate,
-  });
+  // console.log("checkCommission:--->", {
+  //   service: shopDetail?.commissionService,
+  //   affiliateId: commissionForShopId,
+  //   affiliateCommission: _commissionForAffiliate,
+  // });
   // ຄຳນວນລາຄາສິນຄ້າຕາມ ອາຟຣິລີເອດ
   const _calculatePriceWithExchangeRate = (price, currency) => {
     // console.log("currency import------->", currency)
