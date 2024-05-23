@@ -8,7 +8,10 @@ import "../styles/globals.css";
 
 import "../styles/styleSalePage.css";
 import "../styles/index.scss"; 
+import "../styles/app.css"; 
 import "../styles/_customstyle.scss"
+
+
 
  
 

@@ -14,8 +14,9 @@ export default function LoadingComponent({ titleLoading, height, width }) {
         color: "#3c169b",
         flexDirection: "column",  
         gap: 10,
+        fontSize:12
       }}>
-      <TwinSpin color="#3c169b" width={width ?? '90px'} height={height ?? '90px'} duration="0.6s" />
+      <TwinSpin color="#3c169b" width={width ?? '50px'} height={height ?? '50px'} duration="0.6s" />
       {titleLoading}
     </div>
   );

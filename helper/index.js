@@ -4,7 +4,8 @@ export const CORLOR_WHITE = "#FFF";
 export const COLOR_TEXT = "rgba(47,110,163,1)";
 
 export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/resized/small/";
-// export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/files/";
+export const S3_URL_MEDIUM = "https://lailaocf-bucket.s3.amazonaws.com/files/medium";
+export const S3_URL_LARGE = "https://lailaocf-bucket.s3.amazonaws.com/files/large";
 
 export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
@@ -39,9 +40,9 @@ export const numberFormat = (_number) => {
 // export const SOCKET_SERVER_URI = "wss://api-dev.bbbb.com.la/";
 
 // Production
-export const SERVER_URI = "https://api.bbbb.com.la/";
-export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
+// export const SERVER_URI = "https://api.bbbb.com.la/";
+// export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
 
 // localhost
-// export const SERVER_URI = "http://localhost:7070/";
-// export const SOCKET_SERVER_URI = "ws://localhost:7070/" 
+export const SERVER_URI = "http://localhost:7070/";
+export const SOCKET_SERVER_URI = "ws://localhost:7070/" 
