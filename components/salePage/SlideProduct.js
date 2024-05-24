@@ -29,7 +29,7 @@ const imageLists = [
 
 function SlideProduct({ shopId }) {
   const { height, width } = useWindowDimensions();
-  const [advertisingdata, setAdverTisingData] = useState([])
+  const [advertisingdata, setAdverTisingData] = useState([]);
 
   const [
     getAdvertisings,
@@ -55,83 +55,87 @@ function SlideProduct({ shopId }) {
 
   React.useEffect(() => {
     if (!adverTisings) return;
-    setAdverTisingData(adverTisings?.advertisements?.data)
+    setAdverTisingData(adverTisings?.advertisements?.data);
   }, [adverTisings]);
 
   return (
     <>
-        <div>
-          {advertisingdata?.length <= 0 ? (
-            <Carousel
-              speed={400}
-              autoplay
-              style={{
-                marginTop: "4.6em",
-                height: width > 700 ? "30em" : "auto",
-                overflow: "hidden",
-              }}
-            >
-              {imageLists?.map((emptyData, index) => (
-                <div key={index}>
-                  <div
+      <div>
+        {advertisingdata?.length <= 0 ? (
+          <Carousel
+            speed={400}
+            autoplay
+            style={{
+              marginTop: "4.6em",
+              height: width > 700 ? "30em" : "auto",
+              overflow: "hidden",
+            }}
+          >
+            {imageLists?.map((emptyData, index) => (
+              <div key={index}>
+                <div
+                  style={{
+                    height: width < 700 ? "18em" : "auto",
+                    width: "100%",
+                  }}
+                >
+                  <img
+                    src={emptyData?.image}
                     style={{
-                      height: width < 700 ? "18em" : "auto",
+                      height: "100%",
                       width: "100%",
+                      objectFit: "cover",
                     }}
-                  >
-                    <img
-                      src={emptyData?.image}
-                      style={{
-                        height: "100%",
-                        width: "100%",
-                        objectFit: "cover",
-                      }}
-                      alt="emptyImage"
-                    />
-                  </div>
+                    alt="emptyImage"
+                  />
                 </div>
-              ))}
-            </Carousel>
-          ) : (
-            <Carousel
-              speed={400}
-              autoplay
-              style={{
-                marginTop: "4.6em",
-                height: width > 700 ? "22em" : "auto",
-                overflow: "hidden",
-              }}
-            >
-            {!advertisingdata && loadingAdvertisings ?(
-              <div style={{fontSize:'4em'}}>loading...</div>
-            ) :(
-               <div>
-               {advertisingdata.map((emptyData, index) => (
-                  <div key={index}>
-                    <div
-                      style={{
-                        height: width < 700 ? "15em" : "auto",
-                        width: "100%",
-                      }}
-                    >
-                      <img
-                        // src={emptyData?.image}
-                        src={S3_URL + emptyData?.image}
-                        style={{
-                          height: "100%",
-                          width: "100%",
-                          objectFit: "cover",
-                        }}
-                        alt="emptyImage"
-                      />
-                    </div>
+              </div>
+            ))}
+          </Carousel>
+        ) : (
+          <>
+            {!advertisingdata && loadingAdvertisings ? (
+              <div style={{ fontSize: "4em" }}>loading...</div>
+            ) : (
+              <>
+                <Carousel
+                  speed={400}
+                  autoplay
+                  style={{
+                    marginTop: "4.6em",
+                    height: width > 700 ? "22em" : "auto",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div>
+                    {advertisingdata.map((emptyData, index) => (
+                      <div key={index}>
+                        <div
+                          style={{
+                            height: width < 700 ? "15em" : "auto",
+                            width: "100%",
+                          }}
+                        >
+                          <img
+                            // src={emptyData?.image}
+                            src={S3_URL + emptyData?.image}
+                            style={{
+                              height: "100%",
+                              width: "100%",
+                              objectFit: "cover",
+                            }}
+                            alt="emptyImage"
+                          />
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-               </div>
+                </Carousel>
+              </>
             )}
-            </Carousel>
-          )}
-        </div>
+          </>
+        )}
+      </div>
     </>
   );
 
