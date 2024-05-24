@@ -729,9 +729,6 @@ function ProductSalePage({ initialShop }) {
   };
 
   const openWhatsApp = () => {
-    // Replace '1234567890' with the recipient's phone number.
-    // const phoneNumber = "020" + loadShopData?.shop?.phone;
-    // const phoneNumber = "+85602094293951";
     const phoneNumber = "+856020" + shopDetail?.phone;
 
     // You can also include a message using the 'text' parameter.
@@ -743,7 +740,8 @@ function ProductSalePage({ initialShop }) {
     )}`;
 
     // Open WhatsApp using the constructed URL.
-    window.open(whatsappUrl);
+    // window.open(whatsappUrl);
+    window.location.href = whatsappUrl;
   };
 
   const handleTrackOrderNow = () => {
