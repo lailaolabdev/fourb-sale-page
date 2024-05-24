@@ -107,7 +107,7 @@ function SlideProduct({ shopId }) {
                     overflow: "hidden",
                   }}
                 >
-                  <div>
+                  <>
                     {advertisingdata.map((emptyData, index) => (
                       <div key={index}>
                         <div
@@ -129,7 +129,7 @@ function SlideProduct({ shopId }) {
                         </div>
                       </div>
                     ))}
-                  </div>
+                  </>
                 </Carousel>
               </>
             )}
