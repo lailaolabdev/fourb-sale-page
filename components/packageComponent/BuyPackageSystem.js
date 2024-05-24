@@ -193,10 +193,10 @@ export default function BuyPackageSystem({ handleCancel, setObjectData, setGetSh
             <br />
             <Avatar size={80} style={{ border: '1px solid #f2f2f2' }} src={S3_URL + previewData?.shopData?.shop?.image} />
             <br />
-            <div style={{ lineHeight: 1, marginTop: 10 }}>
+            <div style={{ lineHeight: 1, marginTop: 10, textAlign:'center' }}>
               {/* <p>ID SHOP: {previewData?.shopData?.shop?.id}</p> */}
-              <h5>ຊື່ຮ້ານ: <b>{previewData?.shopData?.shop?.name}</b></h5>
-              <h5>ເບີໂທລະສັບ: <b>{previewData?.shopData?.shop?.phone}</b></h5>
+              <h5><b>{previewData?.shopData?.shop?.name}</b></h5>
+              <h5><b>{previewData?.shopData?.shop?.phone}</b></h5>
               {/* <h5>ລາຍລະອຽດ: <b>{previewData?.shopData?.note ?? "................."}</b></h5> */}
               {/* <p>ຊື່ນຳໃຊ້ລະບົບ: {previewData?.shopData?.phone}</p> */}
             </div>
@@ -205,20 +205,20 @@ export default function BuyPackageSystem({ handleCancel, setObjectData, setGetSh
                 <b>ໝາຍເຫດ:</b> ຖ້າຫາກວ່າທ່ານຊຳລະຄ່າລະບົບໄປແລ້ວ
                 ຈະບໍ່ສາມາດຄືນເງິນໄດ້ໃນທຸກກໍລະນີ.
               </p> */}
-            <h5>ກະລຸນາກວດສອບບັນຊີນຳໃຊ້ລະບົບອິກຄັ້ງ ເພື່ອຄວາມປອດໄປຂອງທ່ານ!</h5>
+            <p>ກະລຸນາກວດສອບ ຊື່ຮ້ານ ແລະ ເບີໂທ ອິກຄັ້ງ ເພື່ອຄວາມປອດໄພຂອງທ່ານ!</p>
 
           </div>
 
 
           <br />
-          <div className="d-flex justify-content-end gap-2 mt-4 w-100">
+          <div className="d-flex justify-content-center gap-2 mt-4 w-100">
 
             <button type="button" onClick={handleCancelPayment} className="btn-package-cancel">
               <span>ຍົກເລີກ</span>
             </button>
 
             <button type="button" onClick={handleNext} className="btn-package-confirm">
-              {loadingSubscripe ? <Spinner size="sm" /> : "ຢືນຢັນ"}
+              {loadingSubscripe ? <Spinner size="sm" /> : "ຢືນຢັນຊື້ແພັກເກັດ"}
             </button>
 
           </div>
@@ -247,7 +247,7 @@ export default function BuyPackageSystem({ handleCancel, setObjectData, setGetSh
                 <Avatar size={100} src="/assets/images/successIcon3.png" />
                 <br />
                 <h4>ສຳເລັດແລ້ວ</h4>
-                <p>ຂໍສະແດງຄວາມຍິນດີກັບ ການຊື້ແພັກເກັດລະບົບຄັ້ງນີ້</p>
+                <p style={{fontSize:12}}>ຂໍສະແດງຄວາມຍິນດີກັບ ການຊື້ແພັກເກັດລະບົບຄັ້ງນີ້</p>
                 <Button onClick={handleLoginToLiveSystem} variant="success" >ເຂົ້າລະບົບ ໄລຟ</Button>
               </div>
               // </Watermark>

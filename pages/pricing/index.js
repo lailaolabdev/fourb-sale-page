@@ -99,6 +99,7 @@ export default function index() {
       }
     } catch (error) {
       console.log("error:", error);
+    setState("idle");
       Swal.fire({
         title: "Oops...!",
         text: "ຊື່ນຳໃຊ້ ຫຼື ລະຫັດຜ່ານບໍ່ຖຶກຕ້ອງ",
@@ -200,6 +201,17 @@ export default function index() {
 
   const onShowModalThreeMonth = () => {
     setPackageType("THREE_MONTH_NEW");
+    setIsModalOpen(true);
+    setPreviewData({
+      shopData: {
+        ...shopData,
+        objectData,
+      },
+    });
+  };
+
+  const onShowModalSixMonth = () => {
+    setPackageType("SIX_MONTH_NEW");
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
@@ -368,9 +380,9 @@ export default function index() {
               </h1>
               <p>ເລືອກຊື້ແພັກເກັດລາຄາລະບົບ 4B ໂຟບີ ເພື່ອທຸລະກິດຂອງທ່ານ</p>
               <div style={{ paddingBottom: 20 }}>
-                <small style={{ color: "orange" }}>
+                {/* <small style={{ color: "orange" }}>
                   ໝາຍເຫດ: ລາຄາແພັກເກັດ ຈະຖຶກປັບຂື້ນໃນທ້າຍປີ 2024 ນີ້
-                </small>
+                </small> */}
                 {/* <Button onClick={() => {
                   setObjectData({ username: '', password: '' });
                   setGetShop("")
@@ -504,8 +516,8 @@ export default function index() {
                     <p>1</p>
                     <p>ເດືອນ</p>
                   </div>
-                  <h6>1.470.000 ກີບ</h6>
-                  <h3>735.000 ກີບ</h3>
+                  <h6>735.000 ກີບ</h6>
+                  <h3>599.000 ກີບ</h3>
                   <ul>
                     <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
                     <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li>
@@ -529,8 +541,8 @@ export default function index() {
                     <p>3</p>
                     <p>ເດືອນ</p>
                   </div>
-                  <h6>4.410.000 ກີບ</h6>
-                  <h3>3.969.000 ກີບ</h3>
+                  <h6>3.939.000 ກີບ</h6>
+                  <h3>1.499.000 ກີບ</h3>
                   <ul>
                     <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
                     <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
@@ -551,14 +563,37 @@ export default function index() {
 
                 <div className="card-ps">
                   <div className="card-type">
-                    <p>1</p>
-                    <p>ປີ</p>
+                    <p>6</p>
+                    <p>ເດືອນ</p>
                   </div>
-                  <h6>17.640.000 ກີບ</h6>
-                  <h3>15.876.000 ກີບ</h3>
+                  <h6>3.969.000 ກີບ</h6>
+                  <h3>2.890.000 ກີບ</h3>
                   <ul>
                     <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
                     <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
+                    <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
+                    <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
+                    <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
+                  </ul>
+
+                  <div className="card-footer-ps">
+                    <button
+                      onClick={onShowModalSixMonth}
+                      className="btn-buy-package"
+                    >
+                      <span>ເລືອກຊື້ເລີຍ</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="card-ps">
+                  <div className="card-type">
+                    <p>1</p>
+                    <p>ປີ</p>
+                  </div>
+                  <h6>15.876.000 ກີບ</h6>
+                  <h3>5.696.000 ກີບ</h3>
+                  <ul>
                     <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
                     <li>ຄອສສອນຍິງແອັດຟຣີ</li>
                     <li>ຄອສສອນການນຳໃຊ້ ai ເຂົ້າໃນການສ້າງຄອນເທັ້ນການຂາຍຟຣີ</li>
