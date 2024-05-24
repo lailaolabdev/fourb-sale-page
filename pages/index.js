@@ -2,7 +2,6 @@ import Image from "next/image";
 // import mainLogo from "../images/mainLogo.png";
 import useWindowDimensions from "../helper/useWindowDimensions";
 import { LINK_AFFILIATE } from "../helper";
-// import "../App.css"
 
 export default function Home() {
   const { height, width } = useWindowDimensions();

@@ -234,11 +234,8 @@ function ProductSalePage({ initialShop }) {
   }, [shopId]);
 
   useEffect(() => {
-    if (live === "LIVE") {
-      fetchLiveStock();
-    } else {
+    
       fetchStock();
-    }
   }, [liveId, shopId, page, live, isInStock]);
 
   // get shop data
@@ -261,61 +258,61 @@ function ProductSalePage({ initialShop }) {
   }, [loadExchangeRate?.exchangeRate]);
 
   // ດືງສິນຄ້າທັງໝົດໃນ live
-  const fetchLiveStock = async () => {
-    try {
-      let _where = {
-        shop: shopId,
-        isDeleted: false,
-        live: liveId,
-        isPublished: true,
-      };
+  // const fetchLiveStock = async () => {
+  //   try {
+  //     let _where = {
+  //       shop: shopId,
+  //       isDeleted: false,
+  //       live: liveId,
+  //       isPublished: true,
+  //     };
 
-      if (isInStock === 1)
-        _where = {
-          ..._where,
-          amount: isInStock,
-        };
-      else {
-        _where = { ..._where };
-      }
-      const message = await getLiveStockData({
-        variables: {
-          // orderBy: "createBy_DESC",
-          skip: page * rowsPerPage,
-          limit: rowsPerPage,
-          where: {
-            shop: shopId,
-            isDeleted: false,
-            live: liveId,
-            isPublished: true,
-          },
-        },
-      });
+  //     if (isInStock === 1)
+  //       _where = {
+  //         ..._where,
+  //         amount: isInStock,
+  //       };
+  //     else {
+  //       _where = { ..._where };
+  //     }
+  //     const message = await getLiveStockData({
+  //       variables: {
+  //         // orderBy: "createBy_DESC",
+  //         skip: page * rowsPerPage,
+  //         limit: rowsPerPage,
+  //         where: {
+  //           shop: shopId,
+  //           isDeleted: false,
+  //           live: liveId,
+  //           isPublished: true,
+  //         },
+  //       },
+  //     });
 
-      const converntFieldInStock = message?.data?.salePageLiveStocks?.data?.map(
-        (stock) => {
-          const _newStock = stock?.stock;
-          return {
-            id: stock?.id,
-            stock: _newStock?.id,
-            price: _newStock?.price,
-            amount: stock?.amount,
-            unit: _newStock?.unit,
-            cfMessage: stock?.cfMessage,
-            note: stock?.note,
-            currency: _newStock?.currency,
-            image: _newStock?.image,
-            name: _newStock?.name,
-          };
-        }
-      );
+  //     const converntFieldInStock = message?.data?.salePageLiveStocks?.data?.map(
+  //       (stock) => {
+  //         const _newStock = stock?.stock;
+  //         return {
+  //           id: stock?.id,
+  //           stock: _newStock?.id,
+  //           price: _newStock?.price,
+  //           amount: stock?.amount,
+  //           unit: _newStock?.unit,
+  //           cfMessage: stock?.cfMessage,
+  //           note: stock?.note,
+  //           currency: _newStock?.currency,
+  //           image: _newStock?.image,
+  //           name: _newStock?.name,
+  //         };
+  //       }
+  //     );
 
-      setProductsLists(converntFieldInStock);
-      setProductTotal(message?.data?.salePageLiveStocks?.total);
-    } catch (error) {
-      console.log("Error fetching live stock:", error);
-    }
-  };
+  //     setProductsLists(converntFieldInStock);
+  //     setProductTotal(message?.data?.salePageLiveStocks?.total);
+  //   } catch (error) {
+  //     console.log("Error fetching live stock:", error);
+  //   }
+  // };
 
   // ດືງສິນຄ້າທັງໝົດໃນຮ້ານ
   const fetchStock = async () => {
@@ -743,7 +740,8 @@ function ProductSalePage({ initialShop }) {
     )}`;
 
     // Open WhatsApp using the constructed URL.
-    window.open(whatsappUrl);
+    // window.open(whatsappUrl);
+    window.location.href = whatsappUrl;
   };
 
   const handleTrackOrderNow = () => {
@@ -821,7 +819,7 @@ function ProductSalePage({ initialShop }) {
 
       <div className="containerSalepage">
         <div className="cardItems">
-          {loadingLiveStock || loadingStock ? (
+          {(!productLists && loadingStock) ? (
             <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
           ) : (
             <Row

@@ -27,7 +27,6 @@ import {
 // import { config } from "@fortawesome/fontawesome-svg-core";
 import Head from "next/head";
 import Script from "next/script";
-// import "./App.css";
 import { DefaultSeo } from "next-seo";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from "nextjs-google-analytics";
