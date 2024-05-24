@@ -809,7 +809,7 @@ function ProductSalePage({ initialShop }) {
         handleIsStockZero={handleIsStockZero}
         handleIsStockThenZero={handleIsStockThenZero}
         hadleCartProducts={hadleCartProducts}
-      />
+      />  
 
       {/* Branner */}
       <SlideProduct shopId={shopId} />
