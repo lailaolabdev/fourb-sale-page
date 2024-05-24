@@ -58,84 +58,43 @@ function SlideProduct({ shopId }) {
     setAdverTisingData(adverTisings?.advertisements?.data);
   }, [adverTisings]);
 
+  console.log({advertisingdata})
+
+  if(!advertisingdata) return <div style={{height:70}} />;
+
   return (
     <>
-      <div>
-        {advertisingdata?.length <= 0 ? (
-          <Carousel
-            speed={400}
-            autoplay
-            style={{
-              marginTop: "4.6em",
-              height: width > 700 ? "30em" : "auto",
-              overflow: "hidden",
-            }}
-          >
-            {imageLists?.map((emptyData, index) => (
-              <div key={index}>
-                <div
+        <Carousel
+          speed={400}
+          autoplay
+          style={{
+            marginTop: "4.6em",
+            height: width > 700 ? "30em" : "auto",
+            overflow: "hidden",
+          }}
+        >
+          {advertisingdata?.map((emptyData, index) => (
+            <div key={index}>
+              <div
+                style={{
+                  height: width < 700 ? "18em" : "auto",
+                  width: "100%",
+                }}
+              >
+                <img
+                  src={S3_URL + emptyData?.image}
                   style={{
-                    height: width < 700 ? "18em" : "auto",
+                    height: "100%",
                     width: "100%",
+                    objectFit: "cover",
                   }}
-                >
-                  <img
-                    src={emptyData?.image}
-                    style={{
-                      height: "100%",
-                      width: "100%",
-                      objectFit: "cover",
-                    }}
-                    alt="emptyImage"
-                  />
-                </div>
+                  alt="emptyImage"
+                />
               </div>
-            ))}
-          </Carousel>
-        ) : (
-          <>
-            {!advertisingdata && loadingAdvertisings ? (
-              <div style={{ fontSize: "4em" }}>loading...</div>
-            ) : (
-              <>
-                <Carousel
-                  speed={400}
-                  autoplay
-                  style={{
-                    marginTop: "4.6em",
-                    height: width > 700 ? "22em" : "auto",
-                    overflow: "hidden",
-                  }}
-                >
-                  <>
-                    {advertisingdata.map((emptyData, index) => (
-                      <div key={index}>
-                        <div
-                          style={{
-                            height: width < 700 ? "15em" : "auto",
-                            width: "100%",
-                          }}
-                        >
-                          <img
-                            // src={emptyData?.image}
-                            src={S3_URL + emptyData?.image}
-                            style={{
-                              height: "100%",
-                              width: "100%",
-                              objectFit: "cover",
-                            }}
-                            alt="emptyImage"
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </>
-                </Carousel>
-              </>
-            )}
-          </>
-        )}
-      </div>
+            </div>
+          ))}
+        </Carousel>
+     
     </>
   );
 
