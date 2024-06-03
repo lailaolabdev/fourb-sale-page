@@ -1,19 +1,87 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaRegUserCircle, FaSearch, FaShoppingCart } from "react-icons/fa";
-import { IoIosArrowForward } from "react-icons/io";
-import { IoNotifications } from "react-icons/io5";
-import { RiListCheck3, RiListIndefinite } from "react-icons/ri";
+import { IoIosArrowForward, IoLogoWhatsapp } from "react-icons/io";
+import { IoClose, IoNotifications } from "react-icons/io5";
+import { RiListCheck3, RiListIndefinite, RiMenu2Fill } from "react-icons/ri";
 import { TbPhoneCall } from "react-icons/tb";
 import { TiShoppingCart } from "react-icons/ti";
 import { motion } from "framer-motion";
 import CartRight from "./CartRight";
 import { useRouter } from "next/router";
+import { useDispatch, useSelector } from "react-redux";
+import useWindowDimensions from "@/helper/useWindowDimensions";
+import { SiGooglemessages } from "react-icons/si";
+import { BiMessageRounded } from "react-icons/bi";
+import { MdOutlineEmail } from "react-icons/md";
+import { Menubar } from "primereact/menubar";
+import { SlInfo, SlMenu } from "react-icons/sl";
+import { AiOutlineClose } from "react-icons/ai";
+import { PiCursorClickLight } from "react-icons/pi";
+import { getSearchs } from "@/redux/notiorder/getNotiorder";
 
-export default function CustomNavbar({ setIsStock }) {
-  const [isShowRing, setIsShowRing] = useState(false);
+
+
+export default function CustomNavbar() {
   const navigate = useRouter();
+  // const {
+  //   liveId,
+  //   live,
+  //   affiliateId,
+  //   id,
+  //   shopForAffiliateId,
+  //   commissionForShopId,
+  // } = navigate.query;
+  // const shopId = id;
 
+  const [isShowRing, setIsShowRing] = useState(false);
   const parentDivRef = useRef(null);
+  const [dataBage, setDataBage] = useState(0);
+  const [isCall, setIsCall] = useState(false);
+  const [filterData, setFilterData] = useState();
+  const [showMenu, setShowMenu] = useState(false);
+  const [keyPatch, setKeyPatch] = useState();
+  const dispatch = useDispatch()
+
+  const { height, width } = useWindowDimensions();
+
+  const { cartList } = useSelector((state) => state?.salepage);
+  const { patchBack } = useSelector((state) => state?.setpatch);
+  const shopId = patchBack?.id;
+
+
+  // const defaultKey = localStorage.getItem("PATCH_KEY")
+  useEffect(() => {
+    const _data = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    if (_data) {
+      setKeyPatch(_data);
+    }
+  }, []);
+
+  useEffect(() => {
+      const _checkdatas = cartList.filter(
+        (item) => item?.shop === patchBack?.id
+      );
+      if(_checkdatas) {
+        const totalQty = cartList.reduce((acc, data) => {
+          return acc + data?.qty;
+        }, 0);
+    console.log("totalQty:---->", { totalQty });
+
+        setDataBage(totalQty);
+      }
+   
+  }, [cartList, patchBack]);
+
+  // useEffect(() => {
+  //   if (patchBack?.id) {
+  //     const _checkdatas = cartList.filter(
+  //       (item) => item?.shop === patchBack?.id
+  //     );
+  //     setCartDatas(_checkdatas);
+  //     console.log("checkDtas:-------->", _checkdatas);
+  //   }
+  // }, [patchBack, cartList]);
+
 
   useEffect(() => {
     // Event listener for clicks outside the parent div
@@ -35,6 +103,85 @@ export default function CustomNavbar({ setIsStock }) {
     };
   }, []);
 
+  const onChangeFillter = (e) => {
+    if (e.key === "Enter") {
+      let _data = e?.target?.value;
+    navigate.push(`../search?search_key=${_data}`)
+      // dispatch(getSearchs(_data))
+      // setFilterNew(_data);
+      // localStorage.setItem("DATA_FILTER", _data);
+      // setFilterData(_data);
+    }
+  };
+
+  // const ()=> navigate.push("../cartdetail") = () => {
+  //   let idPreState = {
+  //     shopId: shopId,
+  //     affiliateId: affiliateId,
+  //   };
+
+  //   if (commissionForShopId) {
+  //     idPreState = {
+  //       ...idPreState,
+  //       commissionForShopId: commissionForShopId,
+  //     };
+  //   }
+
+  //   const myPatch =
+  //     idPreState.shopId &&
+  //     idPreState.affiliateId &&
+  //     idPreState.commissionForShopId
+  //       ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
+  //       : idPreState.shopId && idPreState.affiliateId
+  //       ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+  //       : `../cartdetail/${idPreState?.shopId}`;
+
+  //   navigate.push(myPatch);
+  // };
+
+  const menuSmScreen = [
+    {
+      title: "ໜ້າຫລັກ",
+      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      url: `../shoping/${shopId}`
+    },
+    {
+      title: "ກ໋ຽວກັບ",
+      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      url: "../about-us"
+    },
+    {
+      title: "ຕິດຕໍ່ພວກເຮົາ",
+      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      url: "../contact-us"
+    },
+    // {
+    //   title: "ຕິດຕາມອໍເດີ້",
+    //   icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+    //   url: "/"
+  
+    // },
+    {
+      title: "ປະຫວັດການຊື້",
+      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      url: "../history"
+  
+    },
+    {
+      title: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
+      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      url: "/"
+       
+    },
+    
+    // {
+    //   title: "ເງື່ອນໄຂ ແລະ ຂໍ້ກຳນົດ",
+    //   icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+    //   url: "/"
+  
+    // },
+  ];
+
   return (
     <>
       <div className="nav-calling">
@@ -46,22 +193,33 @@ export default function CustomNavbar({ setIsStock }) {
         </p>
       </div>
       <div className="nav-top">
-        <div className="nav-main">
-          <div className="nav-logo">
-            <img
-              src="/assets/images/mainLogo2.png"
-              style={{ maxWidth: 100, width: 90 }}
-            />
-            <div>
-              <h3>ໂຟບີ </h3>
-              <p>FOR BUSINESS</p>
+        <div
+          className="nav-main"
+          style={{ padding: width > 800 ? "0" : ".75em" }}
+        >
+          {width > 800 && (
+            <div className="nav-logo">
+              <img
+                src="/assets/images/mainLogo2.png"
+                style={{ maxWidth: 100, width: 90 }}
+              />
+              <div>
+                <h3>ໂຟບີ </h3>
+                <p>FOR BUSINESS</p>
+              </div>
             </div>
-          </div>
+          )}
 
-          <div className="nav-form-control">
+          <div
+            className="nav-form-control"
+            style={{ width: width > 800 ? "45%" : "100%" }}
+          >
             <input
               type="text"
-              placeholder="ປ້ອນຂໍ້ມູນ ເພື່ອຄົ້ນຫາສິນຄ້າຂອງທ່ານ..."
+              placeholder="ຊອກຫາສິນຄ້າທີ່ທ່ານມັກ..."
+              // value={filterData}
+              onKeyDown={onChangeFillter}
+              // onChange={(e) => setFilterData(e.target.value)}
             />
 
             <div className="icon-search">
@@ -69,97 +227,280 @@ export default function CustomNavbar({ setIsStock }) {
             </div>
           </div>
 
-          <div className="nav-notication">
-            <div>
-              <IoNotifications />
-              <p>ແຈ້ງການ</p>
+          {width > 800 && (
+            <div className="nav-notication">
+              <div>
+                <IoNotifications />
+                <p>ແຈ້ງການ</p>
+              </div>
+              <div onClick={() => navigate.push("../cartdetail")}>
+                <TiShoppingCart style={{ fontSize: 25 }} />
+                <p>ກະຕ່າສິນຄ້າ</p>
+                <span>{dataBage ?? 0}</span>
+              </div>
+              <div>
+                <FaRegUserCircle />
+                <p>ໂປຣຟາຍ</p>
+              </div>
             </div>
-            <div onClick={() => navigate.push("/cartdetail")}>
-              <TiShoppingCart style={{ fontSize: 25 }} />
-              <p>ກະຕ່າສິນຄ້າ</p>
-              <span>5</span>
-            </div>
-            <div>
-              <FaRegUserCircle />
-              <p>ໂປຣຟາຍ</p>
-            </div>
-          </div>
+          )}
         </div>
 
-        <div className="nav-menu">
-          <div className="menu-list">
-            <li ref={parentDivRef} onClick={() => setIsShowRing(!isShowRing)}>
-              <span>ສະແດງ ສິນຄ້າ</span>
-              <span>
-                <IoIosArrowForward />
-              </span>
-            </li>
+        {width > 800 ? (
+          <div className="nav-menu">
+            <div className="menu-list">
+              <li ref={parentDivRef} onClick={() => setIsShowRing(!isShowRing)}>
+                <span>ສະແດງ ສິນຄ້າ</span>
+                <span>
+                  <IoIosArrowForward />
+                </span>
+              </li>
 
-            <li onClick={() => navigate.push("/")}>ໜ້າຫຼັກ</li>
-            <li>ກ່ຽວກັບພວກເຮົາ</li>
-            <li>ຕິດຕໍ່ພວກເຮົາ</li>
-            <li>ຕິດຕາມອໍເດີ້</li>
+              <li onClick={()=> navigate.push(`../shoping/${shopId}`)}>ໜ້າຫລັກ</li>
+              <li onClick={()=> navigate.push("../about-us")}>ກ່ຽວກັບ</li>
+              <li onClick={() => navigate.push("../contact-us")}>
+                ຕິດຕໍ່ພວກເຮົາ
+              </li>
+              <li onClick={()=> navigate.push("../history")}>ປະຫວັດການຊື້</li>
 
-            {isShowRing && (
-              <motion.div
-                variants={container}
-                initial="hidden"
-                animate="visible"
-                className="card-show-products"
-                onClick={(e) => e.stopPropagation()}
+              {isShowRing && (
+                <motion.div
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 15 }}
+                  className="card-show-products"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="arrow-item" />
+                  <motion.div
+                    variants={{ y: 0, opacity: 0 }}
+                    initial={{ y: 0, opacity: 1 }}
+                    onClick={() => {
+                      navigate.push(`../search?stocks=${1}`)
+                      setIsShowRing(false);
+                    }}
+                    className="item"
+                  >
+                    <span>
+                      <RiListCheck3 style={{ fontSize: 20 }} />
+                    </span>
+                    <span>ສິນຄ້າທີ່ຍັງມີສະຕ໋ອກ</span>
+                  </motion.div>
+                  <motion.div
+                    variants={{ y: 0, opacity: 0 }}
+                    initial={{ y: 0, opacity: 1 }}
+                    onClick={() => {
+                      navigate.push(`../search?stocks=${0}`)
+                      setIsShowRing(false);
+                    }}
+                    className="item"
+                  >
+                    <span>
+                      <RiListIndefinite style={{ fontSize: 20 }} />
+                    </span>
+                    <span>ສິນຄ້າທັງໝົດໃນສະຕ໋ອກ</span>
+                  </motion.div>
+                  <hr />
+                  <span
+                    style={{
+                      fontSize: 10,
+                      textAlign: "center",
+                      marginTop: "-.5em",
+                      color: "gray",
+                    }}
+                  >
+                    ສະແດງສິນຄ້າທີ່ມີຈຳນວນ ຫຼື ສິນຄ້າທີ່ໝົດສະຕ໋ອກແລ້ວ
+                  </span>
+                </motion.div>
+              )}
+            </div>
+
+            <div className="menu-list">
+              <li>ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</li>
+              {/* <li>ຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂ</li> */}
+            </div>
+          </div>
+        ) : (
+          <div className="nav-menu">
+            <div className="menu-list">
+              <li
+                ref={parentDivRef}
+                onClick={() => {
+                  setShowMenu(false);
+                  setIsShowRing(!isShowRing);
+                }}
               >
-                <div className="arrow-item" />
+                <span>ສະແດງ ສິນຄ້າ</span>
+                <span>
+                  <IoIosArrowForward />
+                </span>
+              </li>
+
+              {isShowRing && (
                 <motion.div
-                  variants={{ y: 0, opacity: 0 }}
-                  initial={{ y: 0, opacity: 1 }}
-                  onClick={() => {
-                    setIsStock(1);
-                    setIsShowRing(false);
-                  }}
-                  className="item"
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 15 }}
+                  className="card-show-products"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <span>
-                    <RiListCheck3 style={{ fontSize: 20 }} />
+                  <div className="arrow-item" />
+                  <motion.div
+                    variants={{ y: 0, opacity: 0 }}
+                    initial={{ y: 0, opacity: 1 }}
+                    onClick={() => {
+                      navigate.push(`../search?stocks=${1}`)
+                      setIsShowRing(false);
+                    }}
+                    className="item"
+                  >
+                    <span>
+                      <RiListCheck3 style={{ fontSize: 20 }} />
+                    </span>
+                    <span>ສິນຄ້າທີ່ຍັງມີສະຕ໋ອກ</span>
+                  </motion.div>
+                  <motion.div
+                    variants={{ y: 0, opacity: 0 }}
+                    initial={{ y: 0, opacity: 1 }}
+                    onClick={() => {
+                      navigate.push(`../search?stocks=${0}`)
+                      setIsShowRing(false);
+                    }}
+                    className="item"
+                  >
+                    <span>
+                      <RiListIndefinite style={{ fontSize: 20 }} />
+                    </span>
+                    <span>ສິນຄ້າທັງໝົດໃນສະຕ໋ອກ</span>
+                  </motion.div>
+                  <hr />
+                  <span
+                    style={{
+                      fontSize: 10,
+                      textAlign: "center",
+                      marginTop: "-.5em",
+                      color: "gray",
+                    }}
+                  >
+                    ສະແດງສິນຄ້າທີ່ມີຈຳນວນ ຫຼື ສິນຄ້າທີ່ໝົດສະຕ໋ອກແລ້ວ
                   </span>
-                  <span>ສິນຄ້າທີ່ຍັງມີສະຕ໋ອກ</span>
                 </motion.div>
-                <motion.div
-                  variants={{ y: 0, opacity: 0 }}
-                  initial={{ y: 0, opacity: 1 }}
-                  onClick={() => {
-                    setIsStock(0);
-                    setIsShowRing(false);
-                  }}
-                  className="item"
-                >
-                  <span>
-                    <RiListIndefinite style={{ fontSize: 20 }} />
-                  </span>
-                  <span>ສິນຄ້າທັງໝົດໃນສະຕ໋ອກ</span>
-                </motion.div>
-                <hr />
+              )}
+            </div>
+
+            <div className="menu-list">
+              <li onClick={() => navigate.push("../cartdetail")}>
+                <TiShoppingCart style={{ fontSize: 23 }} />
                 <span
                   style={{
-                    fontSize: 10,
-                    textAlign: "center",
-                    marginTop: "-.5em",
-                    color: "gray",
+                    position: "absolute",
+                    top: 2,
+                    right: "5em",
+                    fontSize: 11,
+                    background: "red",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: 17,
+                    height: 17,
+                    borderRadius: "50em",
+                    color: "#fff",
                   }}
                 >
-                  ສະແດງສິນຄ້າທີ່ມີຈຳນວນ ຫຼື ສິນຄ້າທີ່ໝົດສະຕ໋ອກແລ້ວ
+                  {dataBage ?? 0}
                 </span>
-              </motion.div>
-            )}
-          </div>
+              </li>
+              <li onClick={() => setShowMenu(!showMenu)}>
+                {!showMenu ? <SlMenu /> : <AiOutlineClose />}
+              </li>
+            </div>
 
-          <div className="menu-list">
-            <li>ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</li>
-            <li>ຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂ</li>
+            {showMenu && (
+              <motion.div
+                // style={{
+                //   height: "height 2s",
+                //   transition: showMenu ? "500px" : ""
+                // }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 4, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                className="menu-sm-screen"
+              >
+                <div onClick={() => setShowMenu(false)}>
+                  {menuSmScreen.map((menu, idex) => {
+                    return (
+                      <motion.li
+                        initial={{ opacity: 0, scale: 1 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.15 * idex }}
+                        key={idex}
+                        onClick={() => navigate.push(menu?.url)}
+                      >
+                        {menu?.icon}
+                        {menu?.title}
+                      </motion.li>
+                    );
+                  })}
+                </div>
+                {/* <div className="d-flex" style={{background:'#f2f2f2'}}>
+                  <img
+                    src="/assets/images/mainLogo2.png"
+                    style={{ maxWidth: 100, width: 70 }}
+                  />
+                  <div style={{marginLeft: '-1.5em', paddingTop:26}} className="d-flex flex-column justify-conten-cent align-items-start ">
+                    <p><b>ໂຟບີ</b> </p>
+                    <small style={{fontSize:10}}>FOR BUSINESS</small>
+                  </div>
+                </div> */}
+              </motion.div>
+            )}  
           </div>
-        </div>
+        )}
       </div>
 
       {/* <CartRight /> */}
+
+      <div className="card-contact-shop" onClick={() => setIsCall(!isCall)}>
+        {isCall ? (
+          <IoClose style={{ fontSize: 28 }} />
+        ) : (
+          <SiGooglemessages style={{ fontSize: 28 }} />
+        )}
+
+        {isCall && (
+          <div
+            className="info-call"
+            style={{
+              width: isCall ? "auto" : 0,
+              overflow: isCall ? "" : "hidden",
+              marginLeft: isCall ? "4em" : 0,
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
+            >
+              <IoLogoWhatsapp />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+            >
+              <BiMessageRounded />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              <MdOutlineEmail />
+            </motion.div>
+          </div>
+        )}
+      </div>
     </>
   );
 }

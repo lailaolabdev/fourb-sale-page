@@ -1,0 +1,63 @@
+/* Pagination.css */
+:root {
+    --colorMain: linear-gradient(23deg,
+            rgba(47, 110, 163, 1) 0%,
+            rgba(90, 81, 160, 1) 58%);
+    --colorWhite: #fff;
+    --colorShadow: #f2f2f2;
+    --colorText: #0c3763bb;
+    --colorBorder: #ddd;
+    --colorBlack: #000;
+    --colorGray: #dee2e6;
+    --colorPurple: #1b45b7;
+    --hover: #f5f5f575;
+    --hover2: rgba(47, 110, 163, 1);
+    --boxShadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    --boxShadowItem: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    --colorRed: #e31f1f;
+}
+
+
+.card-pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  justify-content: center;
+
+  .page-item {
+    margin: 0 2px;
+
+    &.disabled .page-link {
+      cursor: not-allowed;
+      opacity: 0.5;
+      background-color: var(--colorGray);
+      border: 1px solid var(--colorGray);
+      border: none;
+    }
+
+    &.active .page-link {
+      background-color: white;
+      color: var(--colorText);
+      border: 1px solid var(--colorText);
+      font-weight: bold;
+    }
+
+    & .page-link {
+      display: block;
+      padding: 6px 10px;
+      color: #333;
+      background-color: var(--colorWhite);
+      border: 1px solid var(--colorGray);
+      border-radius: 5px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s, color 0.3s, border 0.3s;
+      font-size: 13px;
+
+      &:hover {
+        background-color: var(--hover);
+      }
+    }
+  }
+}

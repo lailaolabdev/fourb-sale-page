@@ -4,8 +4,8 @@ export const CORLOR_WHITE = "#FFF";
 export const COLOR_TEXT = "rgba(47,110,163,1)";
 
 export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/resized/small/";
-export const S3_URL_MEDIUM = "https://lailaocf-bucket.s3.amazonaws.com/files/medium";
-export const S3_URL_LARGE = "https://lailaocf-bucket.s3.amazonaws.com/files/large";
+export const S3_URL_MEDIUM = "https://lailaocf-bucket.s3.amazonaws.com/resized/medium";
+export const S3_URL_LARGE = "https://lailaocf-bucket.s3.amazonaws.com/resized/large";
 
 export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";

@@ -1,13 +1,17 @@
-import { CORLOR_APP } from '../../helper';
-import React from 'react'
+import { CORLOR_APP } from "../../helper";
+import React from "react";
 import { Pagination, Row, Col } from "react-bootstrap";
+import {
+  IoIosArrowDropleftCircle,
+  IoIosArrowDroprightCircle,
+} from "react-icons/io";
 
 export default function PaginationComponent({
   count = 0,
-  page = 0, 
+  page = 0,
   rowsPerPage = 10,
   pageAll = 1,
-  onPageChange, 
+  onPageChange,
 }) {
   const pagesToDisplay = 5; // Number of pages to display around the current page
   const halfPagesToDisplay = Math.floor(pagesToDisplay / 2);
@@ -27,7 +31,11 @@ export default function PaginationComponent({
         pageNumbers.push(i);
       }
     } else {
-      for (let i = page - halfPagesToDisplay; i <= page + halfPagesToDisplay; i++) {
+      for (
+        let i = page - halfPagesToDisplay;
+        i <= page + halfPagesToDisplay;
+        i++
+      ) {
         pageNumbers.push(i);
       }
     }
@@ -41,26 +49,30 @@ export default function PaginationComponent({
           ສະແດງ {page * rowsPerPage + 1}-{Math.min((page + 1) * rowsPerPage, count)} ຈາກ {count} ລາຍການ
         </div>
       </Col> */}
-      <Col xs={12} style={{ display: "flex", justifyContent: "center", }}>
+      <Col xs={12} style={{ display: "flex", justifyContent: "center" }}>
         <Pagination>
           <Pagination.Prev
             disabled={page === 0}
             onClick={() => onPageChange(page - 1)}
-          >ຍ້ອນກັບ</Pagination.Prev>
+          >
+            <IoIosArrowDropleftCircle />
+          </Pagination.Prev>
           {getPageNumbers().map((pageNumber) => (
             <Pagination.Item
-            style={{background:CORLOR_APP}}
+              style={{ background: CORLOR_APP }}
               active={pageNumber === page}
               key={pageNumber}
-              onClick={() => onPageChange(pageNumber)}>
+              onClick={() => onPageChange(pageNumber)}
+            >
               {pageNumber + 1}
             </Pagination.Item>
           ))}
           <Pagination.Next
             disabled={page === pageAll - 1}
             onClick={() => onPageChange(page + 1)}
-          >ຖັດໄປ</Pagination.Next>
-           
+          >
+            <IoIosArrowDroprightCircle />
+          </Pagination.Next>
         </Pagination>
       </Col>
     </Row>

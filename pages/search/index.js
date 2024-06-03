@@ -39,11 +39,8 @@ import { encode as base64Encode } from "js-base64";
 import { MdArrowBackIos } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
 import { Paginator } from "primereact/paginator";
-import { getKeyPatch } from "@/redux/setPatch/patchBack";
-import useWindowDimensions from "@/helper/useWindowDimensions";
-import { Rating } from "primereact/rating";
 
-function ShopingStore({ initialShop }) {
+function SearchProduct({ initialShop }) {
   const router = useRouter();
   const {
     liveId,
@@ -52,10 +49,12 @@ function ShopingStore({ initialShop }) {
     id,
     shopForAffiliateId,
     commissionForShopId,
+    search_key,
+    stocks
   } = router.query;
-  const shopId = id;
 
-  const { height, width } = useWindowDimensions();
+ 
+  console.log("query:---->", router);
 
   const itemsPerPage = 30;
   const [isOpenView, setIsOpenView] = useState(false);
@@ -67,10 +66,13 @@ function ShopingStore({ initialShop }) {
   const [isStock, setIsStock] = useState(1);
   const [filterNew, setFilterNew] = useState();
   const toast = useRef(null);
+  const { patchBack } = useSelector((state) => state?.setpatch);
+  const shopId = patchBack?.id;
+
+  console.log({patchBack})
+
 
   const dispatch = useDispatch();
-
-  console.log({productLists})
 
   const [getStocksGeneral, { data: stockData, loading: loadingStock }] =
     useLazyQuery(GET_STOCKS, {
@@ -108,6 +110,8 @@ function ShopingStore({ initialShop }) {
     }
   };
 
+  
+
   const totalPages = Math.ceil(productTotal / itemsPerPage);
 
   const handlePageChange = useCallback((newPage) => {
@@ -120,11 +124,6 @@ function ShopingStore({ initialShop }) {
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
-  // get patch key to localstorage
-  useEffect(() => {
-    localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
-     dispatch(getKeyPatch(router?.query));
-  }, [shopId]);
 
   useEffect(() => {
     getShopCommissionFor({
@@ -145,7 +144,7 @@ function ShopingStore({ initialShop }) {
 
   useEffect(() => {
     fetchStock();
-  }, [liveId, shopId, currentPage, live, isStock, filterNew]);
+  }, [liveId, shopId, currentPage, live, stocks, search_key]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -200,17 +199,19 @@ function ShopingStore({ initialShop }) {
         isUsingSalePage: true,
       };
 
-      if (filterNew !== "") {
+      if (search_key !== "") {
         _where = {
           ..._where,
-          searchKeyWord: filterNew,
+          searchKeyWord: search_key,
         };
       }
 
-      if (isStock) {
+      console.log("check_type:::", typeof(stocks))
+
+      if (stocks) {
         _where = {
           ..._where,
-          amount: isStock,
+          amount: parseFloat(stocks),
         };
       }
 
@@ -363,95 +364,15 @@ function ShopingStore({ initialShop }) {
         />
       </Head>
 
-      <CustomNavbar setIsStock={setIsStock} setFilterNew={setFilterNew} />
-
-      {/* <div className="d-flex gap-4">
-      </div> */}
-      <SwiperComponent  shopDetail={shopDetail} />
-
-      <div className="p-3">
-        <p style={{ paddingTop: 10, fontWeight: "bold", fontSize: 15 }}>
-          ປະເພດສິນຄ້າ
-        </p>
-
-        <div className="card-review-category">
-          <button className="btn-back-scroll" onClick={scrollLeft}>
-            <MdArrowBackIos />
-          </button>
-          <div
-            className="scrolling"
-            ref={scrollContainerRef}
-            style={{
-              overflowX: "auto",
-              width: "100%",
-              scrollBehavior: "smooth",
-            }}
-          >
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ໄຟຟ້າ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຟີນີເຈີ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເສື້ອຜ້າ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ອາຫານ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ຫ້ອງການ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ຫ້ອງການ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ຫ້ອງການ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ຫ້ອງການ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ຫ້ອງການ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ຫ້ອງການ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ຫ້ອງການ</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>ເຄື່ອງໃຊ້ຫ້ອງການ</span>
-            </div>
-          </div>
-          <button className="btn-next-scroll" onClick={scrollRight}>
-            <GrNext />
-          </button>
-        </div>
-      </div>
+      <CustomNavbar />
 
       <div className="container-contents">
         <h5>
-          <b>ຜະລິດຕະພັນຍອດນິຍົມສໍາລັບການຊື້ເຄື່ອງປະຈໍາວັນ</b>{" "}
+          <b>{productLists?.length > 0 ? `ຜະລິດຕະພັນຍອດນິຍົມສໍາລັບການຊື້ເຄື່ອງປະຈໍາວັນ`: `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}</b>
         </h5>
-        <p style={{ fontSize: 13, textAlign: "center" }}>
-          ເບິ່ງສິນຄ້າຍອດນິຍົມທັງໝົດຂອງພວກເຮົາໃນອາທິດນີ້.
-          ທ່ານສາມາດເລືອກຜະລິດຕະພັນຄວາມຕ້ອງການປະຈໍາວັນຂອງທ່ານຈາກບັນຊີລາຍຊື່ນີ້ແລະໄດ້ຮັບຂໍ້ສະເຫນີພິເສດບາງຢ່າງທີ່ມີການຂົນສົ່ງຟຣີ.
-        </p>
         
-            <div className="card-items">
+
+        <div className="card-items">
               {!stockData && loadingStock ? (
                 <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
               ) : (
@@ -473,7 +394,7 @@ function ShopingStore({ initialShop }) {
                         className="box-shoping"
                         onClick={(e) => e.stopPropagation()}
                       >
-                        <h3>{item?.name}</h3>
+                        <h3>{item?.name} It is a long established fact that a reader will be distracted by the readable content of a page</h3>
 
                         <div className="btn-price-add">
                           <div>
@@ -500,15 +421,14 @@ function ShopingStore({ initialShop }) {
                 </>
               )}
             </div>
-            <div className="pt-1 d-flex justify-content-end align-items-end w-100">
-              <Paginator
-                first={currentPage}
-                rows={itemsPerPage}
-                totalRecords={productTotal}
-                onPageChange={handlePageChange}
-              />
-            </div>
-       
+       {productLists?.length > 0 && <div className="pt-1 d-flex justify-content-end align-items-end w-100">
+          <Paginator
+            first={currentPage}
+            rows={itemsPerPage}
+            totalRecords={productTotal}
+            onPageChange={handlePageChange}
+          />
+        </div>}
       </div>
 
       <FooterComponent />
@@ -558,4 +478,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default ShopingStore;
+export default SearchProduct;

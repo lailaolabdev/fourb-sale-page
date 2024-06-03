@@ -8,8 +8,9 @@ import "../styles/globals.css";
 
 import "../styles/styleSalePage.css";
 import "../styles/index.scss"; 
-import "../styles/app.css"; 
 import "../styles/_customstyle.scss"
+import "../styles/app.css"; 
+import "../styles/pagination.css"; 
 
 
 
@@ -48,7 +49,7 @@ import { S3_URL, SERVER_URI, SOCKET_SERVER_URI } from "../helper";
 import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "react-toast-notifications";
 // import HeaderSalePage from "../components/salePage/HeaderSalePage";
-import NavbarComponent from "../components/salePage/NavbarComponent";
+// import NavbarComponent from "../components/salePage/NavbarComponent";
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 

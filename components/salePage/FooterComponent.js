@@ -12,11 +12,6 @@ export default function FooterComponent() {
 
   return (
     <div className="footer-sale-page">
-      <div className="card-slo-can">
-        <Marquee speed={60} className="my-marquee">
-          <h1>"ໃຫ້ການຂາຍອອນລາຍ ເປັນເລື່ອງງ່າຍດ້ວຍ 4B"</h1>
-        </Marquee>
-      </div>
       <div
         className="footer-first"
         style={{ padding: width > 700 ? "1em 3em" : "1em" }}
@@ -57,7 +52,7 @@ export default function FooterComponent() {
           </div>
           <div>
             <p>
-              <b>ຟີເຈີີຂອງ 4B</b>
+              <b>ຟີເຈີຂອງ 4B</b>
             </p>
             <ul>
               <li

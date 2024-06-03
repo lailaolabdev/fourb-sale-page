@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { message } from "antd";
-import { toast } from "react-toastify";
 
 const initialState = {
   cartList: [],
@@ -15,23 +13,18 @@ const cartSlice = createSlice({
       const existingItem = state.cartList.find(
         (data) => data.id === product.id
       );
-
+    
       if (existingItem) {
-        if (product?.amount <= existingItem?.qty) {
-          
-          message.warning('ຈຳນວນສິນຄ້າໝົດແລ້ວ!')
-          return
-        }
-
-        existingItem.qty += 1;
-        message.success('ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ')
-        
+        // Check if newQuantity exists and add it to qty, else add 1
+        existingItem.qty += product.newQuantity ? product.newQuantity : 1;
       } else {
-        state.cartList.push({ ...product, qty: 1, modelType: action.payload.modelType || "LIVE" });
-         
-        message.success('ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ')
+        // If newQuantity exists, use it; otherwise, set qty to 1
+        state.cartList.push({ ...product, qty: product.newQuantity ? product.newQuantity : 1, modelType: action.payload.modelType || "LIVE" });
       }
+      // Uncomment the following line if you want to show a success message
+      // message.success('ເພິ່ມເຂົ້າກະຕ່າສຳເລັດແລ້ວ');
     },
+    
 
     // ລືບຈຳນວນສິນຄ້າທັງໝົດບາດດຽວ
     removeCartItem: (state, action) => {
@@ -43,11 +36,12 @@ const cartSlice = createSlice({
       state.cartList.splice(action.payload, 1);
     },
 
-    // ບວກຈຳນວນເທື່ອລະໜຶ່ງ
     incrementCartItem: (state, action) => {
-      state.cartList[action.payload].qty += 1 || 0;
+      const index = action.payload;
+      if (state.cartList[index] && state.cartList[index].qty < state.cartList[index].amount) {
+        state.cartList[index].qty += 1;
+      }
     },
-
     updateCartItemQuantity: (state, action) => {
       const { index, newQuantity } = action.payload;
       if (state.cartList[index]) {
