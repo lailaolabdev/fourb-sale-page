@@ -2,11 +2,8 @@ import Image from "next/image";
 // import mainLogo from "../images/mainLogo.png";
 import useWindowDimensions from "../helper/useWindowDimensions";
 import { LINK_AFFILIATE } from "../helper";
-<<<<<<< HEAD
-=======
 import CustomNavbar from "@/components/CustomNavbar";
 import CustomFooter from "@/components/CustomFooter";
->>>>>>> origin/design-ui-new
 
 export default function Home() {
   const { height, width } = useWindowDimensions();
