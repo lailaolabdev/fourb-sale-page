@@ -1,4 +1,5 @@
 import CustomNavbar from "@/components/CustomNavbar";
+import FooterComponent from "@/components/salePage/FooterComponent";
 import { OrganizationChart } from "primereact/organizationchart";
 import React, { useState } from "react";
 
@@ -40,9 +41,12 @@ export default function index() {
     <>
       <CustomNavbar />
       <div className="card-about-us">
-        <h4>ບໍລິສັດ 4B ໂຟບີ For Business</h4>
+        <img src="/assets/images/mainLogo2.png" style={{width:200, maxWidth:200,marginTop:'-2em'}} />
+        <h4 style={{marginTop:'-1.85em'}}>ບໍລິສັດ 4B ໂຟບີ For Business</h4>
+        <div style={{height:50}} />
         <OrganizationChart value={data} />
       </div>
+      <FooterComponent />
     </>
   );
 }

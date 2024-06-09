@@ -1,7 +1,7 @@
 import CustomNavbar from "@/components/CustomNavbar";
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { FaMinus, FaPlus, FaRegHeart } from "react-icons/fa";
 import { IoBagAddSharp, IoCloseSharp } from "react-icons/io5";
 import { useRouter } from "next/router";
 import { S3_URL, S3_URL_MEDIUM, numberFormat } from "@/helper";
@@ -20,6 +20,7 @@ import {
 } from "@/redux/salepage/cartReducer";
 import { Toast } from "primereact/toast";
 import { Fieldset } from "primereact/fieldset";
+import { formatNumberFavorite } from "@/const";
 
 const images = [
   {
@@ -69,33 +70,41 @@ export default function index() {
     }
   }, [router.query.item]);
 
-
   useEffect(() => {
     if (product?.containImages) {
       setPreviewImage(product?.containImages[0]);
     }
   }, [product?.containImages]);
+// add product to cart
+const onAddToCart = () => {
+  let productWithQuantity = {};
 
-  // add product to cart
-  const onAddToCart = () => {
-    let productWithQuantity = {};
-    if (quantity > 1) {
-      productWithQuantity = {
-        ...product,
-        shop: patchBack?.id,
-        newQuantity: quantity,
-      };
-    } else {
-      productWithQuantity = { ...product, shop: patchBack?.id };
-    }
-    console.log("productWithQuantity:----->", productWithQuantity);
-    dispatch(addCartItem(productWithQuantity));
-    toast.current.show({
-      severity: "success",
-      summary: "ສຳເລັດ",
-      detail: "ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າຂອງທ່ານແລ້ວ",
-    });
-  };
+  // Calculate the new price based on the reduction percentage
+  const reduction = product.reduction ?? 0;
+  const newPrice = product.price * reduction / 100;
+
+  if (quantity > 1) {
+    productWithQuantity = {
+      ...product,
+      shop: patchBack?.id,
+      newQuantity: quantity,
+      price: newPrice // Update the price with the reduced price
+    };
+  } else {
+    productWithQuantity = {
+      ...product,
+      shop: patchBack?.id,
+      price: newPrice // Update the price with the reduced price
+    };
+  }
+
+  dispatch(addCartItem(productWithQuantity));
+  toast.current.show({
+    severity: "success",
+    summary: "ສຳເລັດ",
+    detail: "ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າຂອງທ່ານແລ້ວ",
+  });
+};
 
   const incrementQuantity = () => {
     if (quantity >= product?.amount) {
@@ -116,8 +125,6 @@ export default function index() {
   };
 
 
-  console.log("product:-888--->", product);
-
   return (
     <>
       <Toast position="top-center" ref={toast} />
@@ -126,17 +133,17 @@ export default function index() {
        */}
       <div className="card-cart-products">
         <div className="bread-crumb">
-          <span onClick={() => router.back()}>Shoping</span>
+          <span onClick={() => router.back()}>ໜ້າຫລັກ</span>
           <RxSlash />
           <span>{product?.name}</span>
         </div>
         <div className="card-view">
           <div className="card-dailog-image">
             <div className="image-view">
-            <img
-                  src={S3_URL + previewImage}
-                  style={{ width: "100%", height: "100%" }}
-                />
+              <img
+                src={S3_URL + previewImage}
+                style={{ width: "100%", height: "100%" }}
+              />
               {/* <img src={S3_URL + product?.image} /> */}
               {/* {previewImage ? (
               
@@ -167,10 +174,23 @@ export default function index() {
           </div>
           <div className="card-dailog-content">
             <h3>{product?.name}</h3>
-            <p>Stock: {product?.amount}</p>
+            <p style={{color:'red', fontSize:23}}>ສ່ວນຫຼຸດ {product?.reduction}%</p>
             <p>{product?.note ?? "..."}</p>
 
-            <h4> ₭ {numberFormat(product?.price)}</h4>
+            <h4>
+              {" "}
+              ₭{" "}
+              {product?.reduction && (
+                <span
+                  style={{
+                     textDecoration:'line-through',
+                  }}
+                >
+                  {numberFormat(product?.price)}
+                </span>
+              )}{" - "}
+              <span>{numberFormat((product?.price * product?.reduction) / 100)}</span>
+            </h4>
             <br />
             <p>Color:</p>
             <select>
@@ -203,8 +223,17 @@ export default function index() {
                 <span>ເພິ່ມກະຕ່າ</span>
               </button>
             </div>
+            <br />
+            <div style={{ cursor: "pointer" }}>
+              <p>
+                <FaRegHeart style={{ fontSize: 18 }} />{" "}
+                Favorite ({formatNumberFavorite(product?.favorite)})
+              </p>
+            </div>
           </div>
         </div>
+
+       
 
         <div className="card-description-product">
           <div className="product-specifications">
@@ -216,13 +245,24 @@ export default function index() {
               </div>
             ))}
           </div>
-          <div className="product-specifications" >
+          <div className="product-specifications">
             <h4>ລາຍລະອຽດສິນຄ້າ</h4>
 
             {product?.descriptions.map((item, index) => (
-              <div style={{ flexDirection: "column", gap: 10,padding:"20px 0",display:'flex', justifyContent:'center',flexDirection:'column', alignItems:'center' }} key={index}>
+              <div
+                style={{
+                  flexDirection: "column",
+                  gap: 10,
+                  padding: "20px 0",
+                  display: "flex",
+                  justifyContent: "center",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+                key={index}
+              >
                 <p>{item?.title} title description</p>
-                <img style={{ width: "70%",  }} src={S3_URL + item?.image} />
+                {item?.image && <img style={{ width: "70%" }} src={S3_URL + item?.image} />}
               </div>
             ))}
           </div>

@@ -1,7 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import { FaRegUserCircle, FaSearch, FaShoppingCart } from "react-icons/fa";
-import { IoIosArrowForward, IoLogoWhatsapp } from "react-icons/io";
-import { IoClose, IoNotifications } from "react-icons/io5";
+import {
+  FaHistory,
+  FaRegUserCircle,
+  FaSearch,
+  FaShoppingCart,
+} from "react-icons/fa";
+import { IoIosArrowForward, IoLogoWhatsapp, IoMdLogIn } from "react-icons/io";
+import {
+  IoClose,
+  IoLogInOutline,
+  IoNotifications,
+  IoSettingsSharp,
+} from "react-icons/io5";
 import { RiListCheck3, RiListIndefinite, RiMenu2Fill } from "react-icons/ri";
 import { TbPhoneCall } from "react-icons/tb";
 import { TiShoppingCart } from "react-icons/ti";
@@ -18,29 +28,35 @@ import { SlInfo, SlMenu } from "react-icons/sl";
 import { AiOutlineClose } from "react-icons/ai";
 import { PiCursorClickLight } from "react-icons/pi";
 import { getSearchs } from "@/redux/notiorder/getNotiorder";
-
-
+import { Dialog } from "primereact/dialog";
+import SiginAccount from "./SiginAccount";
+import { Avatar } from "primereact/avatar";
+import { Sidebar } from "primereact/sidebar";
+import ProfileAccount from "./ProfileAccount";
+import { Menu } from "primereact/menu";
+import { HiOutlineLogout } from "react-icons/hi";
+import { ConfirmPopup } from "primereact/confirmpopup";
+import { Modal } from "react-bootstrap"
+import { googleLogout } from '@react-oauth/google';
 
 export default function CustomNavbar() {
   const navigate = useRouter();
-  // const {
-  //   liveId,
-  //   live,
-  //   affiliateId,
-  //   id,
-  //   shopForAffiliateId,
-  //   commissionForShopId,
-  // } = navigate.query;
-  // const shopId = id;
 
   const [isShowRing, setIsShowRing] = useState(false);
   const parentDivRef = useRef(null);
+  const buttonEl = useRef(null);
+
   const [dataBage, setDataBage] = useState(0);
   const [isCall, setIsCall] = useState(false);
   const [filterData, setFilterData] = useState();
   const [showMenu, setShowMenu] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
+  const [visibleRight, setVisibleRight] = useState(false);
   const [keyPatch, setKeyPatch] = useState();
-  const dispatch = useDispatch()
+  const [profileAccount, setProfileAccount] = useState();
+  const [clientData, setClientData] = useState();
+
+  const dispatch = useDispatch();
 
   const { height, width } = useWindowDimensions();
 
@@ -48,28 +64,39 @@ export default function CustomNavbar() {
   const { patchBack } = useSelector((state) => state?.setpatch);
   const shopId = patchBack?.id;
 
-
   // const defaultKey = localStorage.getItem("PATCH_KEY")
   useEffect(() => {
     const _data = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    const _client = JSON.parse(localStorage.getItem("CLIENT_DATA"));
+
     if (_data) {
       setKeyPatch(_data);
     }
+    if (_client) {
+      setClientData(_client);
+    }
   }, []);
 
-  useEffect(() => {
-      const _checkdatas = cartList.filter(
-        (item) => item?.shop === patchBack?.id
-      );
-      if(_checkdatas) {
-        const totalQty = cartList.reduce((acc, data) => {
-          return acc + data?.qty;
-        }, 0);
-    console.log("totalQty:---->", { totalQty });
+  console.log("clientData:---", clientData)
 
-        setDataBage(totalQty);
-      }
-   
+  // useEffect(() => {
+  //   const _client = localStorage.setItem("CLIENT_DATA", decoded)
+
+  //   if (_client) {
+  //     set(_client);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    const _checkdatas = cartList.filter((item) => item?.shop === patchBack?.id);
+    if (_checkdatas) {
+      const totalQty = cartList.reduce((acc, data) => {
+        return acc + data?.qty;
+      }, 0);
+      console.log("totalQty:---->", { totalQty });
+
+      setDataBage(totalQty);
+    }
   }, [cartList, patchBack]);
 
   // useEffect(() => {
@@ -81,7 +108,6 @@ export default function CustomNavbar() {
   //     console.log("checkDtas:-------->", _checkdatas);
   //   }
   // }, [patchBack, cartList]);
-
 
   useEffect(() => {
     // Event listener for clicks outside the parent div
@@ -106,7 +132,7 @@ export default function CustomNavbar() {
   const onChangeFillter = (e) => {
     if (e.key === "Enter") {
       let _data = e?.target?.value;
-    navigate.push(`../search?search_key=${_data}`)
+      navigate.push(`../search?search_key=${_data}`);
       // dispatch(getSearchs(_data))
       // setFilterNew(_data);
       // localStorage.setItem("DATA_FILTER", _data);
@@ -114,71 +140,81 @@ export default function CustomNavbar() {
     }
   };
 
-  // const ()=> navigate.push("../cartdetail") = () => {
-  //   let idPreState = {
-  //     shopId: shopId,
-  //     affiliateId: affiliateId,
-  //   };
+  const onLogOutSalePage = () => {
+    googleLogout();
+    localStorage.removeItem("CLIENT_DATA");
+    setProfileAccount(null);
+    setVisibleRight(false)
+    setClientData()
+  }
 
-  //   if (commissionForShopId) {
-  //     idPreState = {
-  //       ...idPreState,
-  //       commissionForShopId: commissionForShopId,
-  //     };
-  //   }
-
-  //   const myPatch =
-  //     idPreState.shopId &&
-  //     idPreState.affiliateId &&
-  //     idPreState.commissionForShopId
-  //       ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
-  //       : idPreState.shopId && idPreState.affiliateId
-  //       ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
-  //       : `../cartdetail/${idPreState?.shopId}`;
-
-  //   navigate.push(myPatch);
-  // };
-
+  const items = [
+    {
+      label: profileAccount?.name,
+      icon: <Avatar image={clientData?.picture} />,
+      items: [
+        {
+          label: "LogOut",
+          icon: <HiOutlineLogout />,
+        },
+        {
+          label: "Search",
+          icon: <HiOutlineLogout />,
+        },
+      ],
+    },
+    {
+      label: "Profile",
+      items: [
+        {
+          label: "Settings",
+          icon: "pi pi-cog",
+        },
+        {
+          label: "Logout",
+          icon: "pi pi-sign-out",
+        },
+      ],
+    },
+  ];
   const menuSmScreen = [
     {
       title: "ໜ້າຫລັກ",
       icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
-      url: `../shoping/${shopId}`
+      url: `../shoping/${shopId}`,
     },
     {
       title: "ກ໋ຽວກັບ",
       icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
-      url: "../about-us"
+      url: "../about-us",
     },
     {
       title: "ຕິດຕໍ່ພວກເຮົາ",
       icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
-      url: "../contact-us"
+      url: "../contact-us",
     },
     // {
     //   title: "ຕິດຕາມອໍເດີ້",
     //   icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
     //   url: "/"
-  
+
     // },
     {
       title: "ປະຫວັດການຊື້",
       icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
-      url: "../history"
-  
+      url: "../history",
     },
     {
       title: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
       icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
-      url: "/"
-       
+      url: "../policy",
     },
-    
+
     // {
     //   title: "ເງື່ອນໄຂ ແລະ ຂໍ້ກຳນົດ",
     //   icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
     //   url: "/"
-  
+
     // },
   ];
 
@@ -189,7 +225,7 @@ export default function CustomNavbar() {
           <TbPhoneCall />
         </div>
         <p>
-          We are available 24/7, Need help? <span>+856 020 769-681-99</span>
+          We are available 24/7, Need help? <span>+856 020 29-933-696</span>
         </p>
       </div>
       <div className="nav-top">
@@ -238,14 +274,25 @@ export default function CustomNavbar() {
                 <p>ກະຕ່າສິນຄ້າ</p>
                 <span>{dataBage ?? 0}</span>
               </div>
-              <div>
-                <FaRegUserCircle />
-                <p>ໂປຣຟາຍ</p>
-              </div>
+              {clientData?.email_verified ? (
+                <div onClick={() => setVisibleRight(true)}>
+                  <img src={clientData?.picture} />
+                  <p>{clientData?.name}</p>
+                </div>
+              ) : (
+                
+                <div >
+                  <button ref={buttonEl} onClick={() => setShowLogin(true)}>
+                    <IoMdLogIn style={{ fontSize: 22 }} />
+                    ລ໋ອກອິນ
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </div>
 
+    
         {width > 800 ? (
           <div className="nav-menu">
             <div className="menu-list">
@@ -256,12 +303,14 @@ export default function CustomNavbar() {
                 </span>
               </li>
 
-              <li onClick={()=> navigate.push(`../shoping/${shopId}`)}>ໜ້າຫລັກ</li>
-              <li onClick={()=> navigate.push("../about-us")}>ກ່ຽວກັບ</li>
+              <li onClick={() => navigate.push(`../shoping/${shopId}`)}>
+                ໜ້າຫລັກ
+              </li>
+              <li onClick={() => navigate.push("../about-us")}>ກ່ຽວກັບ</li>
               <li onClick={() => navigate.push("../contact-us")}>
                 ຕິດຕໍ່ພວກເຮົາ
               </li>
-              <li onClick={()=> navigate.push("../history")}>ປະຫວັດການຊື້</li>
+              <li onClick={() => navigate.push("../history")}>ປະຫວັດການຊື້</li>
 
               {isShowRing && (
                 <motion.div
@@ -276,7 +325,7 @@ export default function CustomNavbar() {
                     variants={{ y: 0, opacity: 0 }}
                     initial={{ y: 0, opacity: 1 }}
                     onClick={() => {
-                      navigate.push(`../search?stocks=${1}`)
+                      navigate.push(`../search?stocks=${1}`);
                       setIsShowRing(false);
                     }}
                     className="item"
@@ -290,7 +339,7 @@ export default function CustomNavbar() {
                     variants={{ y: 0, opacity: 0 }}
                     initial={{ y: 0, opacity: 1 }}
                     onClick={() => {
-                      navigate.push(`../search?stocks=${0}`)
+                      navigate.push(`../search?stocks=${0}`);
                       setIsShowRing(false);
                     }}
                     className="item"
@@ -316,7 +365,9 @@ export default function CustomNavbar() {
             </div>
 
             <div className="menu-list">
-              <li>ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</li>
+              <li onClick={() => navigate.push("../policy")}>
+                ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ
+              </li>
               {/* <li>ຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂ</li> */}
             </div>
           </div>
@@ -349,7 +400,7 @@ export default function CustomNavbar() {
                     variants={{ y: 0, opacity: 0 }}
                     initial={{ y: 0, opacity: 1 }}
                     onClick={() => {
-                      navigate.push(`../search?stocks=${1}`)
+                      navigate.push(`../search?stocks=${1}`);
                       setIsShowRing(false);
                     }}
                     className="item"
@@ -363,7 +414,7 @@ export default function CustomNavbar() {
                     variants={{ y: 0, opacity: 0 }}
                     initial={{ y: 0, opacity: 1 }}
                     onClick={() => {
-                      navigate.push(`../search?stocks=${0}`)
+                      navigate.push(`../search?stocks=${0}`);
                       setIsShowRing(false);
                     }}
                     className="item"
@@ -453,14 +504,14 @@ export default function CustomNavbar() {
                   </div>
                 </div> */}
               </motion.div>
-            )}  
+            )}
           </div>
         )}
       </div>
 
       {/* <CartRight /> */}
 
-      <div className="card-contact-shop" onClick={() => setIsCall(!isCall)}>
+      {/* <div className="card-contact-shop" onClick={() => setIsCall(!isCall)}>
         {isCall ? (
           <IoClose style={{ fontSize: 28 }} />
         ) : (
@@ -500,7 +551,57 @@ export default function CustomNavbar() {
             </motion.div>
           </div>
         )}
-      </div>
+      </div> */}
+
+      <Modal
+      centered
+        show={showLogin}
+        onHide={() => {
+          if (!showLogin) return;
+          setShowLogin(false);
+        }}
+      >
+        <SiginAccount
+          setProfileAccount={setProfileAccount}
+          setShowLogin={setShowLogin}
+        />
+      </Modal>
+
+      <Sidebar
+        visible={visibleRight}
+        position="right"
+        onHide={() => setVisibleRight(false)}
+      >
+        {/* <Menu model={items} className="w-100" /> */}
+        <div className="d-flex gap-3">
+          <Avatar
+            image={clientData?.picture}
+            shape="circle"
+            size="xlarge"
+          />
+          <div>
+            <h5 style={{ marginBottom: "-.4em", paddingTop: 10, fontSize: 23 }}>
+              <b>{clientData?.name}</b>
+            </h5>
+            <small style={{ fontSize: 12 }}>{clientData?.email}</small>
+          </div>
+        </div>
+        <br />
+        <ul className="menu-profile">
+          <li>
+            <FaHistory />
+            ປະຫວັດການເຄື່ອນໄຫວ
+          </li>
+          <li>
+            <IoSettingsSharp />
+            ຕັ້ງຄ່າໂປຣຟາຍ
+          </li>
+          <li onClick={onLogOutSalePage}>
+            <HiOutlineLogout />
+            ອອກຈາກລະບົບ
+          </li>
+        </ul>
+      </Sidebar>
     </>
   );
 }

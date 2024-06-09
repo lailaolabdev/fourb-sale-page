@@ -85,6 +85,15 @@ export const CREATE_ORDER_GROUP = gql`
   }
 `;
 
+
+export const UPDATE_STOCK = gql`
+  mutation UpdateStock($data: StockInput!, $where: StockWhereInputOne!) {
+    updateStock(data: $data, where: $where) {
+        id
+    }
+}
+`;
+
 export const DELETE_ORDER_GROUP = gql`
   mutation Mutation($where: OrderGroupWhereInputOne!) {
     deleteOrderGroup(where: $where) {

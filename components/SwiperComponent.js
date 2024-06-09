@@ -2,18 +2,28 @@ import React, { useState, useEffect } from "react";
 import { Carousel } from "primereact/carousel";
 import { GET_ADVERTISINGS } from "@/apollo/setting/query";
 import { useLazyQuery } from "@apollo/client";
-import { S3_URL, S3_URL_LARGE } from "@/helper";
+import { COLOR_TEXT, CORLOR_APP, S3_URL, S3_URL_LARGE } from "@/helper";
 import useWindowDimensions from "@/helper/useWindowDimensions";
-import { FaWhatsapp } from "react-icons/fa";
-import { FaShop } from "react-icons/fa6";
+import {
+  FaHeart,
+  FaMapMarkerAlt,
+  FaPlus,
+  FaSitemap,
+  FaWhatsapp,
+} from "react-icons/fa";
+import { FaHeartCircleCheck, FaShop } from "react-icons/fa6";
 import { RiUserAddLine } from "react-icons/ri";
+import { Button } from "primereact/button";
+import { SlUserFollowing } from "react-icons/sl";
+import { TbEyeShare } from "react-icons/tb";
+import { AiOutlineProduct } from "react-icons/ai";
 
-export default function SwiperComponent({ shopDetail }) {
+export default function SwiperComponent({ shopDetail, contactshop, productTotal }) {
   const [products, setProducts] = useState([]);
   const shopId = shopDetail?.id;
+  const [follower, setFolloWer] = useState(false);
 
   const { height, width } = useWindowDimensions();
-  console.log({ shopDetail });
 
   const [
     getAdvertisings,
@@ -101,23 +111,18 @@ export default function SwiperComponent({ shopDetail }) {
 
   const productTemplate = (product) => {
     return (
-      <div className="surface-border p-2 text-center w-100  ">
-        <div className="mb-3 w-100 ">
+      <div className="surface-border p-2 text-center w-100 ">
+        <div style={{width:"100%",height: width >800 ? 360: 185}}>
           <img
             src={S3_URL + product.image}
             alt={product.name}
-            className="w-100 shadow-2"
             style={{
               borderRadius: 3,
-              maxHeight: width > 700 ? 380 : 280,
-              minHeight: width > 700 ? 190 : 180,
+              width:'100%', height:'100%',
+              // maxHeight: width > 700 ? 280 : 210,
+              // minHeight: width > 700 ? 260 : 80,
             }}
           />
-        </div>
-        <div>
-          <p style={{ fontSize: width > 700 ? "2em" : 20 }}>
-            <b>{product.name}</b>
-          </p>
         </div>
       </div>
     );
@@ -127,7 +132,7 @@ export default function SwiperComponent({ shopDetail }) {
     <div
       className={
         width > 900
-          ? "d-flex gap-2 p-2 container-carousel"
+          ? "d-flex gap-2 p-4 container-carousel"
           : "d-flex flex-column gap-2 p-2 container-carousel"
       }
     >
@@ -144,38 +149,120 @@ export default function SwiperComponent({ shopDetail }) {
         // showNavigators={false}
       />
       <div className="card-carousel-right">
-        {shopDetail?.image ? (
-          <img src={S3_URL + shopDetail?.image} />
-        ) : (
-          <img src="https://i.pinimg.com/originals/44/b1/4a/44b14a8b2fc649b18b3671f878af65c9.png" />
-        )}
-        <br />
-        <h4>{shopDetail?.name}</h4>
-        <br />
-        {/* <small>ສອບຖາມຂໍ້ມູນເພິ່ມເຕີມຫາຮ້ານໄດ້ທີເບີວ໋ອດແອບ</small> */}
+        <div className="shop-profile">
+          {shopDetail?.image ? (
+            <img src={S3_URL + shopDetail?.image} />
+          ) : (
+            <img src="https://i.pinimg.com/originals/44/b1/4a/44b14a8b2fc649b18b3671f878af65c9.png" />
+          )}
+          <h4>{shopDetail?.name}</h4>
+
+          <div className="btn-action-call">
+           
+            <div className="d-flex gap-2 w-100 justify-content-end align-items-end">
+              <button onClick={() => contactshop(shopDetail?.phone)}>
+                <FaWhatsapp style={{ fontSize: 18 }} /> +856 20{" "}
+                {shopDetail?.phone}
+              </button>
+              <button onClick={() => setFolloWer(!follower)}>
+                <FaPlus style={{ fontSize: 15 }} />{" "}
+                {follower ? "ຕິດຕາມແລ້ວ" : "ຕິດຕາມ"}
+              </button>
+            </div>
+            {/* {width > 800 && <small>
+              <FaMapMarkerAlt
+                style={{ color: "red", fontSize: 18, paddingBottom: 5 }}
+              />{" "}
+              ທີ່ຢູ່: ບ. {shopDetail?.address?.village}, ມ.{" "}
+              {shopDetail?.address?.district}, ຂ.{" "}
+              {shopDetail?.address?.province}
+            </small>} */}
+          </div>
+        </div>
+
+        {/* <div className="d-flex gap-3">
+          <Button
+            severity="success"
+            onClick={()=>contactshop(shopDetail?.phone)}
+            style={{
+              borderRadius: 3,
+              fontSize: 14,
+              height: 40,
+              marginTop: 8,
+              background: "green",
+              border: "none",
+            }}
+          >
+            <FaWhatsapp style={{ fontSize: 21, marginRight: 15 }} /> +856 20{" "}
+            {shopDetail?.phone}
+          </Button>
+          {follower ? (
+            <Button
+              onClick={() => setFolloWer(false)}
+              severity="secondary"
+              style={{
+                borderRadius: 3,
+                fontSize: 14,
+                height: 40,
+                marginTop: 8,
+                background:CORLOR_APP,
+                border: `1px solid ${COLOR_TEXT}`,
+              }}
+            >
+              <SlUserFollowing style={{ fontSize: 20, marginRight: 15 }} />{" "}
+              ຕິດຕາມແລ້ວ
+            </Button>
+          ) : (
+            <Button
+              onClick={() => setFolloWer(true)}
+              severity="secondary"
+              outlined
+              style={{
+                borderRadius: 3,
+                fontSize: 14,
+                height: 40,
+                marginTop: 8,
+                border: `1px solid ${COLOR_TEXT}`,
+              }}
+            >
+              <SlUserFollowing style={{ fontSize: 20, marginRight: 15 }} />{" "}
+              ຕິດຕາມ
+            </Button>
+          )}
+        </div> */}
+ <br />
+ <small>
+              <FaMapMarkerAlt
+                style={{ color: "red", fontSize: 18, paddingBottom: 5 }}
+              />{" "}
+              ທີ່ຢູ່: ບ. {shopDetail?.address?.village}, ມ.{" "}
+              {shopDetail?.address?.district}, ຂ.{" "}
+              {shopDetail?.address?.province}
+            </small>
+
         <div className="shop-info">
           <div>
             <li>
-              <RiUserAddLine />
-              <span>Products: </span>
-              <span>120 </span>
+              <FaSitemap style={{ fontSize: 18 }} />
+              <span>ສິນຄ້າທັງໝົດ: </span>
+              <span>{productTotal ?? 0}</span>
             </li>
             <li>
-              <RiUserAddLine />
-              <span>Following: </span>
-              <span>540 </span>
+              <FaHeart style={{ fontSize: 18 }} />
+              <span>ກົດໃຈ: </span>
+              <span>5 </span>
             </li>
           </div>
           <div>
             <li>
-              <RiUserAddLine />
-              <span>Followers: </span>
-              <span> 3.01k</span>
+              <RiUserAddLine style={{ fontSize: 22 }} />
+              <span>ຜູ້ຕິດຕາມ: </span>
+              <span>5</span>
             </li>
             <li>
-              <RiUserAddLine />
-              <span>Followers: </span>
-              <span>80</span>
+              <TbEyeShare style={{ fontSize: 22 }} />
+              <span>ການເຂົ້າຊົມ: </span>
+              <span>150</span>
             </li>
           </div>
         </div>

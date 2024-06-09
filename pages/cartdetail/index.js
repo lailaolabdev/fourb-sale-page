@@ -74,26 +74,6 @@ export default function CartDetail() {
     (acc, item) => acc + item.price * item.qty,
     0
   );
-
-  // const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
-  //   GET_EXCHANGRATE,
-  //   { fetchPolicy: "cache-and-network" }
-  // );
-
-  // //   fetch exchange ret
-  // useEffect(() => {
-  //   getExchangeRate({
-  //     variables: {
-  //       where: {
-  //         shop: shopId,
-  //       },
-  //     },
-  //   });
-  // }, [shopId]);
-
-  // const isExChangeRate = useMemo(() => {
-  //   return loadExchangeRate?.exchangeRate;
-  // }, [loadExchangeRate?.exchangeRate]);
  
 
   useEffect(() => {
@@ -106,60 +86,8 @@ export default function CartDetail() {
     }
   }, [patchBack, cartList]);
 
-  console.log("cartList:---53to----->", cartList, patchBack);
-  // // ຄຳນວນຈຳນວນເງິນຈາມສະກຸນເງິນ
-  // const calculatorAll = useMemo(() => {
-  //   // let totalLak = 0;
-  //   // let totalBaht = 0;
-  //   // let totalUsd = 0;
-  //   let amountKip = 0;
-
-  //   // ກວດສອບສະກຸນເງິນກ່ອນຄຳນວນ
-  //   for (let order of cartDatas) {
-  //     const { currency, qty, price } = order;
-
-  //     const sumpriceRecord = (amountKip += qty * price);
-  //     setPriceToPay(sumpriceRecord);
-
-  //     //  console.log("roundedValue4444---------------->", sumpriceRecord)
-
-  //     // console.log("777 new:",amountKip += qty * price)
-
-  //     // if (currency === "LAK" || currency === "ກີບ") {
-  //     //   totalLak += qty * price;
-  //     // } else if (currency === "BAHT" || currency === "ບາດ") {
-  //     //   totalBaht += qty * price;
-  //     // } else if (currency === "USD" || currency === "ໂດລາ") {
-  //     //   totalUsd += qty * price;
-  //     // } else {
-  //     //   totalLak += qty * price;
-  //     // }
-  //   }
-
-  //   // ຄິດໄລ່ຈຳນວນເງິນທັງໝົດເປັນເງິນກີບ ໂດຍໃຊ້ອັດຕາແລກປ່ຽນ ຖ້າມີ
-  //   // amountKip =
-  //   //   totalLak +
-  //   //     totalBaht * isExChangeRate?.baht +
-  //   //     totalUsd * isExChangeRate?.usd || totalLak;
-
-  //   //     const roundedValue = calculateRoundedValue(amountKip/1000)*1000;
-
-  //   return {
-  //     // totalLak,
-  //     // totalBaht,
-  //     // totalUsd,
-  //     amountKip,
-  //     // sumpriceRecord,
-  //     // roundedValue,
-  //     // priceAqllPaid
-  //     // modelType: "",
-  //     // shop: shopId,
-  //   };
-  // }, [cartDatas, isExChangeRate]);
-
-  // const handleCheckPaid = () => {
-  //   setCheckPaid(!checkPaid);
-  // };
+  console.log("cartList:---53to----->", cartList); 
+  console.log("patchBack:---ຖຖto----->", patchBack); 
 
   const handleConfirmCart = () => {
     const combineField = {
@@ -283,11 +211,11 @@ export default function CartDetail() {
           padding: "1em",
         }}
       >
-        <div className="bread-crumb">
+        {/* <div className="bread-crumb">
           <span onClick={() => router.back()}>Shoping</span>
           <RxSlash />
           <span>ກະຕ່າສິນຄ້າ</span>
-        </div>
+        </div> */}
         {/* <div className="removeIcon1" onClick={onBackPage}>
           <MdArrowBack style={{ fontSize: 20 }} />
         </div> */}
@@ -297,19 +225,19 @@ export default function CartDetail() {
         <div></div> */}
       </div>
       {cartDatas?.length > 0 ? (
-        <div className="containerCartItems">
+        <div className="p-4">
           <div className="w-100">
             {cartDatas?.map((data, index) => {
               return (
                 <div key={data?.id} className="cartItem-product">
-                  <div
+                  {/* <div
                     className="remove-single-item"
                     onClick={() => dispatch(removeSingleItem(index))}
                   >
                     <CloseCircleOutlined
                       style={{ fontSize: 20, cursor: "pointer" }}
                     />
-                  </div>
+                  </div> */}
 
                   <div className="cartImage">
                     {data?.image?.length > 0 ? (

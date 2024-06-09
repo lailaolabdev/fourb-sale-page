@@ -14,6 +14,8 @@ export const EMPTY_USER_PROFILE = "assets/images/emptyProfile.jpg";
 export const SERVER_IP = "https://sp.bbbb.com.la/";
 export const LINK_AFFILIATE = "https://affiliate.bbbb.com.la/";
 
+export const CLIENT_ID = "191329944996-toam9grdvadq5sdbjaicr2t70pqjl4n0.apps.googleusercontent.com";
+
 // convert price
 export const calculateRoundedValue = (price) => {
   // console.log("calculateRoundedValue------->", price)
@@ -36,13 +38,13 @@ export const numberFormat = (_number) => {
 
 // ======================================= link upoint ================================
 // Dev
-// export const SERVER_URI = "https://api-dev.bbbb.com.la/";
-// export const SOCKET_SERVER_URI = "wss://api-dev.bbbb.com.la/";
+export const SERVER_URI = "https://api-dev.bbbb.com.la/";
+export const SOCKET_SERVER_URI = "wss://api-dev.bbbb.com.la/";
 
 // Production
 // export const SERVER_URI = "https://api.bbbb.com.la/";
 // export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
 
 // localhost
-export const SERVER_URI = "http://localhost:7070/";
-export const SOCKET_SERVER_URI = "ws://localhost:7070/" 
+// export const SERVER_URI = "http://localhost:7070/";
+// export const SOCKET_SERVER_URI = "ws://localhost:7070/" 

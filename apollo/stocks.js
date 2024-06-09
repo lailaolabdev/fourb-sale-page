@@ -13,6 +13,7 @@ export const GET_STOCKS = gql`
         id
         price
         originPrice
+        favorite
         amount
         cfMessage
         image
@@ -33,6 +34,7 @@ export const GET_STOCKS = gql`
         createdAt
         updatedAt
         note
+        reduction
         containImages
         descriptions {
           title
