@@ -17,7 +17,7 @@ import {
   numberFormat,
 } from "@/helper";
 import { addCartItem } from "@/redux/salepage/cartReducer";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { useRouter } from "next/router";
 import React, {
   useCallback,
@@ -39,6 +39,9 @@ import { encode as base64Encode } from "js-base64";
 import { MdArrowBackIos } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
 import { Paginator } from "primereact/paginator";
+import { formatNumberFavorite } from "@/const";
+import { UPDATE_STOCK } from "@/apollo/order/mutation";
+import { FaHeart } from "react-icons/fa";
 
 function SearchProduct({ initialShop }) {
   const router = useRouter();
@@ -54,7 +57,6 @@ function SearchProduct({ initialShop }) {
   } = router.query;
 
  
-  console.log("query:---->", router);
 
   const itemsPerPage = 30;
   const [isOpenView, setIsOpenView] = useState(false);
@@ -65,11 +67,12 @@ function SearchProduct({ initialShop }) {
   const [shopDetail, setShopDetail] = useState("");
   const [isStock, setIsStock] = useState(1);
   const [filterNew, setFilterNew] = useState();
+  const [heartAnimation, setHeartAnimation] = useState(false);
+
   const toast = useRef(null);
   const { patchBack } = useSelector((state) => state?.setpatch);
   const shopId = patchBack?.id;
 
-  console.log({patchBack})
 
 
   const dispatch = useDispatch();
@@ -94,6 +97,8 @@ function SearchProduct({ initialShop }) {
   ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
     fetchPolicy: "network-only",
   });
+
+  const [updateStock] = useMutation(UPDATE_STOCK);
 
   // click to scrolling to left and right
   const scrollContainerRef = useRef(null);
@@ -326,6 +331,31 @@ function SearchProduct({ initialShop }) {
       query: { item: encodedItem },
     });
   };
+  
+   // add heart to product
+   const onAddHeartProduct = (data, index) => {
+    const currentFavorites = data?.favorite || 0;
+    const newFavoritesCount = currentFavorites + 1;
+
+    updateStock({
+      variables: {
+        where: {
+          id: data?.id,
+        },
+        data: {
+          favorite: newFavoritesCount,
+        },
+      },
+    });
+    setProductsLists((prevState) =>
+      prevState.map((item) =>
+        item.id === data.id ? { ...item, favorite: newFavoritesCount } : item
+      )
+    );
+    setHeartAnimation(index);
+    setTimeout(() => setHeartAnimation(null), 600);
+  };
+
 
   const ogImageUrl = initialShop
     ? `${S3_URL}${initialShop?.image}`
@@ -366,6 +396,7 @@ function SearchProduct({ initialShop }) {
 
       <CustomNavbar />
 
+<div className="body-main">
       <div className="container-contents">
         <h5>
           <b>{productLists?.length > 0 ? `ຜະລິດຕະພັນຍອດນິຍົມສໍາລັບການຊື້ເຄື່ອງປະຈໍາວັນ`: `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}</b>
@@ -378,46 +409,73 @@ function SearchProduct({ initialShop }) {
               ) : (
                 <>
                   {productLists.map((item, index) => (
-                    <div
-                      className="item-now"
-                      key={index}
-                      onClick={() => handleProductPreview(item)}
+                <div
+                  className="item-now"
+                  key={index}
+                  onClick={() => handleProductPreview(item)}
+                >
+                  <div
+                    className="favorite-view"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <p
+                      className={
+                        heartAnimation === index ? "heart-animation" : ""
+                      }
+                      onClick={() => onAddHeartProduct(item, index)}
                     >
-                      <div className="box-image">
-                        {item?.image ? (
-                          <img src={S3_URL + item?.image} />
-                        ) : (
-                          <EmptyImage />
-                        )}
+                      <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
+                    </p>
+                  </div>
+                  <div className="box-image">
+                    {item?.image ? (
+                      <img src={S3_URL + item?.image} />
+                    ) : (
+                      <EmptyImage />
+                    )}
+                    {item?.reduction && (
+                      <div className="promotion-field">
+                        ສ່ວນຫຼຸດ {item?.reduction}%
                       </div>
-                      <div
-                        className="box-shoping"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <h3>{item?.name} It is a long established fact that a reader will be distracted by the readable content of a page</h3>
+                    )}
+                  </div>
+                  <div
+                    className="box-shoping"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <h3>{item?.name}</h3>
 
-                        <div className="btn-price-add">
-                          <div>
-                            {/* <span>50000</span> */}
-                            <small style={{color: item?.amount >5 ? "green": "red"}}>stocks: {item?.amount}</small>
-                            <h3>
-                            ₭ {numberFormat(
-                                _calculatePriceWithExchangeRate(
-                                  item?.price ?? 0,
-                                  item?.currency
-                                )
-                              )}
-                            </h3>
-                          </div>
-                          <p>20.5k sold</p>
-                          {/* <button onClick={() => handleAddProduct(item)}>
+                    <div className="btn-price-add">
+                      <div>
+                        {item?.reduction && (
+                          <span>{numberFormat(item?.price)}</span>
+                        )}
+                        {/* <small
+                          style={{ color: item?.amount > 5 ? "black" : "red" }}
+                        >
+                          Stocks: {item?.amount}
+                        </small> */}
+
+                          <h3>
+                            ₭{" "}
+                            {numberFormat(
+                              _calculatePriceWithExchangeRate(
+                                item?.price ?? 0,
+                                item?.currency,
+                                item?.reduction
+                              )
+                            )}
+                          </h3> 
+                      </div>
+                      <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
+                      {/* <button onClick={() => handleAddProduct(item)}>
                             <IoBagAddSharp />
                             <span>ເພິ່ມ</span>
                           </button> */}
-                        </div>
-                      </div>
                     </div>
-                  ))}
+                  </div>
+                </div>
+              ))}
                 </>
               )}
             </div>
@@ -429,6 +487,7 @@ function SearchProduct({ initialShop }) {
             onPageChange={handlePageChange}
           />
         </div>}
+      </div>
       </div>
 
       <FooterComponent />

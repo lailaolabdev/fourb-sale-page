@@ -368,25 +368,25 @@
          display: flex;
          justify-content: space-between;
          align-items: center;
-         padding: .1em 2em;
+         padding: .1em;
          /* overflow: hidden; */
 
          & .menu-list {
              position: relative;
              display: flex;
-             gap: 1.5em;
+             gap: 0;
 
              & li {
                  list-style: none;
                  font-size: 13px;
                  cursor: pointer;
-                 padding: .85em;
+                 padding: .85em 1em;
                  display: flex;
                  justify-content: center;
                  align-items: center;
                  border-radius: .2em;
                  gap: 7px;
-                 transition: all .2s ease-in-out;
+                 /* transition: all .2s ease-in-out; */
                  font-weight: 400;
                  color: var(--colorBlack2);
              }
@@ -448,7 +448,7 @@
          & .menu-sm-screen {
              width: 100%;
              position: absolute;
-             top: 6.75em;
+             top: 6.9em;
              right: 0;
              background: var(--colorWhite);
              box-shadow: var(--boxShadow);
@@ -1511,6 +1511,15 @@
 
  /* screen small */
  @media screen and (max-width: 700px) {
+
+    /* .nav-menu {
+        border: 1px solid red;
+        padding: .2em; 
+
+       & .menu-list {
+        background: #000;
+       }
+    } */
 
      .body-main {
         padding: .3em;

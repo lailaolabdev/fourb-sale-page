@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   FaHistory,
+  FaPage4,
+  FaRegUser,
   FaRegUserCircle,
   FaSearch,
   FaShoppingCart,
+  FaSignInAlt,
 } from "react-icons/fa";
 import { IoIosArrowForward, IoLogoWhatsapp, IoMdLogIn } from "react-icons/io";
 import {
   IoClose,
   IoLogInOutline,
-  IoNotifications, 
+  IoNotifications,
   IoSettingsSharp,
 } from "react-icons/io5";
 import { RiListCheck3, RiListIndefinite, RiMenu2Fill } from "react-icons/ri";
-import { TbPhoneCall } from "react-icons/tb";
+import { TbLogin2, TbPhoneCall } from "react-icons/tb";
 import { TiShoppingCart } from "react-icons/ti";
 import { motion } from "framer-motion";
 import CartRight from "./CartRight";
@@ -22,7 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import useWindowDimensions from "@/helper/useWindowDimensions";
 import { SiGooglemessages } from "react-icons/si";
 import { BiMessageRounded } from "react-icons/bi";
-import { MdOutlineEmail } from "react-icons/md";
+import { MdOutlineEmail, MdOutlinePolicy } from "react-icons/md";
 import { Menubar } from "primereact/menubar";
 import { SlInfo, SlMenu } from "react-icons/sl";
 import { AiOutlineClose } from "react-icons/ai";
@@ -36,8 +39,10 @@ import ProfileAccount from "./ProfileAccount";
 import { Menu } from "primereact/menu";
 import { HiOutlineLogout } from "react-icons/hi";
 import { ConfirmPopup } from "primereact/confirmpopup";
-import { Modal } from "react-bootstrap"
-import { googleLogout } from '@react-oauth/google';
+import { Modal } from "react-bootstrap";
+import { googleLogout } from "@react-oauth/google";
+import { FaChalkboardUser } from "react-icons/fa6";
+import { FiHome } from "react-icons/fi";
 
 export default function CustomNavbar() {
   const navigate = useRouter();
@@ -77,23 +82,12 @@ export default function CustomNavbar() {
     }
   }, []);
 
-  console.log("clientData:---", clientData)
-
-  // useEffect(() => {
-  //   const _client = localStorage.setItem("CLIENT_DATA", decoded)
-
-  //   if (_client) {
-  //     set(_client);
-  //   }
-  // }, []);
-
   useEffect(() => {
     const _checkdatas = cartList.filter((item) => item?.shop === patchBack?.id);
     if (_checkdatas) {
       const totalQty = cartList.reduce((acc, data) => {
         return acc + data?.qty;
       }, 0);
-      console.log("totalQty:---->", { totalQty });
 
       setDataBage(totalQty);
     }
@@ -144,9 +138,9 @@ export default function CustomNavbar() {
     googleLogout();
     localStorage.removeItem("CLIENT_DATA");
     setProfileAccount(null);
-    setVisibleRight(false)
-    setClientData()
-  }
+    setVisibleRight(false);
+    setClientData();
+  };
 
   const items = [
     {
@@ -180,17 +174,17 @@ export default function CustomNavbar() {
   const menuSmScreen = [
     {
       title: "ໜ້າຫລັກ",
-      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      icon: <FiHome style={{ fontSize: 18 }} />,
       url: `../shoping/${shopId}`,
     },
     {
       title: "ກ໋ຽວກັບ",
-      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      icon: <FaPage4 style={{ fontSize: 18 }} />,
       url: "../about-us",
     },
     {
       title: "ຕິດຕໍ່ພວກເຮົາ",
-      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      icon: <FaChalkboardUser style={{ fontSize: 18 }} />,
       url: "../contact-us",
     },
     // {
@@ -201,22 +195,36 @@ export default function CustomNavbar() {
     // },
     {
       title: "ປະຫວັດການຊື້",
-      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      icon: <FaHistory style={{ fontSize: 18 }} />,
       url: "../history",
     },
     {
       title: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
-      icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
+      icon: <MdOutlinePolicy style={{ fontSize: 18 }} />,
       url: "../policy",
     },
 
-    // {
-    //   title: "ເງື່ອນໄຂ ແລະ ຂໍ້ກຳນົດ",
-    //   icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
-    //   url: "/"
-
-    // },
+    {
+      title: clientData?.email_verified ? "ອອກຈາກລະບົບ" : "ລ໋ອກອິນ",
+      icon: clientData?.email_verified ? (
+        <HiOutlineLogout style={{ fontSize: 18 }} />
+      ) : (
+        <IoMdLogIn style={{ fontSize: 18 }} />
+      ),
+      url: clientData?.email_verified ? "/sign-out" : "/sigin",
+    },
   ];
+
+  const onMenuLink = (menu) => {
+    console.log(menu);
+    if (menu?.url === "/sigin") {
+      setShowLogin(true);
+    } else if (menu?.url === "/sign-out") {
+      onLogOutSalePage();
+    } else {
+      navigate.push(menu?.url);
+    }
+  };
 
   return (
     <>
@@ -280,8 +288,7 @@ export default function CustomNavbar() {
                   <p>{clientData?.name}</p>
                 </div>
               ) : (
-                
-                <div >
+                <div>
                   <button ref={buttonEl} onClick={() => setShowLogin(true)}>
                     <IoMdLogIn style={{ fontSize: 22 }} />
                     ລ໋ອກອິນ
@@ -292,7 +299,6 @@ export default function CustomNavbar() {
           )}
         </div>
 
-    
         {width > 800 ? (
           <div className="nav-menu">
             <div className="menu-list">
@@ -440,27 +446,42 @@ export default function CustomNavbar() {
             </div>
 
             <div className="menu-list">
-              <li onClick={() => navigate.push("../cartdetail")}>
+              <li
+                style={{ position: "relative" }}
+                onClick={() => navigate.push("../cartdetail")}
+              >
                 <TiShoppingCart style={{ fontSize: 23 }} />
-                <span
-                  style={{
-                    position: "absolute",
-                    top: 2,
-                    right: "5em",
-                    fontSize: 11,
-                    background: "red",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    width: 17,
-                    height: 17,
-                    borderRadius: "50em",
-                    color: "#fff",
-                  }}
-                >
-                  {dataBage ?? 0}
-                </span>
+                {dataBage > 0 && (
+                  <span
+                    style={{
+                      position: "absolute",
+                      top: 5,
+                      right: 0,
+                      fontSize: 11,
+                      background: "red",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: 17,
+                      height: 17,
+                      borderRadius: "50em",
+                      color: "#fff",
+                    }}
+                  >
+                    {dataBage ?? 0}
+                  </span>
+                )}
               </li>
+              {clientData?.email_verified ? (
+                <li onClick={() => setVisibleRight(true)}>
+                  <Avatar image={clientData?.picture} shape="circle" />
+                </li>
+              ) : (
+                <li onClick={() => setShowLogin(true)}>
+                  <TbLogin2 style={{ fontSize: 23 }} />
+                </li>
+              )}
+
               <li onClick={() => setShowMenu(!showMenu)}>
                 {!showMenu ? <SlMenu /> : <AiOutlineClose />}
               </li>
@@ -485,7 +506,7 @@ export default function CustomNavbar() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.15 * idex }}
                         key={idex}
-                        onClick={() => navigate.push(menu?.url)}
+                        onClick={() => onMenuLink(menu)}
                       >
                         {menu?.icon}
                         {menu?.title}
@@ -554,7 +575,7 @@ export default function CustomNavbar() {
       </div> */}
 
       <Modal
-      centered
+        centered
         show={showLogin}
         onHide={() => {
           if (!showLogin) return;
@@ -574,11 +595,7 @@ export default function CustomNavbar() {
       >
         {/* <Menu model={items} className="w-100" /> */}
         <div className="d-flex gap-3">
-          <Avatar
-            image={clientData?.picture}
-            shape="circle"
-            size="xlarge"
-          />
+          <Avatar image={clientData?.picture} shape="circle" size="xlarge" />
           <div>
             <h5 style={{ marginBottom: "-.4em", paddingTop: 10, fontSize: 23 }}>
               <b>{clientData?.name}</b>
@@ -588,9 +605,9 @@ export default function CustomNavbar() {
         </div>
         <br />
         <ul className="menu-profile">
-          <li>
+          <li onClick={()=> navigate.push("../history")}>
             <FaHistory />
-            ປະຫວັດການເຄື່ອນໄຫວ
+            ປະຫວັດ
           </li>
           <li>
             <IoSettingsSharp />

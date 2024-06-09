@@ -84,19 +84,35 @@ const onAddToCart = () => {
   const newPrice = product.price * reduction / 100;
 
   if (quantity > 1) {
+    if(product.reduction) {
+      productWithQuantity = {
+        ...product,
+        shop: patchBack?.id,
+        newQuantity: quantity,
+        price: newPrice // Update the price with the reduced price
+      };
+    }
     productWithQuantity = {
       ...product,
       shop: patchBack?.id,
       newQuantity: quantity,
-      price: newPrice // Update the price with the reduced price
     };
+   
   } else {
+    if(product.reduction) {
+      productWithQuantity = {
+        ...product,
+        shop: patchBack?.id,
+        price: newPrice // Update the price with the reduced price
+      };
+    }
     productWithQuantity = {
       ...product,
       shop: patchBack?.id,
-      price: newPrice // Update the price with the reduced price
     };
   }
+
+  console.log("productWithQuantity:::", productWithQuantity)
 
   dispatch(addCartItem(productWithQuantity));
   toast.current.show({
@@ -174,7 +190,7 @@ const onAddToCart = () => {
           </div>
           <div className="card-dailog-content">
             <h3>{product?.name}</h3>
-            <p style={{color:'red', fontSize:23}}>ສ່ວນຫຼຸດ {product?.reduction}%</p>
+            {product?.reduction && <p style={{color:'red', fontSize:23}}>ສ່ວນຫຼຸດ {product?.reduction}%</p>}
             <p>{product?.note ?? "..."}</p>
 
             <h4>
@@ -189,7 +205,11 @@ const onAddToCart = () => {
                   {numberFormat(product?.price)}
                 </span>
               )}{" - "}
-              <span>{numberFormat((product?.price * product?.reduction) / 100)}</span>
+              {product?.reduction ? (
+                <span>{numberFormat((product?.price * product?.reduction) / 100)}</span>
+              ):(
+                <span>{numberFormat((product?.price))}</span>
+              )}
             </h4>
             <br />
             <p>Color:</p>
