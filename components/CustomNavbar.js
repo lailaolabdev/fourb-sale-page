@@ -9,7 +9,7 @@ import { IoIosArrowForward, IoLogoWhatsapp, IoMdLogIn } from "react-icons/io";
 import {
   IoClose,
   IoLogInOutline,
-  IoNotifications,
+  IoNotifications, 
   IoSettingsSharp,
 } from "react-icons/io5";
 import { RiListCheck3, RiListIndefinite, RiMenu2Fill } from "react-icons/ri";
