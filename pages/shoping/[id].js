@@ -45,7 +45,6 @@ import { getKeyPatch } from "@/redux/setPatch/patchBack";
 import useWindowDimensions from "@/helper/useWindowDimensions";
 import { Rating } from "primereact/rating";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import productCard from "./component/productCard";
 import { UPDATE_STOCK } from "@/apollo/order/mutation";
 import { formatNumberFavorite } from "@/const";
 
