@@ -52,7 +52,7 @@ export default function FooterComponent() {
           </div>
           <div>
             <p>
-              <b>ຟີເຈີີຂອງ 4B</b>
+              <b>ຟີເຈີຂອງ 4B</b>
             </p>
             <ul>
               <li

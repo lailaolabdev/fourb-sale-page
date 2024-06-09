@@ -2,12 +2,18 @@ import Image from "next/image";
 // import mainLogo from "../images/mainLogo.png";
 import useWindowDimensions from "../helper/useWindowDimensions";
 import { LINK_AFFILIATE } from "../helper";
+<<<<<<< HEAD
+=======
+import CustomNavbar from "@/components/CustomNavbar";
+import CustomFooter from "@/components/CustomFooter";
+>>>>>>> origin/design-ui-new
 
 export default function Home() {
   const { height, width } = useWindowDimensions();
 
   return (
     <>
+    <CustomNavbar />
       <div
         style={{
           width: "100%",
@@ -44,7 +50,7 @@ export default function Home() {
           ເພື່ອໃຫ້ລູກຄ້າທີ່ເຂົ້າເບິ່ງຕັດສິນໃຈ ຊື້ໄດ້ງ່າຍຂື້ນ.
         </h5>
 
-        <div className="cart-button-register">
+        {/* <div className="cart-button-register">
           <div className="btn-register-now">
             ສະໝັກນຳໃຊ້ 4B Shop
           </div>
@@ -53,8 +59,11 @@ export default function Home() {
             }}>
             ສະໝັກນຳໃຊ້ 4B Affiliate
           </div>
-        </div>
+        </div> */}
       </div>
+ 
+
+      <CustomFooter />
     </>
   );
 }

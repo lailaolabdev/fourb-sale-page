@@ -14,12 +14,12 @@ export default function EmptyImage() {
       }}>
       <img
         src="/assets/images/mainLogo2.png"
-        style={{ width: "100%", height: "100%", opacity: "0.3" }}
+        style={{ width: "100%", height: "100%", opacity: "0.2" }}
         alt="empty"
       />
-      <small style={{ fontSize: ".7em", marginTop: "-.6em", color: "#d4d4d4" }}>
+      {/* <small style={{ fontSize: ".7em", marginTop: "-.6em", color: "#d4d4d4" }}>
         ບໍ່ມີຮູບພາບສິນຄ້າ
-      </small>
+      </small> */}
     </div>
   );
 }

@@ -56,6 +56,8 @@ import { bankDatas } from "../../const/selectBankData";
 import html2canvas from "html2canvas";
 import { removeCartItem } from "../../redux/salepage/cartReducer";
 import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE } from "@/apollo";
+import CustomNavbar from "@/components/CustomNavbar";
+import { RxSlash } from "react-icons/rx";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -75,7 +77,7 @@ export default function payment() {
     shopForAffiliateId,
     commissionForShopId,
   } = router.query;
-  const shopId = id;
+  // const shopId = id;
 
   const paperStyle = {
     borderRadius: "1em",
@@ -97,8 +99,8 @@ export default function payment() {
   const [fullWidth, setFullWidth] = useState(true);
   const [maxWidth, setMaxWidth] = useState("sm");
   const [minWidth, setMinWidth] = useState("lg");
-  const [cartDatas, setCartDatas] = useState([]) 
-
+  const [cartDatas, setCartDatas] = useState([]);
+  const [keyPatch, setKeyPatch] = useState();
 
   const [openSelectBank, setOpenSelectBank] = useState(false);
   const [typeBanks, setTypeBanks] = useState("");
@@ -134,8 +136,10 @@ export default function payment() {
 
   const ordersState = useSelector((state) => state?.setorder);
   const { cartList } = useSelector((state) => state?.salepage);
+  const { patchBack } = useSelector((state) => state?.setpatch);
+
   // const { setId } = useSelector((state) => state?.predata);
-  // const shopId = setId?.idPreState?.shopId;
+  const shopId = patchBack?.id;
   // const affiliateId = setId?.idPreState?.affiliateId;
 
   const totalPrice = cartDatas.reduce(
@@ -163,25 +167,42 @@ export default function payment() {
   const [getPresignUrl, { data: presignUrlData }] =
     useLazyQuery(GET_PRESIGN_URL);
 
-    const [
-      getShopCommissionFor,
-      { data: shopDataCommissionFor, loading: shopLoading },
-    ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
-      fetchPolicy: "network-only",
-    });
+  const [
+    getShopCommissionFor,
+    { data: shopDataCommissionFor, loading: shopLoading },
+  ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
+    fetchPolicy: "network-only",
+  });
 
-    const _commissionForAffiliate =
+  const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
-    useEffect(() => {
-      getShopCommissionFor({
-        variables: {
-          where: {
-            id: commissionForShopId,
-          },
+  // useEffect(() => {
+  //   const _data = JSON.parse(localStorage.getItem("PATCH_KEY"));
+  //   if (_data) {
+  //     setKeyPatch(_data);
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    if (patchBack?.id) {
+      const _checkdatas = cartList.filter(
+        (item) => item?.shop === patchBack?.id
+      );
+      setCartDatas(_checkdatas);
+      console.log("checkDtas:-------->", _checkdatas);
+    }
+  }, [patchBack, cartList]);
+
+  useEffect(() => {
+    getShopCommissionFor({
+      variables: {
+        where: {
+          id: commissionForShopId,
         },
-      });
-    }, [commissionForShopId]);
+      },
+    });
+  }, [commissionForShopId]);
 
   // ຖ້າບໍ່ມີ onepay ແມ່ນໃຫ້ໃຊ້ໂຕອັບໂຫລດຮູບ qrcode ການຊຳລະ
   useEffect(() => {
@@ -190,12 +211,13 @@ export default function payment() {
     }
   }, [presignUrlData]);
 
-  useEffect(() => {
-    if(cartList) {
-      const _checkdatas = cartList.filter(item => item?.shop === shopId)
-      setCartDatas(_checkdatas)
-    }
-  },[cartList])
+  // useEffect(() => {
+  //   if(cartList) {
+  //     const _checkdatas = cartList.filter(item => item?.shop === keyPatch?.id)
+  //     setCartDatas(_checkdatas)
+  //     console.log({_checkdatas})
+  //   }
+  // },[cartList])
 
   const onFileUpload = async (url) => {
     try {
@@ -387,14 +409,14 @@ export default function payment() {
     }
 
     const destinationPath =
-      idPreState.shopId && idPreState.affiliateId &&
+      idPreState.shopId &&
+      idPreState.affiliateId &&
       idPreState.commissionForShopId
         ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
-        : idPreState.shopId &&
-          idPreState.affiliateId 
+        : idPreState.shopId && idPreState.affiliateId
         ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
         : `../cartdetail/${idPreState?.shopId}`;
-        console.log("path_payment:----->", destinationPath)
+    console.log("path_payment:----->", destinationPath);
     router.push(destinationPath);
   };
 
@@ -513,14 +535,14 @@ export default function payment() {
         sumPriceUsd: calculatorAll?.totalUsd,
         totalPrice: calculatorAll?.totalLak,
         sumPriceBaht: calculatorAll?.totalBaht,
-        sumPrice: totalPrice, 
+        sumPrice: totalPrice,
         type: "SALE_PAGE",
         amount: cartDatas?.length,
         customerName,
         phone,
         logistic,
         destinationLogistic: connectField,
-        infulancer_percent: commissionForShopId ? _commissionForAffiliate : 0
+        infulancer_percent: commissionForShopId ? _commissionForAffiliate : 0,
       };
 
       // console.log("orders-9-8-6--->", convertedOrders)
@@ -531,7 +553,7 @@ export default function payment() {
           ..._orderGroup,
           infulancer: affiliateId,
         };
-      } 
+      }
 
       // if(commissionForShopId) {
       //   _orderGroup = {
@@ -697,11 +719,19 @@ export default function payment() {
 
   return (
     <>
+    <CustomNavbar />
       <div className="payment-page">
+      
         <div className="payment-form">
           <>
-            <div className="header-form">
-              <div className="removeIcon1" onClick={handleGoback}>
+          {/* <div className="bread-crumb">
+          <span onClick={() => router.back()}>Shoping</span>
+          <RxSlash />
+          <span></span>
+        </div> */}
+
+            {/* <div className="header-form">
+              <div className="removeIcon1" onClick={() => router.back()}>
                 <MdArrowBack style={{ fontSize: 20 }} />
               </div>
               <h4 style={{ marginTop: ".6em" }}>
@@ -712,7 +742,7 @@ export default function payment() {
                 </b>
               </h4>
               <p></p>
-            </div>
+            </div> */}
 
             <Form onSubmit={handleCheckToPaid}>
               <Row xs={1} sm={2}>
@@ -970,7 +1000,7 @@ export default function payment() {
                   aria-controls="panel1-content"
                   id="panel1-header"
                 >
-                  ເບິ່ງລາຍການສັ່ງຊື້ທັງໝົດ {cartDatas?.length} ລາຍການ. &nbsp;
+                  ເບິ່ງລາຍການສັ່ງຊື້ຂອງຂ້ອຍ
                   {/* <b> ເງິນລວມ: {numberFormat(totalPrice)} ກີບ</b> */}
                 </AccordionSummary>
                 <AccordionDetails>
@@ -1009,13 +1039,16 @@ export default function payment() {
                               }}
                             >
                               <div style={{ lineHeight: 3 }}>
-                                <h6>{numberFormat(data?.price ?? 0)} ກີບ</h6>
-                                <h6>
+                                <h6 style={{ fontSize: 13, color: "gray" }}>
+                                  {data?.qty} X {numberFormat(data?.price ?? 0)}{" "}
+                                  ກີບ
+                                </h6>
+                                <h6 style={{ fontSize: 13, color: "gray" }}>
                                   {numberFormat(data?.price * data?.qty ?? 0)}{" "}
                                   ກີບ
                                 </h6>
                               </div>
-                              <h6>ຈຳນວນ {data?.qty}</h6>
+                              {/* <h6>ຈຳນວນ {data?.qty}</h6> */}
                             </div>
                           </div>
                         </div>
@@ -1024,7 +1057,7 @@ export default function payment() {
                   </div>
 
                   <div className="d-flex justify-content-between align-items-center w-100">
-                    <h6>ຈຳນວນສິນຄ້າທັງໝົດ:</h6>
+                    <h6>ຈຳນວນສິນຄ້າ:</h6>
                     <h6>{cartDatas?.length} ລາຍການ</h6>
                   </div>
                   <div className="d-flex justify-content-between align-items-center w-100">

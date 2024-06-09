@@ -1,3 +1,4 @@
+import CustomNavbar from "@/components/CustomNavbar";
 import FooterComponent from "../../components/salePage/FooterComponent";
 import React, { useEffect, useState } from "react";
 
@@ -6,38 +7,9 @@ function PrivatePolicy() {
 
   return (
     <>
+    <CustomNavbar />
       <div style={{ padding: 20 }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "start",
-            alignItems: "center",
-            background: "#422F90",
-            color:'#ffff',
-            borderRadius: 5,
-            border: "1px #3c169b",
-            boxShadow: "0 1px 1px rgba(75, 2, 131, 1)",
-            padding: "5px 20px",
-          }}>
-          <img
-            src="/assets/images/mainLogo.png"
-            style={{
-              width: "65px",
-              height: "65px",
-              borderRadius: "5em",
-              paddingLeft: "-80px",
-              background: "#fff",
-            }}
-            alt="profile"
-          />
-          <h2
-            style={{
-              padding: "25px",
-              marginLeft: "-15px",
-            }}>
-            <b>4B Live - Policy</b>
-          </h2>
-        </div>
+        
         <br />
         <h4>
           <strong>1. ພາກສະເໜີ</strong>

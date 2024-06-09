@@ -3,8 +3,8 @@ import { combineReducers } from "redux";
 import fbdataReducer from "./fbdata/fbdata.reducer";
 import cartReducer from "./salepage/cartReducer";
 import orders from "./setOrder/orders";
-import patchBack from "./setPatch/patchBack";
-import { setNotiOrders } from "./notiorder/getNotiorder";
+import patchBack, { getKeyPatch } from "./setPatch/patchBack";
+import { getSearchs, setNotiOrders } from "./notiorder/getNotiorder";
 import getIds from "./predata/getIds";
 import dataOrder from "./completedOrder/dataOrder";
 import trackOrder from "./setOrder/trackOrder";
@@ -16,12 +16,14 @@ const rootReducer = combineReducers({
   salepage: cartReducer,
   setorder: orders,
   notiorder: setNotiOrders,
+  notiorder: getSearchs,
   setpatch: patchBack,
   predata: getIds,
   completedOrder: dataOrder,
   setorder: trackOrder,
   qrcode: getqrcode,
   productView: getData,
+  getKeyPatch: getKeyPatch,
 });
  
 
