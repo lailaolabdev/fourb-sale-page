@@ -4,12 +4,25 @@ import LoadingComponent from "@/components/LoadingComponent";
 import FooterComponent from "@/components/salePage/FooterComponent";
 import { useLazyQuery } from "@apollo/client";
 import moment from "moment";
-import { Accordion, AccordionTab } from "primereact/accordion";
+// import { Accordion, AccordionTab } from "primereact/accordion";
 import { Avatar } from "primereact/avatar";
 import { Badge } from "primereact/badge";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import React, { useEffect, useState } from "react";
+
+import Accordion from "@mui/material/Accordion";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { numberFormat } from "@/helper";
 
 export default function Index() {
   const [myInfo, setMyinfo] = useState("");
@@ -61,51 +74,64 @@ export default function Index() {
             onKeyDown={onChangeFilter}
           />
           <br />
+
           {newOrdergroups.length > 0 ? (
-            <div>
+            <>
+            <p style={{fontSize:13,fontWeight:'bold'}}>ປະຫວັດການຊື້ຂອງທ່ານ</p>
               {newOrdergroups.map((data, index) => (
                 <Accordion
-                  activeIndex={expanded === index ? 0 : null}
-                  onChange={handleChange(index)}
+                elevation={0}
                   key={index}
+                  expanded={expanded === index}
+                  onChange={handleChange(index)}
+                  sx={{ width: "100%" }}
                 >
-                  <AccordionTab
-                    style={{ width: "100%" }}
-                    header={
-                      <span
-                        className="d-flex align-items-center gap-2"
-                        style={{ width: "100%" }}
-                      >
-                        {/* <Avatar
-                          image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png"
-                          shape="circle"
-                        /> */}
-                        <span >{data?.code}</span>
-                        <span >{moment(data?.createdAt).format("DD-MM-YYYY, HH:mm:ss")}</span>
-                        <span>ຊື່ປ້ອນຕອນສັ່ງຊື້: {data?.customerName ?? "-"}</span>
-                        <Badge
-                          value={data?.orders?.length}
-                          className="ml-auto"
-                        />
-                      </span>
-                    }
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1bh-content"
+                    id="panel1bh-header"
                   >
-                    <div >
-                    <DataTable
-                      value={data?.orders}
-                      tableStyle={{ minWidth: 300, width:'100%' }}
-                    >
-                      <Column field="productName" header="ຊື່ສິນຄ້າ"></Column>
-                      <Column field="amount" header="ຈຳນວນ"></Column>
-                      <Column field="price" header="ລາຄາ"></Column>
-                      <Column field="currency" header="ສະກຸນ"></Column>
-                    </DataTable>
-                    </div>
-                    <p>ລວມທັງໝົດ: {data?.sumPrice}</p>
-                  </AccordionTab>
+                    <Typography sx={{ width: "33%", flexShrink: 0,fontSize:13 }}>
+                      {data?.code}
+                    </Typography>
+                    <Typography sx={{ color: "text.secondary",fontSize:12 }}>
+                      {moment(data?.createdAt).format("DD-MM-YYYY, HH:mm:ss")}
+                    </Typography>
+                    <Typography sx={{ color: "text.secondary",ml:2,fontSize:12,color:'green' }}>
+                      ເງິນລວມ: {numberFormat(data?.sumPrice)} ກີບ
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Table sx={{ width: "100%" }} aria-label="simple table">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell align="left">ຊື່ສິນຄ້າ</TableCell>
+                          <TableCell align="center">ຈຳນວນ</TableCell>
+                          <TableCell align="center">ລາຄາ</TableCell>
+                          <TableCell align="right">ລວມ</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {data?.orders.map((item, idex) => (
+                          <TableRow
+                          key={idex}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                         
+                          <TableCell align="left">{idex + 1}.{item?.productName}</TableCell>
+                          <TableCell align="center">{item?.amount}</TableCell>
+                          <TableCell align="center">{numberFormat(item?.price)}</TableCell>
+                          <TableCell align="right">{numberFormat(item?.totalPrice)} {item?.currency}</TableCell> 
+                        </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </AccordionDetails>
                 </Accordion>
               ))}
-            </div>
+            </>
           ) : (
             <div className="d-flex justify-content-center align-items-center w-100">
               <img

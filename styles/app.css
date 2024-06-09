@@ -170,7 +170,6 @@
          font-size: 12px;
          gap: 2px;
          cursor: pointer;
-         /* width: 100%; */
          display: -webkit-box;
          -webkit-box-orient: vertical;
          -webkit-line-clamp: 1;
@@ -184,6 +183,7 @@
          &:last-child {
              font-weight: bold;
              color: var(--colorText);
+             width: 60%;
          }
      }
 
@@ -1457,15 +1457,16 @@
          & input {
              width: 100%;
              padding: .65em;
-             text-align: center;
+             text-align: left;
              border: none;
              outline: 1px solid var(--colorGray);
              border-radius: .3em;
              transition: all .2s ease-in-out;
+             font-size: 12px;
 
-             &:focus {
+             /* &:focus {
                  outline: 1px solid var(--colorText);
-             }
+             } */
 
          }
      }

@@ -216,7 +216,6 @@ export default function CustomNavbar() {
   ];
 
   const onMenuLink = (menu) => {
-    console.log(menu);
     if (menu?.url === "/sigin") {
       setShowLogin(true);
     } else if (menu?.url === "/sign-out") {

@@ -1,10 +1,10 @@
 import CustomNavbar from "@/components/CustomNavbar";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { FaMinus, FaPlus, FaRegHeart } from "react-icons/fa";
 import { IoBagAddSharp, IoCloseSharp } from "react-icons/io5";
 import { useRouter } from "next/router";
-import { S3_URL, S3_URL_MEDIUM, numberFormat } from "@/helper";
+import { COMMISSION_OFFICE, S3_URL, S3_URL_MEDIUM, calculateRoundedValue, numberFormat } from "@/helper";
 import { HiHome } from "react-icons/hi2";
 import { SiShopee } from "react-icons/si";
 import { RxSlash } from "react-icons/rx";
@@ -21,6 +21,8 @@ import {
 import { Toast } from "primereact/toast";
 import { Fieldset } from "primereact/fieldset";
 import { formatNumberFavorite } from "@/const";
+import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
+import { SHOP } from "@/apollo";
 
 const images = [
   {
@@ -54,8 +56,42 @@ export default function index() {
   const [previewImage, setPreviewImage] = useState([]);
   const [defaultImage, setDefaultImage] = useState();
   const dispatch = useDispatch();
+  const [shopDetail, setShopDetail] = useState("");
+
   const [quantity, setQuantity] = useState(1);
   const { patchBack } = useSelector((state) => state?.setpatch);
+
+  const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
+    GET_EXCHANGRATE,
+    { fetchPolicy: "network-only" }
+  );
+
+  const [getShopData, { data: loadShopData }] = useLazyQuery(SHOP, {
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    getExchangeRate({
+      variables: {
+        where: {
+          shop: patchBack?.id,
+        },
+      },
+    });
+    getShopData({
+      variables: {
+        where: {
+          id: patchBack?.id,
+        },
+      },
+    });
+  },[patchBack])
+
+  useEffect(() => {
+    if (loadShopData?.shop) {
+      setShopDetail(loadShopData?.shop);
+    }
+  }, [loadShopData]);
 
   useEffect(() => {
     if (router.query.item) {
@@ -70,57 +106,147 @@ export default function index() {
     }
   }, [router.query.item]);
 
+  
+
   useEffect(() => {
     if (product?.containImages) {
       setPreviewImage(product?.containImages[0]);
     }
   }, [product?.containImages]);
-// add product to cart
-const onAddToCart = () => {
-  let productWithQuantity = {};
 
-  // Calculate the new price based on the reduction percentage
-  const reduction = product.reduction ?? 0;
-  const newPrice = product.price * reduction / 100;
+  const isExChangeRate = useMemo(() => {
+    return loadExchangeRate?.exchangeRate;
+  }, [loadExchangeRate?.exchangeRate]);
 
-  if (quantity > 1) {
-    if(product.reduction) {
+  const _calculatePriceWithExchangeRate = (price, currency, reduction) => {
+    let _price = 0;
+
+    if (["BAHT", "ບາດ"].includes(currency)) {
+      _price = price * isExChangeRate?.baht;
+    } else if (["USD", "ໂດລາ"].includes(currency)) {
+      _price = price * (isExChangeRate?.usd || 0);
+    } else {
+      _price = price;
+    }
+
+    let priceProduct = 0;
+
+    if (patchBack?.commissionForShopId) {
+      priceProduct = _price + (_price * _commissionForAffiliate) / 100;
+    } else {
+      priceProduct = _price;
+    }
+
+    if (shopDetail?.commissionService) {
+      priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
+    } else {
+      priceProduct = _price;
+    }
+
+    // ຄຳນວນສ່ວນຫຼຸດ
+    if (reduction > 0) {
+      priceProduct = (priceProduct * reduction) / 100;
+    }
+
+    return calculateRoundedValue(priceProduct / 1000) * 1000;
+  };
+
+  // add product to cart
+  const onAddToCart = () => {
+    let productWithQuantity = {};
+
+    // Calculate the new price based on the reduction percentage
+    const reduction = product.reduction ?? 0;
+    const newPrice = product.price - (product.price * reduction) / 100;
+
+    if (quantity > 1) {
       productWithQuantity = {
         ...product,
         shop: patchBack?.id,
         newQuantity: quantity,
-        price: newPrice // Update the price with the reduced price
       };
-    }
-    productWithQuantity = {
-      ...product,
-      shop: patchBack?.id,
-      newQuantity: quantity,
-    };
-   
-  } else {
-    if(product.reduction) {
+      // Only update the price if there is a reduction
+      if (product.reduction) {
+        productWithQuantity.price = newPrice;
+      }
+    } else {
       productWithQuantity = {
         ...product,
         shop: patchBack?.id,
-        price: newPrice // Update the price with the reduced price
       };
+      // Only update the price if there is a reduction
+      if (product.reduction) {
+        productWithQuantity.price = newPrice;
+      }
     }
-    productWithQuantity = {
-      ...product,
-      shop: patchBack?.id,
-    };
-  }
 
-  console.log("productWithQuantity:::", productWithQuantity)
+    console.log("productWithQuantity:::", productWithQuantity);
 
-  dispatch(addCartItem(productWithQuantity));
-  toast.current.show({
-    severity: "success",
-    summary: "ສຳເລັດ",
-    detail: "ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າຂອງທ່ານແລ້ວ",
-  });
-};
+    // dispatch(addCartItem(productWithQuantity));
+    // toast.current.show({
+    //   severity: "success",
+    //   summary: "ສຳເລັດ",
+    //   detail: "ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າຂອງທ່ານແລ້ວ",
+    // });
+  };
+
+  const handleAddProduct = () => {
+    
+      let _price = 0;
+
+      if (["BAHT", "ບາດ"].includes(product?.currency)) {
+        _price = product?.price * isExChangeRate?.baht;
+      } else if (["USD", "ໂດລາ"].includes(product?.currency)) {
+        _price = product?.price * (isExChangeRate?.usd || 0);
+      } else {
+        _price = product?.price;
+      }
+
+      let priceProduct = 0;
+
+      if (patchBack?.commissionForShopId) {
+        priceProduct = _price + (_price * _commissionForAffiliate) / 100;
+      } else {
+        priceProduct = _price;
+      }
+
+      if (shopDetail?.commissionService) {
+        priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
+      } else {
+        priceProduct = _price;
+      }
+
+      if (product?.reduction !== null || product?.reduction) {
+        priceProduct = (priceProduct * product?.reduction) / 100;
+      }
+
+      const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
+
+      // const _data = {
+      //   ...data,
+      //   price: roundedValue,
+      //   modelType: live, shop: shopId
+      // };
+
+      // console.log({_data})
+
+      const { __typename, ...restData } = product;
+
+      const _data = {
+        ...restData,
+        price: roundedValue,
+        shop: patchBack?.id,
+      };
+
+
+      dispatch(addCartItem(_data));
+
+      toast.current.show({
+        severity: "success",
+        summary: "ສຳເລັດ",
+        detail: "ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າຂອງທ່ານແລ້ວ",
+      });
+  };
 
   const incrementQuantity = () => {
     if (quantity >= product?.amount) {
@@ -140,7 +266,6 @@ const onAddToCart = () => {
     }
   };
 
-
   return (
     <>
       <Toast position="top-center" ref={toast} />
@@ -151,7 +276,7 @@ const onAddToCart = () => {
         <div className="bread-crumb">
           <span onClick={() => router.back()}>ໜ້າຫລັກ</span>
           <RxSlash />
-          <span>{product?.name}</span>
+          <span>{product?.name}888hkjgjghfgdfsfsfjhjghhgbyfrwervlnkjopghfgdtpoiuytrwqexv,,mnnvfg</span>
         </div>
         <div className="card-view">
           <div className="card-dailog-image">
@@ -190,7 +315,11 @@ const onAddToCart = () => {
           </div>
           <div className="card-dailog-content">
             <h3>{product?.name}</h3>
-            {product?.reduction && <p style={{color:'red', fontSize:23}}>ສ່ວນຫຼຸດ {product?.reduction}%</p>}
+            {product?.reduction && (
+              <p style={{ color: "red", fontSize: 23 }}>
+                ສ່ວນຫຼຸດ {product?.reduction}%
+              </p>
+            )}
             <p>{product?.note ?? "..."}</p>
 
             <h4>
@@ -199,17 +328,27 @@ const onAddToCart = () => {
               {product?.reduction && (
                 <span
                   style={{
-                     textDecoration:'line-through',
+                    textDecoration: "line-through",
                   }}
                 >
                   {numberFormat(product?.price)}
                 </span>
-              )}{" - "}
-              {product?.reduction ? (
+              )}
+              {" - "}
+              {/* {product?.reduction ? (
                 <span>{numberFormat((product?.price * product?.reduction) / 100)}</span>
               ):(
                 <span>{numberFormat((product?.price))}</span>
-              )}
+              )} */}
+              <span>
+                {numberFormat(
+                  _calculatePriceWithExchangeRate(
+                    product?.price ?? 0,
+                    product?.currency,
+                    product?.reduction
+                  )
+                )}
+              </span>
             </h4>
             <br />
             <p>Color:</p>
@@ -238,7 +377,7 @@ const onAddToCart = () => {
                   <FaPlus />
                 </p>
               </div>
-              <button onClick={onAddToCart} style={{ userSelect: "none" }}>
+              <button onClick={handleAddProduct} style={{ userSelect: "none" }}>
                 <IoBagAddSharp />
                 <span>ເພິ່ມກະຕ່າ</span>
               </button>
@@ -246,14 +385,12 @@ const onAddToCart = () => {
             <br />
             <div style={{ cursor: "pointer" }}>
               <p>
-                <FaRegHeart style={{ fontSize: 18 }} />{" "}
-                Favorite ({formatNumberFavorite(product?.favorite)})
+                <FaRegHeart style={{ fontSize: 18 }} /> Favorite (
+                {formatNumberFavorite(product?.favorite)})
               </p>
             </div>
           </div>
         </div>
-
-       
 
         <div className="card-description-product">
           <div className="product-specifications">
@@ -282,7 +419,9 @@ const onAddToCart = () => {
                 key={index}
               >
                 <p>{item?.title} title description</p>
-                {item?.image && <img style={{ width: "70%" }} src={S3_URL + item?.image} />}
+                {item?.image && (
+                  <img style={{ width: "70%" }} src={S3_URL + item?.image} />
+                )}
               </div>
             ))}
           </div>

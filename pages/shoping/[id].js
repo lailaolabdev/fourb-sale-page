@@ -559,7 +559,6 @@ function ShopingStore({ initialShop }) {
             className="p-gination"
             template={{ layout: "PrevPageLink CurrentPageReport NextPageLink" }}
           />
-          {/* <Paginator first={first} rows={10} totalRecords={50} onPageChange={onPageChange} template={{ layout: 'PrevPageLink CurrentPageReport NextPageLink' }} /> */}
         </div>
       </div>
       </div>

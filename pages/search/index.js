@@ -53,10 +53,8 @@ function SearchProduct({ initialShop }) {
     shopForAffiliateId,
     commissionForShopId,
     search_key,
-    stocks
+    stocks,
   } = router.query;
-
- 
 
   const itemsPerPage = 30;
   const [isOpenView, setIsOpenView] = useState(false);
@@ -67,13 +65,13 @@ function SearchProduct({ initialShop }) {
   const [shopDetail, setShopDetail] = useState("");
   const [isStock, setIsStock] = useState(1);
   const [filterNew, setFilterNew] = useState();
+  const [count, setCount] = useState(0);
+
   const [heartAnimation, setHeartAnimation] = useState(false);
 
   const toast = useRef(null);
   const { patchBack } = useSelector((state) => state?.setpatch);
   const shopId = patchBack?.id;
-
-
 
   const dispatch = useDispatch();
 
@@ -115,20 +113,17 @@ function SearchProduct({ initialShop }) {
     }
   };
 
-  
-
   const totalPages = Math.ceil(productTotal / itemsPerPage);
 
   const handlePageChange = useCallback((newPage) => {
-    console.log({ newPage });
     setCurrentPage(newPage?.page);
+    setCount(newPage?.first);
   }, []);
 
   console.log({ currentPage });
 
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
-
 
   useEffect(() => {
     getShopCommissionFor({
@@ -211,7 +206,7 @@ function SearchProduct({ initialShop }) {
         };
       }
 
-      console.log("check_type:::", typeof(stocks))
+      console.log("check_type:::", typeof stocks);
 
       if (stocks) {
         _where = {
@@ -331,9 +326,9 @@ function SearchProduct({ initialShop }) {
       query: { item: encodedItem },
     });
   };
-  
-   // add heart to product
-   const onAddHeartProduct = (data, index) => {
+
+  // add heart to product
+  const onAddHeartProduct = (data, index) => {
     const currentFavorites = data?.favorite || 0;
     const newFavoritesCount = currentFavorites + 1;
 
@@ -355,7 +350,6 @@ function SearchProduct({ initialShop }) {
     setHeartAnimation(index);
     setTimeout(() => setHeartAnimation(null), 600);
   };
-
 
   const ogImageUrl = initialShop
     ? `${S3_URL}${initialShop?.image}`
@@ -396,61 +390,64 @@ function SearchProduct({ initialShop }) {
 
       <CustomNavbar />
 
-<div className="body-main">
-      <div className="container-contents">
-        <h5>
-          <b>{productLists?.length > 0 ? `ຜະລິດຕະພັນຍອດນິຍົມສໍາລັບການຊື້ເຄື່ອງປະຈໍາວັນ`: `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}</b>
-        </h5>
-        
+      <div className="body-main">
+        <div className="container-contents">
+          <h5>
+            <b>
+              {productLists?.length > 0
+                ? `ຜະລິດຕະພັນຍອດນິຍົມ`
+                : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
+            </b>
+          </h5>
 
-        <div className="card-items">
-              {!stockData && loadingStock ? (
-                <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
-              ) : (
-                <>
-                  {productLists.map((item, index) => (
-                <div
-                  className="item-now"
-                  key={index}
-                  onClick={() => handleProductPreview(item)}
-                >
+          <div className="card-items">
+            {!stockData && loadingStock ? (
+              <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
+            ) : (
+              <>
+                {productLists.map((item, index) => (
                   <div
-                    className="favorite-view"
-                    onClick={(e) => e.stopPropagation()}
+                    className="item-now"
+                    key={index}
+                    onClick={() => handleProductPreview(item)}
                   >
-                    <p
-                      className={
-                        heartAnimation === index ? "heart-animation" : ""
-                      }
-                      onClick={() => onAddHeartProduct(item, index)}
+                    <div
+                      className="favorite-view"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
-                    </p>
-                  </div>
-                  <div className="box-image">
-                    {item?.image ? (
-                      <img src={S3_URL + item?.image} />
-                    ) : (
-                      <EmptyImage />
-                    )}
-                    {item?.reduction && (
-                      <div className="promotion-field">
-                        ສ່ວນຫຼຸດ {item?.reduction}%
-                      </div>
-                    )}
-                  </div>
-                  <div
-                    className="box-shoping"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <h3>{item?.name}</h3>
+                      <p
+                        className={
+                          heartAnimation === index ? "heart-animation" : ""
+                        }
+                        onClick={() => onAddHeartProduct(item, index)}
+                      >
+                        <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
+                      </p>
+                    </div>
+                    <div className="box-image">
+                      {item?.image ? (
+                        <img src={S3_URL + item?.image} />
+                      ) : (
+                        <EmptyImage />
+                      )}
+                      {item?.reduction && (
+                        <div className="promotion-field">
+                          ສ່ວນຫຼຸດ {item?.reduction}%
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      className="box-shoping"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <h3>{item?.name}</h3>
 
-                    <div className="btn-price-add">
-                      <div>
-                        {item?.reduction && (
-                          <span>{numberFormat(item?.price)}</span>
-                        )}
-                        {/* <small
+                      <div className="btn-price-add">
+                        <div>
+                          {item?.reduction && (
+                            <span>{numberFormat(item?.price)}</span>
+                          )}
+                          {/* <small
                           style={{ color: item?.amount > 5 ? "black" : "red" }}
                         >
                           Stocks: {item?.amount}
@@ -465,29 +462,33 @@ function SearchProduct({ initialShop }) {
                                 item?.reduction
                               )
                             )}
-                          </h3> 
-                      </div>
-                      <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
-                      {/* <button onClick={() => handleAddProduct(item)}>
+                          </h3>
+                        </div>
+                        <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
+                        {/* <button onClick={() => handleAddProduct(item)}>
                             <IoBagAddSharp />
                             <span>ເພິ່ມ</span>
                           </button> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-                </>
-              )}
-            </div>
-       {productLists?.length > 0 && <div className="pt-1 d-flex justify-content-end align-items-end w-100">
-          <Paginator
-            first={currentPage}
-            rows={itemsPerPage}
-            totalRecords={productTotal}
-            onPageChange={handlePageChange}
-          />
-        </div>}
-      </div>
+                ))}
+              </>
+            )}
+          </div>
+          <div className="pt-1 d-flex justify-content-center align-items-center w-100">
+            <Paginator
+              first={count}
+              rows={itemsPerPage}
+              totalRecords={productTotal}
+              onPageChange={handlePageChange}
+              className="p-gination"
+              template={{
+                layout: "PrevPageLink CurrentPageReport NextPageLink",
+              }}
+            />
+          </div>
+        </div>
       </div>
 
       <FooterComponent />
