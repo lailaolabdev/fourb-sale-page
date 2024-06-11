@@ -166,11 +166,11 @@ export default function CartDetail() {
     // const destinationPath =
     // idPreState.shopId && idPreState.affiliateId &&
     // idPreState.commissionForShopId
-    //   ? `../shoping/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
+    //   ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
     //   : idPreState.shopId &&
     //     idPreState.affiliateId
-    //   ? `../shoping/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
-    //   : `../shoping/${idPreState?.shopId}`;
+    //   ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+    //   : `../shop/${idPreState?.shopId}`;
 
     // router.push(destinationPath);
   };
@@ -212,7 +212,7 @@ export default function CartDetail() {
         }}
       >
         {/* <div className="bread-crumb">
-          <span onClick={() => router.back()}>Shoping</span>
+          <span onClick={() => router.back()}>shop</span>
           <RxSlash />
           <span>ກະຕ່າສິນຄ້າ</span>
         </div> */}

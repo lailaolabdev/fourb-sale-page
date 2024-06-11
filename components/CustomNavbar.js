@@ -176,7 +176,7 @@ export default function CustomNavbar() {
     {
       title: "ໜ້າຫລັກ",
       icon: <FiHome style={{ fontSize: 18 }} />,
-      url: `../shoping/${shopId}`,
+      url: `../shop/${shopId}`,
     },
     {
       title: "ກ໋ຽວກັບ",
@@ -309,7 +309,7 @@ export default function CustomNavbar() {
                 </span>
               </li>
 
-              <li onClick={() => navigate.push(`../shoping/${shopId}`)}>
+              <li onClick={() => navigate.push(`../shop/${shopId}`)}>
                 ໜ້າຫລັກ
               </li>
               <li onClick={() => navigate.push("../about-us")}>ກ່ຽວກັບ</li>
