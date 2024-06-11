@@ -44,6 +44,7 @@ import { googleLogout } from "@react-oauth/google";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { FiHome } from "react-icons/fi";
 import { image_main } from "@/helper";
+import { Toast } from "primereact/toast";
 
 export default function CustomNavbar() {
   const navigate = useRouter();
@@ -51,6 +52,8 @@ export default function CustomNavbar() {
   const [isShowRing, setIsShowRing] = useState(false);
   const parentDivRef = useRef(null);
   const buttonEl = useRef(null);
+  const toast = useRef(null);
+
 
   const [dataBage, setDataBage] = useState(0);
   const [isCall, setIsCall] = useState(false);
@@ -228,6 +231,8 @@ export default function CustomNavbar() {
 
   return (
     <>
+      <Toast position="top-center" ref={toast} />
+
       <div className="nav-calling">
         <div>
           <TbPhoneCall />
@@ -273,12 +278,18 @@ export default function CustomNavbar() {
 
           {width > 800 && (
             <div className="nav-notication">
-              <div>
+              <div onClick={()=> {
+                 toast.current.show({
+                  severity: "info",
+                  summary: "ບໍ່ແຈ້ງການ?",
+                  detail: "ຕິດຕາມຕໍ່ໄປ!",
+                });
+              }}>
                 <IoNotifications />
                 <p>ແຈ້ງການ</p>
               </div>
               <div onClick={() => navigate.push("../cartdetail")}>
-                <TiShoppingCart style={{ fontSize: 25 }} />
+                <TiShoppingCart style={{ fontSize: 23 }} />
                 <p>ກະຕ່າສິນຄ້າ</p>
                 <span>{dataBage ?? 0}</span>
               </div>
