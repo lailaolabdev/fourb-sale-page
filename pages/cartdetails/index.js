@@ -287,8 +287,7 @@ export default function index() {
           <span onClick={() => router.back()}>ໜ້າຫລັກ</span>
           <RxSlash />
           <span>
-            {product?.name}
-            888hkjgjghfgdfsfsfjhjghhgbyfrwervlnkjopghfgdtpoiuytrwqexv,,mnnvfg
+            {product?.name} 
           </span>
         </div>
         <div className="card-view">
