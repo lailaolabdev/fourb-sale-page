@@ -9,6 +9,10 @@ import "../styles/globals.css";
 import "../styles/styleSalePage.css";
 import "../styles/index.scss"; 
 import "../styles/_customstyle.scss"
+import "../styles/app.css"; 
+import "../styles/pagination.css"; 
+
+
 
  
 
@@ -40,13 +44,14 @@ import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 // import { authClient } from "../autClient";
 import { StateProvider } from "../store";
-import { S3_URL, SERVER_URI, SOCKET_SERVER_URI } from "../helper";
+import { CLIENT_ID, S3_URL, SERVER_URI, SOCKET_SERVER_URI } from "../helper";
 import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "react-toast-notifications";
 // import HeaderSalePage from "../components/salePage/HeaderSalePage";
-import NavbarComponent from "../components/salePage/NavbarComponent";
+// import NavbarComponent from "../components/salePage/NavbarComponent";
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // config.autoAddCss = false;
 
@@ -146,6 +151,7 @@ const App = ({ Component, pageProps }) => {
 
       <Provider store={store}>
         {/* <ApolloProvider client={authClient}> */}
+        <GoogleOAuthProvider clientId={CLIENT_ID}>
         <ApolloProvider client={client}>
           <ToastProvider>
             <StateProvider>
@@ -155,6 +161,7 @@ const App = ({ Component, pageProps }) => {
             </StateProvider>
           </ToastProvider>
         </ApolloProvider>
+        </GoogleOAuthProvider>
       </Provider>
       <GoogleAnalytics trackPageViews={{ ignoreHashChange: true }} />
     </>

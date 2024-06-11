@@ -1,5 +1,3 @@
-"use client";
-
 import {
   GET_SHOP,
   GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE,
@@ -15,7 +13,6 @@ import PaginationComponent from "@/components/salePage/PaginationComponent";
 import {
   COMMISSION_OFFICE,
   S3_URL,
-  S3_URL_MEDIUM,
   calculateRoundedValue,
   numberFormat,
 } from "@/helper";
@@ -42,14 +39,11 @@ import { encode as base64Encode } from "js-base64";
 import { MdArrowBackIos } from "react-icons/md";
 import { GrNext } from "react-icons/gr";
 import { Paginator } from "primereact/paginator";
-import { getKeyPatch } from "@/redux/setPatch/patchBack";
-import useWindowDimensions from "@/helper/useWindowDimensions";
-import { Rating } from "primereact/rating";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { UPDATE_STOCK, UPDATE_STOCK_HEART } from "@/apollo/order/mutation";
 import { formatNumberFavorite } from "@/const";
+import { UPDATE_STOCK } from "@/apollo/order/mutation";
+import { FaHeart } from "react-icons/fa";
 
-function ShopingStore({ initialShop }) {
+function SearchProduct({ initialShop }) {
   const router = useRouter();
   const {
     liveId,
@@ -58,25 +52,26 @@ function ShopingStore({ initialShop }) {
     id,
     shopForAffiliateId,
     commissionForShopId,
+    search_key,
+    stocks,
   } = router.query;
-  const shopId = id;
 
-  const { height, width } = useWindowDimensions();
-
-  const itemsPerPage = 25;
+  const itemsPerPage = 30;
   const [isOpenView, setIsOpenView] = useState(false);
   const parentDivRef = useRef(null);
   const [productLists, setProductsLists] = useState([]);
   const [productTotal, setProductTotal] = useState(0);
-
-  const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(0);
   const [shopDetail, setShopDetail] = useState("");
-
-  const [heartAnimation, setHeartAnimation] = useState(false);
   const [isStock, setIsStock] = useState(1);
   const [filterNew, setFilterNew] = useState();
+  const [count, setCount] = useState(0);
+
+  const [heartAnimation, setHeartAnimation] = useState(false);
+
   const toast = useRef(null);
+  const { patchBack } = useSelector((state) => state?.setpatch);
+  const shopId = patchBack?.id;
 
   const dispatch = useDispatch();
 
@@ -102,7 +97,6 @@ function ShopingStore({ initialShop }) {
   });
 
   const [updateStock] = useMutation(UPDATE_STOCK);
-  const [updateStockHeart] = useMutation(UPDATE_STOCK_HEART);
 
   // click to scrolling to left and right
   const scrollContainerRef = useRef(null);
@@ -126,14 +120,10 @@ function ShopingStore({ initialShop }) {
     setCount(newPage?.first);
   }, []);
 
+  console.log({ currentPage });
+
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
-
-  // get patch key to localstorage
-  useEffect(() => {
-    localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
-    dispatch(getKeyPatch(router?.query));
-  }, [shopId]);
 
   useEffect(() => {
     getShopCommissionFor({
@@ -154,7 +144,7 @@ function ShopingStore({ initialShop }) {
 
   useEffect(() => {
     fetchStock();
-  }, [liveId, shopId, currentPage, live, isStock, filterNew]);
+  }, [liveId, shopId, currentPage, live, stocks, search_key]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -209,17 +199,19 @@ function ShopingStore({ initialShop }) {
         isUsingSalePage: true,
       };
 
-      if (filterNew !== "") {
+      if (search_key !== "") {
         _where = {
           ..._where,
-          searchKeyWord: filterNew,
+          searchKeyWord: search_key,
         };
       }
 
-      if (isStock) {
+      console.log("check_type:::", typeof stocks);
+
+      if (stocks) {
         _where = {
           ..._where,
-          amount: isStock,
+          amount: parseFloat(stocks),
         };
       }
 
@@ -236,7 +228,7 @@ function ShopingStore({ initialShop }) {
     }
   };
 
-  const _calculatePriceWithExchangeRate = (price, currency, reduction) => {
+  const _calculatePriceWithExchangeRate = (price, currency) => {
     let _price = 0;
 
     if (["BAHT", "ບາດ"].includes(currency)) {
@@ -259,12 +251,6 @@ function ShopingStore({ initialShop }) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
     } else {
       priceProduct = _price;
-    }
-
-    // ຄຳນວນສ່ວນຫຼຸດ
-    if(reduction > 0) {
-
-      priceProduct = (priceProduct * reduction) / 100;
     }
 
     return calculateRoundedValue(priceProduct / 1000) * 1000;
@@ -319,6 +305,8 @@ function ShopingStore({ initialShop }) {
         shop: shopId,
       };
 
+      console.log({ _data });
+
       dispatch(addCartItem(_data));
 
       toast.current.show({
@@ -329,6 +317,7 @@ function ShopingStore({ initialShop }) {
     }
   };
 
+  // preview my product
   const handleProductPreview = (item) => {
     const { __typename, ...newItem } = item;
     const encodedItem = base64Encode(JSON.stringify(newItem));
@@ -343,7 +332,7 @@ function ShopingStore({ initialShop }) {
     const currentFavorites = data?.favorite || 0;
     const newFavoritesCount = currentFavorites + 1;
 
-    updateStockHeart({
+    updateStock({
       variables: {
         where: {
           id: data?.id,
@@ -360,23 +349,6 @@ function ShopingStore({ initialShop }) {
     );
     setHeartAnimation(index);
     setTimeout(() => setHeartAnimation(null), 600);
-  };
-
-  const openWhatsApp = (data) => {
-    // console.log("log phone:--->", data)
-    const phoneNumber = "+856020" + data;
-
-    // You can also include a message using the 'text' parameter.
-    const message = "ສະບາຍດີ🙏";
-
-    // Construct the WhatsApp URL using https://wa.me.
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-
-    // Open WhatsApp using the constructed URL.
-    // window.open(whatsappUrl);
-    window.location.href = whatsappUrl;
   };
 
   const ogImageUrl = initialShop
@@ -416,114 +388,66 @@ function ShopingStore({ initialShop }) {
         />
       </Head>
 
-      <CustomNavbar setIsStock={setIsStock} setFilterNew={setFilterNew} />
+      <CustomNavbar />
 
-      {/* <div className="d-flex gap-4">
-      </div> */}
-      <SwiperComponent shopDetail={shopDetail} contactshop={openWhatsApp} productTotal={productTotal} />
-<div className="body-main">
-      {/* <div>
-        <p style={{ paddingTop: 10, fontWeight: "bold", fontSize: 15 }}>
-          ປະເພດສິນຄ້າ
-        </p>
+      <div className="body-main">
+        <div className="container-contents">
+          <h5>
+            <b>
+              {productLists?.length > 0
+                ? `ຜະລິດຕະພັນຍອດນິຍົມ`
+                : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
+            </b>
+          </h5>
 
-        <div className="card-review-category">
-          <button className="btn-back-scroll" onClick={scrollLeft}>
-            <MdArrowBackIos />
-          </button>
-          <div
-            className="scrolling"
-            ref={scrollContainerRef}
-            style={{
-              overflowX: "auto",
-              width: "100%",
-              scrollBehavior: "smooth",
-            }}
-          >
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
-          </div>
-          <button className="btn-next-scroll" onClick={scrollRight}>
-            <GrNext />
-          </button>
-        </div>
-      </div> */}
-
-      <div className="container-contents">
-        <p>
-          <b>ຜະລິດຕະພັນຍອດນິຍົມ</b>{" "}
-        </p>
-        {/* <p style={{ fontSize: 13, textAlign: "center" }}>
-          ເບິ່ງສິນຄ້າຍອດນິຍົມທັງໝົດຂອງພວກເຮົາໃນອາທິດນີ້.
-          ທ່ານສາມາດເລືອກຜະລິດຕະພັນຄວາມຕ້ອງການປະຈໍາວັນຂອງທ່ານຈາກບັນຊີລາຍຊື່ນີ້ແລະໄດ້ຮັບຂໍ້ສະເຫນີພິເສດບາງຢ່າງທີ່ມີການຂົນສົ່ງຟຣີ.
-        </p> */}
-
-        <div className="card-items">
-          {!stockData && loadingStock ? (
-            <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
-          ) : (
-            <>
-              {productLists.map((item, index) => (
-                <div
-                  className="item-now"
-                  key={index}
-                  onClick={() => handleProductPreview(item)}
-                >
+          <div className="card-items">
+            {!stockData && loadingStock ? (
+              <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
+            ) : (
+              <>
+                {productLists.map((item, index) => (
                   <div
-                    className="favorite-view"
-                    onClick={(e) => e.stopPropagation()}
+                    className="item-now"
+                    key={index}
+                    onClick={() => handleProductPreview(item)}
                   >
-                    <p
-                      className={
-                        heartAnimation === index ? "heart-animation" : ""
-                      }
-                      onClick={() => onAddHeartProduct(item, index)}
+                    <div
+                      className="favorite-view"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
-                    </p>
-                  </div>
-                  <div className="box-image">
-                    {item?.image ? (
-                      <img src={S3_URL_MEDIUM + item?.image} />
-                    ) : (
-                      <EmptyImage />
-                    )}
-                    {item?.reduction && (
-                      <div className="promotion-field">
-                        ສ່ວນຫຼຸດ {item?.reduction}%
-                      </div>
-                    )}
-                  </div>
-                  <div
-                    className="box-shoping"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <h3>{item?.name}</h3>
+                      <p
+                        className={
+                          heartAnimation === index ? "heart-animation" : ""
+                        }
+                        onClick={() => onAddHeartProduct(item, index)}
+                      >
+                        <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
+                      </p>
+                    </div>
+                    <div className="box-image">
+                      {item?.image ? (
+                        <img src={S3_URL + item?.image} />
+                      ) : (
+                        <EmptyImage />
+                      )}
+                      {item?.reduction && (
+                        <div className="promotion-field">
+                          ສ່ວນຫຼຸດ {item?.reduction}%
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      className="box-shoping"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <h3>{item?.name}</h3>
 
-                    <div className="btn-price-add">
-                      <div>
-                        {item?.reduction && (
-                          <span>{numberFormat(item?.price)}</span>
-                        )}
-                        {/* <small
+                      <div className="btn-price-add">
+                        <div>
+                          {item?.reduction && (
+                            <span>{numberFormat(item?.price)}</span>
+                          )}
+                          {/* <small
                           style={{ color: item?.amount > 5 ? "black" : "red" }}
                         >
                           Stocks: {item?.amount}
@@ -538,31 +462,33 @@ function ShopingStore({ initialShop }) {
                                 item?.reduction
                               )
                             )}
-                          </h3> 
-                      </div>
-                      <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
-                      {/* <button onClick={() => handleAddProduct(item)}>
+                          </h3>
+                        </div>
+                        <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
+                        {/* <button onClick={() => handleAddProduct(item)}>
                             <IoBagAddSharp />
                             <span>ເພິ່ມ</span>
                           </button> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </>
-          )}
+                ))}
+              </>
+            )}
+          </div>
+          <div className="pt-1 d-flex justify-content-center align-items-center w-100">
+            <Paginator
+              first={count}
+              rows={itemsPerPage}
+              totalRecords={productTotal}
+              onPageChange={handlePageChange}
+              className="p-gination"
+              template={{
+                layout: "PrevPageLink CurrentPageReport NextPageLink",
+              }}
+            />
+          </div>
         </div>
-        <div className="pt-1 d-flex justify-content-center align-items-center w-100">
-          <Paginator
-            first={count}
-            rows={itemsPerPage}
-            totalRecords={productTotal}
-            onPageChange={handlePageChange}
-            className="p-gination"
-            template={{ layout: "PrevPageLink CurrentPageReport NextPageLink" }}
-          />
-        </div>
-      </div>
       </div>
 
       <FooterComponent />
@@ -572,6 +498,7 @@ function ShopingStore({ initialShop }) {
 
 export async function getServerSideProps(context) {
   let { id } = context.query;
+  console.log("serverside:---->", context);
 
   try {
     const {
@@ -602,6 +529,7 @@ export async function getServerSideProps(context) {
     //   },
     // };
   } catch (error) {
+    console.log("error-->", error);
     return {
       props: {
         error: "SHOP_NOT_FOUND",
@@ -610,4 +538,4 @@ export async function getServerSideProps(context) {
   }
 }
 
-export default ShopingStore;
+export default SearchProduct;
