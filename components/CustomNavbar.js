@@ -43,6 +43,7 @@ import { Modal } from "react-bootstrap";
 import { googleLogout } from "@react-oauth/google";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { FiHome } from "react-icons/fi";
+import { image_main } from "@/helper";
 
 export default function CustomNavbar() {
   const navigate = useRouter();
@@ -243,8 +244,8 @@ export default function CustomNavbar() {
           {width > 800 && (
             <div className="nav-logo">
               <img
-                src="/assets/images/mainLogo2.png"
-                style={{ maxWidth: 100, width: 90 }}
+                src={image_main}
+                style={{ maxWidth: 100, width: 45,borderRadius:'50em' }}
               />
               <div>
                 <h3>ໂຟບີ </h3>

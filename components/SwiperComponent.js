@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Carousel } from "primereact/carousel";
 import { GET_ADVERTISINGS } from "@/apollo/setting/query";
 import { useLazyQuery } from "@apollo/client";
-import { COLOR_TEXT, CORLOR_APP, S3_URL, S3_URL_LARGE } from "@/helper";
+import { COLOR_TEXT, CORLOR_APP, S3_URL, S3_URL_LARGE, S3_URL_MEDIUM } from "@/helper";
 import useWindowDimensions from "@/helper/useWindowDimensions";
 import {
   FaHeart,
@@ -114,7 +114,7 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
       <div className="surface-border p-2 text-center w-100 ">
         <div style={{width:"100%",height: width >800 ? 360: 185}}>
           <img
-            src={S3_URL + product.image}
+            src={S3_URL_MEDIUM + product.image}
             alt={product.name}
             style={{
               borderRadius: 3,

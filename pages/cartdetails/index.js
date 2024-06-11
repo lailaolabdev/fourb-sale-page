@@ -4,7 +4,13 @@ import { motion } from "framer-motion";
 import { FaMinus, FaPlus, FaRegHeart } from "react-icons/fa";
 import { IoBagAddSharp, IoCloseSharp } from "react-icons/io5";
 import { useRouter } from "next/router";
-import { COMMISSION_OFFICE, S3_URL, S3_URL_MEDIUM, calculateRoundedValue, numberFormat } from "@/helper";
+import {
+  COMMISSION_OFFICE,
+  S3_URL,
+  S3_URL_MEDIUM,
+  calculateRoundedValue,
+  numberFormat,
+} from "@/helper";
 import { HiHome } from "react-icons/hi2";
 import { SiShopee } from "react-icons/si";
 import { RxSlash } from "react-icons/rx";
@@ -85,7 +91,7 @@ export default function index() {
         },
       },
     });
-  },[patchBack])
+  }, [patchBack]);
 
   useEffect(() => {
     if (loadShopData?.shop) {
@@ -105,8 +111,6 @@ export default function index() {
       }
     }
   }, [router.query.item]);
-
-  
 
   useEffect(() => {
     if (product?.containImages) {
@@ -191,61 +195,67 @@ export default function index() {
   };
 
   const handleAddProduct = () => {
-    
-      let _price = 0;
-
-      if (["BAHT", "ບາດ"].includes(product?.currency)) {
-        _price = product?.price * isExChangeRate?.baht;
-      } else if (["USD", "ໂດລາ"].includes(product?.currency)) {
-        _price = product?.price * (isExChangeRate?.usd || 0);
-      } else {
-        _price = product?.price;
-      }
-
-      let priceProduct = 0;
-
-      if (patchBack?.commissionForShopId) {
-        priceProduct = _price + (_price * _commissionForAffiliate) / 100;
-      } else {
-        priceProduct = _price;
-      }
-
-      if (shopDetail?.commissionService) {
-        priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-      } else {
-        priceProduct = _price;
-      }
-
-      if (product?.reduction !== null || product?.reduction) {
-        priceProduct = (priceProduct * product?.reduction) / 100;
-      }
-
-      const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
-
-      // const _data = {
-      //   ...data,
-      //   price: roundedValue,
-      //   modelType: live, shop: shopId
-      // };
-
-      // console.log({_data})
-
-      const { __typename, ...restData } = product;
-
-      const _data = {
-        ...restData,
-        price: roundedValue,
-        shop: patchBack?.id,
-      };
-
-
-      dispatch(addCartItem(_data));
-
+    if (quantity >= product?.amount) {
       toast.current.show({
-        severity: "success",
-        summary: "ສຳເລັດ",
-        detail: "ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າຂອງທ່ານແລ້ວ",
+        severity: "error",
+        summary: "ແຈ້ງເຕືອນ",
+        detail: "ສິນຄ້າໃນສະຕ໋ອກບໍ່ພໍຂາຍ!",
       });
+      return;
+    }
+
+    let _price = 0;
+
+    if (["BAHT", "ບາດ"].includes(product?.currency)) {
+      _price = product?.price * isExChangeRate?.baht;
+    } else if (["USD", "ໂດລາ"].includes(product?.currency)) {
+      _price = product?.price * (isExChangeRate?.usd || 0);
+    } else {
+      _price = product?.price;
+    }
+
+    let priceProduct = 0;
+
+    if (patchBack?.commissionForShopId) {
+      priceProduct = _price + (_price * _commissionForAffiliate) / 100;
+    } else {
+      priceProduct = _price;
+    }
+
+    if (shopDetail?.commissionService) {
+      priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
+    } else {
+      priceProduct = _price;
+    }
+
+    if (product?.reduction !== null || product?.reduction) {
+      priceProduct = (priceProduct * product?.reduction) / 100;
+    }
+
+    const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
+
+    const { __typename, ...restData } = product;
+
+    const _data = {
+      ...restData,
+      price: roundedValue,
+      shop: patchBack?.id,
+    };
+
+    if (quantity > 1) {
+      _data = {
+        ..._data,
+        newQuantity: quantity,
+      };
+    }
+
+    dispatch(addCartItem(_data));
+
+    toast.current.show({
+      severity: "success",
+      summary: "ສຳເລັດ",
+      detail: "ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າຂອງທ່ານແລ້ວ",
+    });
   };
 
   const incrementQuantity = () => {
@@ -276,24 +286,26 @@ export default function index() {
         <div className="bread-crumb">
           <span onClick={() => router.back()}>ໜ້າຫລັກ</span>
           <RxSlash />
-          <span>{product?.name}888hkjgjghfgdfsfsfjhjghhgbyfrwervlnkjopghfgdtpoiuytrwqexv,,mnnvfg</span>
+          <span>
+            {product?.name}
+            888hkjgjghfgdfsfsfjhjghhgbyfrwervlnkjopghfgdtpoiuytrwqexv,,mnnvfg
+          </span>
         </div>
         <div className="card-view">
           <div className="card-dailog-image">
             <div className="image-view">
-              <img
-                src={S3_URL + previewImage}
-                style={{ width: "100%", height: "100%" }}
-              />
               {/* <img src={S3_URL + product?.image} /> */}
-              {/* {previewImage ? (
-              
-              ) : (
+              {previewImage ? (
                 <img
-                  src={S3_URL + defaultImage}
+                  src={S3_URL_MEDIUM + previewImage}
                   style={{ width: "100%", height: "100%" }}
                 />
-              )} */}
+              ) : (
+                <img
+                  src={S3_URL + product?.image}
+                  style={{ width: "100%", height: "100%" }}
+                />
+              )}
             </div>
             <div className="image-small-view">
               {product?.containImages.map((data, index) => (
@@ -315,6 +327,7 @@ export default function index() {
           </div>
           <div className="card-dailog-content">
             <h3>{product?.name}</h3>
+            <p>Stocks: {product?.amount}</p>
             {product?.reduction && (
               <p style={{ color: "red", fontSize: 23 }}>
                 ສ່ວນຫຼຸດ {product?.reduction}%
@@ -351,7 +364,7 @@ export default function index() {
               </span>
             </h4>
             <br />
-            <p>Color:</p>
+            {/* <p>Color:</p>
             <select>
               <option>red</option>
               <option>black</option>
@@ -362,7 +375,7 @@ export default function index() {
               <span>Small</span>
               <span>Midium</span>
               <span>Large</span>
-            </div>
+            </div> */}
 
             <div className="card-button-preview">
               <div>

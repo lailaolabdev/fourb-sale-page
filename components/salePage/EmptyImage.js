@@ -1,3 +1,4 @@
+import { image_main } from "@/helper";
 import React from "react";
 
 export default function EmptyImage() {
@@ -13,8 +14,8 @@ export default function EmptyImage() {
         padding: "1em",
       }}>
       <img
-        src="/assets/images/mainLogo2.png"
-        style={{ width: "100%", height: "100%", opacity: "0.2" }}
+        src={image_main}
+        style={{ width: "50%", height: "50%", opacity: "0.2" }}
         alt="empty"
       />
       {/* <small style={{ fontSize: ".7em", marginTop: "-.6em", color: "#d4d4d4" }}>

@@ -15,6 +15,7 @@ import PaginationComponent from "@/components/salePage/PaginationComponent";
 import {
   COMMISSION_OFFICE,
   S3_URL,
+  S3_URL_MEDIUM,
   calculateRoundedValue,
   numberFormat,
 } from "@/helper";
@@ -45,7 +46,7 @@ import { getKeyPatch } from "@/redux/setPatch/patchBack";
 import useWindowDimensions from "@/helper/useWindowDimensions";
 import { Rating } from "primereact/rating";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { UPDATE_STOCK } from "@/apollo/order/mutation";
+import { UPDATE_STOCK, UPDATE_STOCK_HEART } from "@/apollo/order/mutation";
 import { formatNumberFavorite } from "@/const";
 
 function ShopingStore({ initialShop }) {
@@ -101,6 +102,7 @@ function ShopingStore({ initialShop }) {
   });
 
   const [updateStock] = useMutation(UPDATE_STOCK);
+  const [updateStockHeart] = useMutation(UPDATE_STOCK_HEART);
 
   // click to scrolling to left and right
   const scrollContainerRef = useRef(null);
@@ -341,7 +343,7 @@ function ShopingStore({ initialShop }) {
     const currentFavorites = data?.favorite || 0;
     const newFavoritesCount = currentFavorites + 1;
 
-    updateStock({
+    updateStockHeart({
       variables: {
         where: {
           id: data?.id,
@@ -500,7 +502,7 @@ function ShopingStore({ initialShop }) {
                   </div>
                   <div className="box-image">
                     {item?.image ? (
-                      <img src={S3_URL + item?.image} />
+                      <img src={S3_URL_MEDIUM + item?.image} />
                     ) : (
                       <EmptyImage />
                     )}

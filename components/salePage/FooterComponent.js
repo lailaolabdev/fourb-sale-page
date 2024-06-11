@@ -1,5 +1,5 @@
 import useWindowDimensions from "../../helper/useWindowDimensions";
-import { CORLOR_APP, CORLOR_WHITE } from "../../helper";
+import { CORLOR_APP, CORLOR_WHITE, image_main } from "../../helper";
 import React from "react";
 import { useRouter } from "next/router";
 import { URL_PACKAGE_SYSTEM } from "../../const";
@@ -19,18 +19,18 @@ export default function FooterComponent() {
         <div className="footer-title">
           <div className="logo-main">
             <img
-              src="/assets/images/mainLogo.png"
-              style={{ width: "100%", height: "100%" }}
+              src={image_main}
+              style={{ width: "100%", height: "100%",border:'1px solid #f2f2f2', borderRadius:'50em' }}
             />
           </div>
-          <h5>Sale Page</h5>
+          <p style={{fontSize:18}}><b>Sale Page</b></p>
           <small>Lailaolab ICT Solutions CO.,LTD</small>
           <br />
           <small style={{ fontSize: 13 }}>
             {" "}
             ບ້ານ ປາກ​ທ້າງ, ເມືອງ​ສີ​ໂຄດ​ຕະ​ບອງ, ນະ​ຄອນ​ຫຼວງວຽງ​ຈັນ, ປະ​ເທດ​ລາວ
           </small>
-          <p>Call: +856 20 95 119 036</p>
+          <p style={{fontSize:14}}>ໂທ: +856 020 299-336-96</p>
         </div>
         <div className="footer-title">
           <div>
@@ -42,12 +42,17 @@ export default function FooterComponent() {
               {/* <li onClick={()=> navigate.back()}>ໜ້າຫລັກ ເຊວເພຈ</li> */}
               {/* <li>ວິທີການສັ່ງຊື້</li> */}
               <li onClick={() => navigate.push("/policy")}>
-                <u>ນະໂຍບາຍການນຳໃຊ້</u>
+                <u>ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ</u>
               </li>
               <li onClick={() => window.open(URL_PACKAGE_SYSTEM)}>
                 <u>ແພັກເກັດລະບົບ</u>
               </li>
-              {/* <li>ຕິດຕໍ່ພວກເຮົາ</li> */}
+              <li>
+                <u>ຕິດຕໍ່ພວກເຮົາ</u>
+              </li>
+              <li>
+                <u>ປະຫວັດການຊື້</u>
+              </li>
             </ol>
           </div>
           <div>
@@ -87,7 +92,7 @@ export default function FooterComponent() {
         className="footer-second"
       >
         <div>
-          <h4>ປະເພດການຊຳລະ</h4>
+          <p>ປະເພດການຊຳລະ</p>
           <div style={{ display: "flex", gap: 10 }}>
             <img
               src="/assets/images/bcel_one.png"
@@ -104,7 +109,7 @@ export default function FooterComponent() {
           </div>
         </div>
         <div>
-          <h4>ຂົນສົ່ງ</h4>
+          <p>ຂົນສົ່ງ</p>
           <div style={{ display: "flex", gap: 20 }}>
             <div
               style={{
@@ -152,7 +157,7 @@ export default function FooterComponent() {
           </div>
         </div>
         <div>
-          <h4>ຕິດຕາມພວກເຮົາ</h4>
+          <p>ຕິດຕາມພວກເຮົາ</p>
           <div style={{ display: "flex", gap: 20 }}>
             <div
               onClick={() => {
@@ -188,8 +193,8 @@ export default function FooterComponent() {
           </div>
         </div>
 
-        <div className="card-copy-right">
-<p>© 4B, All Right Reserved | By Lailaolab</p>
+        <div className="card-copy-right" style={{fontSize:12}}>
+<p >© 4B, All Right Reserved || By Lailaolab</p>
       {versionWeb?.version}
         </div>
        

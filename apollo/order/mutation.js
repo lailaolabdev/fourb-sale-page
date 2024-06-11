@@ -77,6 +77,14 @@ export const UPDATE_STOCK_AMOUNT = gql`
   }
 `;
 
+export const UPDATE_STOCK_HEART = gql`
+  mutation Mutation($data: StockInput!, $where: StockWhereInputOne!) {
+    updateHeartStock(data: $data, where: $where) {
+      id
+    }
+  }
+`;
+
 export const CREATE_ORDER_GROUP = gql`
   mutation Mutation($data: OrderGroupInput!) {
     createOrderGroup(data: $data) {
