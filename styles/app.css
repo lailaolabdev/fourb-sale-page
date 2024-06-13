@@ -344,10 +344,10 @@
 
              & span {
                  position: absolute;
-                 top: -.85em;
-                 right: .85em;
-                 width: 20px;
-                 height: 20px;
+                 top: -.3em;
+                 right: .9em;
+                 width: 18px;
+                 height: 18px;
                  border-radius: 50em;
                  overflow: hidden;
                  font-size: 10px;

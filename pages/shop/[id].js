@@ -333,7 +333,7 @@ function ShopingStore({ initialShop }) {
     const { __typename, ...newItem } = item;
     const encodedItem = base64Encode(JSON.stringify(newItem));
     router.push({
-      pathname: "../cartdetails",
+      pathname: "../detailProduct",
       query: { item: encodedItem },
     });
   };

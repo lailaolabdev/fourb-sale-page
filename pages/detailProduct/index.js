@@ -28,7 +28,7 @@ import { Toast } from "primereact/toast";
 import { Fieldset } from "primereact/fieldset";
 import { formatNumberFavorite } from "@/const";
 import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
-import { SHOP } from "@/apollo";
+import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, SHOP } from "@/apollo";
 
 const images = [
   {
@@ -76,6 +76,16 @@ export default function index() {
     fetchPolicy: "network-only",
   });
 
+  const [
+    getShopCommissionFor,
+    { data: shopDataCommissionFor, loading: shopLoading },
+  ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
+    fetchPolicy: "network-only",
+  });
+
+
+ 
+
   useEffect(() => {
     getExchangeRate({
       variables: {
@@ -88,6 +98,13 @@ export default function index() {
       variables: {
         where: {
           id: patchBack?.id,
+        },
+      },
+    });
+    getShopCommissionFor({
+      variables: {
+        where: {
+          id: patchBack?.commissionForShopId,
         },
       },
     });
@@ -117,6 +134,9 @@ export default function index() {
       setPreviewImage(product?.containImages[0]);
     }
   }, [product?.containImages]);
+
+  const _commissionForAffiliate =
+  shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
