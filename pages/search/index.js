@@ -54,6 +54,7 @@ function SearchProduct({ initialShop }) {
     commissionForShopId,
     search_key,
     stocks,
+    category
   } = router.query;
 
   const itemsPerPage = 30;
@@ -120,7 +121,6 @@ function SearchProduct({ initialShop }) {
     setCount(newPage?.first);
   }, []);
 
-  console.log({ currentPage });
 
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
@@ -144,7 +144,7 @@ function SearchProduct({ initialShop }) {
 
   useEffect(() => {
     fetchStock();
-  }, [liveId, shopId, currentPage, live, stocks, search_key]);
+  }, [liveId, shopId, currentPage, live, stocks, search_key, category]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -206,7 +206,14 @@ function SearchProduct({ initialShop }) {
         };
       }
 
-      console.log("check_type:::", typeof stocks);
+
+      if (!_.isEmpty(category)) {
+        _where = {
+          ..._where,
+          category: category,
+        };
+      }
+
 
       if (stocks) {
         _where = {
@@ -393,11 +400,9 @@ function SearchProduct({ initialShop }) {
       <div className="body-main">
         <div className="container-contents">
           <h5>
-            <b>
               {productLists?.length > 0
                 ? `ຜະລິດຕະພັນຍອດນິຍົມ`
                 : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
-            </b>
           </h5>
 
           <div className="card-items">

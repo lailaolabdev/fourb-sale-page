@@ -30,29 +30,6 @@ import { formatNumberFavorite } from "@/const";
 import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
 import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, SHOP } from "@/apollo";
 
-const images = [
-  {
-    name: "https://media.istockphoto.com/id/1332092432/photo/magnifying-glass-focusing-a-forest.jpg?s=612x612&w=0&k=20&c=BMTiQfV-Mp6MMg-MGYCqbu9kWOsX5Rq6vw3UvXao-m8=",
-  },
-  {
-    name: "https://images.unsplash.com/photo-1549655698-c7a8a4639ec8?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xlYXJ8ZW58MHx8MHx8fDA%3D",
-  },
-  {
-    name: "https://media.istockphoto.com/id/968167380/photo/glass-ball-in-hand.jpg?s=612x612&w=0&k=20&c=Nu9irojC_nH8RmzAn1bM9y1p-I2TfWhoWkMHlK9qn-Y=",
-  },
-  {
-    name: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK1Uu9sGTIac4rc8IGXwW6ygWNNSm9FrxeXrY58d4Fjr6xjOA9CcliPZEkxpHu-y8lmKY&usqp=CAU",
-  },
-  {
-    name: "https://assets.unileversolutions.com/v1/123147056.jpg",
-  },
-  {
-    name: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU7xftKz0jfgObmFvvQ3_ONQxg4JpH3Sa4zU8ikiPj2prrzxdt3cVBmwZacTCovLIeEMo&usqp=CAU",
-  },
-  {
-    name: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq6wkLE4Q3kiizMDVOBGOS5Efkf9L1muq_eKRP0F9EGq083-9-euaJgfnzv6a1eymaK9U&usqp=CAU",
-  },
-];
 
 export default function index() {
   const router = useRouter();
@@ -130,10 +107,13 @@ export default function index() {
   }, [router.query.item]);
 
   useEffect(() => {
-    if (product?.containImages) {
-      setPreviewImage(product?.containImages[0]);
-    }
-  }, [product?.containImages]);
+    // if (product?.containImages) {
+    //   setPreviewImage(product?.containImages[0]);
+    // }else {
+    // }
+      setPreviewImage(product?.image);
+
+  }, [product]);
 
   const _commissionForAffiliate =
   shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
@@ -295,6 +275,25 @@ export default function index() {
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
+ 
+
+   // click the menu home
+   const onCalbackToHome = async () => {
+    // Retrieve the state from local storage
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+
+    // Construct the destination path based on available data
+    let destinationPath = `../shop/${idPreState?.id}`;
+
+    if (idPreState?.affiliateId) {
+      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+      if (idPreState?.commissionForShopId) {
+        destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+      }
+    }
+    router.replace(destinationPath);
+  };
+ 
 
   return (
     <>
@@ -304,7 +303,7 @@ export default function index() {
        */}
       <div className="card-cart-products">
         <div className="bread-crumb">
-          <span onClick={() => router.back()}>ໜ້າຫລັກ</span>
+          <span onClick={onCalbackToHome}>ໜ້າຫລັກ</span>
           <RxSlash />
           <span>
             {product?.name} 
@@ -312,8 +311,8 @@ export default function index() {
         </div>
         <div className="card-view">
           <div className="card-dailog-image">
-            <div className="image-view">
-              {/* <img src={S3_URL + product?.image} /> */}
+        
+            <div className="image-view"> 
               {previewImage ? (
                 <img
                   src={S3_URL_MEDIUM + previewImage}
@@ -321,7 +320,7 @@ export default function index() {
                 />
               ) : (
                 <img
-                  src={S3_URL + product?.image}
+                  src={S3_URL_MEDIUM + product?.image}
                   style={{ width: "100%", height: "100%" }}
                 />
               )}

@@ -389,6 +389,16 @@
                  /* transition: all .2s ease-in-out; */
                  font-weight: 400;
                  color: var(--colorBlack2);
+
+                 & span{
+
+                    &:first-child {
+                        width: 20px;height: 20px;border: 1px solid var(--colorGray);
+                        display: flex;justify-content: center;align-items: center;border-radius: 50em;
+                        font-weight: bold;
+                     }
+
+                 }
              }
 
              & li:hover {
@@ -706,7 +716,7 @@
          & div {
              width: 200px;
              min-width: 160px;
-             height: 130px;
+             /* height: 80px; */
              box-shadow: var(--boxShadow);
              border-radius: .1em;
              display: flex;
@@ -714,7 +724,7 @@
              align-items: center;
              flex-direction: column;
              gap: 10px;
-             color: var(--colorRed);
+             color: var(--colorText);
              font-size: 20px;
              padding: .4em 1em;
              transition: all .3s ease-in-out;
@@ -722,16 +732,16 @@
              cursor: pointer;
 
              & span {
-                 color: var(--colorText);
+                 color: var(--colorBlack);
                  font-size: 15px;
-                 font-weight: 500;
+                 font-weight:  400;
              }
 
              &:hover {
                  background: var(--hover);
                  transform: scale(1.01);
                  /* border-radius: .5em; */
-                 margin-top: -.55em;
+                 margin-top: -.35em;
 
              }
 
@@ -1147,9 +1157,10 @@
 
              & .image-view {
                  width: 100%;
-                 height: 100%;
+                 /* height: 100%; */
+                height: 300px;
                  padding: .5em;
-                 /* overflow: hidden; */
+                 overflow: hidden;
                  border: 1px solid var(--colorWhite);
 
 

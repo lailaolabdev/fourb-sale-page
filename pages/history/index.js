@@ -23,6 +23,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { numberFormat } from "@/helper";
+import { InputGroup, Form } from "react-bootstrap"
+import { FaSearch } from "react-icons/fa";
 
 export default function Index() {
   const [myInfo, setMyinfo] = useState("");
@@ -68,19 +70,28 @@ export default function Index() {
       )}
       <div className="card-history-buy">
         <div className="card-info">
-          <input
+          {/* <input
             className="form-control"
             placeholder="ປ້ອນ ລະຫັດບິນ ຫຼື ເບີໂທລະສັບ"
             onKeyDown={onChangeFilter}
-          />
-          <br />
+          /> */}
+          <InputGroup className="mb-3">
+            <InputGroup.Text id="basic-addon1"><FaSearch /></InputGroup.Text>
+            <Form.Control
+              placeholder="ປ້ອນ ລະຫັດບິນ ຫຼື ເບີໂທລະສັບ"
+              aria-describedby="basic-addon1"
+              onKeyDown={onChangeFilter}
+              className="w-50"
+            />
+          </InputGroup>
+          {/* <br /> */}
 
           {newOrdergroups.length > 0 ? (
             <>
-            <p style={{fontSize:13,fontWeight:'bold'}}>ປະຫວັດການຊື້ຂອງທ່ານ</p>
+              <p style={{ fontSize: 13, fontWeight: 'bold' }}>ປະຫວັດການຊື້ຂອງທ່ານ</p>
               {newOrdergroups.map((data, index) => (
                 <Accordion
-                elevation={0}
+                  elevation={0}
                   key={index}
                   expanded={expanded === index}
                   onChange={handleChange(index)}
@@ -91,13 +102,13 @@ export default function Index() {
                     aria-controls="panel1bh-content"
                     id="panel1bh-header"
                   >
-                    <Typography sx={{ width: "33%", flexShrink: 0,fontSize:13 }}>
+                    <Typography sx={{ width: "33%", flexShrink: 0, fontSize: 13 }}>
                       {data?.code}
                     </Typography>
-                    <Typography sx={{ color: "text.secondary",fontSize:12 }}>
+                    <Typography sx={{ color: "text.secondary", fontSize: 12 }}>
                       {moment(data?.createdAt).format("DD-MM-YYYY, HH:mm:ss")}
                     </Typography>
-                    <Typography sx={{ color: "text.secondary",ml:2,fontSize:12,color:'green' }}>
+                    <Typography sx={{ color: "text.secondary", ml: 2, fontSize: 12, color: 'green' }}>
                       ເງິນລວມ: {numberFormat(data?.sumPrice)} ກີບ
                     </Typography>
                   </AccordionSummary>
@@ -114,17 +125,17 @@ export default function Index() {
                       <TableBody>
                         {data?.orders.map((item, idex) => (
                           <TableRow
-                          key={idex}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                         
-                          <TableCell align="left">{idex + 1}.{item?.productName}</TableCell>
-                          <TableCell align="center">{item?.amount}</TableCell>
-                          <TableCell align="center">{numberFormat(item?.price)}</TableCell>
-                          <TableCell align="right">{numberFormat(item?.totalPrice)} {item?.currency}</TableCell> 
-                        </TableRow>
+                            key={idex}
+                            sx={{
+                              "&:last-child td, &:last-child th": { border: 0 },
+                            }}
+                          >
+
+                            <TableCell align="left">{idex + 1}.{item?.productName}</TableCell>
+                            <TableCell align="center">{item?.amount}</TableCell>
+                            <TableCell align="center">{numberFormat(item?.price)}</TableCell>
+                            <TableCell align="right">{numberFormat(item?.totalPrice)} {item?.currency}</TableCell>
+                          </TableRow>
                         ))}
                       </TableBody>
                     </Table>
@@ -133,10 +144,10 @@ export default function Index() {
               ))}
             </>
           ) : (
-            <div className="d-flex justify-content-center align-items-center w-100">
+            <div className="d-flex p-4 justify-content-center align-items-center w-100">
               <img
                 style={{ width: 300, maxWidth: 305 }}
-                src="https://t4.ftcdn.net/jpg/06/95/34/09/360_F_695340925_WXBUS1qhrEkdOijyYYyId0exOTqavAJu.jpg"
+                src="https://organickle.com/images/no-order.svg"
               />
             </div>
           )}

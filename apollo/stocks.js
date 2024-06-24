@@ -137,3 +137,27 @@ export const GET_SALE_PAGE_LIVE_STOCKS = gql`
     }
   }
 `;
+
+export const GET_CATEGORYS = gql`
+query Data($where: CategoryWhereInput) {
+    categories(where: $where) {
+      data {
+        id
+        name
+        image
+        coverImages
+        detail
+        level
+        status
+        isDeleted
+        createdAt
+        updatedAt
+        note
+        shop {
+          id 
+        } 
+      }
+      total
+    }
+  }
+`;

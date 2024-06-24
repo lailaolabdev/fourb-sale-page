@@ -149,7 +149,7 @@ export default function FooterComponent() {
                   overflow: "hidden",
                 }}
               >
-                <img src="/assets/images/mixay.png" style={{ width: "100%" }} />
+                {/* <img src="/assets/images/mixay.png" style={{ width: "100%" }} /> */}
               </div>
               {/* &nbsp;
               <small>ບໍລິສັດ ຂົນສົ່ງ ອານຸສິດ (ກຳລັງພັດທະນາ)</small> */}

@@ -6,7 +6,7 @@ import {
   SHOP,
 } from "@/apollo";
 import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
-import { GET_STOCKS } from "@/apollo/stocks";
+import { GET_CATEGORYS, GET_STOCKS } from "@/apollo/stocks";
 import CustomNavbar from "@/components/CustomNavbar";
 import LoadingComponent from "@/components/LoadingComponent";
 import ModalPreView from "@/components/ModalPreview";
@@ -48,6 +48,7 @@ import { Rating } from "primereact/rating";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { UPDATE_STOCK, UPDATE_STOCK_HEART } from "@/apollo/order/mutation";
 import { formatNumberFavorite } from "@/const";
+import _ from "lodash";
 
 function ShopingStore({ initialShop }) {
   const router = useRouter();
@@ -77,6 +78,7 @@ function ShopingStore({ initialShop }) {
   const [isStock, setIsStock] = useState(1);
   const [filterNew, setFilterNew] = useState();
   const toast = useRef(null);
+  const [categoryDatas, setCategoryDatas] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -87,19 +89,24 @@ function ShopingStore({ initialShop }) {
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
-    { fetchPolicy: "network-only" }
+    { fetchPolicy: "cache-and-network" }
   );
 
   const [getShopData, { data: loadShopData }] = useLazyQuery(SHOP, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
 
   const [
     getShopCommissionFor,
     { data: shopDataCommissionFor, loading: shopLoading },
   ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
   });
+
+  const [
+    getCategoryData,
+    { data: loadCategoryData, loading: loadingCategoryDatas },
+  ] = useLazyQuery(GET_CATEGORYS, { fetchPolicy: "cache-and-network" });
 
   const [updateStock] = useMutation(UPDATE_STOCK);
   const [updateStockHeart] = useMutation(UPDATE_STOCK_HEART);
@@ -146,6 +153,12 @@ function ShopingStore({ initialShop }) {
   }, [commissionForShopId]);
 
   useEffect(() => {
+    if (loadCategoryData) {
+      setCategoryDatas(loadCategoryData?.categories?.data);
+    }
+  }, [loadCategoryData]);
+
+  useEffect(() => {
     if (stockData) {
       setProductsLists(stockData?.stocks?.data);
       setProductTotal(stockData?.stocks?.total);
@@ -189,6 +202,16 @@ function ShopingStore({ initialShop }) {
         },
       },
     });
+
+     getCategoryData({
+      variables: {
+        where: {
+          shop: shopId,
+          isDeleted: false,
+        },
+      },
+    });
+
   }, [shopId]);
 
   useEffect(() => {
@@ -216,7 +239,7 @@ function ShopingStore({ initialShop }) {
         };
       }
 
-      if (isStock) {
+      if (!_.isEmpty(isStock)) {
         _where = {
           ..._where,
           amount: isStock,
@@ -234,7 +257,9 @@ function ShopingStore({ initialShop }) {
     } catch (error) {
       console.log("Error fetching general stock:", error);
     }
-  };
+  }; 
+
+
 
   const _calculatePriceWithExchangeRate = (price, currency, reduction) => {
     let _price = 0;
@@ -422,9 +447,9 @@ function ShopingStore({ initialShop }) {
       </div> */}
       <SwiperComponent shopDetail={shopDetail} contactshop={openWhatsApp} productTotal={productTotal} />
 <div className="body-main">
-      {/* <div>
+   <div>
         <p style={{ paddingTop: 10, fontWeight: "bold", fontSize: 15 }}>
-          ປະເພດສິນຄ້າ
+          ປະເພດສິນຄ້າ  
         </p>
 
         <div className="card-review-category">
@@ -440,32 +465,19 @@ function ShopingStore({ initialShop }) {
               scrollBehavior: "smooth",
             }}
           >
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
+            {categoryDatas.map((data, index) => (
+            <div key={index} onClick={() => router.push(`/search?search_key=${data?.name}&category=${data?.id}`)}>
+              <HiMiniShoppingBag style={{fontSize:40}} />
+              <span>{data?.name}</span>
             </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
-            <div>
-              <HiMiniShoppingBag />
-              <span>categories</span>
-            </div>
+            ))}
+             
           </div>
           <button className="btn-next-scroll" onClick={scrollRight}>
             <GrNext />
           </button>
         </div>
-      </div> */}
+      </div> 
 
       <div className="container-contents">
         <p>
