@@ -19,7 +19,6 @@ import { RiListCheck3, RiListIndefinite, RiMenu2Fill } from "react-icons/ri";
 import { TbLogin2, TbPhoneCall } from "react-icons/tb";
 import { TiShoppingCart } from "react-icons/ti";
 import { motion } from "framer-motion";
-import CartRight from "./CartRight";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import useWindowDimensions from "@/helper/useWindowDimensions";
@@ -542,7 +541,6 @@ export default function CustomNavbar() {
         )}
       </div>
 
-      {/* <CartRight /> */}
 
       {/* <div className="card-contact-shop" onClick={() => setIsCall(!isCall)}>
         {isCall ? (

@@ -203,7 +203,7 @@ function ShopingStore({ initialShop }) {
       },
     });
 
-     getCategoryData({
+    getCategoryData({
       variables: {
         where: {
           shop: shopId,
@@ -257,7 +257,7 @@ function ShopingStore({ initialShop }) {
     } catch (error) {
       console.log("Error fetching general stock:", error);
     }
-  }; 
+  };
 
 
 
@@ -287,7 +287,7 @@ function ShopingStore({ initialShop }) {
     }
 
     // ຄຳນວນສ່ວນຫຼຸດ
-    if(reduction > 0) {
+    if (reduction > 0) {
 
       priceProduct = (priceProduct * reduction) / 100;
     }
@@ -446,96 +446,96 @@ function ShopingStore({ initialShop }) {
       {/* <div className="d-flex gap-4">
       </div> */}
       <SwiperComponent shopDetail={shopDetail} contactshop={openWhatsApp} productTotal={productTotal} />
-<div className="body-main">
-   <div>
-        <p style={{ paddingTop: 10, fontWeight: "bold", fontSize: 15 }}>
-          ປະເພດສິນຄ້າ  
-        </p>
+      <div className="body-main">
+        <div>
+          <p style={{ paddingTop: 10, fontWeight: "bold", fontSize: 15 }}>
+            ປະເພດສິນຄ້າ
+          </p>
 
-        <div className="card-review-category">
-          <button className="btn-back-scroll" onClick={scrollLeft}>
-            <MdArrowBackIos />
-          </button>
-          <div
-            className="scrolling"
-            ref={scrollContainerRef}
-            style={{
-              overflowX: "auto",
-              width: "100%",
-              scrollBehavior: "smooth",
-            }}
-          >
-            {categoryDatas.map((data, index) => (
-            <div key={index} onClick={() => router.push(`/search?search_key=${data?.name}&category=${data?.id}`)}>
-              <HiMiniShoppingBag style={{fontSize:40}} />
-              <span>{data?.name}</span>
+          <div className="card-review-category">
+            <button className="btn-back-scroll" onClick={scrollLeft}>
+              <MdArrowBackIos />
+            </button>
+            <div
+              className="scrolling"
+              ref={scrollContainerRef}
+              style={{
+                overflowX: "auto",
+                width: "100%",
+                scrollBehavior: "smooth",
+              }}
+            >
+              {categoryDatas.map((data, index) => (
+                <div key={index} onClick={() => router.push(`/search?search_key=${data?.name}&category=${data?.id}`)}>
+                  <HiMiniShoppingBag style={{ fontSize: 40 }} />
+                  <span>{data?.name}</span>
+                </div>
+              ))}
+
             </div>
-            ))}
-             
+            <button className="btn-next-scroll" onClick={scrollRight}>
+              <GrNext />
+            </button>
           </div>
-          <button className="btn-next-scroll" onClick={scrollRight}>
-            <GrNext />
-          </button>
         </div>
-      </div> 
 
-      <div className="container-contents">
-        <p>
-          <b>ຜະລິດຕະພັນຍອດນິຍົມ</b>{" "}
-        </p>
-        {/* <p style={{ fontSize: 13, textAlign: "center" }}>
+        <div className="container-contents">
+          <p>
+            <b>ຜະລິດຕະພັນຍອດນິຍົມ</b>{" "}
+          </p>
+          {/* <p style={{ fontSize: 13, textAlign: "center" }}>
           ເບິ່ງສິນຄ້າຍອດນິຍົມທັງໝົດຂອງພວກເຮົາໃນອາທິດນີ້.
           ທ່ານສາມາດເລືອກຜະລິດຕະພັນຄວາມຕ້ອງການປະຈໍາວັນຂອງທ່ານຈາກບັນຊີລາຍຊື່ນີ້ແລະໄດ້ຮັບຂໍ້ສະເຫນີພິເສດບາງຢ່າງທີ່ມີການຂົນສົ່ງຟຣີ.
         </p> */}
 
-        <div className="card-items">
-          {!stockData && loadingStock ? (
-            <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
-          ) : (
-            <>
-              {productLists.map((item, index) => (
-                <div
-                  className="item-now"
-                  key={index}
-                  onClick={() => handleProductPreview(item)}
-                >
+          <div className="card-items">
+            {!stockData && loadingStock ? (
+              <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
+            ) : (
+              <>
+                {productLists.map((item, index) => (
                   <div
-                    className="favorite-view"
-                    onClick={(e) => e.stopPropagation()}
+                    className="item-now"
+                    key={index}
+                    onClick={() => handleProductPreview(item)}
                   >
-                    <p
-                      className={
-                        heartAnimation === index ? "heart-animation" : ""
-                      }
-                      onClick={() => onAddHeartProduct(item, index)}
+                    <div
+                      className="favorite-view"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
-                    </p>
-                  </div>
-                  <div className="box-image">
-                    {item?.image ? (
-                      <img src={S3_URL_MEDIUM + item?.image} />
-                    ) : (
-                      <EmptyImage />
-                    )}
-                    {item?.reduction && (
-                      <div className="promotion-field">
-                        ສ່ວນຫຼຸດ {item?.reduction}%
-                      </div>
-                    )}
-                  </div>
-                  <div
-                    className="box-shoping"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <h3>{item?.name}</h3>
+                      <p
+                        className={
+                          heartAnimation === index ? "heart-animation" : ""
+                        }
+                        onClick={() => onAddHeartProduct(item, index)}
+                      >
+                        <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
+                      </p>
+                    </div>
+                    <div className="box-image">
+                      {item?.image ? (
+                        <img src={S3_URL_MEDIUM + item?.image} />
+                      ) : (
+                        <EmptyImage />
+                      )}
+                      {item?.reduction && (
+                        <div className="promotion-field">
+                          ສ່ວນຫຼຸດ {item?.reduction}%
+                        </div>
+                      )}
+                    </div>
+                    <div
+                      className="box-shoping"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <h3>{item?.name}</h3>
 
-                    <div className="btn-price-add">
-                      <div>
-                        {item?.reduction && (
-                          <span>{numberFormat(item?.price)}</span>
-                        )}
-                        {/* <small
+                      <div className="btn-price-add">
+                        <div>
+                          {item?.reduction && (
+                            <span>{numberFormat(item?.price)}</span>
+                          )}
+                          {/* <small
                           style={{ color: item?.amount > 5 ? "black" : "red" }}
                         >
                           Stocks: {item?.amount}
@@ -550,31 +550,31 @@ function ShopingStore({ initialShop }) {
                                 item?.reduction
                               )
                             )}
-                          </h3> 
-                      </div>
-                      <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
-                      {/* <button onClick={() => handleAddProduct(item)}>
+                          </h3>
+                        </div>
+                        <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
+                        {/* <button onClick={() => handleAddProduct(item)}>
                             <IoBagAddSharp />
                             <span>ເພິ່ມ</span>
                           </button> */}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </>
-          )}
+                ))}
+              </>
+            )}
+          </div>
+          <div className="pt-1 d-flex justify-content-center align-items-center w-100">
+            <Paginator
+              first={count}
+              rows={itemsPerPage}
+              totalRecords={productTotal}
+              onPageChange={handlePageChange}
+              className="p-gination"
+              template={{ layout: "PrevPageLink CurrentPageReport NextPageLink" }}
+            />
+          </div>
         </div>
-        <div className="pt-1 d-flex justify-content-center align-items-center w-100">
-          <Paginator
-            first={count}
-            rows={itemsPerPage}
-            totalRecords={productTotal}
-            onPageChange={handlePageChange}
-            className="p-gination"
-            template={{ layout: "PrevPageLink CurrentPageReport NextPageLink" }}
-          />
-        </div>
-      </div>
       </div>
 
       <FooterComponent />

@@ -4,7 +4,7 @@ import React, { useRef } from "react";
 import moment from "moment";
 import html2canvas from "html2canvas";
 import { saveAs } from "file-saver";
-import { CORLOR_APP, numberFormat } from "../../helper";
+import { CORLOR_APP, image_main, numberFormat } from "../../helper";
 // import mainLogo from "/assets/images/mainLogo.png"
 import { MdArrowBack, MdPageview, MdSimCardDownload } from "react-icons/md";
 import { useRouter } from "next/router";
@@ -39,19 +39,19 @@ export default function CompletedOrder() {
 
   const handleBack = () => {
    
-    
-    const destinationPath =
-    setId.shopId && setId.affiliateId &&
-    setId.commissionForShopId
-      ? `../shop/${setId.shopId}?affiliateId=${setId.affiliateId}&commissionForShopId=${setId.commissionForShopId}`
-      : setId.shopId &&
-        setId.affiliateId 
-      ? `../shop/${setId.shopId}?affiliateId=${setId.affiliateId}`
-      : `../shop/${setId?.shopId}`;
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
 
+    // Construct the destination path based on available data
+    let destinationPath = `../shop/${idPreState?.id}`;
 
+    if (idPreState?.affiliateId) {
+      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+      if (idPreState?.commissionForShopId) {
+        destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+      }
+    }
     navigate.push(destinationPath);
-    // dispatch(removeStateCompleted(2))
+     
   };
   // let text = info?.code, moment(info?.createdAt).format("DD/MM/YYYY HH:mm"),
   // {moment(info?.createdAt).format("DD/MM/YYYY HH:mm")} {info?.code}{" "}
@@ -115,7 +115,7 @@ export default function CompletedOrder() {
         ref={captureElementRef}
         style={{ width: "100%", position: "relative" }}>
         <div className="logoBusness2">
-          <img src="/assets/images/mainLogo.png" alt="mainLogo" />
+          <img src={image_main} alt="mainLogo" />
         </div>
         <Watermark
           gap={[10, 10]}

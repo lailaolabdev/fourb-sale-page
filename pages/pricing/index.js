@@ -13,7 +13,7 @@ import { Button, Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { SHOP } from "@/apollo";
 import moment from "moment";
-import { CORLOR_APP } from "@/helper";
+import { CORLOR_APP, image_main } from "@/helper";
 import { toast } from "react-toastify";
 import { Checkbox, Form, Input, message, Modal } from "antd";
 import useWindowDimensions from "@/helper/useWindowDimensions";
@@ -280,10 +280,10 @@ export default function index() {
               borderRadius: "50%",
               overflow: "hidden",
               padding: 10,
-              background: "#f2f2f2",
+              // background: "#f2f2f2",
             }}
           >
-            <img src="/assets/images/mainLogo.png" style={{ width: "100%" }} />
+            <img src={image_main} style={{ width: "100%" }} />
           </div>
 
           <h4 style={{ textAlign: "center" }}>

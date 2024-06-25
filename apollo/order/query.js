@@ -261,6 +261,12 @@ export const GET_ORDERGROUPS = gql`
           description
           pageName
         }
+        shop {
+          id
+          name
+          image
+          note
+        }
         status
         isPaymented
         type
