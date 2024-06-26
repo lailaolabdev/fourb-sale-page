@@ -165,7 +165,7 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
           : "d-flex flex-column gap-2 p-2 container-carousel"
       }
     >
-      {/* <Carousel
+      <Carousel
         value={products}
         numVisible={1}
         numScroll={1}
@@ -176,9 +176,9 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
         itemTemplate={productTemplate}
         showIndicators={false}
         // showNavigators={false}
-      /> */}
+      />
 
-      <div className="slide-container">
+      {/* <div className="slide-container">
 
         <Slide
           // arrows={true} 
@@ -187,13 +187,12 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
           {products.map((slideImage, index) => (
             <div key={index} style={{ width: '100%', height: width > 700 ? 380 : 205 }}>
               <div style={{ ...divStyle }}>
-                {/* <span className="title-slide-image">{slideImage?.name}</span> */}
                 <img className="w-100 h-100" src={S3_URL_MEDIUM + slideImage.image} />
               </div>
             </div>
           ))}
         </Slide>
-      </div>
+      </div> */}
       <div className="card-carousel-right">
         <div className="shop-profile">
           {shopDetail?.image ? (
