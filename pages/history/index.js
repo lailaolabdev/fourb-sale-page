@@ -201,12 +201,12 @@ export default function Index() {
                       <span style={{ fontSize: 13 }}>{data?.shop?.name}</span>
                     </div>
                     <div className="d-flex gap-2">
-                      <Button disabled variant="light" size="sm">
+                      <Button variant="light" size="sm">
                         <IoLogoWhatsapp style={{ fontSize: 18, marginRight: 3 }} />
                         {width > 700 && <span style={{ fontWeight: 'normal', fontSize: 12 }}>ຕິດຕໍ່ຮ້ານ</span>}
                       </Button>
                       <Button  variant="light" size="sm" 
-                      onClick={() => onChatOrderGroup(data)}
+                      // onClick={() => onChatOrderGroup(data)}
                       
                       >
                         <IoChatboxEllipsesOutline style={{ fontSize: 18, marginRight: 3 }} />
