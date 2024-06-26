@@ -81,7 +81,8 @@ export default function Index() {
     setOrderForChat(data)
   }
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (e) => {
+    e.preventDefault();
     if (message.trim()) {
       setMessages([...messages, { id: messages.length + 1, text: message, sender: 'customer' }]);
       setMessage('');
@@ -102,8 +103,10 @@ export default function Index() {
     }
   }, [messages]);
 
-  const headChat = <div className="d-flex justify-content-start align-items-center gap-2">
-    <Avatar image={S3_URL + orderForChat?.shop?.image} />
+  const headChat = <div className="d-flex justify-content-start align-items-center gap-2 p-0">
+    <Avatar className="p-overlay-badge" shape="circle" image={S3_URL + orderForChat?.shop?.image}>
+    <Badge severity="success"></Badge>
+    </Avatar>
     <div className="d-flex justify-content-start flex-column align-items-start">
       <span style={{ fontSize: 13 }}>{orderForChat?.shop?.name}</span>
       <span style={{ fontSize: 10 }}>{orderForChat?.code}</span>
@@ -202,8 +205,8 @@ export default function Index() {
                         <IoLogoWhatsapp style={{ fontSize: 18, marginRight: 3 }} />
                         {width > 700 && <span style={{ fontWeight: 'normal', fontSize: 12 }}>ຕິດຕໍ່ຮ້ານ</span>}
                       </Button>
-                      <Button disabled variant="light" size="sm" 
-                      // onClick={() => onChatOrderGroup(data)}
+                      <Button  variant="light" size="sm" 
+                      onClick={() => onChatOrderGroup(data)}
                       
                       >
                         <IoChatboxEllipsesOutline style={{ fontSize: 18, marginRight: 3 }} />
@@ -252,13 +255,13 @@ export default function Index() {
               </div>
             )}
 
-          <div className="form-comment-control">
-            <input value={message} onChange={(e) => setMessage(e?.target?.value)} placeholder="comment here..." />
+          <form onSubmit={(e)=>handleSendMessage(e)} className="form-comment-control">
+            <input value={message} onChange={(e) => setMessage(e?.target?.value)} placeholder="Write a comment..." />
 
-            <button onClick={handleSendMessage} disabled={message ? false : true}>
+            <button  type="submit" disabled={message ? false : true}>
               <i className="pi pi-send"></i>
             </button>
-          </div>
+          </form>
         </div>
       </Sidebar>
     </>

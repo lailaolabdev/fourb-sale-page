@@ -1598,10 +1598,10 @@
      height: 100%;
      position: relative;
      display: flex;
-     gap: 3px;
+     /* gap: 3px; */
      justify-content: space-between;
      align-items: end;
-     /* background: var(--colorBorder); */
+
 
      & .message-detail {
          height: 100%;
@@ -1610,33 +1610,37 @@
          align-items: end;flex-direction: column;
          width: 100%;
          padding: .3em;
-         overflow-y: auto;
+        overflow-y: auto;
+
 
 
          /* Customer message styling */
          & .customer-message {
-             background-color: #f2f2f2;
+             background-color: #e0fafc;
              align-self: flex-end;
              font-size: 13px;
              font-weight: 400;
-             padding: .75em 1em;
-             border-radius: .85em .85em 0 .85em;
+             padding: .3em .6em;
+             border-radius: .65em .65em 0 .65em;
              display: flex;flex-direction: column;
              justify-content: end;align-items: end;
-             box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+             box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+             line-height: 14px;
          }
 
          /* Admin message styling */
          & .admin-message {
-             background-color: #f3f3f3;
+             background-color: #fff7f7;  
              align-self: flex-start;
              font-size: 13px;
              font-weight: 400;
-             padding: .75em 1em;
-             border-radius: .85em .85em .85em 0;
+             padding: .3em .6em;
+             border-radius: .65em .65em .65em 0;
              display: flex;flex-direction: column;
              justify-content: end;align-items: end;
-             box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+             box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
+             line-height: 14px;
+
          }
 
          
@@ -1673,8 +1677,8 @@
              background: var(--colorGray);
              border-radius: 5px;
              position: absolute;
-             top: 12px;
-             right: 12px;
+             top: 11px;
+             right: 11px;
              z-index: 90;
              width: 36px;
              height: 36px;

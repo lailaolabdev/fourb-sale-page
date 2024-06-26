@@ -329,7 +329,7 @@ function SearchProduct({ initialShop }) {
     const { __typename, ...newItem } = item;
     const encodedItem = base64Encode(JSON.stringify(newItem));
     router.push({
-      pathname: "../cartdetail",
+      pathname: "../detailProduct",
       query: { item: encodedItem },
     });
   };
