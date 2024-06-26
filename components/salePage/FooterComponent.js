@@ -160,9 +160,9 @@ export default function FooterComponent() {
           <p>ຕິດຕາມພວກເຮົາ</p>
           <div style={{ display: "flex", gap: 20 }}>
             <div
-              onClick={() => {
-                window.open("https://www.facebook.com/LailaoCF");
-              }}
+               onClick={() =>
+                window.open("https://www.facebook.com/4B.forbusiness", "_blank")
+              }
             >
               <img
                 src="https://www.facebook.com/images/fb_icon_325x325.png"
@@ -171,7 +171,7 @@ export default function FooterComponent() {
             </div>
             <div
               onClick={() => {
-                window.open("https://www.youtube.com/@cflivebylailaocf2342");
+                window.open("https://www.youtube.com/@cflivebylailaocf2342",  "_blank");
               }}
             >
               <img
@@ -181,7 +181,7 @@ export default function FooterComponent() {
             </div>
             <div
               onClick={() => {
-                window.open("https://www.tiktok.com/@4bforbusiness");
+                window.open("https://www.tiktok.com/@4bforbusiness",  "_blank");
               }}
             >
               <img
