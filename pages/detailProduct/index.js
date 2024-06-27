@@ -30,10 +30,10 @@ import { formatNumberFavorite } from "@/const";
 import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
 import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, SHOP } from "@/apollo";
 
-
 export default function index() {
   const router = useRouter();
   const [product, setProduct] = useState(null);
+  const [stockAmount, setStockAmount] = useState(0);
   const toast = useRef(null);
 
   const [previewImage, setPreviewImage] = useState([]);
@@ -41,7 +41,7 @@ export default function index() {
   const dispatch = useDispatch();
   const [shopDetail, setShopDetail] = useState("");
 
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const { patchBack } = useSelector((state) => state?.setpatch);
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
@@ -59,9 +59,6 @@ export default function index() {
   ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
     fetchPolicy: "network-only",
   });
-
-
- 
 
   useEffect(() => {
     getExchangeRate({
@@ -111,12 +108,18 @@ export default function index() {
     //   setPreviewImage(product?.containImages[0]);
     // }else {
     // }
-      setPreviewImage(product?.image);
-
+    setPreviewImage(product?.image);
+    if (product?.amount > 0){
+      setStockAmount(product?.amount-1);
+      setQuantity(1);
+    } else{
+      setQuantity(0);
+      setStockAmount(0);
+    }
   }, [product]);
 
   const _commissionForAffiliate =
-  shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
+    shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
@@ -195,7 +198,7 @@ export default function index() {
   };
 
   const handleAddProduct = () => {
-    if (quantity > product?.amount) {
+    if (quantity > product?.amount){
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
@@ -259,7 +262,8 @@ export default function index() {
   };
 
   const incrementQuantity = () => {
-    if (quantity >= product?.amount) {
+    const newQuantity = stockAmount-1;
+    if (newQuantity < 0){ 
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
@@ -267,18 +271,28 @@ export default function index() {
       });
       return;
     }
+    setStockAmount(newQuantity);
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const decrementQuantity = () => {
+    const newQuantity = stockAmount+1;
+    if (newQuantity < 0){
+      toast.current.show({
+        severity: "error",
+        summary: "ແຈ້ງເຕືອນ",
+        detail: "ສິນຄ້າໃນສະຕ໋ອກບໍ່ພໍຂາຍ!",
+      });
+      return;
+    }
+    setStockAmount(newQuantity);
     if (quantity > 1) {
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
   };
- 
 
-   // click the menu home
-   const onCalbackToHome = async () => {
+  // click the menu home
+  const onCalbackToHome = async () => {
     // Retrieve the state from local storage
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
 
@@ -293,7 +307,6 @@ export default function index() {
     }
     router.replace(destinationPath);
   };
- 
 
   return (
     <>
@@ -305,14 +318,11 @@ export default function index() {
         <div className="bread-crumb">
           <span onClick={onCalbackToHome}>ໜ້າຫລັກ</span>
           <RxSlash />
-          <span>
-            {product?.name} 
-          </span>
+          <span>{product?.name}</span>
         </div>
         <div className="card-view">
           <div className="card-dailog-image">
-        
-            <div className="image-view"> 
+            <div className="image-view">
               {previewImage ? (
                 <img
                   src={S3_URL_MEDIUM + previewImage}
@@ -345,7 +355,8 @@ export default function index() {
           </div>
           <div className="card-dailog-content">
             <h3>{product?.name}</h3>
-            <p>Stocks: {product?.amount}</p>
+            {/* <p>Stocks: {product?.amount}</p> */}
+            <p>Stocks: {stockAmount}</p>
             {product?.reduction && (
               <p style={{ color: "red", fontSize: 23 }}>
                 ສ່ວນຫຼຸດ {product?.reduction}%
@@ -395,20 +406,42 @@ export default function index() {
               <span>Large</span>
             </div> */}
 
-            <div className="card-button-preview">
+            <div className="card-button-preview" 
+              // style={{
+              //   opacity: stockAmount <= 0 ? "0.5" : "1",
+              // }}
+            >
               <div>
                 <p
-                  onClick={decrementQuantity}
-                  style={{ cursor: quantity > 1 ? "pointer" : "not-allowed" }}
+                  onClick={()=>{
+                    if(quantity >= 2){
+                      decrementQuantity()
+                    }
+                  }}
+                  style={{ cursor: quantity > 1 ? "pointer" : "not-allowed",
+                    opacity: quantity > 1 ? "1" : "0.5"
+                  }}
                 >
                   <FaMinus />
                 </p>
-                <p style={{ userSelect: "none" }}>{quantity}</p>
-                <p onClick={incrementQuantity}>
+                <p style={{ userSelect: "none", opacity: quantity<=0 ? "0.5" : "1" }}>{quantity}</p>
+                <p
+                  onClick={() => {
+                    if (stockAmount > 0){
+                      incrementQuantity();
+                    }
+                  }}
+                  style={{ cursor: stockAmount > 0 ? "pointer" : "not-allowed", 
+                    opacity: stockAmount <= 0 ? "0.5" : "1"
+                  }}
+                >
                   <FaPlus />
                 </p>
               </div>
-              <button onClick={handleAddProduct} style={{ userSelect: "none" }}>
+              <button  disabled={quantity<=0 ? true : false} onClick={handleAddProduct} style={{ userSelect: "none", 
+                  cursor: quantity>=1 ? "pointer" : "not-allowed",
+                  opacity: quantity<=0 ? "0.5" : "1"
+              }}>
                 <IoBagAddSharp />
                 <span>ເພິ່ມກະຕ່າ</span>
               </button>
