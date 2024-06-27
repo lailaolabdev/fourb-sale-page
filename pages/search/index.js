@@ -339,6 +339,14 @@ function SearchProduct({ initialShop }) {
     const currentFavorites = data?.favorite || 0;
     const newFavoritesCount = currentFavorites + 1;
 
+    setProductsLists((prevState) =>
+    prevState.map((item) =>
+      item.id === data.id ? { ...item, favorite: newFavoritesCount } : item
+    )
+  );
+  setHeartAnimation(index);
+  setTimeout(() => setHeartAnimation(null), 600);
+  
     updateStock({
       variables: {
         where: {
@@ -349,13 +357,7 @@ function SearchProduct({ initialShop }) {
         },
       },
     });
-    setProductsLists((prevState) =>
-      prevState.map((item) =>
-        item.id === data.id ? { ...item, favorite: newFavoritesCount } : item
-      )
-    );
-    setHeartAnimation(index);
-    setTimeout(() => setHeartAnimation(null), 600);
+   
   };
 
   const ogImageUrl = initialShop
@@ -449,9 +451,12 @@ function SearchProduct({ initialShop }) {
 
                       <div className="btn-price-add">
                         <div>
+                        <div style={{display:'flex', flexDirection:'column'}}>
+                         <small>ຈຳນວນ: {item?.amount}</small>
                           {item?.reduction && (
                             <span>{numberFormat(item?.price)}</span>
                           )}
+                         </div>
                           {/* <small
                           style={{ color: item?.amount > 5 ? "black" : "red" }}
                         >

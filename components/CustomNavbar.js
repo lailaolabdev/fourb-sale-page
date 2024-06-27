@@ -107,25 +107,25 @@ export default function CustomNavbar() {
       url: "/home",
     },
     {
-      title: "ກ໋ຽວກັບ",
+      title: "ກ່ຽວກັບຮ້ານ",
       icon: <FaPage4 style={{ fontSize: 18 }} />,
       url: "../about-us",
     },
-    {
-      title: "ຕິດຕໍ່ພວກເຮົາ",
-      icon: <FaChalkboardUser style={{ fontSize: 18 }} />,
-      url: "../contact-us",
-    },
+    // {
+    //   title: "ຕິດຕໍ່ພວກເຮົາ",
+    //   icon: <FaChalkboardUser style={{ fontSize: 18 }} />,
+    //   url: "../contact-us",
+    // },
     {
       title: "ປະຫວັດການຊື້",
       icon: <FaHistory style={{ fontSize: 18 }} />,
       url: "../history",
     },
-    {
-      title: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
-      icon: <MdOutlinePolicy style={{ fontSize: 18 }} />,
-      url: "../policy",
-    },
+    // {
+    //   title: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
+    //   icon: <MdOutlinePolicy style={{ fontSize: 18 }} />,
+    //   url: "../policy",
+    // },
   
     {
       title: clientData?.email_verified ? "ອອກຈາກລະບົບ" : "ລ໋ອກອິນ",
@@ -234,7 +234,7 @@ export default function CustomNavbar() {
       <div className="nav-top">
         <div
           className="nav-main"
-          style={{ padding: width > 800 ? "0" : ".75em" }}
+      
         >
           {width > 800 && (
             <div className="nav-logo">
@@ -268,16 +268,7 @@ export default function CustomNavbar() {
 
           {width > 800 && (
             <div className="nav-notication">
-              <div onClick={() => {
-                toast.current.show({
-                  severity: "info",
-                  summary: "ບໍ່ແຈ້ງການ?",
-                  detail: "ຕິດຕາມຕໍ່ໄປ!",
-                });
-              }}>
-                <IoNotifications />
-                <p>ແຈ້ງການ</p>
-              </div>
+              
               <div onClick={() => navigate.push("../cartdetail")}>
                 <TiShoppingCart style={{ fontSize: 23 }} />
                 <p>ກະຕ່າສິນຄ້າ</p>
@@ -317,11 +308,11 @@ export default function CustomNavbar() {
                 ໜ້າຫລັກ
               </li>
               <li onClick={() => navigate.push("../about-us")}>
-                <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບ</li>
-              <li onClick={() => navigate.push("../contact-us")}>
+                <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບຮ້ານ</li>
+              {/* <li onClick={() => navigate.push("../contact-us")}>
               <FaChalkboardUser style={{ fontSize: 15 }} />
                 ຕິດຕໍ່ພວກເຮົາ
-              </li>
+              </li> */}
               <li onClick={() => navigate.push("../history")}>
               <FaHistory style={{ fontSize: 15 }} />
                 ປະຫວັດການຊື້</li>
@@ -481,7 +472,7 @@ export default function CustomNavbar() {
                   </span>
                 )}
               </li>
-              {clientData?.email_verified ? (
+              {/* {clientData?.email_verified ? (
                 <li onClick={() => setVisibleRight(true)}>
                   <Avatar image={clientData?.picture} shape="circle" />
                 </li>
@@ -489,7 +480,7 @@ export default function CustomNavbar() {
                 <li onClick={() => setShowLogin(true)}>
                   <TbLogin2 style={{ fontSize: 23 }} />
                 </li>
-              )}
+              )} */}
 
               <li onClick={() => setShowMenu(!showMenu)}>
                 {!showMenu ? <SlMenu /> : <AiOutlineClose />}

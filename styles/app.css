@@ -259,10 +259,11 @@
 
      & .nav-main {
          display: flex;
-         justify-content: space-around;
+         justify-content: space-between;
          align-items: center;
          background: var(--colorMain);
          color: var(--colorWhite);
+         padding: 0 6em;
 
          & .nav-logo {
              display: flex;
@@ -381,7 +382,7 @@
              }
          }
 
-         & .nav-notication div:nth-child(2) {
+         & .nav-notication div:nth-child(1) {
              position: relative;
 
              & span {
@@ -410,7 +411,7 @@
          display: flex;
          justify-content: space-between;
          align-items: center;
-         padding: .1em;
+         padding: .1em 6em;
          /* overflow: hidden; */
 
          & .menu-list {
@@ -505,7 +506,7 @@
          & .menu-sm-screen {
              width: 100%;
              position: absolute;
-             top: 6.9em;
+             top: 6.6em;
              right: 0;
              background: var(--colorWhite);
              box-shadow: var(--boxShadow);
@@ -758,7 +759,7 @@
  }
 
  .card-review-category {
-     background: var(--colorWhite);
+     /* background: var(--colorWhite); */
      /* white-space: nowrap;
      overflow-x: auto; */
      padding: 0 1em;
@@ -768,7 +769,7 @@
      & .scrolling {
          /* width: 100vw; */
          display: flex;
-         gap: 20px;
+         gap:5px;
          padding: 1em;
 
          & div {
@@ -781,7 +782,7 @@
              justify-content: center;
              align-items: center;
              flex-direction: column;
-             gap: 10px;
+             gap: 5px;
              color: var(--colorText);
              font-size: 20px;
              padding: .4em 1em;
@@ -797,9 +798,9 @@
 
              &:hover {
                  background: var(--hover);
-                 transform: scale(1.01);
+                 transform: scale(1.03);
                  /* border-radius: .5em; */
-                 margin-top: -.35em;
+                 /* margin-top: -.35em; */
 
              }
 
@@ -813,7 +814,7 @@
      .btn-next-scroll {
          width: 35px;
          height: 35px;
-         border-radius: 40em;
+         border-radius: 4px;
          display: flex;
          justify-content: center;
          align-items: center;
@@ -835,24 +836,56 @@
      }
 
      & .btn-next-scroll {
-         left: 99%;
+         left: 97%;
 
 
      }
 
      & .btn-back-scroll {
-         left: 1%;
+         left: 2%;
      }
 
 
  }
 
+ /* card shop profile */
+ .swipper-card {
+    position: relative;
+    height: 10vw;
+    background: none;
+    
+    & .card-shop-profile {
+        width: 100%;
+        padding: .3em 6em;
+         display: flex;
+         gap: 10px;
+         justify-content: start;
+         align-items: end;
+         position: absolute;
+         top: 0;left: 0;
+
+
+         & div:first-child {
+             width: 100px;
+             height: 100px;
+             outline: 10px solid var(--colorWhite);
+             margin-top: -2em;
+             border-radius: 50em;
+             overflow: hidden;
+         }
+
+         & dev:last-child {
+             padding-top: 1em;
+         }
+     }
+ }
+
 
  /* shoping style */
  .body-main {
-     padding: .5em 2em;
+     padding: .5em 6em;
      background-image: linear-gradient(to bottom, var(--hover) 1%, var(--colorGray));
-     margin-top: -1em;
+     /* margin-top: -1em; */
 
 
      & .container-contents {
@@ -1607,10 +1640,11 @@
          height: 100%;
          display: flex;
          justify-content: space-between;
-         align-items: end;flex-direction: column;
+         align-items: end;
+         flex-direction: column;
          width: 100%;
          padding: .3em;
-        overflow-y: auto;
+         overflow-y: auto;
 
 
 
@@ -1622,28 +1656,32 @@
              font-weight: 400;
              padding: .3em .6em;
              border-radius: .65em .65em 0 .65em;
-             display: flex;flex-direction: column;
-             justify-content: end;align-items: end;
+             display: flex;
+             flex-direction: column;
+             justify-content: end;
+             align-items: end;
              box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
              line-height: 14px;
          }
 
          /* Admin message styling */
          & .admin-message {
-             background-color: #fff7f7;  
+             background-color: #fff7f7;
              align-self: flex-start;
              font-size: 13px;
              font-weight: 400;
              padding: .3em .6em;
              border-radius: .65em .65em .65em 0;
-             display: flex;flex-direction: column;
-             justify-content: end;align-items: end;
+             display: flex;
+             flex-direction: column;
+             justify-content: end;
+             align-items: end;
              box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.13) 0px 0px 1px 1px;
              line-height: 14px;
 
          }
 
-         
+
      }
 
      & .form-comment-control {
@@ -1692,6 +1730,21 @@
 
  /* screen small */
  @media screen and (max-width: 700px) {
+
+    .nav-top {
+
+        & .nav-main,.nav-menu {
+            padding: .3em;
+        }
+    }
+
+    .swipper-card  {
+        padding-bottom: 7em;
+
+        & .card-shop-profile {
+            padding: 1em;
+        }
+    }
 
      .card-history-buy {
          padding: .2em;

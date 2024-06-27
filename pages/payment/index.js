@@ -101,6 +101,7 @@ export default function payment() {
   const [minWidth, setMinWidth] = useState("lg");
   const [cartDatas, setCartDatas] = useState([]);
   const [keyPatch, setKeyPatch] = useState();
+  const [customerDatas, setCustomerDatas] =  useState()
 
   const [openSelectBank, setOpenSelectBank] = useState(false);
   const [typeBanks, setTypeBanks] = useState("");
@@ -147,7 +148,8 @@ export default function payment() {
     0
   );
 
-  // console.log("shopStateId=--44545-->", setId)
+
+
   // console.log("combineField Payment55=---->", totalPrice)
 
   // console.log("check price9999---->", totalPrice);
@@ -184,14 +186,24 @@ export default function payment() {
   //   }
   // }, []);
 
+  // useEffect(() => {
+ 
+  // const cdData = localStorage.JSON.prase(getItem("CLIENT_DATA"));
+  // if(cdData) {
+  //   setCustomerDatas(cdData)
+  // }
+
+  // }, []);
+  // console.log({customerDatas})
+
   useEffect(() => {
     if (patchBack?.id) {
       const _checkdatas = cartList.filter(
         (item) => item?.shop === patchBack?.id
       );
-      setCartDatas(_checkdatas);
-      console.log("checkDtas:-------->", _checkdatas);
-    }
+      setCartDatas(_checkdatas); 
+    } 
+
   }, [patchBack, cartList]);
 
   useEffect(() => {

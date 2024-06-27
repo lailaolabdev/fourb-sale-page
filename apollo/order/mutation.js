@@ -95,10 +95,10 @@ export const CREATE_ORDER_GROUP = gql`
 
 
 export const UPDATE_STOCK = gql`
-  mutation UpdateStock($data: StockInput!, $where: StockWhereInputOne!) {
-    updateStock(data: $data, where: $where) {
-        id
-    }
+mutation UpdateHeartStock($data: StockInput!, $where: StockWhereInputOne!) {
+  updateHeartStock(data: $data, where: $where) {
+    id
+  }
 }
 `;
 

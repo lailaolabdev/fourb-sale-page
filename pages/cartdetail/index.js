@@ -8,6 +8,7 @@ import {
   decrementCartItem,
   incrementCartItem,
   removeCartItem,
+  removeSingleItem,
   updateCartItemQuantity,
 } from "../../redux/salepage/cartReducer";
 import { setOrders } from "../../redux/setOrder/orders";
@@ -26,6 +27,8 @@ import { message } from "antd";
 import CustomButton from "@/components/CustomButton";
 import CustomNavbar from "@/components/CustomNavbar";
 import Alert from 'react-bootstrap/Alert';
+import { IoClose } from "react-icons/io5";
+import { Button } from "react-bootstrap"
 
 
 export default function CartDetail() {
@@ -160,14 +163,14 @@ export default function CartDetail() {
             {cartDatas?.map((data, index) => {
               return (
                 <div key={data?.id} className="cartItem-product">
-                  {/* <div
+                  <div
                     className="remove-single-item"
                     onClick={() => dispatch(removeSingleItem(index))}
                   >
-                    <CloseCircleOutlined
+                    <IoClose
                       style={{ fontSize: 20, cursor: "pointer" }}
                     />
-                  </div> */}
+                  </div>
 
                   <div className="cartImage">
                     {data?.image?.length > 0 ? (
@@ -263,7 +266,8 @@ export default function CartDetail() {
               <h5>{isNaN(totalPrice) ? 0 : numberFormat(totalPrice)} ກີບ</h5>
             </div>
             <div className="paid-buy">
-              <CustomButton
+              <Button style={{background: CORLOR_APP, width: '100%'}} onClick={handleConfirmCart} >ຈ່າຍເງິນ</Button>
+              {/* <CustomButton
                 type="submit"
                 text="ສັ່ງຊື້"
                 state={state}
@@ -272,13 +276,13 @@ export default function CartDetail() {
                 borderRadius={10}
                 padding={8}
                 width="100%"
-              />
+              /> */}
             </div>
           </div>
         </div>
       ) : (
         <div style={{ padding: '2em', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-          <Alert style={{width:"100%"}} variant="warning">
+          <Alert style={{width:"100%", textAlign:'center'}} variant="warning">
             <small>ກະລຸນາເລືອກສິນຄ້າກ່ອນ!</small>
           </Alert>
           <img style={{ width: '100%', maxWidth: 400, height: '100%' }} src="https://test.techhut.com.bd/images/no-item-in-cart.gif" />

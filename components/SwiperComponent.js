@@ -140,14 +140,14 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
 
   const productTemplate = (product) => {
     return (
-      <div className="surface-border p-2 text-center w-100 ">
-        <div style={{ width: "100%", height: width > 800 ? 360 : 185 }}>
+      <div className="surface-border text-center w-100 ">
+        <div style={{ width: "100%", height: width > 800 ? "25vw" : "38vw" }}>
           <img
             src={S3_URL_MEDIUM + product.image}
             alt={product.name}
             style={{
-              borderRadius: 3,
               width: '100%', height: '100%',
+              objectFit:'contain'
               // maxHeight: width > 700 ? 280 : 210,
               // minHeight: width > 700 ? 260 : 80,
             }}
@@ -159,11 +159,11 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
 
   return (
     <div
-      className={
-        width > 900
-          ? "d-flex gap-2 p-4 container-carousel"
-          : "d-flex flex-column gap-2 p-2 container-carousel"
-      }
+    // className={
+    //   width > 900
+    //     ? "d-flex gap-2 p-4 container-carousel"
+    //     : "d-flex flex-column gap-2 p-2 container-carousel"
+    // }
     >
       <Carousel
         value={products}
@@ -175,8 +175,30 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
         autoplayInterval={3000}
         itemTemplate={productTemplate}
         showIndicators={false}
-        // showNavigators={false}
+        showNavigators={false}
       />
+
+      <div className="swipper-card">
+        <div className="card-shop-profile">
+          <div> {shopDetail?.image ? (
+            <img src={S3_URL + shopDetail?.image} />
+          ) : (
+            <img src="https://i.pinimg.com/originals/44/b1/4a/44b14a8b2fc649b18b3671f878af65c9.png" />
+          )}</div>
+          <div>
+          <h4>{shopDetail?.name}</h4>
+
+            <small>
+              <FaMapMarkerAlt
+                style={{ color: "red", fontSize: 18, paddingBottom: 5 }}
+              />{" "}
+              ທີ່ຢູ່: ບ. {shopDetail?.address?.village}, ມ.{" "}
+              {shopDetail?.address?.district}, ຂ.{" "}
+              {shopDetail?.address?.province}
+            </small>
+          </div>
+        </div>
+      </div>
 
       {/* <div className="slide-container">
 
@@ -193,7 +215,7 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
           ))}
         </Slide>
       </div> */}
-      <div className="card-carousel-right">
+      {/* <div className="card-carousel-right">
         <div className="shop-profile">
           {shopDetail?.image ? (
             <img src={S3_URL + shopDetail?.image} />
@@ -255,7 +277,7 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
           </div>
         </div>
 
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -230,6 +230,7 @@ function ShopingStore({ initialShop }) {
         shop: shopId,
         isDeleted: false,
         isUsingSalePage: true,
+        amount:1
       };
 
       if (filterNew !== "") {
@@ -239,12 +240,12 @@ function ShopingStore({ initialShop }) {
         };
       }
 
-      if (!_.isEmpty(isStock)) {
-        _where = {
-          ..._where,
-          amount: isStock,
-        };
-      }
+      // if (!_.isEmpty(isStock)) {
+      //   _where = {
+      //     ..._where,
+      //     amount: isStock,
+      //   };
+      // }
 
       await getStocksGeneral({
         variables: {
@@ -532,9 +533,12 @@ function ShopingStore({ initialShop }) {
 
                       <div className="btn-price-add">
                         <div>
+                         <div style={{display:'flex', flexDirection:'column'}}>
+                         <small>ຈຳນວນ: {item?.amount}</small>
                           {item?.reduction && (
                             <span>{numberFormat(item?.price)}</span>
                           )}
+                         </div>
                           {/* <small
                           style={{ color: item?.amount > 5 ? "black" : "red" }}
                         >

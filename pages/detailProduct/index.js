@@ -195,7 +195,7 @@ export default function index() {
   };
 
   const handleAddProduct = () => {
-    if (quantity >= product?.amount) {
+    if (quantity > product?.amount) {
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
