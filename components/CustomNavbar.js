@@ -48,8 +48,9 @@ import { Toast } from "primereact/toast";
 import { GrPrevious } from "react-icons/gr";
 import { GET_SHOP } from "@/apollo";
 import { useLazyQuery } from "@apollo/client";
+import { contactWhatsAppWitdhShop } from "@/const";
 
- 
+
 export default function CustomNavbar() {
   const navigate = useRouter();
 
@@ -78,7 +79,7 @@ export default function CustomNavbar() {
   const { patchBack } = useSelector((state) => state?.setpatch);
   const [shopId, setShopId] = useState()
 
-  const [getShopData, { data: loadShopData, loading: loadingShop }] = useLazyQuery(GET_SHOP, {fetchPolicy: "cache-and-network"})
+  const [getShopData, { data: loadShopData, loading: loadingShop }] = useLazyQuery(GET_SHOP, { fetchPolicy: "cache-and-network" })
 
 
   // const defaultKey = localStorage.getItem("PATCH_KEY")
@@ -112,6 +113,7 @@ export default function CustomNavbar() {
 
   useEffect(() => {
     if (loadShopData) {
+      console.log({ loadShopData })
       setShopData(loadShopData?.shop)
     }
   }, [loadShopData])
@@ -162,7 +164,7 @@ export default function CustomNavbar() {
     //   icon: <MdOutlinePolicy style={{ fontSize: 18 }} />,
     //   url: "../policy",
     // },
-  
+
     {
       title: clientData?.email_verified ? "ອອກຈາກລະບົບ" : "ລ໋ອກອິນ",
       icon: clientData?.email_verified ? (
@@ -270,7 +272,7 @@ export default function CustomNavbar() {
       <div className="nav-top">
         <div
           className="nav-main"
-      
+
         >
           {width > 800 && (
             <div className="nav-logo">
@@ -304,7 +306,7 @@ export default function CustomNavbar() {
 
           {width > 800 && (
             <div className="nav-notication">
-              
+
               <div onClick={() => navigate.push("../cartdetail")}>
                 <TiShoppingCart style={{ fontSize: 23 }} />
                 <p>ກະຕ່າສິນຄ້າ</p>
@@ -315,11 +317,11 @@ export default function CustomNavbar() {
                 <p>ປະຫວັດການຊື້</p>
               </div> */}
               <div>
-                  <button ref={buttonEl} onClick={() => setShowLogin(true)}>
-                    <FaHistory style={{ fontSize: 18 }} />
-                    ປະຫວັດ
-                  </button>
-                </div>
+                <button ref={buttonEl} onClick={() => setShowLogin(true)}>
+                  <FaHistory style={{ fontSize: 18 }} />
+                  ປະຫວັດ
+                </button>
+              </div>
               {/* {clientData?.email_verified ? (
                 <div onClick={() => setVisibleRight(true)}>
                   <img src={clientData?.picture} />
@@ -426,9 +428,12 @@ export default function CustomNavbar() {
         ) : (
           <div className="nav-menu">
             <div className="menu-list">
-              <div onClick={()=> navigate.replace(`../about-us`)} style={{paddingLeft:5,display:'flex', justifyContent:'center',gap:10, alignItems:'center'}}>
-                <Avatar label="s"  image={S3_URL + shopData?.image} shape="circle" />
-                <p style={{paddingTop:10}}><b>{shopData?.name}</b></p>
+              <div onClick={() => navigate.replace(`../about-us`)} style={{ paddingLeft: 5, display: 'flex', justifyContent: 'center', gap:5,alignItems: 'center' }}>
+                {/* <Avatar label="s" image={S3_URL + shopData?.image} shape="circle" /> */}
+                <div style={{ flexDirection: 'column',marginTop:'-.7em ', display: 'flex', justifyContent: 'center', gap: 10, alignItems: 'start' }}>
+                  <p style={{ paddingTop: 10 }}><b>{shopData?.name}</b></p>
+                  <small style={{ marginTop: '-2.5em', fontSize: 11 }}>+856 020 {shopData?.phone}</small>
+                </div>
               </div>
               {/* <li
                 ref={parentDivRef}
@@ -585,14 +590,15 @@ export default function CustomNavbar() {
       </div>
 
 
-      {/* <div className="card-contact-shop" onClick={() => setIsCall(!isCall)}>
-        {isCall ? (
+      <div className="card-contact-shop" onClick={() => contactWhatsAppWitdhShop(shopData?.phone)}>
+        <IoLogoWhatsapp style={{ fontSize: 32 }} />
+        {/* {isCall ? (
           <IoClose style={{ fontSize: 28 }} />
         ) : (
           <SiGooglemessages style={{ fontSize: 28 }} />
-        )}
+        )} */}
 
-        {isCall && (
+        {/* {isCall && (
           <div
             className="info-call"
             style={{
@@ -624,8 +630,8 @@ export default function CustomNavbar() {
               <MdOutlineEmail />
             </motion.div>
           </div>
-        )}
-      </div> */}
+        )} */}
+      </div>
 
       <Modal
         centered

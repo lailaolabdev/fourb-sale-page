@@ -8,6 +8,7 @@ import { OrganizationChart } from "primereact/organizationchart";
 import React, { useEffect, useState } from "react";
 import { FaWhatsapp } from "react-icons/fa";
 import { Button } from "react-bootstrap"
+import { contactWhatsAppWitdhShop } from "@/const";
 
 export default function index() {
   const [shopId, setShopId] = useState()
@@ -15,7 +16,6 @@ export default function index() {
 
   const [getShopData, { data: loadShopData, loading: loadingShop }] = useLazyQuery(GET_SHOP)
 
-  console.log({ loadShopData })
 
   useEffect(() => {
     if (loadShopData) {
@@ -42,22 +42,6 @@ export default function index() {
     })
   }, [shopId])
 
-  const openWhatsApp = (data) => {
-    // console.log("log phone:--->", data)
-    const phoneNumber = "+856020" + data;
-
-    // You can also include a message using the 'text' parameter.
-    const message = "ສະບາຍດີ🙏";
-
-    // Construct the WhatsApp URL using https://wa.me.
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-
-    // Open WhatsApp using the constructed URL.
-    // window.open(whatsappUrl);
-    window.location.href = whatsappUrl;
-  };
 
 
   return (
@@ -71,7 +55,8 @@ export default function index() {
       <div className="card-about-us">
         <img src={S3_URL + shopData?.image} style={{width:180,height:180, borderRadius:'50em',outline:'3px solid white'}} />
         <h1 style={{ marginTop: '.5em' }}>{shopData?.name}</h1>
-        <Button style={{background:CORLOR_APP, border:'none'}} onClick={() => openWhatsApp(shopData?.phone)}>
+        <p style={{fontSize:14}}>ບ {shopData?.address?.village}, ມ {shopData?.address?.district}, {shopData?.address?.province}</p>
+        <Button style={{background:CORLOR_APP, border:'none'}} onClick={() => contactWhatsAppWitdhShop(shopData?.phone)}>
                 <FaWhatsapp style={{ fontSize: 18 }} /> +856 20{" "}
                 {shopData?.phone}
               </Button>

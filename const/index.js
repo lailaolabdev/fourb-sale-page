@@ -24,6 +24,18 @@ export const checkInviceStatus = (status) => {
   return title;
 };
 
+export const contactWhatsAppWitdhShop = ( data ) => {
+  const phoneNumber = "+856020" + data;
+
+  const message = "ສະບາຍດີ🙏";
+
+  const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+    message
+  )}`;
+
+  window.location.href = whatsappUrl;
+}
+
  
 
 export const formatNumberFavorite = (num) => {

@@ -187,8 +187,7 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
           )}</div>
           <div>
           <h4>{shopDetail?.name}</h4>
-
-            <small>
+            <small >
               <FaMapMarkerAlt
                 style={{ color: "red", fontSize: 18, paddingBottom: 5 }}
               />{" "}

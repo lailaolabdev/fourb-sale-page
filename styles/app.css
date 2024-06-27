@@ -545,8 +545,8 @@
 
  .card-contact-shop {
      position: fixed;
-     bottom: 2em;
-     left: 2em;
+     bottom: 1em;
+     left:1em;
      z-index: 99;
      width: 45px;
      height: 45px;
@@ -868,6 +868,7 @@
          & div:first-child {
              width: 100px;
              height: 100px;
+             min-width: 80px;min-height: 80px;
              outline: 10px solid var(--colorWhite);
              margin-top: -2em;
              border-radius: 50em;
@@ -1748,6 +1749,16 @@
 
         & .card-shop-profile {
             padding: 1em;
+
+            & div:first-child {
+                width: 60px;height: 60px;
+            }
+            & div:last-child {
+
+                & small {
+                    font-size: 10px;
+                }
+            }
         }
     }
 
