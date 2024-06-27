@@ -7,6 +7,7 @@ import {
   FaSearch,
   FaShoppingCart,
   FaSignInAlt,
+  FaWhatsapp,
 } from "react-icons/fa";
 import { IoIosArrowForward, IoLogoWhatsapp, IoMdLogIn } from "react-icons/io";
 import {
@@ -42,9 +43,11 @@ import { Modal } from "react-bootstrap";
 import { googleLogout } from "@react-oauth/google";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { FiHome } from "react-icons/fi";
-import { image_main } from "@/helper";
+import { S3_URL, image_main } from "@/helper";
 import { Toast } from "primereact/toast";
 import { GrPrevious } from "react-icons/gr";
+import { GET_SHOP } from "@/apollo";
+import { useLazyQuery } from "@apollo/client";
 
  
 export default function CustomNavbar() {
@@ -65,6 +68,7 @@ export default function CustomNavbar() {
   const [keyPatch, setKeyPatch] = useState();
   const [profileAccount, setProfileAccount] = useState();
   const [clientData, setClientData] = useState();
+  const [shopData, setShopData] = useState()
 
   const dispatch = useDispatch();
 
@@ -72,7 +76,10 @@ export default function CustomNavbar() {
 
   const { cartList } = useSelector((state) => state?.salepage);
   const { patchBack } = useSelector((state) => state?.setpatch);
-  const shopId = patchBack?.id;
+  const [shopId, setShopId] = useState()
+
+  const [getShopData, { data: loadShopData, loading: loadingShop }] = useLazyQuery(GET_SHOP, {fetchPolicy: "cache-and-network"})
+
 
   // const defaultKey = localStorage.getItem("PATCH_KEY")
   useEffect(() => {
@@ -94,9 +101,38 @@ export default function CustomNavbar() {
         return acc + data?.qty;
       }, 0);
 
+      setShopId(patchBack?.id)
+
       setDataBage(totalQty);
     }
   }, [cartList, patchBack]);
+
+
+
+
+  useEffect(() => {
+    if (loadShopData) {
+      setShopData(loadShopData?.shop)
+    }
+  }, [loadShopData])
+
+  useEffect(() => {
+    let _shop = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    if (_shop) {
+      setShopId(_shop?.id)
+    }
+  }, [])
+
+
+  useEffect(() => {
+    getShopData({
+      variables: {
+        where: {
+          id: shopId
+        }
+      }
+    })
+  }, [shopId])
 
 
 
@@ -223,14 +259,14 @@ export default function CustomNavbar() {
     <>
       <Toast position="top-center" ref={toast} />
 
-      <div className="nav-calling">
+      {/* <div className="nav-calling">
         <div>
           <TbPhoneCall />
         </div>
         <p>
           We are available 24/7, Need help? <span>+856 020 29-933-696</span>
         </p>
-      </div>
+      </div> */}
       <div className="nav-top">
         <div
           className="nav-main"
@@ -274,7 +310,17 @@ export default function CustomNavbar() {
                 <p>ກະຕ່າສິນຄ້າ</p>
                 <span>{dataBage ?? 0}</span>
               </div>
-              {clientData?.email_verified ? (
+              {/* <div>
+                <FaHistory />
+                <p>ປະຫວັດການຊື້</p>
+              </div> */}
+              <div>
+                  <button ref={buttonEl} onClick={() => setShowLogin(true)}>
+                    <FaHistory style={{ fontSize: 18 }} />
+                    ປະຫວັດ
+                  </button>
+                </div>
+              {/* {clientData?.email_verified ? (
                 <div onClick={() => setVisibleRight(true)}>
                   <img src={clientData?.picture} />
                   <p>{clientData?.name}</p>
@@ -286,112 +332,118 @@ export default function CustomNavbar() {
                     ລ໋ອກອິນ
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </div>
 
         {width > 800 ? (
-          <div className="nav-menu">
-            <div className="menu-list">
-              {width < 800 && <li ref={parentDivRef}
-                onClick={onHomeMenu}
-              >
-                <span>
-                  <GrPrevious />
-                </span>
-                <span>ໜ້າຮ້ານ ໃນເຊວເພຈ</span>
-              </li>}
+          ""
+          // <div className="nav-menu">
+          //   <div className="menu-list">
+          //     {width < 800 && <li ref={parentDivRef}
+          //       onClick={onHomeMenu}
+          //     >
+          //       <span>
+          //         <GrPrevious />
+          //       </span>
+          //       <span>ໜ້າຮ້ານ ໃນເຊວເພຈ</span>
+          //     </li>}
 
-              <li onClick={onHomeMenu}>
-                <FiHome style={{ fontSize: 15 }} />
-                ໜ້າຫລັກ
-              </li>
-              <li onClick={() => navigate.push("../about-us")}>
-                <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບຮ້ານ</li>
-              {/* <li onClick={() => navigate.push("../contact-us")}>
-              <FaChalkboardUser style={{ fontSize: 15 }} />
-                ຕິດຕໍ່ພວກເຮົາ
-              </li> */}
-              <li onClick={() => navigate.push("../history")}>
-              <FaHistory style={{ fontSize: 15 }} />
-                ປະຫວັດການຊື້</li>
+          //     <li onClick={onHomeMenu}>
+          //       <FiHome style={{ fontSize: 15 }} />
+          //       ໜ້າຫລັກ
+          //     </li>
+          //     <li onClick={() => navigate.push("../about-us")}>
+          //       <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບຮ້ານ</li>
+          //     {/* <li onClick={() => navigate.push("../contact-us")}>
+          //     <FaChalkboardUser style={{ fontSize: 15 }} />
+          //       ຕິດຕໍ່ພວກເຮົາ
+          //     </li> */}
+          //     <li onClick={() => navigate.push("../history")}>
+          //     <FaHistory style={{ fontSize: 15 }} />
+          //       ປະຫວັດການຊື້</li>
 
-              {isShowRing && (
-                <motion.div
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 15 }}
-                  className="card-show-products"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="arrow-item" />
-                  <motion.div
-                    variants={{ y: 0, opacity: 0 }}
-                    initial={{ y: 0, opacity: 1 }}
-                    onClick={() => {
-                      navigate.push(`../search?stocks=${1}`);
-                      setIsShowRing(false);
-                    }}
-                    className="item"
-                  >
-                    <span>
-                      <RiListCheck3 style={{ fontSize: 20 }} />
-                    </span>
-                    <span>ສິນຄ້າທີ່ຍັງມີສະຕ໋ອກ</span>
-                  </motion.div>
-                  <motion.div
-                    variants={{ y: 0, opacity: 0 }}
-                    initial={{ y: 0, opacity: 1 }}
-                    onClick={() => {
-                      navigate.push(`../search?stocks=${0}`);
-                      setIsShowRing(false);
-                    }}
-                    className="item"
-                  >
-                    <span>
-                      <RiListIndefinite style={{ fontSize: 20 }} />
-                    </span>
-                    <span>ສິນຄ້າທັງໝົດໃນສະຕ໋ອກ</span>
-                  </motion.div>
-                  <hr />
-                  <span
-                    style={{
-                      fontSize: 10,
-                      textAlign: "center",
-                      marginTop: "-.5em",
-                      color: "gray",
-                    }}
-                  >
-                    ສະແດງສິນຄ້າທີ່ມີຈຳນວນ ຫຼື ສິນຄ້າທີ່ໝົດສະຕ໋ອກແລ້ວ
-                  </span>
-                </motion.div>
-              )}
-            </div>
+          //     {isShowRing && (
+          //       <motion.div
+          //         initial={{ opacity: 0, y: 5 }}
+          //         animate={{ opacity: 1, y: 0 }}
+          //         exit={{ opacity: 0, y: 15 }}
+          //         className="card-show-products"
+          //         onClick={(e) => e.stopPropagation()}
+          //       >
+          //         <div className="arrow-item" />
+          //         <motion.div
+          //           variants={{ y: 0, opacity: 0 }}
+          //           initial={{ y: 0, opacity: 1 }}
+          //           onClick={() => {
+          //             navigate.push(`../search?stocks=${1}`);
+          //             setIsShowRing(false);
+          //           }}
+          //           className="item"
+          //         >
+          //           <span>
+          //             <RiListCheck3 style={{ fontSize: 20 }} />
+          //           </span>
+          //           <span>ສິນຄ້າທີ່ຍັງມີສະຕ໋ອກ</span>
+          //         </motion.div>
+          //         <motion.div
+          //           variants={{ y: 0, opacity: 0 }}
+          //           initial={{ y: 0, opacity: 1 }}
+          //           onClick={() => {
+          //             navigate.push(`../search?stocks=${0}`);
+          //             setIsShowRing(false);
+          //           }}
+          //           className="item"
+          //         >
+          //           <span>
+          //             <RiListIndefinite style={{ fontSize: 20 }} />
+          //           </span>
+          //           <span>ສິນຄ້າທັງໝົດໃນສະຕ໋ອກ</span>
+          //         </motion.div>
+          //         <hr />
+          //         <span
+          //           style={{
+          //             fontSize: 10,
+          //             textAlign: "center",
+          //             marginTop: "-.5em", 
+          //             color: "gray",
+          //           }}
+          //         >
+          //           ສະແດງສິນຄ້າທີ່ມີຈຳນວນ ຫຼື ສິນຄ້າທີ່ໝົດສະຕ໋ອກແລ້ວ
+          //         </span>
+          //       </motion.div>
+          //     )}
+          //   </div>
 
-            <div className="menu-list">
-              <li onClick={() => navigate.push("../policy")}>
-              <MdOutlinePolicy style={{ fontSize: 15 }} />ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ
-              </li>
-              {/* <li>ຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂ</li> */}
-            </div>
-          </div>
+          //   <div className="menu-list">
+          //     {/* <li onClick={() => navigate.push("../policy")}>
+          //     <FaWhatsapp style={{ fontSize: 15 }} /> +856 020 769 681 99
+          //     </li> */}
+          //     <li></li>
+          //   </div>
+          // </div>
         ) : (
           <div className="nav-menu">
             <div className="menu-list">
-              <li
+              <div onClick={()=> navigate.replace(`../about-us`)} style={{paddingLeft:5,display:'flex', justifyContent:'center',gap:10, alignItems:'center'}}>
+                <Avatar  image={S3_URL + shopData?.image} shape="circle" />
+                <p style={{paddingTop:10}}><b>{shopData?.name}</b></p>
+              </div>
+              {/* <li
                 ref={parentDivRef}
-                onClick={onHomeMenu}
-              // onClick={() => {
-              //   setShowMenu(false);
-              //   setIsShowRing(!isShowRing);
-              // }}
+                // onClick={onHomeMenu}
+              onClick={() => {
+                setShowMenu(false);
+                setIsShowRing(!isShowRing);
+              }}
               >
                 <span>
                   <GrPrevious />
                 </span>
+                <span>ສະແດງສິນຄ້າ</span>
                 <span>ໜ້າຮ້ານ ໃນເຊວເພຈ</span>
-              </li>
+              </li> */}
 
               {isShowRing && (
                 <motion.div

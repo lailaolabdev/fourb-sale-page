@@ -200,23 +200,24 @@ export default function Index() {
                       <Avatar image={S3_URL + data?.shop?.image} shape="circle" />
                       <span style={{ fontSize: 13 }}>{data?.shop?.name}</span>
                     </div>
-                    <div className="d-flex gap-2">
+                    <div />
+                    {/* <div className="d-flex gap-2">
                       <Button variant="light" size="sm">
                         <IoLogoWhatsapp style={{ fontSize: 18, marginRight: 3 }} />
                         {width > 700 && <span style={{ fontWeight: 'normal', fontSize: 12 }}>ຕິດຕໍ່ຮ້ານ</span>}
                       </Button>
                       <Button  variant="light" size="sm" 
-                      // onClick={() => onChatOrderGroup(data)}
+                      onClick={() => onChatOrderGroup(data)}
                       
                       >
                         <IoChatboxEllipsesOutline style={{ fontSize: 18, marginRight: 3 }} />
                         {width > 700 && <span style={{ fontWeight: 'normal', fontSize: 12 }}>ຄອມເມັ້ນອໍເດີ້</span>}
                       </Button>
-                      {/* <Button disabled variant="light" size="sm">
+                      <Button disabled variant="light" size="sm">
                         <IoMdShare style={{ fontSize: 18, marginRight: 3 }} />
                         {width > 700 && <span style={{ fontWeight: 'normal', fontSize: 12 }}>ແຊຣ</span>}
-                      </Button> */}
-                    </div>
+                      </Button>
+                    </div> */}
                   </div>
                 </Accordion>
               ))}
