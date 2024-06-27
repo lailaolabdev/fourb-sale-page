@@ -230,7 +230,7 @@ function ShopingStore({ initialShop }) {
         shop: shopId,
         isDeleted: false,
         isUsingSalePage: true,
-        amount:1
+        // amount:1
       };
 
       if (filterNew !== "") {
