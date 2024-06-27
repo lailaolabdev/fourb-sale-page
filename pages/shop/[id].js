@@ -49,6 +49,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { UPDATE_STOCK, UPDATE_STOCK_HEART } from "@/apollo/order/mutation";
 import { formatNumberFavorite } from "@/const";
 import _ from "lodash";
+import {Form} from "react-bootstrap"
 
 function ShopingStore({ initialShop }) {
   const router = useRouter();
@@ -230,7 +231,6 @@ function ShopingStore({ initialShop }) {
         shop: shopId,
         isDeleted: false,
         isUsingSalePage: true,
-        // amount:1
       };
 
       if (filterNew !== "") {
@@ -240,12 +240,13 @@ function ShopingStore({ initialShop }) {
         };
       }
 
-      // if (!_.isEmpty(isStock)) {
-      //   _where = {
-      //     ..._where,
-      //     amount: isStock,
-      //   };
-      // }
+      if (!_.isEmpty(isStock)) {
+        _where = {
+          ..._where,
+          amount: parseInt(isStock),
+          
+        };
+      }
 
       await getStocksGeneral({
         variables: {
@@ -442,7 +443,7 @@ function ShopingStore({ initialShop }) {
         />
       </Head>
 
-      <CustomNavbar setIsStock={setIsStock} setFilterNew={setFilterNew} />
+      <CustomNavbar  setFilterNew={setFilterNew} />
 
       {/* <div className="d-flex gap-4">
       </div> */}
@@ -481,9 +482,16 @@ function ShopingStore({ initialShop }) {
         </div>
 
         <div className="container-contents">
-          <p>
-            <b>ຜະລິດຕະພັນຍອດນິຍົມ</b>{" "}
-          </p>
+          <div className="d-flex py-2 justify-content-between align-items-center w-100">
+
+            <p>
+              <b>ຜະລິດຕະພັນຍອດນິຍົມ</b>{" "}
+            </p>
+            <Form.Select  style={{width:180}} value={isStock} onChange={(e) => setIsStock(e?.target?.value)}>
+              <option value={1}>ສິນຄ້າ ທີ່ຍັງມີສະຕ໋ອກ</option>
+              <option value={0}>ສິນຄ້າ ທີ່ສະຕ໋ອກໝົດ</option>
+            </Form.Select>
+          </div>
           {/* <p style={{ fontSize: 13, textAlign: "center" }}>
           ເບິ່ງສິນຄ້າຍອດນິຍົມທັງໝົດຂອງພວກເຮົາໃນອາທິດນີ້.
           ທ່ານສາມາດເລືອກຜະລິດຕະພັນຄວາມຕ້ອງການປະຈໍາວັນຂອງທ່ານຈາກບັນຊີລາຍຊື່ນີ້ແລະໄດ້ຮັບຂໍ້ສະເຫນີພິເສດບາງຢ່າງທີ່ມີການຂົນສົ່ງຟຣີ.
@@ -533,12 +541,12 @@ function ShopingStore({ initialShop }) {
 
                       <div className="btn-price-add">
                         <div>
-                         <div style={{display:'flex', flexDirection:'column'}}>
-                         <small>ຈຳນວນ: {item?.amount}</small>
-                          {item?.reduction && (
-                            <span>{numberFormat(item?.price)}</span>
-                          )}
-                         </div>
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <small>ຈຳນວນ: {item?.amount}</small>
+                            {item?.reduction && (
+                              <span>{numberFormat(item?.price)}</span>
+                            )}
+                          </div>
                           {/* <small
                           style={{ color: item?.amount > 5 ? "black" : "red" }}
                         >
@@ -575,6 +583,8 @@ function ShopingStore({ initialShop }) {
               totalRecords={productTotal}
               onPageChange={handlePageChange}
               className="p-gination"
+              style={{maxHeight:50, padding:0,overflow:'hidden'}}
+
               template={{ layout: "PrevPageLink CurrentPageReport NextPageLink" }}
             />
           </div>

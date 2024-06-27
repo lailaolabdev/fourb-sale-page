@@ -42,6 +42,9 @@ import { Paginator } from "primereact/paginator";
 import { formatNumberFavorite } from "@/const";
 import { UPDATE_STOCK } from "@/apollo/order/mutation";
 import { FaHeart } from "react-icons/fa";
+import _ from "lodash";
+import {Form} from "react-bootstrap"
+
 
 function SearchProduct({ initialShop }) {
   const router = useRouter();
@@ -215,10 +218,10 @@ function SearchProduct({ initialShop }) {
       }
 
 
-      if (stocks) {
+      if (!_.isEmpty(isStock)) {
         _where = {
           ..._where,
-          amount: parseFloat(stocks),
+          amount: parseInt(isStock),
         };
       }
 
@@ -340,13 +343,13 @@ function SearchProduct({ initialShop }) {
     const newFavoritesCount = currentFavorites + 1;
 
     setProductsLists((prevState) =>
-    prevState.map((item) =>
-      item.id === data.id ? { ...item, favorite: newFavoritesCount } : item
-    )
-  );
-  setHeartAnimation(index);
-  setTimeout(() => setHeartAnimation(null), 600);
-  
+      prevState.map((item) =>
+        item.id === data.id ? { ...item, favorite: newFavoritesCount } : item
+      )
+    );
+    setHeartAnimation(index);
+    setTimeout(() => setHeartAnimation(null), 600);
+
     updateStock({
       variables: {
         where: {
@@ -357,7 +360,7 @@ function SearchProduct({ initialShop }) {
         },
       },
     });
-   
+
   };
 
   const ogImageUrl = initialShop
@@ -401,11 +404,19 @@ function SearchProduct({ initialShop }) {
 
       <div className="body-main">
         <div className="container-contents">
-          <h5>
-              {productLists?.length > 0
-                ? `ຜະລິດຕະພັນຍອດນິຍົມ`
-                : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
-          </h5>
+          <div className="d-flex py-2 justify-content-between align-items-center w-100">
+
+            <p>
+            {productLists?.length > 0
+              ? `ຜະລິດຕະພັນຍອດນິຍົມ`
+              : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
+            </p>
+            <Form.Select style={{ width: 180 }} value={isStock} onChange={(e) => setIsStock(e?.target?.value)}>
+            <option value={1}>ສິນຄ້າ ທີ່ຍັງມີສະຕ໋ອກ</option>
+              <option value={0}>ສິນຄ້າ ທີ່ສະຕ໋ອກໝົດ</option>
+            </Form.Select>
+          </div>
+          
 
           <div className="card-items">
             {!stockData && loadingStock ? (
@@ -451,12 +462,12 @@ function SearchProduct({ initialShop }) {
 
                       <div className="btn-price-add">
                         <div>
-                        <div style={{display:'flex', flexDirection:'column'}}>
-                         <small>ຈຳນວນ: {item?.amount}</small>
-                          {item?.reduction && (
-                            <span>{numberFormat(item?.price)}</span>
-                          )}
-                         </div>
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <small>ຈຳນວນ: {item?.amount}</small>
+                            {item?.reduction && (
+                              <span>{numberFormat(item?.price)}</span>
+                            )}
+                          </div>
                           {/* <small
                           style={{ color: item?.amount > 5 ? "black" : "red" }}
                         >
@@ -493,6 +504,8 @@ function SearchProduct({ initialShop }) {
               totalRecords={productTotal}
               onPageChange={handlePageChange}
               className="p-gination"
+              style={{maxHeight:50, padding:0,overflow:'hidden'}}
+
               template={{
                 layout: "PrevPageLink CurrentPageReport NextPageLink",
               }}

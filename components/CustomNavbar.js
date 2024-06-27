@@ -427,7 +427,7 @@ export default function CustomNavbar() {
           <div className="nav-menu">
             <div className="menu-list">
               <div onClick={()=> navigate.replace(`../about-us`)} style={{paddingLeft:5,display:'flex', justifyContent:'center',gap:10, alignItems:'center'}}>
-                <Avatar  image={S3_URL + shopData?.image} shape="circle" />
+                <Avatar label="s"  image={S3_URL + shopData?.image} shape="circle" />
                 <p style={{paddingTop:10}}><b>{shopData?.name}</b></p>
               </div>
               {/* <li
