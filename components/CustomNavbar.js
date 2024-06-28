@@ -340,91 +340,90 @@ export default function CustomNavbar() {
         </div>
 
         {width > 800 ? (
-          ""
-          // <div className="nav-menu">
-          //   <div className="menu-list">
-          //     {width < 800 && <li ref={parentDivRef}
-          //       onClick={onHomeMenu}
-          //     >
-          //       <span>
-          //         <GrPrevious />
-          //       </span>
-          //       <span>ໜ້າຮ້ານ ໃນເຊວເພຈ</span>
-          //     </li>}
+          <div className="nav-menu">
+            <div className="menu-list">
+              {width < 800 && <li ref={parentDivRef}
+                onClick={onHomeMenu}
+              >
+                <span>
+                  <GrPrevious />
+                </span>
+                <span>ໜ້າຮ້ານ ໃນເຊວເພຈ</span>
+              </li>}
 
-          //     <li onClick={onHomeMenu}>
-          //       <FiHome style={{ fontSize: 15 }} />
-          //       ໜ້າຫລັກ
-          //     </li>
-          //     <li onClick={() => navigate.push("../about-us")}>
-          //       <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບຮ້ານ</li>
-          //     {/* <li onClick={() => navigate.push("../contact-us")}>
-          //     <FaChalkboardUser style={{ fontSize: 15 }} />
-          //       ຕິດຕໍ່ພວກເຮົາ
-          //     </li> */}
-          //     <li onClick={() => navigate.push("../history")}>
-          //     <FaHistory style={{ fontSize: 15 }} />
-          //       ປະຫວັດການຊື້</li>
+              <li onClick={onHomeMenu}>
+                <FiHome style={{ fontSize: 15 }} />
+                ໜ້າຫລັກ
+              </li>
+              <li onClick={() => navigate.push("../about-us")}>
+                <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບຮ້ານ</li>
+              {/* <li onClick={() => navigate.push("../contact-us")}>
+              <FaChalkboardUser style={{ fontSize: 15 }} />
+                ຕິດຕໍ່ພວກເຮົາ
+              </li> */}
+              <li onClick={() => navigate.push("../history")}>
+              <FaHistory style={{ fontSize: 15 }} />
+                ປະຫວັດການຊື້</li>
 
-          //     {isShowRing && (
-          //       <motion.div
-          //         initial={{ opacity: 0, y: 5 }}
-          //         animate={{ opacity: 1, y: 0 }}
-          //         exit={{ opacity: 0, y: 15 }}
-          //         className="card-show-products"
-          //         onClick={(e) => e.stopPropagation()}
-          //       >
-          //         <div className="arrow-item" />
-          //         <motion.div
-          //           variants={{ y: 0, opacity: 0 }}
-          //           initial={{ y: 0, opacity: 1 }}
-          //           onClick={() => {
-          //             navigate.push(`../search?stocks=${1}`);
-          //             setIsShowRing(false);
-          //           }}
-          //           className="item"
-          //         >
-          //           <span>
-          //             <RiListCheck3 style={{ fontSize: 20 }} />
-          //           </span>
-          //           <span>ສິນຄ້າທີ່ຍັງມີສະຕ໋ອກ</span>
-          //         </motion.div>
-          //         <motion.div
-          //           variants={{ y: 0, opacity: 0 }}
-          //           initial={{ y: 0, opacity: 1 }}
-          //           onClick={() => {
-          //             navigate.push(`../search?stocks=${0}`);
-          //             setIsShowRing(false);
-          //           }}
-          //           className="item"
-          //         >
-          //           <span>
-          //             <RiListIndefinite style={{ fontSize: 20 }} />
-          //           </span>
-          //           <span>ສິນຄ້າທັງໝົດໃນສະຕ໋ອກ</span>
-          //         </motion.div>
-          //         <hr />
-          //         <span
-          //           style={{
-          //             fontSize: 10,
-          //             textAlign: "center",
-          //             marginTop: "-.5em", 
-          //             color: "gray",
-          //           }}
-          //         >
-          //           ສະແດງສິນຄ້າທີ່ມີຈຳນວນ ຫຼື ສິນຄ້າທີ່ໝົດສະຕ໋ອກແລ້ວ
-          //         </span>
-          //       </motion.div>
-          //     )}
-          //   </div>
+              {isShowRing && (
+                <motion.div
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 15 }}
+                  className="card-show-products"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <div className="arrow-item" />
+                  <motion.div
+                    variants={{ y: 0, opacity: 0 }}
+                    initial={{ y: 0, opacity: 1 }}
+                    onClick={() => {
+                      navigate.push(`../search?stocks=${1}`);
+                      setIsShowRing(false);
+                    }}
+                    className="item"
+                  >
+                    <span>
+                      <RiListCheck3 style={{ fontSize: 20 }} />
+                    </span>
+                    <span>ສິນຄ້າທີ່ຍັງມີສະຕ໋ອກ</span>
+                  </motion.div>
+                  <motion.div
+                    variants={{ y: 0, opacity: 0 }}
+                    initial={{ y: 0, opacity: 1 }}
+                    onClick={() => {
+                      navigate.push(`../search?stocks=${0}`);
+                      setIsShowRing(false);
+                    }}
+                    className="item"
+                  >
+                    <span>
+                      <RiListIndefinite style={{ fontSize: 20 }} />
+                    </span>
+                    <span>ສິນຄ້າທັງໝົດໃນສະຕ໋ອກ</span>
+                  </motion.div>
+                  <hr />
+                  <span
+                    style={{
+                      fontSize: 10,
+                      textAlign: "center",
+                      marginTop: "-.5em", 
+                      color: "gray",
+                    }}
+                  >
+                    ສະແດງສິນຄ້າທີ່ມີຈຳນວນ ຫຼື ສິນຄ້າທີ່ໝົດສະຕ໋ອກແລ້ວ
+                  </span>
+                </motion.div>
+              )}
+            </div>
 
-          //   <div className="menu-list">
-          //     {/* <li onClick={() => navigate.push("../policy")}>
-          //     <FaWhatsapp style={{ fontSize: 15 }} /> +856 020 769 681 99
-          //     </li> */}
-          //     <li></li>
-          //   </div>
-          // </div>
+            <div className="menu-list">
+              {/* <li onClick={() => navigate.push("../policy")}>
+              <FaWhatsapp style={{ fontSize: 15 }} /> +856 020 769 681 99
+              </li> */}
+              <li></li>
+            </div>
+          </div>
         ) : (
           <div className="nav-menu">
             <div className="menu-list">
