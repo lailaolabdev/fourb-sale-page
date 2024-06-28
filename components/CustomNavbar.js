@@ -317,7 +317,7 @@ export default function CustomNavbar() {
                 <p>ປະຫວັດການຊື້</p>
               </div> */}
               <div>
-                <button ref={buttonEl} onClick={() => setShowLogin(true)}>
+                <button ref={buttonEl} onClick={() => navigate.push("../history")}>
                   <FaHistory style={{ fontSize: 18 }} />
                   ປະຫວັດ
                 </button>
