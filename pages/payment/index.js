@@ -511,8 +511,18 @@ export default function payment() {
   // actoin open bank to paid
 
   const handleConfirmBank = async (values) => {
-    // console.log("check type bank---->", values?.type);
-    // setTypeBanks(data?.type)
+    
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+
+    // Construct the destination path based on available data
+    // let destinationPath = `../shop/${idPreState?.id}`;
+
+    // if (idPreState?.affiliateId) {
+    //   destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+    //   if (idPreState?.commissionForShopId) {
+    //     destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+    //   }
+    // }
 
     try {
       setIsValidate(false);
@@ -560,10 +570,10 @@ export default function payment() {
       // console.log("orders-9-8-6--->", convertedOrders)
       // console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      if (affiliateId) {
+      if (idPreState?.affiliateId) {
         _orderGroup = {
           ..._orderGroup,
-          infulancer: affiliateId,
+          infulancer: idPreState?.affiliateId,
         };
       }
 
@@ -658,7 +668,6 @@ export default function payment() {
             dataResponse.appLink.startsWith("onepay://") ||
             dataResponse.appLink.startsWith("someOtherCustomScheme://"); // Add other schemes as needed
 
-          console.log("isDeepLink:----->", isDeepLink);
           if (isDeepLink) {
             if (isIOS) {
               window.location.href = dataResponse.appLink;
