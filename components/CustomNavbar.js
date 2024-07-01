@@ -51,7 +51,7 @@ import { useLazyQuery } from "@apollo/client";
 import { contactWhatsAppWitdhShop } from "@/const";
 
 
-export default function CustomNavbar() {
+export default function CustomNavbar({ shopDetail }) {
   const navigate = useRouter();
 
   const [isShowRing, setIsShowRing] = useState(false);
@@ -70,6 +70,8 @@ export default function CustomNavbar() {
   const [profileAccount, setProfileAccount] = useState();
   const [clientData, setClientData] = useState();
   const [shopData, setShopData] = useState()
+
+  console.log({ shopDetail })
 
   const dispatch = useDispatch();
 
@@ -109,14 +111,41 @@ export default function CustomNavbar() {
   }, [cartList, patchBack]);
 
 
-
-
   useEffect(() => {
-    if (loadShopData) {
-      console.log({ loadShopData })
-      setShopData(loadShopData?.shop)
+    if (shopDetail) {
+      setShopData(shopDetail);
+      console.log("shopDetail:::", shopDetail, loadShopData);
+    } else {
+      let _shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"));
+      if (_shopData) {
+        setShopData(_shopData?.shop);
+      } else if (loadShopData) {
+        console.log({ loadShopData });
+        setShopData(loadShopData?.shop);
+      } else {
+        setShopData(null);
+      }
     }
-  }, [loadShopData])
+  }, [shopDetail, loadShopData]);
+
+  // useEffect(() => {
+    
+  //   if (shopDetail) {
+
+  //     setShopData(shopDetail)
+  //     console.log("shopDetail:::", shopDetail, shopData)
+  //   } else {
+  //     let _shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"))
+  //     if (_shopData) {
+  //       setShopData(_shopData?.shop)
+  //     } else if(loadShopData) {
+  //       console.log({ loadShopData })
+  //       setShopData(loadShopData?.shop)
+  //     }else {
+  //       setShopData()
+  //     }
+  //   }
+  // }, [])
 
   useEffect(() => {
     let _shop = JSON.parse(localStorage.getItem("PATCH_KEY"));
@@ -362,7 +391,7 @@ export default function CustomNavbar() {
                 ຕິດຕໍ່ພວກເຮົາ
               </li> */}
               <li onClick={() => navigate.push("../history")}>
-              <FaHistory style={{ fontSize: 15 }} />
+                <FaHistory style={{ fontSize: 15 }} />
                 ປະຫວັດການຊື້</li>
 
               {isShowRing && (
@@ -407,7 +436,7 @@ export default function CustomNavbar() {
                     style={{
                       fontSize: 10,
                       textAlign: "center",
-                      marginTop: "-.5em", 
+                      marginTop: "-.5em",
                       color: "gray",
                     }}
                   >
@@ -427,9 +456,9 @@ export default function CustomNavbar() {
         ) : (
           <div className="nav-menu">
             <div className="menu-list">
-              <div onClick={() => navigate.replace(`../about-us`)} style={{ paddingLeft: 5, display: 'flex', justifyContent: 'center', gap:5,alignItems: 'center' }}>
-                {/* <Avatar label="s" image={S3_URL + shopData?.image} shape="circle" /> */}
-                <div style={{ flexDirection: 'column',marginTop:'-.7em ', display: 'flex', justifyContent: 'center', gap: 10, alignItems: 'start' }}>
+              <div onClick={() => navigate.replace(`../about-us`)} style={{ paddingLeft: 5, display: 'flex', justifyContent: 'center', gap: 5, alignItems: 'center' }}>
+                <Avatar label="s" image={S3_URL + shopData?.image} shape="circle" />
+                <div style={{ flexDirection: 'column', marginTop: '-.7em ', display: 'flex', justifyContent: 'center', gap: 10, alignItems: 'start' }}>
                   <p style={{ paddingTop: 10 }}><b>{shopData?.name}</b></p>
                   <small style={{ marginTop: '-2.5em', fontSize: 11 }}>+856 020 {shopData?.phone}</small>
                 </div>

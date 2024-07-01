@@ -80,6 +80,8 @@ function ShopingStore({ initialShop }) {
   const [filterNew, setFilterNew] = useState();
   const toast = useRef(null);
   const [categoryDatas, setCategoryDatas] = useState([]);
+  const [shopInfo, setShopInfo] = useState()
+
 
   const dispatch = useDispatch();
 
@@ -218,6 +220,7 @@ function ShopingStore({ initialShop }) {
   useEffect(() => {
     if (loadShopData?.shop) {
       setShopDetail(loadShopData?.shop);
+    localStorage.setItem("SP_SHOP_DATA", JSON.stringify(loadShopData))
     }
   }, [loadShopData]);
 

@@ -16,6 +16,7 @@ import { useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { GET_EXCHANGRATE } from "../../apollo/exchanrage";
 import {
+  COLOR_TEXT,
   CORLOR_APP,
   numberFormat,
   S3_URL,
@@ -28,7 +29,9 @@ import CustomButton from "@/components/CustomButton";
 import CustomNavbar from "@/components/CustomNavbar";
 import Alert from 'react-bootstrap/Alert';
 import { IoClose } from "react-icons/io5";
-import { Button } from "react-bootstrap"
+import { Button, Breadcrumb } from "react-bootstrap"
+import { MdHome } from "react-icons/md";
+import { RxSlash } from "react-icons/rx";
 
 
 export default function CartDetail() {
@@ -58,6 +61,7 @@ export default function CartDetail() {
 
   const [showConfirmRemove, setShowConfirmRemove] = React.useState(false);
   const [cartDatas, setCartDatas] = useState([]);
+  const [shopInfo, setShopInfo] = useState()
   const handleCloseRemoveProduct = () => setShowConfirmRemove(false);
   const handleShowConfirmProduct = () => {
     setShowConfirmRemove(true);
@@ -68,6 +72,12 @@ export default function CartDetail() {
     0
   );
 
+  // useEffect(()=> {
+  //   let shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"))
+  //   console.log({shopData})
+
+  // },[])
+
 
   useEffect(() => {
     if (patchBack?.id) {
@@ -75,6 +85,12 @@ export default function CartDetail() {
         (item) => item?.shop === patchBack?.id
       );
       setCartDatas(_checkdatas);
+    }
+
+    let shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"))
+    if(shopData) {
+      console.log("cart------", shopData)
+      setShopInfo(shopData?.shop)
     }
   }, [patchBack, cartList]);
 
@@ -129,33 +145,33 @@ export default function CartDetail() {
   };
 
   const onBackPage = () => {
-    let idPreState = {
-      shopId: shopId,
-      affiliateId: affiliateId,
-    };
-
-    if (commissionForShopId) {
-      idPreState = {
-        ...idPreState,
-        commissionForShopId: commissionForShopId,
-      };
-    }
-
-    const destinationPath =
-      idPreState.shopId &&
-        idPreState.affiliateId &&
-        idPreState.commissionForShopId
-        ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
-        : idPreState.shopId && idPreState.affiliateId
-          ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
-          : `../shop/${idPreState?.shopId}`;
-
-    // router.push(destinationPath);
+      // Retrieve the state from local storage
+      const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+  
+      // Construct the destination path based on available data
+      let destinationPath = `../shop/${idPreState?.id}`;
+  
+      if (idPreState?.affiliateId) {
+        destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+        if (idPreState?.commissionForShopId) {
+          destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+        }
+      }
+      router.replace(destinationPath);
   };
 
   return (
     <>
-      <CustomNavbar />
+      <CustomNavbar shopDetail={shopInfo} />
+
+
+      <div style={{ padding: "5px 0" }}>
+        <div className="bread-crumb">
+          <span onClick={onBackPage}><MdHome style={{fontSize:15}} /></span>
+          <RxSlash />
+          <span style={{cursor:'default'}}>ກະຕ່າສິນຄ້າ</span>
+        </div>
+      </div>
 
       {cartDatas?.length > 0 ? (
         <div className="p-4">
@@ -266,7 +282,7 @@ export default function CartDetail() {
               <h5>{isNaN(totalPrice) ? 0 : numberFormat(totalPrice)} ກີບ</h5>
             </div>
             <div className="paid-buy">
-              <Button style={{background: CORLOR_APP, width: '100%'}} onClick={handleConfirmCart} >ຈ່າຍເງິນ</Button>
+              <Button style={{ background: CORLOR_APP, width: '100%' }} onClick={handleConfirmCart} >ຈ່າຍເງິນ</Button>
               {/* <CustomButton
                 type="submit"
                 text="ສັ່ງຊື້"
@@ -282,7 +298,7 @@ export default function CartDetail() {
         </div>
       ) : (
         <div style={{ padding: '2em', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-          <Alert style={{width:"100%", textAlign:'center'}} variant="warning">
+          <Alert style={{ width: "100%", textAlign: 'center' }} variant="warning">
             <small>ກະລຸນາເລືອກສິນຄ້າກ່ອນ!</small>
           </Alert>
           <img style={{ width: '100%', maxWidth: 400, height: '100%' }} src="https://test.techhut.com.bd/images/no-item-in-cart.gif" />

@@ -513,6 +513,7 @@ export default function payment() {
   const handleConfirmBank = async (values) => {
     
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    console.log({idPreState})
 
     // Construct the destination path based on available data
     // let destinationPath = `../shop/${idPreState?.id}`;
@@ -564,7 +565,7 @@ export default function payment() {
         phone,
         logistic,
         destinationLogistic: connectField,
-        infulancer_percent: commissionForShopId ? _commissionForAffiliate : 0,
+        // infulancer_percent: idPreState?.commissionForShopId ? _commissionForAffiliate : 0,
       };
 
       // console.log("orders-9-8-6--->", convertedOrders)
@@ -574,6 +575,12 @@ export default function payment() {
         _orderGroup = {
           ..._orderGroup,
           infulancer: idPreState?.affiliateId,
+        };
+      }
+      if (idPreState?.commissionForShopId) {
+        _orderGroup = {
+          ..._orderGroup,
+          commissionForShopId: idPreState?.commissionForShopId,
         };
       }
 
@@ -1167,7 +1174,7 @@ export default function payment() {
             id="alert-dialog-slide-description"
           >
             <h5 className="textHeadSelect">
-              <b>ເລືອກໃຊ້ທະນາຄານ ໃນການຊຳລະ</b>
+              <b>ເລືອກໃຊ້ທະນາຄານ</b>
             </h5>
             <div className="card-button-banks">
               {bankDatas.map((bank, index) => (
