@@ -122,10 +122,7 @@ export default function CartDetail() {
           : `/payment/${idPreState?.shopId}`;
 
     // send an HTTP request
-    setTimeout(() => {
-      setState("success");
-      router.push("/payment");
-    }, 1000);
+    router.push("/payment");
   };
 
 
