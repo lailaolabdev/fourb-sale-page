@@ -318,13 +318,7 @@ export default function index() {
         <div className="bread-crumb">
           <span onClick={onCalbackToHome}>ໜ້າຫລັກ</span>
           <RxSlash />
-<<<<<<< HEAD:pages/cartdetails/index.js
-          <span>
-            {product?.name} 
-          </span>
-=======
           <span>{product?.name}</span>
->>>>>>> origin/dev:pages/detailProduct/index.js
         </div>
         <div className="card-view">
           <div className="card-dailog-image">
