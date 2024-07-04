@@ -101,6 +101,7 @@ export default function payment() {
   const [minWidth, setMinWidth] = useState("lg");
   const [cartDatas, setCartDatas] = useState([]);
   const [keyPatch, setKeyPatch] = useState();
+  const [customerDatas, setCustomerDatas] =  useState()
 
   const [openSelectBank, setOpenSelectBank] = useState(false);
   const [typeBanks, setTypeBanks] = useState("");
@@ -147,7 +148,8 @@ export default function payment() {
     0
   );
 
-  // console.log("shopStateId=--44545-->", setId)
+
+
   // console.log("combineField Payment55=---->", totalPrice)
 
   // console.log("check price9999---->", totalPrice);
@@ -184,14 +186,24 @@ export default function payment() {
   //   }
   // }, []);
 
+  // useEffect(() => {
+ 
+  // const cdData = localStorage.JSON.prase(getItem("CLIENT_DATA"));
+  // if(cdData) {
+  //   setCustomerDatas(cdData)
+  // }
+
+  // }, []);
+  // console.log({customerDatas})
+
   useEffect(() => {
     if (patchBack?.id) {
       const _checkdatas = cartList.filter(
         (item) => item?.shop === patchBack?.id
       );
-      setCartDatas(_checkdatas);
-      console.log("checkDtas:-------->", _checkdatas);
-    }
+      setCartDatas(_checkdatas); 
+    } 
+
   }, [patchBack, cartList]);
 
   useEffect(() => {
@@ -499,8 +511,19 @@ export default function payment() {
   // actoin open bank to paid
 
   const handleConfirmBank = async (values) => {
-    // console.log("check type bank---->", values?.type);
-    // setTypeBanks(data?.type)
+    
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    console.log({idPreState})
+
+    // Construct the destination path based on available data
+    // let destinationPath = `../shop/${idPreState?.id}`;
+
+    // if (idPreState?.affiliateId) {
+    //   destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+    //   if (idPreState?.commissionForShopId) {
+    //     destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+    //   }
+    // }
 
     try {
       setIsValidate(false);
@@ -542,16 +565,22 @@ export default function payment() {
         phone,
         logistic,
         destinationLogistic: connectField,
-        infulancer_percent: commissionForShopId ? _commissionForAffiliate : 0,
+        // infulancer_percent: idPreState?.commissionForShopId ? _commissionForAffiliate : 0,
       };
 
       // console.log("orders-9-8-6--->", convertedOrders)
       // console.log("orderGroup-9-8-7--->", _orderGroup)
 
-      if (affiliateId) {
+      if (idPreState?.affiliateId) {
         _orderGroup = {
           ..._orderGroup,
-          infulancer: affiliateId,
+          infulancer: idPreState?.affiliateId,
+        };
+      }
+      if (idPreState?.commissionForShopId) {
+        _orderGroup = {
+          ..._orderGroup,
+          commissionForShopId: idPreState?.commissionForShopId,
         };
       }
 
@@ -646,7 +675,6 @@ export default function payment() {
             dataResponse.appLink.startsWith("onepay://") ||
             dataResponse.appLink.startsWith("someOtherCustomScheme://"); // Add other schemes as needed
 
-          console.log("isDeepLink:----->", isDeepLink);
           if (isDeepLink) {
             if (isIOS) {
               window.location.href = dataResponse.appLink;
@@ -1146,7 +1174,7 @@ export default function payment() {
             id="alert-dialog-slide-description"
           >
             <h5 className="textHeadSelect">
-              <b>ເລືອກໃຊ້ທະນາຄານ ໃນການຊຳລະ</b>
+              <b>ເລືອກໃຊ້ທະນາຄານ</b>
             </h5>
             <div className="card-button-banks">
               {bankDatas.map((bank, index) => (

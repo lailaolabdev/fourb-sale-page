@@ -7,6 +7,7 @@ import {
   FaSearch,
   FaShoppingCart,
   FaSignInAlt,
+  FaWhatsapp,
 } from "react-icons/fa";
 import { IoIosArrowForward, IoLogoWhatsapp, IoMdLogIn } from "react-icons/io";
 import {
@@ -19,7 +20,6 @@ import { RiListCheck3, RiListIndefinite, RiMenu2Fill } from "react-icons/ri";
 import { TbLogin2, TbPhoneCall } from "react-icons/tb";
 import { TiShoppingCart } from "react-icons/ti";
 import { motion } from "framer-motion";
-import CartRight from "./CartRight";
 import { useRouter } from "next/router";
 import { useDispatch, useSelector } from "react-redux";
 import useWindowDimensions from "@/helper/useWindowDimensions";
@@ -43,10 +43,15 @@ import { Modal } from "react-bootstrap";
 import { googleLogout } from "@react-oauth/google";
 import { FaChalkboardUser } from "react-icons/fa6";
 import { FiHome } from "react-icons/fi";
-import { image_main } from "@/helper";
+import { S3_URL, image_main } from "@/helper";
 import { Toast } from "primereact/toast";
+import { GrPrevious } from "react-icons/gr";
+import { GET_SHOP } from "@/apollo";
+import { useLazyQuery } from "@apollo/client";
+import { contactWhatsAppWitdhShop } from "@/const";
 
-export default function CustomNavbar() {
+
+export default function CustomNavbar({ shopDetail }) {
   const navigate = useRouter();
 
   const [isShowRing, setIsShowRing] = useState(false);
@@ -64,6 +69,9 @@ export default function CustomNavbar() {
   const [keyPatch, setKeyPatch] = useState();
   const [profileAccount, setProfileAccount] = useState();
   const [clientData, setClientData] = useState();
+  const [shopData, setShopData] = useState()
+
+  console.log({ shopDetail })
 
   const dispatch = useDispatch();
 
@@ -71,7 +79,10 @@ export default function CustomNavbar() {
 
   const { cartList } = useSelector((state) => state?.salepage);
   const { patchBack } = useSelector((state) => state?.setpatch);
-  const shopId = patchBack?.id;
+  const [shopId, setShopId] = useState()
+
+  const [getShopData, { data: loadShopData, loading: loadingShop }] = useLazyQuery(GET_SHOP, { fetchPolicy: "cache-and-network" })
+
 
   // const defaultKey = localStorage.getItem("PATCH_KEY")
   useEffect(() => {
@@ -93,19 +104,106 @@ export default function CustomNavbar() {
         return acc + data?.qty;
       }, 0);
 
+      setShopId(patchBack?.id)
+
       setDataBage(totalQty);
     }
   }, [cartList, patchBack]);
 
+
+  useEffect(() => {
+    if (shopDetail) {
+      setShopData(shopDetail);
+      console.log("shopDetail:::", shopDetail, loadShopData);
+    } else {
+      let _shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"));
+      if (_shopData) {
+        setShopData(_shopData?.shop);
+      } else if (loadShopData) {
+        console.log({ loadShopData });
+        setShopData(loadShopData?.shop);
+      } else {
+        setShopData(null);
+      }
+    }
+  }, [shopDetail, loadShopData]);
+
   // useEffect(() => {
-  //   if (patchBack?.id) {
-  //     const _checkdatas = cartList.filter(
-  //       (item) => item?.shop === patchBack?.id
-  //     );
-  //     setCartDatas(_checkdatas);
-  //     console.log("checkDtas:-------->", _checkdatas);
+    
+  //   if (shopDetail) {
+
+  //     setShopData(shopDetail)
+  //     console.log("shopDetail:::", shopDetail, shopData)
+  //   } else {
+  //     let _shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"))
+  //     if (_shopData) {
+  //       setShopData(_shopData?.shop)
+  //     } else if(loadShopData) {
+  //       console.log({ loadShopData })
+  //       setShopData(loadShopData?.shop)
+  //     }else {
+  //       setShopData()
+  //     }
   //   }
-  // }, [patchBack, cartList]);
+  // }, [])
+
+  useEffect(() => {
+    let _shop = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    if (_shop) {
+      setShopId(_shop?.id)
+    }
+  }, [])
+
+
+  useEffect(() => {
+    getShopData({
+      variables: {
+        where: {
+          id: shopId
+        }
+      }
+    })
+  }, [shopId])
+
+
+
+  const menuSmScreen = [
+    {
+      title: "ໜ້າຫລັກ",
+      icon: <FiHome style={{ fontSize: 18 }} />,
+      url: "/home",
+    },
+    {
+      title: "ກ່ຽວກັບຮ້ານ",
+      icon: <FaPage4 style={{ fontSize: 18 }} />,
+      url: "../about-us",
+    },
+    // {
+    //   title: "ຕິດຕໍ່ພວກເຮົາ",
+    //   icon: <FaChalkboardUser style={{ fontSize: 18 }} />,
+    //   url: "../contact-us",
+    // },
+    {
+      title: "ປະຫວັດການຊື້",
+      icon: <FaHistory style={{ fontSize: 18 }} />,
+      url: "../history",
+    },
+    // {
+    //   title: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
+    //   icon: <MdOutlinePolicy style={{ fontSize: 18 }} />,
+    //   url: "../policy",
+    // },
+
+    {
+      title: clientData?.email_verified ? "ອອກຈາກລະບົບ" : "ລ໋ອກອິນ",
+      icon: clientData?.email_verified ? (
+        <HiOutlineLogout style={{ fontSize: 18 }} />
+      ) : (
+        <IoMdLogIn style={{ fontSize: 18 }} />
+      ),
+      url: clientData?.email_verified ? "/sign-out" : "/sigin",
+    },
+  ];
 
   useEffect(() => {
     // Event listener for clicks outside the parent div
@@ -146,111 +244,70 @@ export default function CustomNavbar() {
     setClientData();
   };
 
-  const items = [
-    {
-      label: profileAccount?.name,
-      icon: <Avatar image={clientData?.picture} />,
-      items: [
-        {
-          label: "LogOut",
-          icon: <HiOutlineLogout />,
-        },
-        {
-          label: "Search",
-          icon: <HiOutlineLogout />,
-        },
-      ],
-    },
-    {
-      label: "Profile",
-      items: [
-        {
-          label: "Settings",
-          icon: "pi pi-cog",
-        },
-        {
-          label: "Logout",
-          icon: "pi pi-sign-out",
-        },
-      ],
-    },
-  ];
-  const menuSmScreen = [
-    {
-      title: "ໜ້າຫລັກ",
-      icon: <FiHome style={{ fontSize: 18 }} />,
-      url: `../shop/${shopId}`,
-    },
-    {
-      title: "ກ໋ຽວກັບ",
-      icon: <FaPage4 style={{ fontSize: 18 }} />,
-      url: "../about-us",
-    },
-    {
-      title: "ຕິດຕໍ່ພວກເຮົາ",
-      icon: <FaChalkboardUser style={{ fontSize: 18 }} />,
-      url: "../contact-us",
-    },
-    // {
-    //   title: "ຕິດຕາມອໍເດີ້",
-    //   icon: <PiCursorClickLight style={{ fontSize: 18 }} />,
-    //   url: "/"
-
-    // },
-    {
-      title: "ປະຫວັດການຊື້",
-      icon: <FaHistory style={{ fontSize: 18 }} />,
-      url: "../history",
-    },
-    {
-      title: "ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ",
-      icon: <MdOutlinePolicy style={{ fontSize: 18 }} />,
-      url: "../policy",
-    },
-
-    {
-      title: clientData?.email_verified ? "ອອກຈາກລະບົບ" : "ລ໋ອກອິນ",
-      icon: clientData?.email_verified ? (
-        <HiOutlineLogout style={{ fontSize: 18 }} />
-      ) : (
-        <IoMdLogIn style={{ fontSize: 18 }} />
-      ),
-      url: clientData?.email_verified ? "/sign-out" : "/sigin",
-    },
-  ];
 
   const onMenuLink = (menu) => {
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+
+    // Construct the destination path based on available data
+    let destinationPath = `../shop/${idPreState?.id}`;
+
+    if (idPreState?.affiliateId) {
+      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+      if (idPreState?.commissionForShopId) {
+        destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+      }
+    }
     if (menu?.url === "/sigin") {
       setShowLogin(true);
+    } else if (menu?.url === "/home") {
+      navigate.push(destinationPath)
     } else if (menu?.url === "/sign-out") {
       onLogOutSalePage();
     } else {
-      navigate.push(menu?.url);
+      navigate.push(menu?.url)
     }
   };
+
+  // click the menu home
+  const onHomeMenu = async () => {
+    // Retrieve the state from local storage
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+
+    // Construct the destination path based on available data
+    let destinationPath = `../shop/${idPreState?.id}`;
+
+    if (idPreState?.affiliateId) {
+      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+      if (idPreState?.commissionForShopId) {
+        destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+      }
+    }
+    navigate.push(destinationPath);
+  };
+
 
   return (
     <>
       <Toast position="top-center" ref={toast} />
 
-      <div className="nav-calling">
+      {/* <div className="nav-calling">
         <div>
           <TbPhoneCall />
         </div>
         <p>
           We are available 24/7, Need help? <span>+856 020 29-933-696</span>
         </p>
-      </div>
+      </div> */}
       <div className="nav-top">
         <div
           className="nav-main"
-          style={{ padding: width > 800 ? "0" : ".75em" }}
+
         >
           {width > 800 && (
             <div className="nav-logo">
               <img
                 src={image_main}
-                style={{ maxWidth: 100, width: 45,borderRadius:'50em' }}
+                style={{ maxWidth: 100, width: 45, borderRadius: '50em' }}
               />
               <div>
                 <h3>ໂຟບີ </h3>
@@ -268,7 +325,7 @@ export default function CustomNavbar() {
               placeholder="ຊອກຫາສິນຄ້າທີ່ທ່ານມັກ..."
               // value={filterData}
               onKeyDown={onChangeFillter}
-              // onChange={(e) => setFilterData(e.target.value)}
+            // onChange={(e) => setFilterData(e.target.value)}
             />
 
             <div className="icon-search">
@@ -278,22 +335,23 @@ export default function CustomNavbar() {
 
           {width > 800 && (
             <div className="nav-notication">
-              <div onClick={()=> {
-                 toast.current.show({
-                  severity: "info",
-                  summary: "ບໍ່ແຈ້ງການ?",
-                  detail: "ຕິດຕາມຕໍ່ໄປ!",
-                });
-              }}>
-                <IoNotifications />
-                <p>ແຈ້ງການ</p>
-              </div>
+
               <div onClick={() => navigate.push("../cartdetail")}>
                 <TiShoppingCart style={{ fontSize: 23 }} />
                 <p>ກະຕ່າສິນຄ້າ</p>
                 <span>{dataBage ?? 0}</span>
               </div>
-              {clientData?.email_verified ? (
+              {/* <div>
+                <FaHistory />
+                <p>ປະຫວັດການຊື້</p>
+              </div> */}
+              <div>
+                <button ref={buttonEl} onClick={() => navigate.push("../history")}>
+                  <FaHistory style={{ fontSize: 18 }} />
+                  ປະຫວັດ
+                </button>
+              </div>
+              {/* {clientData?.email_verified ? (
                 <div onClick={() => setVisibleRight(true)}>
                   <img src={clientData?.picture} />
                   <p>{clientData?.name}</p>
@@ -305,7 +363,7 @@ export default function CustomNavbar() {
                     ລ໋ອກອິນ
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
           )}
         </div>
@@ -313,21 +371,28 @@ export default function CustomNavbar() {
         {width > 800 ? (
           <div className="nav-menu">
             <div className="menu-list">
-              <li ref={parentDivRef} onClick={() => setIsShowRing(!isShowRing)}>
-                <span>ສະແດງ ສິນຄ້າ</span>
+              {width < 800 && <li ref={parentDivRef}
+                onClick={onHomeMenu}
+              >
                 <span>
-                  <IoIosArrowForward />
+                  <GrPrevious />
                 </span>
-              </li>
+                <span>ໜ້າຮ້ານ ໃນເຊວເພຈ</span>
+              </li>}
 
-              <li onClick={() => navigate.push(`../shop/${shopId}`)}>
+              <li onClick={onHomeMenu}>
+                <FiHome style={{ fontSize: 15 }} />
                 ໜ້າຫລັກ
               </li>
-              <li onClick={() => navigate.push("../about-us")}>ກ່ຽວກັບ</li>
-              <li onClick={() => navigate.push("../contact-us")}>
+              <li onClick={() => navigate.push("../about-us")}>
+                <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບຮ້ານ</li>
+              {/* <li onClick={() => navigate.push("../contact-us")}>
+              <FaChalkboardUser style={{ fontSize: 15 }} />
                 ຕິດຕໍ່ພວກເຮົາ
-              </li>
-              <li onClick={() => navigate.push("../history")}>ປະຫວັດການຊື້</li>
+              </li> */}
+              <li onClick={() => navigate.push("../history")}>
+                <FaHistory style={{ fontSize: 15 }} />
+                ປະຫວັດການຊື້</li>
 
               {isShowRing && (
                 <motion.div
@@ -382,27 +447,36 @@ export default function CustomNavbar() {
             </div>
 
             <div className="menu-list">
-              <li onClick={() => navigate.push("../policy")}>
-                ນະໂຍບາຍຄວາມເປັນສ່ວນຕົວ
-              </li>
-              {/* <li>ຂໍ້ກຳນົດ ແລະ ເງື່ອນໄຂ</li> */}
+              {/* <li onClick={() => navigate.push("../policy")}>
+              <FaWhatsapp style={{ fontSize: 15 }} /> +856 020 769 681 99
+              </li> */}
+              <li></li>
             </div>
           </div>
         ) : (
           <div className="nav-menu">
             <div className="menu-list">
-              <li
+              <div onClick={() => navigate.replace(`../about-us`)} style={{ paddingLeft: 5, display: 'flex', justifyContent: 'center', gap: 5, alignItems: 'center' }}>
+                <Avatar label="s" image={S3_URL + shopData?.image} shape="circle" />
+                <div style={{ flexDirection: 'column', marginTop: '-.7em ', display: 'flex', justifyContent: 'center', gap: 10, alignItems: 'start' }}>
+                  <p style={{ paddingTop: 10 }}><b>{shopData?.name}</b></p>
+                  <small style={{ marginTop: '-2.5em', fontSize: 11 }}>+856 020 {shopData?.phone}</small>
+                </div>
+              </div>
+              {/* <li
                 ref={parentDivRef}
-                onClick={() => {
-                  setShowMenu(false);
-                  setIsShowRing(!isShowRing);
-                }}
+                // onClick={onHomeMenu}
+              onClick={() => {
+                setShowMenu(false);
+                setIsShowRing(!isShowRing);
+              }}
               >
-                <span>ສະແດງ ສິນຄ້າ</span>
                 <span>
-                  <IoIosArrowForward />
+                  <GrPrevious />
                 </span>
-              </li>
+                <span>ສະແດງສິນຄ້າ</span>
+                <span>ໜ້າຮ້ານ ໃນເຊວເພຈ</span>
+              </li> */}
 
               {isShowRing && (
                 <motion.div
@@ -483,7 +557,7 @@ export default function CustomNavbar() {
                   </span>
                 )}
               </li>
-              {clientData?.email_verified ? (
+              {/* {clientData?.email_verified ? (
                 <li onClick={() => setVisibleRight(true)}>
                   <Avatar image={clientData?.picture} shape="circle" />
                 </li>
@@ -491,7 +565,7 @@ export default function CustomNavbar() {
                 <li onClick={() => setShowLogin(true)}>
                   <TbLogin2 style={{ fontSize: 23 }} />
                 </li>
-              )}
+              )} */}
 
               <li onClick={() => setShowMenu(!showMenu)}>
                 {!showMenu ? <SlMenu /> : <AiOutlineClose />}
@@ -517,7 +591,9 @@ export default function CustomNavbar() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.15 * idex }}
                         key={idex}
-                        onClick={() => onMenuLink(menu)}
+                        onClick={() =>
+                          onMenuLink(menu)
+                        }
                       >
                         {menu?.icon}
                         {menu?.title}
@@ -541,16 +617,16 @@ export default function CustomNavbar() {
         )}
       </div>
 
-      {/* <CartRight /> */}
 
-      {/* <div className="card-contact-shop" onClick={() => setIsCall(!isCall)}>
-        {isCall ? (
+      <div className="card-contact-shop" onClick={() => contactWhatsAppWitdhShop(shopData?.phone)}>
+        <IoLogoWhatsapp style={{ fontSize: 32 }} />
+        {/* {isCall ? (
           <IoClose style={{ fontSize: 28 }} />
         ) : (
           <SiGooglemessages style={{ fontSize: 28 }} />
-        )}
+        )} */}
 
-        {isCall && (
+        {/* {isCall && (
           <div
             className="info-call"
             style={{
@@ -582,8 +658,8 @@ export default function CustomNavbar() {
               <MdOutlineEmail />
             </motion.div>
           </div>
-        )}
-      </div> */}
+        )} */}
+      </div>
 
       <Modal
         centered
@@ -616,7 +692,7 @@ export default function CustomNavbar() {
         </div>
         <br />
         <ul className="menu-profile">
-          <li onClick={()=> navigate.push("../history")}>
+          <li onClick={() => navigate.push("../history")}>
             <FaHistory />
             ປະຫວັດ
           </li>

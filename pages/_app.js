@@ -51,6 +51,9 @@ import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+import 'primeicons/primeicons.css';
+        
+
 // config.autoAddCss = false;
 
 // const TRACKING_ID = "G-TWDP034E2W";

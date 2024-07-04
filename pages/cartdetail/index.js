@@ -1,5 +1,4 @@
 import { IoMdAdd, IoMdRemove } from "react-icons/io";
-import { BsCreditCard2BackFill } from "react-icons/bs";
 
 import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,26 +13,26 @@ import {
 } from "../../redux/salepage/cartReducer";
 import { setOrders } from "../../redux/setOrder/orders";
 import { useLazyQuery } from "@apollo/client";
-import { MdArrowBack } from "react-icons/md";
 import { useRouter } from "next/router";
 import { GET_EXCHANGRATE } from "../../apollo/exchanrage";
-import ButtonComponent from "../../components/ButtonComponent";
 import {
-  calculateRoundedValue,
+  COLOR_TEXT,
   CORLOR_APP,
-  emptyImage,
   numberFormat,
   S3_URL,
 } from "../../helper";
 import ModalConfirmComponent from "../../components/salePage/ModalConfirmComponent";
-import Image from "next/image";
 import EmptyImage from "../../components/salePage/EmptyImage";
 import FooterComponent from "../../components/salePage/FooterComponent";
-import { CloseCircleOutlined } from "@ant-design/icons";
 import { message } from "antd";
 import CustomButton from "@/components/CustomButton";
 import CustomNavbar from "@/components/CustomNavbar";
+import Alert from 'react-bootstrap/Alert';
+import { IoClose } from "react-icons/io5";
+import { Button, Breadcrumb } from "react-bootstrap"
+import { MdHome } from "react-icons/md";
 import { RxSlash } from "react-icons/rx";
+
 
 export default function CartDetail() {
   const router = useRouter();
@@ -51,11 +50,8 @@ export default function CartDetail() {
     commissionForShopId,
   } = router.query;
   const shopId = id;
-  // console.log("affiliateId:--->", affiliateId)
-  // console.log("shopId:--cart->", shopId)
 
   const dispatch = useDispatch();
-  const [checkPaid, setCheckPaid] = React.useState(true);
   const { cartList } = useSelector((state) => state?.salepage);
   const { patchBack } = useSelector((state) => state?.setpatch);
 
@@ -65,6 +61,7 @@ export default function CartDetail() {
 
   const [showConfirmRemove, setShowConfirmRemove] = React.useState(false);
   const [cartDatas, setCartDatas] = useState([]);
+  const [shopInfo, setShopInfo] = useState()
   const handleCloseRemoveProduct = () => setShowConfirmRemove(false);
   const handleShowConfirmProduct = () => {
     setShowConfirmRemove(true);
@@ -74,7 +71,13 @@ export default function CartDetail() {
     (acc, item) => acc + item.price * item.qty,
     0
   );
- 
+
+  // useEffect(()=> {
+  //   let shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"))
+  //   console.log({shopData})
+
+  // },[])
+
 
   useEffect(() => {
     if (patchBack?.id) {
@@ -82,12 +85,14 @@ export default function CartDetail() {
         (item) => item?.shop === patchBack?.id
       );
       setCartDatas(_checkdatas);
-      console.log("checkDtas:-------->", _checkdatas);
+    }
+
+    let shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"))
+    if(shopData) {
+      console.log("cart------", shopData)
+      setShopInfo(shopData?.shop)
     }
   }, [patchBack, cartList]);
-
-  console.log("cartList:---53to----->", cartList); 
-  console.log("patchBack:---ຖຖto----->", patchBack); 
 
   const handleConfirmCart = () => {
     const combineField = {
@@ -109,41 +114,27 @@ export default function CartDetail() {
 
     const destinationPath =
       idPreState.shopId &&
-      idPreState.affiliateId &&
-      idPreState.commissionForShopId
+        idPreState.affiliateId &&
+        idPreState.commissionForShopId
         ? `/payment/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
         : idPreState.shopId && idPreState.affiliateId
-        ? `/payment/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
-        : `/payment/${idPreState?.shopId}`;
+          ? `/payment/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+          : `/payment/${idPreState?.shopId}`;
 
     // send an HTTP request
     setTimeout(() => {
       setState("success");
       router.push("/payment");
-      // dispatch(setOrders(combineField));
     }, 1000);
-    // Navigate to the payment page with the query string
   };
 
-  // const _calculatePriceWithExchangeRate = (price, currency) => {
-  //   if (["BAHT", "ບາດ"].includes(currency)) {
-  //     return price * isExChangeRate?.baht;
-  //   } else if (["USD", "ໂດລາ"].includes(currency)) {
-  //     // console.log("result:====>", price, isExChangeRate?.usd);
-  //     return price * (isExChangeRate?.usd || 0);
-  //   }
-
-  //   return price;
-  // };
 
   const handleConfirmRemoveCart = () => {
     const patchkey = JSON.parse(localStorage.getItem("PATCH_KEY"));
-    console.log("patchkey:---->", { patchkey });
 
     const checkBeforeRemove = cartDatas.map(
       (item) => item?.shop === patchkey?.id
     );
-    console.log("checkBeforeRemoveRemove:---->", checkBeforeRemove);
     // setCartDatas(checkBeforeRemove)
     if (checkBeforeRemove[0]) {
       dispatch(setOrders([]));
@@ -151,93 +142,51 @@ export default function CartDetail() {
       setShowConfirmRemove(false);
     }
 
-    // let idPreState = {
-    //   shopId: shopId,
-    //   affiliateId: affiliateId,
-    // };
-
-    // if (commissionForShopId) {
-    //   idPreState = {
-    //     ...idPreState,
-    //     commissionForShopId: commissionForShopId,
-    //   };
-    // }
-
-    // const destinationPath =
-    // idPreState.shopId && idPreState.affiliateId &&
-    // idPreState.commissionForShopId
-    //   ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
-    //   : idPreState.shopId &&
-    //     idPreState.affiliateId
-    //   ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
-    //   : `../shop/${idPreState?.shopId}`;
-
-    // router.push(destinationPath);
   };
 
   const onBackPage = () => {
-    let idPreState = {
-      shopId: shopId,
-      affiliateId: affiliateId,
-    };
-
-    if (commissionForShopId) {
-      idPreState = {
-        ...idPreState,
-        commissionForShopId: commissionForShopId,
-      };
-    }
-
-    const destinationPath =
-      idPreState.shopId &&
-      idPreState.affiliateId &&
-      idPreState.commissionForShopId
-        ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
-        : idPreState.shopId && idPreState.affiliateId
-        ? `../shop/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
-        : `../shop/${idPreState?.shopId}`;
-
-    // router.push(destinationPath);
+      // Retrieve the state from local storage
+      const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+  
+      // Construct the destination path based on available data
+      let destinationPath = `../shop/${idPreState?.id}`;
+  
+      if (idPreState?.affiliateId) {
+        destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+        if (idPreState?.commissionForShopId) {
+          destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+        }
+      }
+      router.replace(destinationPath);
   };
 
   return (
     <>
-      <CustomNavbar />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: "1em",
-        }}
-      >
-        {/* <div className="bread-crumb">
-          <span onClick={() => router.back()}>shop</span>
+      <CustomNavbar shopDetail={shopInfo} />
+
+
+      <div style={{ padding: "5px 0" }}>
+        <div className="bread-crumb">
+          <span onClick={onBackPage}><MdHome style={{fontSize:15}} /></span>
           <RxSlash />
-          <span>ກະຕ່າສິນຄ້າ</span>
-        </div> */}
-        {/* <div className="removeIcon1" onClick={onBackPage}>
-          <MdArrowBack style={{ fontSize: 20 }} />
-        </div> */}
-        {/* <div>
-          <h4 style={{ marginTop: ".4em" }}>ກະຕ່າສິນຄ້າ</h4>
+          <span style={{cursor:'default'}}>ກະຕ່າສິນຄ້າ</span>
         </div>
-        <div></div> */}
       </div>
+
       {cartDatas?.length > 0 ? (
         <div className="p-4">
           <div className="w-100">
             {cartDatas?.map((data, index) => {
               return (
                 <div key={data?.id} className="cartItem-product">
-                  {/* <div
+                  <div
                     className="remove-single-item"
                     onClick={() => dispatch(removeSingleItem(index))}
                   >
-                    <CloseCircleOutlined
+                    <IoClose
                       style={{ fontSize: 20, cursor: "pointer" }}
                     />
-                  </div> */}
+                  </div>
 
                   <div className="cartImage">
                     {data?.image?.length > 0 ? (
@@ -333,7 +282,8 @@ export default function CartDetail() {
               <h5>{isNaN(totalPrice) ? 0 : numberFormat(totalPrice)} ກີບ</h5>
             </div>
             <div className="paid-buy">
-              <CustomButton
+              <Button style={{ background: CORLOR_APP, width: '100%' }} onClick={handleConfirmCart} >ຈ່າຍເງິນ</Button>
+              {/* <CustomButton
                 type="submit"
                 text="ສັ່ງຊື້"
                 state={state}
@@ -342,14 +292,17 @@ export default function CartDetail() {
                 borderRadius={10}
                 padding={8}
                 width="100%"
-              />
+              /> */}
             </div>
           </div>
         </div>
       ) : (
-       <div style={{padding:'5em', overflow:'hidden',display:'flex',justifyContent:'center',alignItems:'center'}}>
-         <img style={{width:'100%', maxWidth:500, height:'100%'}} src="https://i.pinimg.com/originals/5a/d0/47/5ad047a18772cf0488a908d98942f9bf.gif" />
-       </div>
+        <div style={{ padding: '2em', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
+          <Alert style={{ width: "100%", textAlign: 'center' }} variant="warning">
+            <small>ກະລຸນາເລືອກສິນຄ້າກ່ອນ!</small>
+          </Alert>
+          <img style={{ width: '100%', maxWidth: 400, height: '100%' }} src="https://test.techhut.com.bd/images/no-item-in-cart.gif" />
+        </div>
       )}
 
       <ModalConfirmComponent

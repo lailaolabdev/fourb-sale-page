@@ -28,35 +28,12 @@ import { Toast } from "primereact/toast";
 import { Fieldset } from "primereact/fieldset";
 import { formatNumberFavorite } from "@/const";
 import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
-import { SHOP } from "@/apollo";
-
-const images = [
-  {
-    name: "https://media.istockphoto.com/id/1332092432/photo/magnifying-glass-focusing-a-forest.jpg?s=612x612&w=0&k=20&c=BMTiQfV-Mp6MMg-MGYCqbu9kWOsX5Rq6vw3UvXao-m8=",
-  },
-  {
-    name: "https://images.unsplash.com/photo-1549655698-c7a8a4639ec8?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y2xlYXJ8ZW58MHx8MHx8fDA%3D",
-  },
-  {
-    name: "https://media.istockphoto.com/id/968167380/photo/glass-ball-in-hand.jpg?s=612x612&w=0&k=20&c=Nu9irojC_nH8RmzAn1bM9y1p-I2TfWhoWkMHlK9qn-Y=",
-  },
-  {
-    name: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSK1Uu9sGTIac4rc8IGXwW6ygWNNSm9FrxeXrY58d4Fjr6xjOA9CcliPZEkxpHu-y8lmKY&usqp=CAU",
-  },
-  {
-    name: "https://assets.unileversolutions.com/v1/123147056.jpg",
-  },
-  {
-    name: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSU7xftKz0jfgObmFvvQ3_ONQxg4JpH3Sa4zU8ikiPj2prrzxdt3cVBmwZacTCovLIeEMo&usqp=CAU",
-  },
-  {
-    name: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQq6wkLE4Q3kiizMDVOBGOS5Efkf9L1muq_eKRP0F9EGq083-9-euaJgfnzv6a1eymaK9U&usqp=CAU",
-  },
-];
+import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, SHOP } from "@/apollo";
 
 export default function index() {
   const router = useRouter();
   const [product, setProduct] = useState(null);
+  const [stockAmount, setStockAmount] = useState(0);
   const toast = useRef(null);
 
   const [previewImage, setPreviewImage] = useState([]);
@@ -64,7 +41,7 @@ export default function index() {
   const dispatch = useDispatch();
   const [shopDetail, setShopDetail] = useState("");
 
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState(0);
   const { patchBack } = useSelector((state) => state?.setpatch);
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
@@ -73,6 +50,13 @@ export default function index() {
   );
 
   const [getShopData, { data: loadShopData }] = useLazyQuery(SHOP, {
+    fetchPolicy: "network-only",
+  });
+
+  const [
+    getShopCommissionFor,
+    { data: shopDataCommissionFor, loading: shopLoading },
+  ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
     fetchPolicy: "network-only",
   });
 
@@ -88,6 +72,13 @@ export default function index() {
       variables: {
         where: {
           id: patchBack?.id,
+        },
+      },
+    });
+    getShopCommissionFor({
+      variables: {
+        where: {
+          id: patchBack?.commissionForShopId,
         },
       },
     });
@@ -113,10 +104,22 @@ export default function index() {
   }, [router.query.item]);
 
   useEffect(() => {
-    if (product?.containImages) {
-      setPreviewImage(product?.containImages[0]);
+    // if (product?.containImages) {
+    //   setPreviewImage(product?.containImages[0]);
+    // }else {
+    // }
+    setPreviewImage(product?.image);
+    if (product?.amount > 0){
+      setStockAmount(product?.amount-1);
+      setQuantity(1);
+    } else{
+      setQuantity(0);
+      setStockAmount(0);
     }
-  }, [product?.containImages]);
+  }, [product]);
+
+  const _commissionForAffiliate =
+    shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
@@ -195,7 +198,7 @@ export default function index() {
   };
 
   const handleAddProduct = () => {
-    if (quantity >= product?.amount) {
+    if (quantity > product?.amount){
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
@@ -259,7 +262,8 @@ export default function index() {
   };
 
   const incrementQuantity = () => {
-    if (quantity >= product?.amount) {
+    const newQuantity = stockAmount-1;
+    if (newQuantity < 0){ 
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
@@ -267,13 +271,41 @@ export default function index() {
       });
       return;
     }
+    setStockAmount(newQuantity);
     setQuantity((prevQuantity) => prevQuantity + 1);
   };
 
   const decrementQuantity = () => {
+    const newQuantity = stockAmount+1;
+    if (newQuantity < 0){
+      toast.current.show({
+        severity: "error",
+        summary: "ແຈ້ງເຕືອນ",
+        detail: "ສິນຄ້າໃນສະຕ໋ອກບໍ່ພໍຂາຍ!",
+      });
+      return;
+    }
+    setStockAmount(newQuantity);
     if (quantity > 1) {
       setQuantity((prevQuantity) => prevQuantity - 1);
     }
+  };
+
+  // click the menu home
+  const onCalbackToHome = async () => {
+    // Retrieve the state from local storage
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+
+    // Construct the destination path based on available data
+    let destinationPath = `../shop/${idPreState?.id}`;
+
+    if (idPreState?.affiliateId) {
+      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+      if (idPreState?.commissionForShopId) {
+        destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
+      }
+    }
+    router.replace(destinationPath);
   };
 
   return (
@@ -284,16 +316,19 @@ export default function index() {
        */}
       <div className="card-cart-products">
         <div className="bread-crumb">
-          <span onClick={() => router.back()}>ໜ້າຫລັກ</span>
+          <span onClick={onCalbackToHome}>ໜ້າຫລັກ</span>
           <RxSlash />
+<<<<<<< HEAD:pages/cartdetails/index.js
           <span>
             {product?.name} 
           </span>
+=======
+          <span>{product?.name}</span>
+>>>>>>> origin/dev:pages/detailProduct/index.js
         </div>
         <div className="card-view">
           <div className="card-dailog-image">
             <div className="image-view">
-              {/* <img src={S3_URL + product?.image} /> */}
               {previewImage ? (
                 <img
                   src={S3_URL_MEDIUM + previewImage}
@@ -301,7 +336,7 @@ export default function index() {
                 />
               ) : (
                 <img
-                  src={S3_URL + product?.image}
+                  src={S3_URL_MEDIUM + product?.image}
                   style={{ width: "100%", height: "100%" }}
                 />
               )}
@@ -326,7 +361,8 @@ export default function index() {
           </div>
           <div className="card-dailog-content">
             <h3>{product?.name}</h3>
-            <p>Stocks: {product?.amount}</p>
+            {/* <p>Stocks: {product?.amount}</p> */}
+            <p>Stocks: {stockAmount}</p>
             {product?.reduction && (
               <p style={{ color: "red", fontSize: 23 }}>
                 ສ່ວນຫຼຸດ {product?.reduction}%
@@ -376,20 +412,42 @@ export default function index() {
               <span>Large</span>
             </div> */}
 
-            <div className="card-button-preview">
+            <div className="card-button-preview" 
+              // style={{
+              //   opacity: stockAmount <= 0 ? "0.5" : "1",
+              // }}
+            >
               <div>
                 <p
-                  onClick={decrementQuantity}
-                  style={{ cursor: quantity > 1 ? "pointer" : "not-allowed" }}
+                  onClick={()=>{
+                    if(quantity >= 2){
+                      decrementQuantity()
+                    }
+                  }}
+                  style={{ cursor: quantity > 1 ? "pointer" : "not-allowed",
+                    opacity: quantity > 1 ? "1" : "0.5"
+                  }}
                 >
                   <FaMinus />
                 </p>
-                <p style={{ userSelect: "none" }}>{quantity}</p>
-                <p onClick={incrementQuantity}>
+                <p style={{ userSelect: "none", opacity: quantity<=0 ? "0.5" : "1" }}>{quantity}</p>
+                <p
+                  onClick={() => {
+                    if (stockAmount > 0){
+                      incrementQuantity();
+                    }
+                  }}
+                  style={{ cursor: stockAmount > 0 ? "pointer" : "not-allowed", 
+                    opacity: stockAmount <= 0 ? "0.5" : "1"
+                  }}
+                >
                   <FaPlus />
                 </p>
               </div>
-              <button onClick={handleAddProduct} style={{ userSelect: "none" }}>
+              <button  disabled={quantity<=0 ? true : false} onClick={handleAddProduct} style={{ userSelect: "none", 
+                  cursor: quantity>=1 ? "pointer" : "not-allowed",
+                  opacity: quantity<=0 ? "0.5" : "1"
+              }}>
                 <IoBagAddSharp />
                 <span>ເພິ່ມກະຕ່າ</span>
               </button>

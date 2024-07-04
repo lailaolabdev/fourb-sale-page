@@ -42,6 +42,9 @@ import { Paginator } from "primereact/paginator";
 import { formatNumberFavorite } from "@/const";
 import { UPDATE_STOCK } from "@/apollo/order/mutation";
 import { FaHeart } from "react-icons/fa";
+import _ from "lodash";
+import {Form} from "react-bootstrap"
+
 
 function SearchProduct({ initialShop }) {
   const router = useRouter();
@@ -54,6 +57,7 @@ function SearchProduct({ initialShop }) {
     commissionForShopId,
     search_key,
     stocks,
+    category
   } = router.query;
 
   const itemsPerPage = 30;
@@ -120,7 +124,6 @@ function SearchProduct({ initialShop }) {
     setCount(newPage?.first);
   }, []);
 
-  console.log({ currentPage });
 
   const _commissionForAffiliate =
     shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
@@ -144,7 +147,7 @@ function SearchProduct({ initialShop }) {
 
   useEffect(() => {
     fetchStock();
-  }, [liveId, shopId, currentPage, live, stocks, search_key]);
+  }, [liveId, shopId, currentPage, live, stocks, search_key, category]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -206,12 +209,19 @@ function SearchProduct({ initialShop }) {
         };
       }
 
-      console.log("check_type:::", typeof stocks);
 
-      if (stocks) {
+      if (!_.isEmpty(category)) {
         _where = {
           ..._where,
-          amount: parseFloat(stocks),
+          category: category,
+        };
+      }
+
+
+      if (!_.isEmpty(isStock)) {
+        _where = {
+          ..._where,
+          amount: parseInt(isStock),
         };
       }
 
@@ -322,7 +332,7 @@ function SearchProduct({ initialShop }) {
     const { __typename, ...newItem } = item;
     const encodedItem = base64Encode(JSON.stringify(newItem));
     router.push({
-      pathname: "../cartdetails",
+      pathname: "../detailProduct",
       query: { item: encodedItem },
     });
   };
@@ -331,6 +341,14 @@ function SearchProduct({ initialShop }) {
   const onAddHeartProduct = (data, index) => {
     const currentFavorites = data?.favorite || 0;
     const newFavoritesCount = currentFavorites + 1;
+
+    setProductsLists((prevState) =>
+      prevState.map((item) =>
+        item.id === data.id ? { ...item, favorite: newFavoritesCount } : item
+      )
+    );
+    setHeartAnimation(index);
+    setTimeout(() => setHeartAnimation(null), 600);
 
     updateStock({
       variables: {
@@ -342,13 +360,7 @@ function SearchProduct({ initialShop }) {
         },
       },
     });
-    setProductsLists((prevState) =>
-      prevState.map((item) =>
-        item.id === data.id ? { ...item, favorite: newFavoritesCount } : item
-      )
-    );
-    setHeartAnimation(index);
-    setTimeout(() => setHeartAnimation(null), 600);
+
   };
 
   const ogImageUrl = initialShop
@@ -392,13 +404,19 @@ function SearchProduct({ initialShop }) {
 
       <div className="body-main">
         <div className="container-contents">
-          <h5>
-            <b>
-              {productLists?.length > 0
-                ? `ຜະລິດຕະພັນຍອດນິຍົມ`
-                : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
-            </b>
-          </h5>
+          <div className="d-flex py-2 justify-content-between align-items-center w-100">
+
+            <p>
+            {productLists?.length > 0
+              ? `ຜະລິດຕະພັນຍອດນິຍົມ`
+              : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
+            </p>
+            <Form.Select style={{ width: 180 }} value={isStock} onChange={(e) => setIsStock(e?.target?.value)}>
+            <option value={1}>ສິນຄ້າ ທີ່ຍັງມີສະຕ໋ອກ</option>
+              <option value={0}>ສິນຄ້າ ທີ່ສະຕ໋ອກໝົດ</option>
+            </Form.Select>
+          </div>
+          
 
           <div className="card-items">
             {!stockData && loadingStock ? (
@@ -444,9 +462,12 @@ function SearchProduct({ initialShop }) {
 
                       <div className="btn-price-add">
                         <div>
-                          {item?.reduction && (
-                            <span>{numberFormat(item?.price)}</span>
-                          )}
+                          <div style={{ display: 'flex', flexDirection: 'column' }}>
+                            <small>ຈຳນວນ: {item?.amount}</small>
+                            {item?.reduction && (
+                              <span>{numberFormat(item?.price)}</span>
+                            )}
+                          </div>
                           {/* <small
                           style={{ color: item?.amount > 5 ? "black" : "red" }}
                         >
@@ -483,6 +504,8 @@ function SearchProduct({ initialShop }) {
               totalRecords={productTotal}
               onPageChange={handlePageChange}
               className="p-gination"
+              style={{maxHeight:50, padding:0,overflow:'hidden'}}
+
               template={{
                 layout: "PrevPageLink CurrentPageReport NextPageLink",
               }}

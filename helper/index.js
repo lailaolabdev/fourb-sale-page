@@ -19,7 +19,6 @@ export const CLIENT_ID = "191329944996-toam9grdvadq5sdbjaicr2t70pqjl4n0.apps.goo
 
 // convert price
 export const calculateRoundedValue = (price) => {
-  // console.log("calculateRoundedValue------->", price)
   let integerPart = Math.floor(price);
   let decimalPart = price - integerPart;
 
@@ -39,12 +38,12 @@ export const numberFormat = (_number) => {
 
 // ======================================= link upoint ================================
 // Dev
-export const SERVER_URI = "https://api-dev.bbbb.com.la/";
-export const SOCKET_SERVER_URI = "wss://api-dev.bbbb.com.la/";
+// export const SERVER_URI = "https://api-dev.bbbb.com.la/";
+// export const SOCKET_SERVER_URI = "wss://api-dev.bbbb.com.la/";
 
 // Production
-// export const SERVER_URI = "https://api.bbbb.com.la/";
-// export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
+export const SERVER_URI = "https://api.bbbb.com.la/";
+export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
 
 // // localhost
 // export const SERVER_URI = "http://localhost:7070/";

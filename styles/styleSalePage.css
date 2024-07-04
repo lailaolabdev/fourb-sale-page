@@ -1,8 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap");
-@font-face {
-  font-family: "FontLao2";
-  src: url("../helper/font/NotoSansLao/BB-Font.ttf");
-}
+ 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap');
 
 :root {
