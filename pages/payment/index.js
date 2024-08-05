@@ -599,8 +599,8 @@ export default function payment() {
         variables: {
           // use Payment Gateway
           data: {
-            // amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            // amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
             paymentMethod: values?.type,
             // description:  "test",
             orders: convertedOrders,
