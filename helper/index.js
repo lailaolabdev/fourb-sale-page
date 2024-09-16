@@ -31,7 +31,7 @@ export const calculateRoundedValue = (price) => {
   }
 };
 
-export const COMMISSION_OFFICE = 3;
+export const COMMISSION_OFFICE = 1;
 export const numberFormat = (_number) => {
   return new Intl.NumberFormat("en-US").format(_number);
 };

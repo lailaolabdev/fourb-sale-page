@@ -49,7 +49,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa";
 import { UPDATE_STOCK, UPDATE_STOCK_HEART } from "@/apollo/order/mutation";
 import { formatNumberFavorite } from "@/const";
 import _ from "lodash";
-import {Form} from "react-bootstrap"
+import { Form } from "react-bootstrap"
 
 function ShopingStore({ initialShop }) {
   const router = useRouter();
@@ -220,7 +220,7 @@ function ShopingStore({ initialShop }) {
   useEffect(() => {
     if (loadShopData?.shop) {
       setShopDetail(loadShopData?.shop);
-    localStorage.setItem("SP_SHOP_DATA", JSON.stringify(loadShopData))
+      localStorage.setItem("SP_SHOP_DATA", JSON.stringify(loadShopData))
     }
   }, [loadShopData]);
 
@@ -247,7 +247,7 @@ function ShopingStore({ initialShop }) {
         _where = {
           ..._where,
           amount: parseInt(isStock),
-          
+
         };
       }
 
@@ -446,7 +446,7 @@ function ShopingStore({ initialShop }) {
         />
       </Head>
 
-      <CustomNavbar  setFilterNew={setFilterNew} />
+      <CustomNavbar setFilterNew={setFilterNew} />
 
       {/* <div className="d-flex gap-4">
       </div> */}
@@ -457,31 +457,38 @@ function ShopingStore({ initialShop }) {
             ປະເພດສິນຄ້າ
           </p>
 
-          <div className="card-review-category">
-            <button className="btn-back-scroll" onClick={scrollLeft}>
-              <MdArrowBackIos />
-            </button>
-            <div
-              className="scrolling"
-              ref={scrollContainerRef}
-              style={{
-                overflowX: "auto",
-                width: "100%",
-                scrollBehavior: "smooth",
-              }}
-            >
-              {categoryDatas.map((data, index) => (
-                <div key={index} onClick={() => router.push(`/search?search_key=${data?.name}&category=${data?.id}`)}>
-                  <HiMiniShoppingBag style={{ fontSize: 40 }} />
-                  <span>{data?.name}</span>
-                </div>
-              ))}
+          {categoryDatas?.length > 0 ? (
+            <div className="card-review-category">
+              <button className="btn-back-scroll" onClick={scrollLeft}>
+                <MdArrowBackIos />
+              </button>
+              <div
+                className="scrolling"
+                ref={scrollContainerRef}
+                style={{
+                  overflowX: "auto",
+                  width: "100%",
+                  scrollBehavior: "smooth",
+                }}
+              >
+                {categoryDatas.map((data, index) => (
+                  <div key={index} onClick={() => router.push(`/search?search_key=${data?.name}&category=${data?.id}`)}>
+                    <HiMiniShoppingBag style={{ fontSize: 40 }} />
+                    <span>{data?.name}</span>
+                  </div>
+                ))}
 
+              </div>
+              <button className="btn-next-scroll" onClick={scrollRight}>
+                <GrNext />
+              </button>
             </div>
-            <button className="btn-next-scroll" onClick={scrollRight}>
-              <GrNext />
-            </button>
-          </div>
+
+          ) : (
+            "..."
+          )}
+          
+
         </div>
 
         <div className="container-contents">
@@ -490,7 +497,7 @@ function ShopingStore({ initialShop }) {
             <p>
               <b>ຜະລິດຕະພັນຍອດນິຍົມ</b>{" "}
             </p>
-            <Form.Select  style={{width:180}} value={isStock} onChange={(e) => setIsStock(e?.target?.value)}>
+            <Form.Select style={{ width: 180 }} value={isStock} onChange={(e) => setIsStock(e?.target?.value)}>
               <option value={1}>ສິນຄ້າ ທີ່ຍັງມີສະຕ໋ອກ</option>
               <option value={0}>ສິນຄ້າ ທີ່ສະຕ໋ອກໝົດ</option>
             </Form.Select>
@@ -586,7 +593,7 @@ function ShopingStore({ initialShop }) {
               totalRecords={productTotal}
               onPageChange={handlePageChange}
               className="p-gination"
-              style={{maxHeight:50, padding:0,overflow:'hidden'}}
+              style={{ maxHeight: 50, padding: 0, overflow: 'hidden' }}
 
               template={{ layout: "PrevPageLink CurrentPageReport NextPageLink" }}
             />
