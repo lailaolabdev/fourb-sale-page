@@ -109,10 +109,10 @@ export default function index() {
     // }else {
     // }
     setPreviewImage(product?.image);
-    if (product?.amount > 0){
-      setStockAmount(product?.amount-1);
+    if (product?.amount > 0) {
+      setStockAmount(product?.amount - 1);
       setQuantity(1);
-    } else{
+    } else {
       setQuantity(0);
       setStockAmount(0);
     }
@@ -198,7 +198,7 @@ export default function index() {
   };
 
   const handleAddProduct = () => {
-    if (quantity > product?.amount){
+    if (quantity > product?.amount) {
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
@@ -262,8 +262,8 @@ export default function index() {
   };
 
   const incrementQuantity = () => {
-    const newQuantity = stockAmount-1;
-    if (newQuantity < 0){ 
+    const newQuantity = stockAmount - 1;
+    if (newQuantity < 0) {
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
@@ -276,8 +276,8 @@ export default function index() {
   };
 
   const decrementQuantity = () => {
-    const newQuantity = stockAmount+1;
-    if (newQuantity < 0){
+    const newQuantity = stockAmount + 1;
+    if (newQuantity < 0) {
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
@@ -356,6 +356,22 @@ export default function index() {
           <div className="card-dailog-content">
             <h3>{product?.name}</h3>
             {/* <p>Stocks: {product?.amount}</p> */}
+            {product?.optionValues.length > 0 &&
+              <>
+
+                {product?.optionValues?.map(
+                  (option, optionIndex) => (
+                    <span key={optionIndex} style={{ fontSize: 11, }}>
+                      {option?.value}{" "}
+                    </span>
+                  )
+                )}
+                <br />
+                <br />
+                <br />
+              </>
+            }
+
             <p>Stocks: {stockAmount}</p>
             {product?.reduction && (
               <p style={{ color: "red", fontSize: 23 }}>
@@ -406,41 +422,44 @@ export default function index() {
               <span>Large</span>
             </div> */}
 
-            <div className="card-button-preview" 
-              // style={{
-              //   opacity: stockAmount <= 0 ? "0.5" : "1",
-              // }}
+            <div className="card-button-preview"
+            // style={{
+            //   opacity: stockAmount <= 0 ? "0.5" : "1",
+            // }}
             >
               <div>
                 <p
-                  onClick={()=>{
-                    if(quantity >= 2){
+                  onClick={() => {
+                    if (quantity >= 2) {
                       decrementQuantity()
                     }
                   }}
-                  style={{ cursor: quantity > 1 ? "pointer" : "not-allowed",
+                  style={{
+                    cursor: quantity > 1 ? "pointer" : "not-allowed",
                     opacity: quantity > 1 ? "1" : "0.5"
                   }}
                 >
                   <FaMinus />
                 </p>
-                <p style={{ userSelect: "none", opacity: quantity<=0 ? "0.5" : "1" }}>{quantity}</p>
+                <p style={{ userSelect: "none", opacity: quantity <= 0 ? "0.5" : "1" }}>{quantity}</p>
                 <p
                   onClick={() => {
-                    if (stockAmount > 0){
+                    if (stockAmount > 0) {
                       incrementQuantity();
                     }
                   }}
-                  style={{ cursor: stockAmount > 0 ? "pointer" : "not-allowed", 
+                  style={{
+                    cursor: stockAmount > 0 ? "pointer" : "not-allowed",
                     opacity: stockAmount <= 0 ? "0.5" : "1"
                   }}
                 >
                   <FaPlus />
                 </p>
               </div>
-              <button  disabled={quantity<=0 ? true : false} onClick={handleAddProduct} style={{ userSelect: "none", 
-                  cursor: quantity>=1 ? "pointer" : "not-allowed",
-                  opacity: quantity<=0 ? "0.5" : "1"
+              <button disabled={quantity <= 0 ? true : false} onClick={handleAddProduct} style={{
+                userSelect: "none",
+                cursor: quantity >= 1 ? "pointer" : "not-allowed",
+                opacity: quantity <= 0 ? "0.5" : "1"
               }}>
                 <IoBagAddSharp />
                 <span>ເພິ່ມກະຕ່າ</span>

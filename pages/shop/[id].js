@@ -487,7 +487,7 @@ function ShopingStore({ initialShop }) {
           ) : (
             "..."
           )}
-          
+
 
         </div>
 
@@ -548,6 +548,23 @@ function ShopingStore({ initialShop }) {
                       onClick={(e) => e.stopPropagation()}
                     >
                       <h3>{item?.name}</h3>
+
+                      {item?.optionValues.length > 0 &&
+                        <>
+
+                          {item?.optionValues?.map(
+                            (option, optionIndex) => (
+                              <span key={optionIndex} style={{ fontSize: 11,  }}>
+                                {option?.value}{" "}
+                              </span>
+                            )
+                          )}
+                          <br />
+                          <br />
+                          <br />
+                        </>
+                      }
+
 
                       <div className="btn-price-add">
                         <div>
