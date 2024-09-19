@@ -513,7 +513,7 @@ export default function payment() {
   const handleConfirmBank = async (values) => {
     
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
-    console.log({idPreState})
+    // console.log({idPreState})
 
     // Construct the destination path based on available data
     // let destinationPath = `../shop/${idPreState?.id}`;
