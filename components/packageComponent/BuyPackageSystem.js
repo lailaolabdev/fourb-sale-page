@@ -19,8 +19,6 @@ export default function BuyPackageSystem({ handleCancel, setObjectData, setGetSh
   const navigate = useRouter();
   const dispatch = useDispatch();
 
-  console.log("check previewData :--->", previewData)
-
 
   const [createQrPayment, { loading: loadingSubscripe }] = useMutation(
     GEN_QR_AND_SUBSCRIPE_FOR_PAYMENT_ADD_PACKAGE
@@ -49,7 +47,6 @@ export default function BuyPackageSystem({ handleCancel, setObjectData, setGetSh
           },
         },
       });
-      console.log({ genqrCode });
       const qrCodeValue =
         genqrCode?.data?.genQrAndSubscripeForPaymentAddPackage?.qrCode;
 
@@ -127,11 +124,11 @@ export default function BuyPackageSystem({ handleCancel, setObjectData, setGetSh
     if (orderSubscription) {
       // console.log("orderSubscription55====>", orderSubscription);
       if (orderSubscription?.onShopUpdatedPackage?.transactionId === transactionId) {
-        console.log("Completed Paid Package......");
+        // console.log("Completed Paid Package......");
         setGetQrcode("");
         setStatusShop(false)
         setGetShop()
-        setObjectData({  
+        setObjectData({
           username: "",
           password: ""
         })
@@ -145,55 +142,14 @@ export default function BuyPackageSystem({ handleCancel, setObjectData, setGetSh
       {!enableQr ? (
         <Form>
 
-          {/* <div className="form-packag-ps">
-              <h3 style={{width:'100%', textAlign:'center'}}>ເຕີມແພັກເກັດ ລະບົບ</h3>
-              <br />
-              <Form.Label htmlFor="username">
-                ຊື່ນຳໃຊ້ລະບົບ 4B Live: (ບັງຄັບ)
-              </Form.Label>
-              <Form.Control
-                value={objectData?.username}
-                onChange={(e) =>
-                  setObjectData({
-                    ...objectData,
-                    username: e?.target?.value,
-                  })
-                }
-                placeholder="ຊື່ນຳໃຊ້"
-                type="text"
-                id="username"
-                required
-                autoFocus
-              />
-              <br />
-              <Form.Label htmlFor="password">
-                ລະຫັດຜ່ານ ເຂົ້າລະບົບ 4B Live: (ບັງຄັບ)
-              </Form.Label>
-              <Form.Control
-                value={objectData?.password}
-                onChange={(e) =>
-                  setObjectData({
-                    ...objectData,
-                    password: e?.target?.value,
-                  })
-                }
-                placeholder="ລະຫັດຜ່ານ"
-                type="text"
-                id="password"
-                required
-              />
-              <br />
-              <Form.Text id="passwordHelpBlock" muted> 
-                ປ້ອນຊື່ນຳໃຊ້ລະບົບ 4B Live ແລະ ລະຫັດຜ່ານ ເພື່ອຢືນຢັນການກວດສອບ ຕໍ່ອາຍຸການໃຊ້ງານ ລະບົບ 4B Live ຂອງທ່ານ ( ຂອບໃຈ ທີ່ໃຊ້ບໍລິການຂອງພວກເຮົາ)
-              </Form.Text>
-            </div> */}
 
           <div className="card-check-confirm">
 
             <br />
+            {/* <img src={S3_URL + previewData?.shopData?.shop?.image} style={{ maxWidth: 260 }} /> */}
             <Avatar size={80} style={{ border: '1px solid #f2f2f2' }} src={S3_URL + previewData?.shopData?.shop?.image} />
             <br />
-            <div style={{ lineHeight: 1, marginTop: 10, textAlign:'center' }}>
+            <div style={{ lineHeight: 1, marginTop: 10, textAlign: 'center' }}>
               {/* <p>ID SHOP: {previewData?.shopData?.shop?.id}</p> */}
               <h5><b>{previewData?.shopData?.shop?.name}</b></h5>
               <h5><b>{previewData?.shopData?.shop?.phone}</b></h5>
@@ -247,7 +203,7 @@ export default function BuyPackageSystem({ handleCancel, setObjectData, setGetSh
                 <Avatar size={100} src="/assets/images/successIcon3.png" />
                 <br />
                 <h4>ສຳເລັດແລ້ວ</h4>
-                <p style={{fontSize:12}}>ຂໍສະແດງຄວາມຍິນດີກັບ ການຊື້ແພັກເກັດລະບົບຄັ້ງນີ້</p>
+                <p style={{ fontSize: 12 }}>ຂໍສະແດງຄວາມຍິນດີກັບ ການຊື້ແພັກເກັດລະບົບຄັ້ງນີ້</p>
                 <Button onClick={handleLoginToLiveSystem} variant="success" >ເຂົ້າລະບົບ ໄລຟ</Button>
               </div>
               // </Watermark>

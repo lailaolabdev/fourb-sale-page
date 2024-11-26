@@ -633,42 +633,7 @@ export default function payment() {
 
         /* ------ use bcel one defalt ---------- */
         setGetOrderId(message?.data?.createQrWithPaymentGateway?.data?.id);
-
-        /* ------ use payment gateway ---------- */
-        // if (dataResponse) {
-        //   // Set the QR code data
-
-        //   console.log("check appLink ---->", dataResponse);
-        //   console.log("type:======>", values?.type);
-        //   // Create an anchor element
-        //   const onPayLink = document.createElement("a");
-        //   let _deepLink = ""; // Changed from const to let to allow reassignment
-
-        //   if (values?.type === "JDB") {
-        //     _deepLink = dataResponse?.qrCode;
-        //   } else {
-        //     _deepLink = dataResponse?.appLink;
-        //   }
-        //   console.log("_deepLink:======>", _deepLink);
-
-        //   onPayLink.href = _deepLink;
-        //   // Check if it's an iOS device
-        //   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-
-        //   if (isIOS) {
-        //     // For iOS, use window.location.href to open the app
-        //     window.location.href = onPayLink.href;
-        //   } else {
-        //     // For non-iOS devices, programmatically trigger a click event
-        //     const event = new MouseEvent("click", {
-        //       view: window,
-        //       bubbles: true,
-        //       cancelable: true,
-        //     });
-        //     onPayLink.dispatchEvent(event);
-        //   }
-        // }
-
+ 
         if (dataResponse && dataResponse.appLink) {
           const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
           const isDeepLink =
