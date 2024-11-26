@@ -25,7 +25,7 @@ export const calculateRoundedValue = (price) => {
   if (decimalPart < 0.5 && decimalPart != 0) {
     return integerPart + 0.5;
   } else if (decimalPart === 0.5 || decimalPart == 0) {
-    return price;
+    return price; 
   } else {
     return integerPart + 1;
   }
