@@ -140,9 +140,10 @@ export default function index() {
       setObjectData({ username: "", password: "" });
     }
   }, [shopData]);
+ 
 
-  const handleShowModalOneMonth = () => {
-    setPackageType("ONE_MONTH");
+  const handleSelectPackatePerMonth = (item) => {
+    setPackageType(item)
     setIsModalOpen(true);
     setPreviewData({
       shopData: {
@@ -150,85 +151,8 @@ export default function index() {
         objectData,
       },
     });
-  };
+  }
 
-  const handleShowModalThreeMonth = () => {
-    setPackageType("THREE_MONTH");
-    setIsModalOpen(true);
-    setPreviewData({
-      shopData: {
-        ...shopData,
-        objectData,
-      },
-    });
-  };
-
-  const handleShowModalSixMonth = () => {
-    setPackageType("SIX_MONTH");
-    setIsModalOpen(true);
-    setPreviewData({
-      shopData: {
-        ...shopData,
-        objectData,
-      },
-    });
-  };
-
-  const handleShowModal1YearMonth = () => {
-    setPackageType("ONE_YEAR");
-    setIsModalOpen(true);
-    setPreviewData({
-      shopData: {
-        ...shopData,
-        objectData,
-      },
-    });
-  };
-
-  // package new
-  // const onShowModalOneMonth = () => {
-  //   setPackageType("ONE_MONTH_NEW");
-  //   setIsModalOpen(true);
-  //   setPreviewData({
-  //     shopData: {
-  //       ...shopData,
-  //       objectData,
-  //     },
-  //   });
-  // };
-
-  // const onShowModalThreeMonth = () => {
-  //   setPackageType("THREE_MONTH_NEW");
-  //   setIsModalOpen(true);
-  //   setPreviewData({
-  //     shopData: {
-  //       ...shopData,
-  //       objectData,
-  //     },
-  //   });
-  // };
-
-  // const onShowModalSixMonth = () => {
-  //   setPackageType("SIX_MONTH_NEW");
-  //   setIsModalOpen(true);
-  //   setPreviewData({
-  //     shopData: {
-  //       ...shopData,
-  //       objectData,
-  //     },
-  //   });
-  // };
-
-  // const onShowModal1YearMonth = () => {
-  //   setPackageType("ONE_YEAR_NEW");
-  //   setIsModalOpen(true);
-  //   setPreviewData({
-  //     shopData: {
-  //       ...shopData,
-  //       objectData,
-  //     },
-  //   });
-  // };
 
   const handleOk = () => {
     setIsModalOpen(false);
@@ -266,6 +190,55 @@ export default function index() {
       boxShadow: "0 0 30px #999",
     },
   };
+
+
+  const packageDatas = [
+    {
+      title: '1/M',
+      type: 'ONE_MONTH',
+      name: 'ລາຄາທົດລອງ',
+      price: "899,000",
+      listChild: [
+        "ຈຳກັດ 850 ອໍເດີ້", "ໃຊ້ໄດ້ພຽງແຕ່ 1 ເພຈ", "ໃຊ້ໄດ້ Facebook Live, Post", "ບໍ່ສາມາດເຊື່ອມຕໍ່ທະນາຄານ"
+      ]
+    },
+    {
+      title: '2/M',
+      type: 'TWO_MONTH',
+      name: 'ນັກຂາຍມືໃໝ່',
+      price: "1,199,000",
+      listChild: [
+        "ບໍ່ຈຳກັດອໍເດີ້", "ໃຊ້ໄດ້ພຽງແຕ່ 1 ເພຈ", "ໃຊ້ໄດ້ Facebook Live, Post", "ສາມາດເຊື່ອມຂົນສົ່ງ"
+      ]
+    },
+    {
+      title: '3/M',
+      type: 'THREE_MONTH',
+      name: 'ນັກຂາຍດີ',
+      price: "3,099,000",
+      listChild: [
+        "ບໍ່ຈຳກັດອໍເດີ້", "ໃຊ້ໄດ້ພຽງແຕ່ 1 ເພຈ", "ໃຊ້ໄດ້ Facebook Live, Post", "ສາມາດເຊື່ອມຂົນສົ່ງ", "ເຊື່ອມຕໍ່ທະນາຄານ"
+      ]
+    },
+    {
+      title: '6/M',
+      type: 'SIX_MONTH',
+      name: 'ນັກຂາຍມືອາຊີບ',
+      price: "6,099,000",
+      listChild: [
+        "ບໍ່ຈຳກັດອໍເດີ້", "ໃຊ້ໄດ້ພຽງແຕ່ 1 ເພຈ", "ໃຊ້ໄດ້ Facebook Live, Post", "ສາມາດເຊື່ອມຂົນສົ່ງ", "ເຊື່ອມຕໍ່ທະນາຄານ"
+      ]
+    },
+    {
+      title: '1/Y',
+      type: 'ONE_YEAR',
+      name: 'ນັກຂາຍໃນຕຳນານ',
+      price: "12,099,000",
+      listChild: [
+        "ບໍ່ຈຳກັດອໍເດີ້", "ໃຊ້ໄດ້ພຽງແຕ່ 1 ເພຈ", "ໃຊ້ໄດ້ Facebook Live, Post", "ສາມາດເຊື່ອມຂົນສົ່ງ", "ເຊື່ອມຕໍ່ທະນາຄານ"
+      ]
+    },
+  ]
 
   return (
     <>
@@ -375,111 +348,40 @@ export default function index() {
         <>
           <div className="main-package-ps px-2">
             <h1>
-              <b>ແພັກເກັດລະບົບ</b>
+              <b>ແພັກເກັດລະບົບ Super CF </b>
             </h1>
-            <p>ເລືອກລາຄາແພັກເກັດ ສຳຫຼັບ ລະບົບດູດ ຂອງທ່ານ</p>
+            <p>ເລືອກແພັກເກັດທີ່ເໝາະສົມກັບທຸລະກິດຂອງທ່ານ</p>
             <div style={{ paddingBottom: 20 }}>
             </div>
             <div className="card-package">
-              <div className="card-ps">
-                <div className="card-type">
-                  <p>1</p>
-                  <p>ເດືອນ</p>
-                </div>
-                <h6>1.000.000 ກີບ</h6>
-                <h3>599.000 ກີບ</h3>
-                <ul>
-                  <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
-                  <li>ເພິ່ມສິນຄ້າເຂົ້າລະບົບແບບສະດວກສະບາຍ</li>
-                  <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
-                  <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
-                  <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-                </ul>
 
-                <div className="card-footer-ps">
-                  <button
-                    onClick={handleShowModalOneMonth}
-                    className="btn-buy-package"
-                  >
-                    <span>ເລືອກຊື້ເລີຍ</span>
-                  </button>
-                </div>
-              </div>
+              {packageDatas?.map((item, index) => (
+                <div className="card-ps" key={index}>
+                  <div className="card-type">
+                    <p>{item?.title}</p>
+                  </div>
+                  <h6>{item?.name}</h6>
+                  <h3>{item?.price} ກີບ</h3>
 
-              <div className="card-ps">
-                <div className="card-type">
-                  <p>3</p>
-                  <p>ເດືອນ</p>
-                </div>
-                <h6>2.850.000 ກີບ</h6>
-                <h3>1.499.000 ກີບ</h3>
-                <ul>
-                  <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
-                  <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-                  <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
-                  <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
-                  <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-                </ul>
+                  <div className="card-child-list">
+                    {item?.listChild.map((child, idChild) => (
+                      <ul key={idChild}>
+                        <li>{child}</li>
+                      </ul>
+                    ))}
+                  </div>
 
-                <div className="card-footer-ps">
-                  <button
-                    onClick={handleShowModalThreeMonth}
-                    className="btn-buy-package"
-                  >
-                    <span>ເລືອກຊື້ເລີຍ</span>
-                  </button>
+                  <div className="card-footer-ps">
+                    <button
+                      onClick={() => handleSelectPackatePerMonth(item?.type)}
+                      className="btn-buy-package"
+                    >
+                      <span>ຊື້ແພັກເກັດ</span>
+                    </button>
+                  </div>
                 </div>
-              </div>
+              ))}
 
-              <div className="card-ps">
-                <div className="card-type">
-                  <p>6</p>
-                  <p>ເດືອນ</p>
-                </div>
-                <h6>5.650.000 ກີບ</h6>
-                <h3>2.890.000 ກີບ</h3>
-                <ul>
-                  <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
-                  <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-                  <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
-                  <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
-                  <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-                </ul>
-
-                <div className="card-footer-ps">
-                  <button
-                    onClick={handleShowModalSixMonth}
-                    className="btn-buy-package"
-                  >
-                    <span>ເລືອກຊື້ເລີຍ</span>
-                  </button>
-                </div>
-              </div>
-
-              <div className="card-ps">
-                <div className="card-type">
-                  <p>1</p>
-                  <p>ປີ</p>
-                </div>
-                <h6>11.250.000 ກີບ</h6>
-                <h3>5.690.000 ກີບ</h3>
-                <ul>
-                  <li>ສາມາດໄລຟ ຂາຍເຄື່ອງຜ່ານ Feacbook</li>
-                  <li>ສາມາດໂພສ ຂາຍລົງ Feacbook</li>
-                  <li>ມີຟັງຊັ່ນຈັດການອໍເດີ້, ຈັດການອິນວອຍ</li>
-                  <li>ລາຍງານຍອດຂາຍ ລາຍອາທິດ, ລາຍເດືອນ, ລາຍປີ</li>
-                  <li>ລາຍງານຍອດເງິນຕົ້ນທືນ, ກຳໄລ</li>
-                </ul>
-
-                <div className="card-footer-ps">
-                  <button
-                    onClick={handleShowModal1YearMonth}
-                    className="btn-buy-package"
-                  >
-                    <span>ເລືອກຊື້ເລີຍ</span>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </>
