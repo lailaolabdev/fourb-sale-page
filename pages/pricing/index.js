@@ -203,8 +203,8 @@ export default function index() {
       ]
     },
     {
-      title: '2/M',
-      type: 'TWO_MONTH',
+      title: '1/M',
+      type: 'ONE_MONTH',
       name: 'ນັກຂາຍມືໃໝ່',
       price: "1,199,000",
       listChild: [
