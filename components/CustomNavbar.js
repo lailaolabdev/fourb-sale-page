@@ -71,7 +71,6 @@ export default function CustomNavbar({ shopDetail }) {
   const [clientData, setClientData] = useState();
   const [shopData, setShopData] = useState()
 
-  console.log({ shopDetail })
 
   const dispatch = useDispatch();
 
@@ -114,7 +113,6 @@ export default function CustomNavbar({ shopDetail }) {
   useEffect(() => {
     if (shopDetail) {
       setShopData(shopDetail);
-      console.log("shopDetail:::", shopDetail, loadShopData);
     } else {
       let _shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"));
       if (_shopData) {

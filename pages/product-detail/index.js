@@ -11,24 +11,23 @@ import {
   calculateRoundedValue,
   numberFormat,
 } from "@/helper";
-import { HiHome } from "react-icons/hi2";
-import { SiShopee } from "react-icons/si";
+import Head from "next/head";
+
 import { RxSlash } from "react-icons/rx";
 import FooterComponent from "@/components/salePage/FooterComponent";
 import { GET_STOCK, GET_STOCKS } from "@/apollo/stocks";
-import { useLazyQuery } from "@apollo/client";
+import { useLazyQuery, useQuery } from "@apollo/client";
 import { decode as base64Decode } from "js-base64";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCartItem,
-  decrementCartItem,
-  incrementCartItem,
 } from "@/redux/salepage/cartReducer";
 import { Toast } from "primereact/toast";
 import { Fieldset } from "primereact/fieldset";
 import { formatNumberFavorite } from "@/const";
 import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
 import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, SHOP } from "@/apollo";
+import EmptyImage from "@/components/salePage/EmptyImage";
 
 export default function index() {
   const router = useRouter();
@@ -40,8 +39,8 @@ export default function index() {
   const [defaultImage, setDefaultImage] = useState();
   const dispatch = useDispatch();
   const [shopDetail, setShopDetail] = useState("");
-
   const [quantity, setQuantity] = useState(0);
+  const [shopIdParams, setShopIdParams] = useState();
   const { patchBack } = useSelector((state) => state?.setpatch);
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
@@ -52,6 +51,7 @@ export default function index() {
   const [getShopData, { data: loadShopData }] = useLazyQuery(SHOP, {
     fetchPolicy: "network-only",
   });
+  // const { detailProduct } = useQuery(GET_STOCK)
 
   const [
     getShopCommissionFor,
@@ -59,6 +59,40 @@ export default function index() {
   ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
     fetchPolicy: "network-only",
   });
+
+  const {
+    data: productDetail,
+    loading: loadingProduct,
+    refetch,
+  } = useQuery(GET_STOCK, {
+    fetchPolicy: "network-only",
+    variables: {
+      where: {
+        id: shopIdParams,
+      },
+    },
+  });
+
+
+  useEffect(() => {
+    if (productDetail) {
+      setProduct(productDetail?.stock)
+    }
+  }, [productDetail]);
+
+  useEffect(() => {
+    if (router.query) {
+      const queryKey = Object.keys(router.query)[0];
+
+      console.log({ queryKey }); 
+      if (queryKey) {
+        // Split the query key by '_'
+        const [shopId, name] = queryKey.split('_');
+        setShopIdParams(shopId)
+        console.log({ shopId, name }); 
+      }
+    }
+  }, [router.query]);
 
   useEffect(() => {
     getExchangeRate({
@@ -93,7 +127,6 @@ export default function index() {
   useEffect(() => {
     if (router.query.item) {
       try {
-        console.log({ router });
         const decodedItem = JSON.parse(base64Decode(router.query.item));
         setProduct(decodedItem);
       } catch (error) {
@@ -241,7 +274,7 @@ export default function index() {
 
     const _data = {
       ...restData,
-      price: roundedValue,
+      price: roundedValue || product?.price,
       shop: patchBack?.id,
     };
 
@@ -310,6 +343,25 @@ export default function index() {
 
   return (
     <>
+     <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
+        />
+        <title>{product?.name}</title>
+        <meta name="theme-color" content="#000000" />
+        <meta
+          name="description"
+          content="ລາຍລະອຽດສິນຄ້າຂາຍດີ"
+        />
+        {/* SEO image */}
+        <link rel="icon" href={S3_URL + product?.image} type="image/icon type" />
+        <meta charSet="UTF-8" />
+        <meta property="og:image" content={product?.image} />
+        <meta name="twitter:image" content={product?.image} />
+      
+      </Head>
+
       <Toast position="top-center" ref={toast} />
       <CustomNavbar />
       {/* <br />
@@ -329,14 +381,20 @@ export default function index() {
                   style={{ width: "100%", height: "100%" }}
                 />
               ) : (
-                <img
-                  src={S3_URL_MEDIUM + product?.image}
-                  style={{ width: "100%", height: "100%" }}
-                />
+                <>
+                  {product?.image ? (
+                    <img
+                      src={S3_URL_MEDIUM + product?.image}
+                      style={{ width: "100%", height: "100%" }}
+                    />
+                  ) : (
+                    <EmptyImage />
+                  )}
+                </>
               )}
             </div>
-            <div className="image-small-view">
-              {product?.containImages.map((data, index) => (
+            {product?.containImages?.length > 0 && <div className="image-small-view">
+              {product?.containImages?.map((data, index) => (
                 <div
                   key={index}
                   style={{
@@ -351,7 +409,7 @@ export default function index() {
                   />
                 </div>
               ))}
-            </div>
+            </div>}
           </div>
           <div className="card-dailog-content">
             <h3>{product?.name}</h3>
@@ -392,7 +450,6 @@ export default function index() {
                   {numberFormat(product?.price)}
                 </span>
               )}
-              {" - "}
               {/* {product?.reduction ? (
                 <span>{numberFormat((product?.price * product?.reduction) / 100)}</span>
               ):(
@@ -476,19 +533,19 @@ export default function index() {
         </div>
 
         <div className="card-description-product">
-          <div className="product-specifications">
+         {product?.properties?.length> 0 && <div className="product-specifications">
             <h4>ຂໍ້ມູນ ຄຸນນະສົມບົດ ສິນຄ້າ</h4>
-            {product?.properties.map((item, index) => (
+            {product?.properties?.map((item, index) => (
               <div key={index}>
                 <li>{item?.title}</li>
                 <li>{item?.detail}</li>
               </div>
             ))}
-          </div>
-          <div className="product-specifications">
+          </div>}
+        {product?.descriptions?.length > 0 &&  <div className="product-specifications">
             <h4>ລາຍລະອຽດສິນຄ້າ</h4>
 
-            {product?.descriptions.map((item, index) => (
+            {product?.descriptions?.map((item, index) => (
               <div
                 style={{
                   flexDirection: "column",
@@ -501,13 +558,13 @@ export default function index() {
                 }}
                 key={index}
               >
-                <p>{item?.title} title description</p>
+                <p>{item?.title} </p>
                 {item?.image && (
                   <img style={{ width: "70%" }} src={S3_URL + item?.image} />
                 )}
               </div>
             ))}
-          </div>
+          </div>}
         </div>
       </div>
 

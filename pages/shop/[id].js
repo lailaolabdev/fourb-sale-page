@@ -361,12 +361,13 @@ function ShopingStore({ initialShop }) {
 
   const handleProductPreview = (item) => {
     const { __typename, ...newItem } = item;
-    const encodedItem = base64Encode(JSON.stringify(newItem));
+
+    const shortUrl = `${newItem?.id}_${newItem?.name}`;
     router.push({
-      pathname: "../detailProduct",
-      query: { item: encodedItem },
-    });
-  };
+      pathname: "../product-detail",
+      query:  shortUrl 
+    })
+  }
 
   // add heart to product
   const onAddHeartProduct = (data, index) => {
@@ -453,15 +454,15 @@ function ShopingStore({ initialShop }) {
       <SwiperComponent shopDetail={shopDetail} contactshop={openWhatsApp} productTotal={productTotal} />
       <div className="body-main">
         <div>
-          <p style={{ paddingTop: 10, fontWeight: "bold", fontSize: 15 }}>
+          {/* <p style={{ paddingTop: 10, fontWeight: "bold", fontSize: 15 }}>
             ປະເພດສິນຄ້າ
-          </p>
+          </p> */}
 
           {categoryDatas?.length > 0 ? (
             <div className="card-review-category">
-              <button className="btn-back-scroll" onClick={scrollLeft}>
+              {/* <button className="btn-back-scroll" onClick={scrollLeft}>
                 <MdArrowBackIos />
-              </button>
+              </button> */}
               <div
                 className="scrolling"
                 ref={scrollContainerRef}
@@ -473,15 +474,15 @@ function ShopingStore({ initialShop }) {
               >
                 {categoryDatas.map((data, index) => (
                   <div key={index} onClick={() => router.push(`/search?search_key=${data?.name}&category=${data?.id}`)}>
-                    <HiMiniShoppingBag style={{ fontSize: 40 }} />
+                    {/* <HiMiniShoppingBag style={{ fontSize: 40 }} /> */}
                     <span>{data?.name}</span>
                   </div>
                 ))}
 
               </div>
-              <button className="btn-next-scroll" onClick={scrollRight}>
+              {/* <button className="btn-next-scroll" onClick={scrollRight}>
                 <GrNext />
-              </button>
+              </button> */}
             </div>
 
           ) : (
@@ -554,7 +555,7 @@ function ShopingStore({ initialShop }) {
 
                           {item?.optionValues?.map(
                             (option, optionIndex) => (
-                              <span key={optionIndex} style={{ fontSize: 11,  }}>
+                              <span key={optionIndex} style={{ fontSize: 11, }}>
                                 {option?.value}{" "}
                               </span>
                             )

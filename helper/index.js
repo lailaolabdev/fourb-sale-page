@@ -3,7 +3,7 @@ export const CORLOR_APP = "linear-gradient(23deg, rgba(47,110,163,1) 0%, rgba(90
 export const CORLOR_WHITE = "#FFF";
 export const COLOR_TEXT = "rgba(47,110,163,1)";
 
-export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/resized/small/";
+export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/files/";
 export const S3_URL_MEDIUM = "https://lailaocf-bucket.s3.amazonaws.com/resized/medium/";
 export const S3_URL_LARGE = "https://lailaocf-bucket.s3.amazonaws.com/resized/large/";
 export const image_main = "/assets/images/image_v2.png"

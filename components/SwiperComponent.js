@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Carousel } from "primereact/carousel";
 import { GET_ADVERTISINGS } from "@/apollo/setting/query";
 import { useLazyQuery } from "@apollo/client";
-import { COLOR_TEXT, CORLOR_APP, S3_URL, S3_URL_LARGE, S3_URL_MEDIUM } from "@/helper";
+import { COLOR_TEXT, CORLOR_APP, EMPTY_USER_PROFILE, S3_URL, S3_URL_LARGE, S3_URL_MEDIUM } from "@/helper";
 import useWindowDimensions from "@/helper/useWindowDimensions";
 import {
   FaHeart,
@@ -132,11 +132,6 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
     display: 'flex', justifyContent: 'center', alignItems: 'center'
   };
 
-  const properties = {
-    prevArrow: <button style={{ ...buttonStyle }}><GrPrevious style={{ color: '#444' }} /></button>,
-    nextArrow: <button style={{ ...buttonStyle }}><GrNext style={{ color: '#444' }} /></button>
-  }
-
 
   const productTemplate = (product) => {
     return (
@@ -147,9 +142,7 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
             alt={product.name}
             style={{
               width: '100%', height: '100%',
-              objectFit:'contain'
-              // maxHeight: width > 700 ? 280 : 210,
-              // minHeight: width > 700 ? 260 : 80,
+              objectFit: 'contain'
             }}
           />
         </div>
@@ -159,11 +152,6 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
 
   return (
     <div
-    // className={
-    //   width > 900
-    //     ? "d-flex gap-2 p-4 container-carousel"
-    //     : "d-flex flex-column gap-2 p-2 container-carousel"
-    // }
     >
       <Carousel
         value={products}
@@ -177,106 +165,7 @@ export default function SwiperComponent({ shopDetail, contactshop, productTotal 
         showIndicators={false}
         showNavigators={false}
       />
-
-      <div className="swipper-card">
-        <div className="card-shop-profile">
-          <div> {shopDetail?.image ? (
-            <img src={S3_URL + shopDetail?.image} />
-          ) : (
-            <img src="https://i.pinimg.com/originals/44/b1/4a/44b14a8b2fc649b18b3671f878af65c9.png" />
-          )}</div>
-          <div>
-          <h4>{shopDetail?.name}</h4>
-            <small >
-              <FaMapMarkerAlt
-                style={{ color: "red", fontSize: 18, paddingBottom: 5 }}
-              />{" "}
-              ທີ່ຢູ່: ບ. {shopDetail?.address?.village}, ມ.{" "}
-              {shopDetail?.address?.district}, ຂ.{" "}
-              {shopDetail?.address?.province}
-            </small>
-          </div>
-        </div>
-      </div>
-
-      {/* <div className="slide-container">
-
-        <Slide
-          // arrows={true} 
-          {...properties}
-        >
-          {products.map((slideImage, index) => (
-            <div key={index} style={{ width: '100%', height: width > 700 ? 380 : 205 }}>
-              <div style={{ ...divStyle }}>
-                <img className="w-100 h-100" src={S3_URL_MEDIUM + slideImage.image} />
-              </div>
-            </div>
-          ))}
-        </Slide>
-      </div> */}
-      {/* <div className="card-carousel-right">
-        <div className="shop-profile">
-          {shopDetail?.image ? (
-            <img src={S3_URL + shopDetail?.image} />
-          ) : (
-            <img src="https://i.pinimg.com/originals/44/b1/4a/44b14a8b2fc649b18b3671f878af65c9.png" />
-          )}
-          <h4>{shopDetail?.name}</h4>
-
-          <div className="btn-action-call">
-
-            <div className="d-flex gap-2 w-100 justify-content-end align-items-end">
-              <button onClick={() => contactshop(shopDetail?.phone)}>
-                <FaWhatsapp style={{ fontSize: 18 }} /> +856 20{" "}
-                {shopDetail?.phone}
-              </button>
-              <button onClick={() => setFolloWer(!follower)}>
-                <FaPlus style={{ fontSize: 15 }} />{" "}
-                {follower ? "ຕິດຕາມແລ້ວ" : "ຕິດຕາມ"}
-              </button>
-            </div>
-
-          </div>
-        </div>
-
-        <br />
-        <small>
-          <FaMapMarkerAlt
-            style={{ color: "red", fontSize: 18, paddingBottom: 5 }}
-          />{" "}
-          ທີ່ຢູ່: ບ. {shopDetail?.address?.village}, ມ.{" "}
-          {shopDetail?.address?.district}, ຂ.{" "}
-          {shopDetail?.address?.province}
-        </small>
-
-        <div className="shop-info">
-          <div>
-            <li>
-              <FaSitemap style={{ fontSize: 18 }} />
-              <span>ສິນຄ້າທັງໝົດ: </span>
-              <span>{productTotal ?? 0}</span>
-            </li>
-            <li>
-              <FaHeart style={{ fontSize: 18 }} />
-              <span>ກົດໃຈ: </span>
-              <span>5 </span>
-            </li>
-          </div>
-          <div>
-            <li>
-              <RiUserAddLine style={{ fontSize: 22 }} />
-              <span>ຜູ້ຕິດຕາມ: </span>
-              <span>5</span>
-            </li>
-            <li>
-              <TbEyeShare style={{ fontSize: 22 }} />
-              <span>ການເຂົ້າຊົມ: </span>
-              <span>150</span>
-            </li>
-          </div>
-        </div>
-
-      </div> */}
+ 
     </div>
   );
 }

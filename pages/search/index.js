@@ -43,7 +43,7 @@ import { formatNumberFavorite } from "@/const";
 import { UPDATE_STOCK } from "@/apollo/order/mutation";
 import { FaHeart } from "react-icons/fa";
 import _ from "lodash";
-import {Form} from "react-bootstrap"
+import { Form } from "react-bootstrap"
 
 
 function SearchProduct({ initialShop }) {
@@ -330,11 +330,11 @@ function SearchProduct({ initialShop }) {
   // preview my product
   const handleProductPreview = (item) => {
     const { __typename, ...newItem } = item;
-    const encodedItem = base64Encode(JSON.stringify(newItem));
+    const shortUrl = `${newItem?.id}_${newItem?.name}`;
     router.push({
-      pathname: "../detailProduct",
-      query: { item: encodedItem },
-    });
+      pathname: "../product-detail",
+      query: shortUrl
+    })
   };
 
   // add heart to product
@@ -407,16 +407,16 @@ function SearchProduct({ initialShop }) {
           <div className="d-flex py-2 justify-content-between align-items-center w-100">
 
             <p>
-            {productLists?.length > 0
-              ? `ຜະລິດຕະພັນຍອດນິຍົມ`
-              : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
+              {productLists?.length > 0
+                ? `ຜະລິດຕະພັນຍອດນິຍົມ`
+                : `ຜົນທີ່ຄົ້ນຫາ '${search_key ?? stocks}'`}
             </p>
             <Form.Select style={{ width: 180 }} value={isStock} onChange={(e) => setIsStock(e?.target?.value)}>
-            <option value={1}>ສິນຄ້າ ທີ່ຍັງມີສະຕ໋ອກ</option>
+              <option value={1}>ສິນຄ້າ ທີ່ຍັງມີສະຕ໋ອກ</option>
               <option value={0}>ສິນຄ້າ ທີ່ສະຕ໋ອກໝົດ</option>
             </Form.Select>
           </div>
-          
+
 
           <div className="card-items">
             {!stockData && loadingStock ? (
@@ -504,7 +504,7 @@ function SearchProduct({ initialShop }) {
               totalRecords={productTotal}
               onPageChange={handlePageChange}
               className="p-gination"
-              style={{maxHeight:50, padding:0,overflow:'hidden'}}
+              style={{ maxHeight: 50, padding: 0, overflow: 'hidden' }}
 
               template={{
                 layout: "PrevPageLink CurrentPageReport NextPageLink",

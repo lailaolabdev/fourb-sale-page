@@ -599,7 +599,7 @@ function ProductSalePage({ initialShop }) {
 
     // setViewProduct(_data);
 
-    router.push("/shop/detailProduct");
+    router.push("/shop/product-detail");
     dispatch(setStateView(_data));
   };
 
