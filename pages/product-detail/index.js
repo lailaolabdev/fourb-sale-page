@@ -357,8 +357,8 @@ export default function index() {
         {/* SEO image */}
         <link rel="icon" href={S3_URL + product?.image} type="image/icon type" />
         <meta charSet="UTF-8" />
-        <meta property="og:image" content={product?.image} />
-        <meta name="twitter:image" content={product?.image} />
+        <meta property="og:image" content={S3_URL + product?.image} />
+        <meta name="twitter:image" content={S3_URL + product?.image} />
       
       </Head>
 
