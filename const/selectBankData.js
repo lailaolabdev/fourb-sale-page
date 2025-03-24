@@ -1,9 +1,9 @@
 export const bankDatas = [
-    // {
-    //     title:'BCEL One',
-    //     image:'/assets/images/bcel_one.png',
-    //     type:'BCL',
-    // },
+    {
+        title:'BCEL One',
+        image:'/assets/images/bcel_one.png',
+        type:'BCL',
+    },
     {
         title:'JDB YES',
         image:'/assets/images/jdbIco.png',

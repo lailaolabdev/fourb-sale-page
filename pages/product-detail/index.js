@@ -341,6 +341,8 @@ export default function index() {
     router.replace(destinationPath);
   };
 
+  console.log("product: ", product)
+
   return (
     <>
      <Head>
@@ -430,7 +432,7 @@ export default function index() {
               </>
             }
 
-            <p>Stocks: {stockAmount}</p>
+            <p>ສະຕ໋ອກ: {stockAmount}</p>
             {product?.reduction && (
               <p style={{ color: "red", fontSize: 23 }}>
                 ສ່ວນຫຼຸດ {product?.reduction}%
