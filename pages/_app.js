@@ -46,9 +46,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { StateProvider } from "../store";
 import { CLIENT_ID, S3_URL, SERVER_URI, SOCKET_SERVER_URI } from "../helper";
 import { ToastContainer } from "react-toastify";
-import { ToastProvider } from "react-toast-notifications";
-// import HeaderSalePage from "../components/salePage/HeaderSalePage";
-// import NavbarComponent from "../components/salePage/NavbarComponent";
+import { ToastProvider } from "react-toast-notifications"; 
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -88,7 +86,7 @@ const App = ({ Component, pageProps }) => {
   );
 
   const authMiddleware = new ApolloLink((operation, forward) => {
-    const user = localStorage.getItem("USER_DATA");
+    const user = localStorage?.getItem("USER_DATA");
     let token;
     if (user) {
       token = JSON.parse(user)["accessToken"];

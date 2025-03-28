@@ -50,49 +50,69 @@ export const GET_STOCKS = gql`
 `;
 
 export const GET_STOCK = gql`
-  query Stock($where: StockWhereInputOne!) {
-    stock(where: $where) {
+query Stock($where: StockWhereInputOne!) {
+  stock(where: $where) {
+    id
+    price
+    originPrice
+    currency
+    amount
+    image
+    coverImages
+    name
+    unit
+    cfMessage
+    isDeleted
+    isUsing
+    product {
+      amount
       id
       price
-      originPrice
-      currency
-      amount
-      image
-      coverImages
-      name
       unit
-      cfMessage
+      currency
+    }
+    optionValues {
+      id
+      name
+      value
+
       isDeleted
-      isUsing
-
-      product {
-        amount
+      stockOptionValues {
         id
-        price
-        unit
-        currency
-      }
-      optionValues {
-        id
-        name
-        value
-
-        isDeleted
-        stockOptionValues {
-          id
-          note
-        }
-        createdAt
-        updatedAt
         note
       }
       createdAt
       updatedAt
       note
-      sort
-      isUsingSalePage
     }
+    createdAt
+    updatedAt
+    note
+    sort
+    isUsingSalePage
+    properties {
+      detail
+      title
+    }
+    descriptions {
+      image
+      title
+    }
+    reduction
+    shelf
+    shelfCode
+    favorite
+    categoryName
+    category {
+      id
+      detail
+      name
+      note
+      image
+    }
+    containImages
   }
+}
 `;
 
 export const GET_SALE_PAGE_LIVE_STOCKS = gql`

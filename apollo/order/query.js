@@ -90,6 +90,90 @@ export const GET_ORDER = gql`
     }
   }
 `;
+export const GET_ORDERGROUPS_WITH_SALEPAGE = gql`
+  query GetOrderGroupWithSalePage($where: OrderGroupWhereInputOne!) {
+  getOrderGroupWithSalePage(where: $where) {
+    id
+    amount
+    phone
+    address
+    totalPrice
+    sumPriceBaht
+    sumPriceUsd
+    sumPrice
+    orders {
+      id
+      amount
+      code
+      note
+      isDeleted
+      stock {
+        id
+        name
+        amount
+        price
+        image
+        unit
+      }
+    }
+    cfName
+    customerName
+    customerImage
+    userFbId
+    unsendMessage
+    sendMessage
+    tag
+    tagColor
+    shop {
+      id
+      name
+      phone
+    }
+    code
+    shipmentNumber
+    shipPrice
+    paymentType
+    userConfirm {
+      id
+      name
+      phone
+    }
+    status
+    invoiceStatus
+    infulancerInvoiceStatus
+    shopStatus
+    payment
+    isPaymented
+    paySlip
+    paySlips
+    logistic
+    originalLogistic
+    destinationLogistic
+    addressCf
+    type
+    isReply
+    isDeleted
+    createdAt
+    updatedAt
+    note
+    transactionId
+    infulancer_percent
+    commissionAffiliate
+    typeForAffiliate
+    totalServiceCharge
+    commissionService
+    commissionInfluencer
+    totalAffiliate
+    isPaymentSupport
+    isClaimBalance
+    confirmBalance
+    servicePaymentSupport
+    jointOrder
+    dataConfirmCod
+    paymentMethod
+  }
+}
+`;
 
 export const GET_ORDERS = gql`
   query Orders(

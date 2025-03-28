@@ -89,7 +89,6 @@ export default function CartDetail() {
 
     let shopData = JSON.parse(localStorage.getItem("SP_SHOP_DATA"))
     if(shopData) {
-      console.log("cart------", shopData)
       setShopInfo(shopData?.shop)
     }
   }, [patchBack, cartList]);
@@ -156,6 +155,7 @@ export default function CartDetail() {
       }
       router.replace(destinationPath);
   };
+
 
   return (
     <>
@@ -270,12 +270,12 @@ export default function CartDetail() {
 
           <div className="action-cart-product-footer">
             <div className="action-price-amounts">
-              <h5>ຈຳນວນສິນຄ້າທັງໝົດ:</h5>
+              <h5>ສິນຄ້າ:</h5>
               <h5>{cartDatas?.length} ລາຍການ</h5>
             </div>
             <br />
             <div className="action-price-amounts">
-              <h5>ເງິນລວມທີ່ຕ້ອງຈ່າຍ:</h5>
+              <h5>ເງິນລວມ:</h5>
               <h5>{isNaN(totalPrice) ? 0 : numberFormat(totalPrice)} ກີບ</h5>
             </div>
             <div className="paid-buy">

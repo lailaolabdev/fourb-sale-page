@@ -769,15 +769,15 @@
      & .scrolling {
          /* width: 100vw; */
          display: flex;
-         gap:5px;
+         gap:10px;
          padding: 1em;
 
          & div {
-             width: 200px;
-             min-width: 160px;
+             /* width: 200px; */
+             min-width: 120px;
              /* height: 80px; */
              box-shadow: var(--boxShadow);
-             border-radius: .1em;
+             border-radius: 4px;
              display: flex;
              justify-content: center;
              align-items: center;
@@ -785,7 +785,7 @@
              gap: 5px;
              color: var(--colorText);
              font-size: 20px;
-             padding: .4em 1em;
+             padding: 5px;
              transition: all .3s ease-in-out;
              background: var(--colorWhite);
              cursor: pointer;
@@ -873,6 +873,10 @@
              margin-top: -2em;
              border-radius: 50em;
              overflow: hidden;
+
+             & img {
+                background: #ddd;
+             }
          }
 
          & dev:last-child {
