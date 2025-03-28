@@ -42,3 +42,11 @@ export const ON_ORDER_UPDATE = gql`
   }
 `;
  
+export const ON_RECEIVE_PAYMENT_LINK = gql`
+  subscription OnSubReceiveLinkCodeWithSalePage($transactionId: ID!) {
+    onSubReceiveLinkCodeWithSalePage(transactionId: $transactionId) {
+      transactionId
+    }
+  }
+`;
+ 

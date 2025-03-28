@@ -1,7 +1,7 @@
-import { calculateRoundedValue } from "@/helper";
 
 export const URL_PACKAGE_SYSTEM = "https://sp.bbbb.com.la/pricing";
-
+export  const PAYMENT_KEY ="$2b$10$sRx/uTHMydWDIdizURcgxecjFPbvnUNFzOwTl3lxNyV35zoFY4HnO";
+export  const PAYMENT_GATEWAY_API_URL = "https://payment-gateway.lailaolab.com";
 export const checkInviceStatus = (status) => {
   let title = "-";
   switch (status) {

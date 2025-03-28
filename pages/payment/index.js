@@ -1,38 +1,25 @@
-// import React from 'react'
-import { MdAdd, MdArrowBack, MdOutlineArrowBack } from "react-icons/md";
-
 import Form from "react-bootstrap/Form";
-import { Col, Row, Spinner } from "react-bootstrap";
+import { Col, Modal, Row, Spinner } from "react-bootstrap";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Swal from "sweetalert2";
 import { useDispatch, useSelector } from "react-redux";
-import copy from "clipboard-copy";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation, useSubscription } from "@apollo/client";
 import {
-  CRATE_QR_WITH_PAYMENT_GATEWAY,
-  CREATE_ORDER_ON_SALE_PAGE,
+  CREATE_PAYMENT_LINK_WITH_PHAPAY,
 } from "../../apollo/order/mutation";
-// import bcelOne from "/assets/images/bcelOne.png";
 import { toast, ToastContainer } from "react-toastify";
-// import { GET_BANKS } from "../../apollo/bank/query";
 
 import { GET_PRESIGN_URL } from "../../apollo/presignUrl/query";
 import axios from "axios";
-import ButtonComponent from "../../components/ButtonComponent";
 import { GET_EXCHANGRATE } from "../../apollo/exchanrage";
 import {
   calculateRoundedValue,
-  EMPTY_IMAGE,
   S3_URL,
   numberFormat,
-  CORLOR_APP,
 } from "../../helper";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import GenQrCode from "../../components/salePage/GenQrCode";
-import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT } from "../../apollo/payment/mutation";
-// import loading77 from "/assets/images/loading77.gif";
-import { setDataCompleteds } from "../../redux/completedOrder/dataOrder";
+import { CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT, ON_RECEIVE_PAYMENT_LINK } from "../../apollo/payment/mutation";
 import EmptyImage from "../../components/salePage/EmptyImage";
 import { CheckCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { Button, message, Spin } from "antd";
@@ -57,7 +44,12 @@ import html2canvas from "html2canvas";
 import { removeCartItem } from "../../redux/salepage/cartReducer";
 import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE } from "@/apollo";
 import CustomNavbar from "@/components/CustomNavbar";
-import { RxSlash } from "react-icons/rx";
+import { io } from "socket.io-client";
+import { PAYMENT_GATEWAY_API_URL, PAYMENT_KEY } from "@/const";
+import { GET_ORDERGROUPS_WITH_SALEPAGE } from "@/apollo/order/query";
+import Invoice from "@/components/invoices/Invoice";
+import { setOrders } from "@/redux/setOrder/orders";
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -101,10 +93,13 @@ export default function payment() {
   const [minWidth, setMinWidth] = useState("lg");
   const [cartDatas, setCartDatas] = useState([]);
   const [keyPatch, setKeyPatch] = useState();
-  const [customerDatas, setCustomerDatas] =  useState()
+  const [customerDatas, setCustomerDatas] = useState()
 
   const [openSelectBank, setOpenSelectBank] = useState(false);
   const [typeBanks, setTypeBanks] = useState("");
+  const [showPreview, setShowPreview] = useState(false);
+  const [qrCodeUrl, setQrCodeUrl] = useState();
+
   const elementCaptureRef = useRef(null);
 
   const handleClickOpenBank = () => {
@@ -117,27 +112,19 @@ export default function payment() {
 
   const [selectedOriginalProvice, setSelectedOriginalProvice] = useState();
   const [selectedOriginalDistrict, setSelectedOriginalDistrict] = useState();
-  const [selectedDestinationProvice, setSelectedDestinationProvice] =
-    useState();
-  const [selectedDestinationDistrict, setSelectedDestinationDistrict] =
-    useState();
-  const [selectedOriginalLogisticBranch, setSelectedOriginalLogisticBranch] =
-    useState();
 
-  const [destinationLogisticBranches, setDestinationLogisticBranches] =
-    useState([]);
+
+  const [destinationLogisticBranches, setDestinationLogisticBranches] = useState([]);
 
   const [logisticBranches, setLogisticBranches] = useState([]);
   const [originalLogisticBranches, setOriginalLogisticBranches] = useState([]);
-
-  const [
-    selectedDestinationLogisticBranch,
-    setSelectedDestinationLogisticBranch,
-  ] = useState();
+  const [preTransactionId, setPreTransactionId] = useState("");
+  const [preInvoiceObj, setPreInvoiceObj] = useState({});
 
   const ordersState = useSelector((state) => state?.setorder);
   const { cartList } = useSelector((state) => state?.salepage);
   const { patchBack } = useSelector((state) => state?.setpatch);
+
 
   // const { setId } = useSelector((state) => state?.predata);
   const shopId = patchBack?.id;
@@ -148,19 +135,14 @@ export default function payment() {
     0
   );
 
-
-
-  // console.log("combineField Payment55=---->", totalPrice)
-
-  // console.log("check price9999---->", totalPrice);
-
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
     { fetchPolicy: "cache-and-network" }
   );
 
   const [createOrderSalepage, { loading: loadingPayment }] = useMutation(
-    CRATE_QR_WITH_PAYMENT_GATEWAY
+    CREATE_PAYMENT_LINK_WITH_PHAPAY
+    // CRATE_QR_WITH_PAYMENT_GATEWAY
     // CREATE_ORDER_ON_SALE_PAGE
   );
   const [createQrPayment, { loading: loadingSubscripe }] = useMutation(
@@ -175,35 +157,67 @@ export default function payment() {
   ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
     fetchPolicy: "network-only",
   });
+  const [loadOrderGroupWithSalepage, { data: orderGroupWithSalepage, loading: loadingOrdeWithSalepage }] = useLazyQuery(GET_ORDERGROUPS_WITH_SALEPAGE, { fetchPolicy: 'cache-and-network' })
 
-  const _commissionForAffiliate =
-    shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
+  // subscription conform payment
+  const { data: onSubscriptionPaymentLink } = useSubscription(ON_RECEIVE_PAYMENT_LINK, {
+    variables: {
+      "transactionId": preTransactionId,
+    },
+  });
 
-  // useEffect(() => {
-  //   const _data = JSON.parse(localStorage.getItem("PATCH_KEY"));
-  //   if (_data) {
-  //     setKeyPatch(_data);
-  //   }
-  // }, []);
+  // Split link code from link
+  function extractTransactionId(url) {
+    try {
+      // Add protocol if missing
+      const fullUrl = url.startsWith('http') ? url : `https://${url}`;
 
-  // useEffect(() => {
- 
-  // const cdData = localStorage.JSON.prase(getItem("CLIENT_DATA"));
-  // if(cdData) {
-  //   setCustomerDatas(cdData)
-  // }
+      // Create URL object
+      const urlObj = new URL(fullUrl);
 
-  // }, []);
-  // console.log({customerDatas})
+      // Extract linkCode
+      const linkCode = urlObj.searchParams.get('linkCode');
+
+      return linkCode;
+    } catch (error) {
+      console.error('Error parsing URL:', error);
+      return '';
+    }
+  }
+
+  useEffect(() => {
+    if (qrCodeUrl) {
+      let transactionId = extractTransactionId(qrCodeUrl);
+      setPreTransactionId(transactionId)
+    }
+  }, [qrCodeUrl]);
+
+  useEffect(() => {
+    if (onSubscriptionPaymentLink) {
+      if (onSubscriptionPaymentLink?.onSubReceiveLinkCodeWithSalePage?.transactionId === preTransactionId) {
+        setShowPreview(false)
+        dispatch(setOrders([]));
+        dispatch(removeCartItem());
+
+        // load order group with salepage
+        loadOrderGroupWithSalepage({
+          variables: {
+            where: {
+              transactionId: onSubscriptionPaymentLink?.onSubReceiveLinkCodeWithSalePage?.transactionId,
+            },
+          },
+        })
+      }
+    }
+  }, [onSubscriptionPaymentLink]);
 
   useEffect(() => {
     if (patchBack?.id) {
       const _checkdatas = cartList.filter(
         (item) => item?.shop === patchBack?.id
       );
-      setCartDatas(_checkdatas); 
-    } 
-
+      setCartDatas(_checkdatas);
+    }
   }, [patchBack, cartList]);
 
   useEffect(() => {
@@ -223,13 +237,6 @@ export default function payment() {
     }
   }, [presignUrlData]);
 
-  // useEffect(() => {
-  //   if(cartList) {
-  //     const _checkdatas = cartList.filter(item => item?.shop === keyPatch?.id)
-  //     setCartDatas(_checkdatas)
-  //     console.log({_checkdatas})
-  //   }
-  // },[cartList])
 
   const onFileUpload = async (url) => {
     try {
@@ -276,19 +283,6 @@ export default function payment() {
   // get bank
   const _getBank = async (shopId) => {
     try {
-      // let SHOP_ID = await localStorage.getItem("SHOP");
-      // await getBank({
-      //   variables: {
-      //     where: {
-      //       shop: shopId
-      //       isDeleted: false,
-      //     },
-      //     skip: 0,
-      //     limit: 100,
-      //     orderBy: "createdAt_DESC",
-      //   },
-      // });
-
       await getExchangeRate({
         variables: {
           where: {
@@ -308,7 +302,6 @@ export default function payment() {
     event.preventDefault();
 
     const showWarning = (txtSms) => {
-      // toast.warning(txtSms, { autoClose: 1000 });
       message.warning(txtSms);
     };
 
@@ -330,81 +323,17 @@ export default function payment() {
 
     if (
       validateField(customerName, "ປ້ອນຊື່ ແລະ ນາມສະກຸນ ກ່ອນ") &&
-      validateField(phone, "ປ້ອນເບີໂທລະສັບກ່ອນ") &&
-      validateField(logistic, "ປ້ອນ ຊື່ຂົນສົ່ງກ່ອນ") &&
-      validateProvinceAndDistrict(selectedOriginalProvice, "ເລືອກແຂວງກ່ອນ") &&
-      validateProvinceAndDistrict(selectedOriginalDistrict, "ເລືອກເມືອງກ່ອນ") &&
-      validateField(destinationLogistic, "ປ້ອນສາຂາປາຍທາງກ່ອນ")
+      validateField(phone, "ປ້ອນເບີໂທລະສັບກ່ອນ")
+      // validateField(logistic, "ປ້ອນ ຊື່ຂົນສົ່ງກ່ອນ") &&
+      // validateProvinceAndDistrict(selectedOriginalProvice, "ເລືອກແຂວງກ່ອນ") &&
+      // validateProvinceAndDistrict(selectedOriginalDistrict, "ເລືອກເມືອງກ່ອນ") &&
+      // validateField(destinationLogistic, "ປ້ອນສາຂາປາຍທາງກ່ອນ")
     ) {
       setIsValidate(false);
-
-      // const connectField =
-      //   `ແຂວງ ${selectedOriginalProvice.province_name}, ` +
-      //   `ເມືອງ ${selectedOriginalDistrict.district}, ` +
-      //   `ສາຂາປາຍທາງ ${destinationLogistic}`;
-
-      // console.log("check array:-->", connectField);
-      // _createOrderOnSalePage();
-      setOpenSelectBank(true);
+      handleConfirmBank()
+      // setOpenSelectBank(true);
     }
   };
-
-  // const handlePayment = (event) => {
-  //   event.preventDefault();
-
-  //   const showWarning = (message) => {
-  //     toast.warning(message, { autoClose: 1000 });
-  //   };
-
-  //   const validateField = (value, message) => {
-  //     if (!value || value.length === 0) {
-  //       showWarning(message);
-  //       return false;
-  //     }
-  //     return true;
-  //   };
-
-  //   const validateProvinceAndDistrict = (value, message) => {
-  //     if (value === undefined) {
-  //       showWarning(message);
-  //       return false;
-  //     }
-  //     return true;
-  //   };
-
-  //   if (
-  //     validateField(customerName, "ປ້ອນຊື່ ແລະ ນາມສະກຸນ ກ່ອນ") &&
-  //     validateField(phone, "ປ້ອນເບີໂທລະສັບກ່ອນ") &&
-  //     validateField(logistic, "ປ້ອນ ຊື່ຂົນສົ່ງກ່ອນ") &&
-  //     validateProvinceAndDistrict(selectedOriginalProvice, "ເລືອກແຂວງກ່ອນ") &&
-  //     validateProvinceAndDistrict(selectedOriginalDistrict, "ເລືອກເມືອງກ່ອນ") &&
-  //     validateField(destinationLogistic, "ປ້ອນສາຂາປາຍທາງກ່ອນ")
-  //   ) {
-  //     setIsValidate(true);
-
-  //     // const connectField =
-  //     //   `ແຂວງ ${selectedOriginalProvice.province_name}, ` +
-  //     //   `ເມືອງ ${selectedOriginalDistrict.district}, ` +
-  //     //   `ສາຂາປາຍທາງ ${destinationLogistic}`;
-
-  //     // console.log("check array:-->", connectField);
-  //     // _createOrderOnSalePage();
-  //   }
-  // };
-
-  // ຄັດລ໋ອກເລກບັນຊີຂອງຮ້ານ
-
-  // const handleCopyCodeBanks = async () => {
-  //   try {
-  //     const urlCodeBanks = bankData?.banks?.data[0].bankAccount;
-  //     await copy(urlCodeBanks);
-  //     toast.success("ຄັດລ໋ອກເລກບັນຊີສຳເລັດແລ້ວ", {
-  //       autoClose: 2000,
-  //     });
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
 
   // ກັບຄືນ
   const handleGoback = () => {
@@ -422,12 +351,12 @@ export default function payment() {
 
     const destinationPath =
       idPreState.shopId &&
-      idPreState.affiliateId &&
-      idPreState.commissionForShopId
+        idPreState.affiliateId &&
+        idPreState.commissionForShopId
         ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
         : idPreState.shopId && idPreState.affiliateId
-        ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
-        : `../cartdetail/${idPreState?.shopId}`;
+          ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+          : `../cartdetail/${idPreState?.shopId}`;
     console.log("path_payment:----->", destinationPath);
     router.push(destinationPath);
   };
@@ -469,8 +398,8 @@ export default function payment() {
     // Calculate amountKip with additional checks
     amountKip =
       totalLak +
-        (totalBaht * isExChangeRate?.baht || 0) +
-        (totalUsd * isExChangeRate?.usd || 0) || totalLak;
+      (totalBaht * isExChangeRate?.baht || 0) +
+      (totalUsd * isExChangeRate?.usd || 0) || totalLak;
 
     // Calculate rounded value
     const roundedValue = calculateRoundedValue(amountKip / 1000) * 1000;
@@ -510,25 +439,13 @@ export default function payment() {
 
   // actoin open bank to paid
 
-  const handleConfirmBank = async (values) => {
-    
+  const handleConfirmBank = async () => {
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
-    // console.log({idPreState})
-
-    // Construct the destination path based on available data
-    // let destinationPath = `../shop/${idPreState?.id}`;
-
-    // if (idPreState?.affiliateId) {
-    //   destinationPath += `?affiliateId=${idPreState.affiliateId}`;
-    //   if (idPreState?.commissionForShopId) {
-    //     destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
-    //   }
-    // }
 
     try {
       setIsValidate(false);
       setOpenSelectBank(false);
-      setTypeBanks(values?.type);
+      // setTypeBanks(values?.type);
       if (loadingSubscripe || loadingPayment) return;
 
       // Convert the orders into the required format
@@ -568,9 +485,6 @@ export default function payment() {
         // infulancer_percent: idPreState?.commissionForShopId ? _commissionForAffiliate : 0,
       };
 
-      // console.log("orders-9-8-6--->", convertedOrders)
-      // console.log("orderGroup-9-8-7--->", _orderGroup)
-
       if (idPreState?.affiliateId) {
         _orderGroup = {
           ..._orderGroup,
@@ -584,91 +498,74 @@ export default function payment() {
         };
       }
 
-      // if(commissionForShopId) {
-      //   _orderGroup = {
-      //     ..._orderGroup,
-      //     infulancer_percent: _commissionForAffiliate,
-      //   };
-      // }
-
-      // console.log("check orders:-->", _orderGroup, convertedOrders);
-      // console.log("check bank type:--->", values?.type);
-
       // Create an order
-      await createOrderSalepage({
+      const response = await createOrderSalepage({
         variables: {
-          // use Payment Gateway
           data: {
-            amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            // amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            paymentMethod: values?.type,
-            // description:  "test",
+            // amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            // paymentMethod: values?.type,
+            description: "4B_SALE_PAGE",
             orders: convertedOrders,
             orderGroup: _orderGroup,
           },
-
-          // use Bcel One defult
-          // data: {
-          //   orders: convertedOrders,
-          //   orderGroup: _orderGroup,
-          // },
         },
-      }).then(async (message) => {
-        // console.log("check message:--->", message);
-        // const _req = message?.data?.createQrWithPaymentGateway;
+      })
 
-        // console.log("check order Id:--->", typeof(_req?.data?.id));
-        const dataResponse = message?.data?.createQrWithPaymentGateway;
-        // const dataResponse = message?.data?.createOrderSalePage;
+      if (response) {
+        setShowPreview(true);
+        let _preLink = JSON.parse(response?.data?.createPaymentLinkWithPhapay?.appLink);
+        setQrCodeUrl(_preLink?.redirectURL)
+      }
 
-        let compareData = {
-          ...dataResponse,
-          shopId: shopId,
-          amountPaided: totalPrice,
-        };
-        // console.log("compareData=====>", compareData);
-        dispatch(setDataCompleteds(compareData));
-        setDataCompleted(compareData);
-        setQrCodeData(dataResponse?.qrCode);
+      // .then(async (message) => {
+      //   const dataResponse = message?.data?.createQrWithPaymentGateway;
 
-        /* ------ use bcel one defalt ---------- */
-        setGetOrderId(message?.data?.createQrWithPaymentGateway?.data?.id);
- 
-        if (dataResponse && dataResponse.appLink) {
-          const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-          const isDeepLink =
-            dataResponse.appLink.startsWith("onepay://") ||
-            dataResponse.appLink.startsWith("someOtherCustomScheme://"); // Add other schemes as needed
+      //   let compareData = {
+      //     ...dataResponse,
+      //     shopId: shopId,
+      //     amountPaided: totalPrice,
+      //   };
+      //   dispatch(setDataCompleteds(compareData));
+      //   setDataCompleted(compareData);
+      //   setQrCodeData(dataResponse?.qrCode);
 
-          if (isDeepLink) {
-            if (isIOS) {
-              window.location.href = dataResponse.appLink;
-            } else {
-              const iframe = document.createElement("iframe");
-              iframe.style.display = "none";
-              iframe.src = dataResponse.appLink;
-              document.body.appendChild(iframe);
-              setTimeout(() => {
-                document.body.removeChild(iframe);
-              }, 1000);
-            }
-          } else {
-            // Handle the case where it's not a deep link (optional)
-            // You might not be able to bypass opening a new tab for HTTP/HTTPS links due to browser restrictions
-            console.log(
-              "Not a deep link, might open in a new tab:",
-              dataResponse.appLink
-            );
-          }
-        }
+      //   /* ------ use bcel one defalt ---------- */
+      //   setGetOrderId(message?.data?.createQrWithPaymentGateway?.data?.id);
 
-        return;
-      });
+      //   if (dataResponse && dataResponse.appLink) {
+      //     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      //     const isDeepLink =
+      //       dataResponse.appLink.startsWith("onepay://") ||
+      //       dataResponse.appLink.startsWith("someOtherCustomScheme://"); // Add other schemes as needed
+
+      //     if (isDeepLink) {
+      //       if (isIOS) {
+      //         window.location.href = dataResponse.appLink;
+      //       } else {
+      //         const iframe = document.createElement("iframe");
+      //         iframe.style.display = "none";
+      //         iframe.src = dataResponse.appLink;
+      //         document.body.appendChild(iframe);
+      //         setTimeout(() => {
+      //           document.body.removeChild(iframe);
+      //         }, 1000);
+      //       }
+      //     } else {
+      //       console.log(
+      //         "Not a deep link, might open in a new tab:",
+      //         dataResponse.appLink
+      //       );
+      //     }
+      //   }
+
+      //   return;
+      // });
       return;
     } catch (error) {
       console.error("Error creating order:", error);
       Swal.fire({
-        title: "Oop!",
+        title: "ລົ້ມເຫລວ!",
         text: "ລົ້ມເຫລວໃນການສັ່ງຊື້",
         icon: "error",
         timer: 3000,
@@ -682,14 +579,8 @@ export default function payment() {
   const captureScreen = () => {
     if (elementCaptureRef.current) {
       html2canvas(elementCaptureRef.current).then((canvas) => {
-        // Convert the canvas to a data URL
         const dataURL = canvas.toDataURL("image/jpeg");
 
-        // Create a Blob from the data URL
-        // const blob = dataURLtoBlob(dataURL);
-
-        // Save the Blob as a file
-        // saveAs(blob, "ບິນສັ່ງຊື້ສິນຄ້າ.jpg");
         fetch(dataURL)
           .then((response) => response.blob())
           .then((blob) => {
@@ -707,140 +598,129 @@ export default function payment() {
     }
   };
 
-  // console.log("selectedOriginalProvice====>", selectedOriginalProvice)
   const compulsory = <span style={{ color: "orange" }}>(ບັງຄັບ)</span>;
 
   return (
     <>
-    <CustomNavbar />
-      <div className="payment-page">
-      
-        <div className="payment-form">
-          <>
-          {/* <div className="bread-crumb">
-          <span onClick={() => router.back()}>Shoping</span>
-          <RxSlash />
-          <span></span>
-        </div> */}
+      <CustomNavbar />
+      {orderGroupWithSalepage?.getOrderGroupWithSalePage?.id ? (
+        <div>
+          <Invoice invoiceData={orderGroupWithSalepage?.getOrderGroupWithSalePage} />
+          <br />
+          <div style={{ paddingLeft: "2em" }}>
+            <Button>ຮັບບິນສັ່ງຊື້</Button>
+          </div>
+        </div>
+      ) : (
+        <div className="payment-page">
 
-            {/* <div className="header-form">
-              <div className="removeIcon1" onClick={() => router.back()}>
-                <MdArrowBack style={{ fontSize: 20 }} />
-              </div>
-              <h4 style={{ marginTop: ".6em" }}>
-                <b>
-                  {width < 700
-                    ? "ປ້ອນຂໍ້ມູນຂອງລູກຄ້າ"
-                    : "ປ້ອນຂໍ້ມູນລູກຄ້າເພື່ອຢືນຢັນ ການສັ່ງຊື້ ສິນຄ້າ"}
-                </b>
-              </h4>
-              <p></p>
-            </div> */}
+          <div className="payment-form">
+            <>
 
-            <Form onSubmit={handleCheckToPaid}>
-              <Row xs={1} sm={2}>
-                <Col>
-                  <Form.Group className="mb-3">
-                    <Form.Label style={{ margin: 0 }}>
-                      ຊື່ ແລະ ນາມສະກຸນ {compulsory}
-                    </Form.Label>
-                    <Form.Control
-                      size="lg"
-                      type="text"
-                      placeholder="ຊື່ ແລະ ນາມສະກຸນ"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e?.target?.value)}
-                    />
-                    {isValidate && customerName?.length <= 0 ? (
-                      <small style={{ color: "red" }}>
-                        ກາລຸນາປ້ອນຊື່ ແລະ ນາມສະກຸນກ່ອນ!
-                      </small>
-                    ) : (
-                      ""
-                    )}
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group
-                    className="mb-3"
-                    style={{ position: "relative" }}
-                    controlId="validationCustom01"
-                  >
-                    <Form.Label style={{ margin: 0 }}>
-                      ເບີໂທລະສັບ {compulsory}
-                    </Form.Label>
-                    <span
-                      style={{
-                        position: "absolute",
-                        left: 10,
-                        top: "1.6em",
-                        fontSize: "1.3em",
-                      }}
+              <Form onSubmit={handleCheckToPaid}>
+                <Row xs={1} sm={2}>
+                  <Col>
+                    <Form.Group className="mb-3">
+                      <Form.Label style={{ margin: 0 }}>
+                        ຊື່ ແລະ ນາມສະກຸນ {compulsory}
+                      </Form.Label>
+                      <Form.Control
+                        size="lg"
+                        type="text"
+                        placeholder="ຊື່ ແລະ ນາມສະກຸນ"
+                        value={customerName}
+                        onChange={(e) => setCustomerName(e?.target?.value)}
+                      />
+                      {isValidate && customerName?.length <= 0 ? (
+                        <small style={{ color: "red" }}>
+                          ກາລຸນາປ້ອນຊື່ ແລະ ນາມສະກຸນກ່ອນ!
+                        </small>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
+                  </Col>
+                  <Col>
+                    <Form.Group
+                      className="mb-3"
+                      style={{ position: "relative" }}
+                      controlId="validationCustom01"
                     >
-                      020{" "}
-                    </span>
-                    <Form.Control
-                      size="lg"
-                      // required
-                      type="number"
-                      maxLength={10} // For 8 digits and 2 hyphens: "XXX-XXX-XX"
-                      minLength={8} // At least 8 digits
-                      pattern="\d{3}-\d{3}-\d{2}" // This is a regular expression pattern for "XXX-XXX-XX"
-                      placeholder="XXX-XXX-XX"
-                      value={phone}
-                      style={{
-                        background: "#fff",
-                        width: "100%",
-                        border: ".02em solid #ddd",
-                        paddingLeft: "2.3em",
-                        fontSize: "1.3em",
-                      }}
-                      onChange={(e) => {
-                        let phone = e?.target?.value;
-                        if (phone.length > 8) {
-                          setPhone(phone.substring(0, 8));
-                        } else {
-                          setPhone(phone);
-                        }
-                      }}
-                      onInput={(e) => {
-                        let phone = e?.target?.value;
-                        if (phone.length > 8) {
-                          e.preventDefault();
-                        }
-                      }}
+                      <Form.Label style={{ margin: 0 }}>
+                        ເບີໂທລະສັບ {compulsory}
+                      </Form.Label>
+                      <span
+                        style={{
+                          position: "absolute",
+                          left: 10,
+                          top: "1.6em",
+                          fontSize: "1.3em",
+                        }}
+                      >
+                        020{" "}
+                      </span>
+                      <Form.Control
+                        size="lg"
+                        // required
+                        type="number"
+                        maxLength={10} // For 8 digits and 2 hyphens: "XXX-XXX-XX"
+                        minLength={8} // At least 8 digits
+                        pattern="\d{3}-\d{3}-\d{2}" // This is a regular expression pattern for "XXX-XXX-XX"
+                        placeholder="XXX-XXX-XX"
+                        value={phone}
+                        style={{
+                          background: "#fff",
+                          width: "100%",
+                          border: ".02em solid #ddd",
+                          paddingLeft: "2.3em",
+                          fontSize: "1.3em",
+                        }}
+                        onChange={(e) => {
+                          let phone = e?.target?.value;
+                          if (phone.length > 8) {
+                            setPhone(phone.substring(0, 8));
+                          } else {
+                            setPhone(phone);
+                          }
+                        }}
+                        onInput={(e) => {
+                          let phone = e?.target?.value;
+                          if (phone.length > 8) {
+                            e.preventDefault();
+                          }
+                        }}
                       // onChange={(e) => {
                       //   let phone = e?.target?.value;
                       //   if (phone.length > 8) return;
                       //   setPhone(phone);
                       // }}
-                    />
-                    {isValidate && phone?.length <= 0 ? (
-                      <small style={{ color: "red" }}>
-                        ກາລຸນາປ້ອນເບີໂທລະສັບກ່ອນ!
-                      </small>
-                    ) : (
-                      ""
-                    )}
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row sm={1}>
-                <Col>
-                  <Form.Group className="mb-3">
-                    <Form.Label style={{ margin: 0 }}>
-                      ຊື່ຂົນສົ່ງ {compulsory}
-                    </Form.Label>
-                    <Form.Control
-                      size="lg"
-                      type="text"
-                      placeholder="ປ້ອນຊື່ຂົນສົ່ງ"
-                      value={logistic}
-                      onChange={(e) => setLogistic(e?.target?.value)}
-                    />
-                  </Form.Group>
-                </Col>
-                {/* <Col>
+                      />
+                      {isValidate && phone?.length <= 0 ? (
+                        <small style={{ color: "red" }}>
+                          ກາລຸນາປ້ອນເບີໂທລະສັບກ່ອນ!
+                        </small>
+                      ) : (
+                        ""
+                      )}
+                    </Form.Group>
+                  </Col>
+                </Row>
+                <Row sm={1}>
+                  <Col>
+                    <Form.Group className="mb-3">
+                      <Form.Label style={{ margin: 0 }}>
+                        ຊື່ຂົນສົ່ງ
+                      </Form.Label>
+                      <Form.Control
+                        size="lg"
+                        type="text"
+                        placeholder="ປ້ອນຊື່ຂົນສົ່ງ"
+                        value={logistic}
+                        onChange={(e) => setLogistic(e?.target?.value)}
+                      />
+                    </Form.Group>
+                  </Col>
+                  {/* <Col>
                   <Form.Group className="mb-3">
                     <Form.Label style={{ margin: 0 }}>
                       ສາຂາປາຍທາງ {compulsory}
@@ -854,89 +734,89 @@ export default function payment() {
                     />
                   </Form.Group>
                 </Col> */}
-              </Row>
-              <Row xs={1} sm={3}>
-                <Col>
-                  <Form.Label style={{ margin: 5 }}>
-                    ແຂວງ {compulsory}
-                  </Form.Label>
-                  <Form.Select
-                    name="selectedOriginalProvice"
-                    as="select"
-                    size="lg"
-                    value={selectedOriginalProvice?.code}
-                    onChange={(e) => {
-                      const _newProvince = _.find(LaoAddress, {
-                        code: e.target.value,
-                      });
-                      setSelectedOriginalProvice(_newProvince);
-                    }}
-                  >
-                    <option value="">--ເລືອກ--</option>
-                    {LaoAddress?.map((province, pIndex) => {
-                      return (
-                        <option
-                          value={province?.code}
-                          key={"province" + pIndex}
-                        >
-                          {province?.province_name}
-                        </option>
-                      );
-                    })}
-                  </Form.Select>
-                </Col>
-                <Col>
-                  <Form.Label style={{ margin: 5 }}>
-                    ເມືອງ {compulsory}
-                  </Form.Label>
-                  <Form.Select
-                    name="selectedOriginalDistrict"
-                    as="select"
-                    size="lg"
-                    value={selectedOriginalDistrict?.code}
-                    onChange={(e) => {
-                      const _newDistrict = _.find(
-                        selectedOriginalProvice?.district_list,
-                        { code: e.target.value }
-                      );
-                      _filterOriginalLogisticBranches(
-                        _newDistrict?.district,
-                        true
-                      );
-                      setSelectedOriginalDistrict(_newDistrict);
-                    }}
-                  >
-                    <option value="">--ເລືອກ--</option>
-                    {selectedOriginalProvice?.district_list?.map(
-                      (district, dIndex) => {
+                </Row>
+                <Row xs={1} sm={3}>
+                  <Col>
+                    <Form.Label style={{ margin: 5 }}>
+                      ແຂວງ
+                    </Form.Label>
+                    <Form.Select
+                      name="selectedOriginalProvice"
+                      as="select"
+                      size="lg"
+                      value={selectedOriginalProvice?.code}
+                      onChange={(e) => {
+                        const _newProvince = _.find(LaoAddress, {
+                          code: e.target.value,
+                        });
+                        setSelectedOriginalProvice(_newProvince);
+                      }}
+                    >
+                      <option value="">--ເລືອກ--</option>
+                      {LaoAddress?.map((province, pIndex) => {
                         return (
                           <option
-                            value={district?.code}
-                            key={"district" + dIndex}
+                            value={province?.code}
+                            key={"province" + pIndex}
                           >
-                            {district?.district}
+                            {province?.province_name}
                           </option>
                         );
-                      }
-                    )}
-                  </Form.Select>
-                </Col>
-                <Col>
-                  <Form.Group className="mb-3">
+                      })}
+                    </Form.Select>
+                  </Col>
+                  <Col>
                     <Form.Label style={{ margin: 5 }}>
-                      ສາຂາປາຍທາງ ຢູ່ບ້ານ {compulsory}
+                      ເມືອງ
                     </Form.Label>
-                    <Form.Control
+                    <Form.Select
+                      name="selectedOriginalDistrict"
+                      as="select"
                       size="lg"
-                      type="text"
-                      placeholder="ປ້ອນສາຂາປາຍທາງ"
-                      value={destinationLogistic}
-                      onChange={(e) => setDestinationLogistic(e?.target?.value)}
-                    />
-                  </Form.Group>
-                </Col>
-              </Row>
-              {/* <Row sm={12}>
+                      value={selectedOriginalDistrict?.code}
+                      onChange={(e) => {
+                        const _newDistrict = _.find(
+                          selectedOriginalProvice?.district_list,
+                          { code: e.target.value }
+                        );
+                        _filterOriginalLogisticBranches(
+                          _newDistrict?.district,
+                          true
+                        );
+                        setSelectedOriginalDistrict(_newDistrict);
+                      }}
+                    >
+                      <option value="">--ເລືອກ--</option>
+                      {selectedOriginalProvice?.district_list?.map(
+                        (district, dIndex) => {
+                          return (
+                            <option
+                              value={district?.code}
+                              key={"district" + dIndex}
+                            >
+                              {district?.district}
+                            </option>
+                          );
+                        }
+                      )}
+                    </Form.Select>
+                  </Col>
+                  <Col>
+                    <Form.Group className="mb-3">
+                      <Form.Label style={{ margin: 5 }}>
+                        ສາຂາປາຍທາງ ຢູ່ບ້ານ
+                      </Form.Label>
+                      <Form.Control
+                        size="lg"
+                        type="text"
+                        placeholder="ປ້ອນສາຂາປາຍທາງ"
+                        value={destinationLogistic}
+                        onChange={(e) => setDestinationLogistic(e?.target?.value)}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
+                {/* <Row sm={12}>
                 <Col>
                   <Form.Group controlId="exampleForm.ControlTextarea1">
                     <Form.Label>ລາຍລະອຽດ (ບໍ່ບັງຄັບ)</Form.Label>
@@ -951,173 +831,164 @@ export default function payment() {
                 </Col>
               </Row> */}
 
-              {file && (
-                <div
-                  style={{
-                    width: "100%",
-                    height: "260px",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: 3,
-                  }}
-                >
-                  <img
-                    // src={fileName}
-                    src={URL.createObjectURL(file)}
+                {file && (
+                  <div
                     style={{
                       width: "100%",
-                      height: "200px",
-                      border: "1px solid gray",
-                      borderRadius: ".3em",
+                      height: "260px",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 3,
                     }}
-                    alt="imageqrPayment"
-                  />
-                  {/* <img
-                      src={S3_URL + bankData?.banks?.data[0].image}
+                  >
+                    <img
+                      // src={fileName}
+                      src={URL.createObjectURL(file)}
                       style={{
-                        width: file ? "100%" : "60%",
+                        width: "100%",
                         height: "200px",
                         border: "1px solid gray",
                         borderRadius: ".3em",
                       }}
-                      alt="imagebank"
-                    /> */}
-                </div>
-              )}
+                      alt="imageqrPayment"
+                    />
 
-              <br />
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1-content"
-                  id="panel1-header"
-                >
-                  ເບິ່ງລາຍການສັ່ງຊື້ຂອງຂ້ອຍ
-                  {/* <b> ເງິນລວມ: {numberFormat(totalPrice)} ກີບ</b> */}
-                </AccordionSummary>
-                <AccordionDetails>
-                  <div className="w-100">
-                    {cartDatas?.map((data, index) => {
-                      return (
-                        <div
-                          key={data?.id}
-                          className="cartItem-product"
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <div className="cartImage">
-                            {data?.image?.length > 0 ? (
-                              <img
-                                src={S3_URL + data?.image}
-                                alt="productImage"
-                                style={{ width: 80, height: 80 }}
-                              />
-                            ) : (
-                              <EmptyImage />
-                            )}
-                          </div>
-                          <div className="action-item">
-                            <h5>
-                              {index + 1}. {data?.name}
-                            </h5>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                alignItems: "start",
-                              }}
-                            >
-                              <div style={{ lineHeight: 3 }}>
-                                <h6 style={{ fontSize: 13, color: "gray" }}>
-                                  {data?.qty} X {numberFormat(data?.price ?? 0)}{" "}
-                                  ກີບ
-                                </h6>
-                                <h6 style={{ fontSize: 13, color: "gray" }}>
-                                  {numberFormat(data?.price * data?.qty ?? 0)}{" "}
-                                  ກີບ
-                                </h6>
+                  </div>
+                )}
+
+                <br />
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header"
+                  >
+                    ເບິ່ງລາຍການສັ່ງຊື້ຂອງຂ້ອຍ
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <div className="w-100">
+                      {cartDatas?.map((data, index) => {
+                        return (
+                          <div
+                            key={data?.id}
+                            className="cartItem-product"
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div className="cartImage">
+                              {data?.image?.length > 0 ? (
+                                <img
+                                  src={S3_URL + data?.image}
+                                  alt="productImage"
+                                  style={{ width: 80, height: 80 }}
+                                />
+                              ) : (
+                                <EmptyImage />
+                              )}
+                            </div>
+                            <div className="action-item">
+                              <h5>
+                                {index + 1}. {data?.name}
+                              </h5>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "start",
+                                }}
+                              >
+                                <div style={{ lineHeight: 3 }}>
+                                  <h6 style={{ fontSize: 13, color: "gray" }}>
+                                    {data?.qty} X {numberFormat(data?.price ?? 0)}{" "}
+                                    ກີບ
+                                  </h6>
+                                  <h6 style={{ fontSize: 13, color: "gray" }}>
+                                    {numberFormat(data?.price * data?.qty ?? 0)}{" "}
+                                    ກີບ
+                                  </h6>
+                                </div>
+                                {/* <h6>ຈຳນວນ {data?.qty}</h6> */}
                               </div>
-                              {/* <h6>ຈຳນວນ {data?.qty}</h6> */}
                             </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-
-                  <div className="d-flex justify-content-between align-items-center w-100">
-                    <h6>ຈຳນວນສິນຄ້າ:</h6>
-                    <h6>{cartDatas?.length} ລາຍການ</h6>
-                  </div>
-                  <div className="d-flex justify-content-between align-items-center w-100">
-                    <h5>
-                      <b>ເງິນລວມທີ່ຕ້ອງຈ່າຍ: </b>
-                    </h5>
-                    <h5>
-                      <b>{numberFormat(totalPrice)} ກີບ</b>
-                    </h5>
-                  </div>
-                </AccordionDetails>
-              </Accordion>
-              <br />
-
-              {qrcodeData !== undefined ? (
-                <>
-                  <div ref={elementCaptureRef}>
-                    <div className="d-flex w-100 justify-content-center align-items-center p-2">
-                      Qr {typeBanks} ສຳຫຼັບການຈ່າຍເງິນ
+                        );
+                      })}
                     </div>
-                    <div className="qrcode-scanner-media">
-                      <GenQrCode
-                        qrcodeData={qrcodeData}
-                        handleGoback={handleGoback}
-                        getOrderId={getOrderId}
-                        shopId={shopId}
-                        affiliateId={affiliateId}
-                        dataCompleted={dataCompleted}
-                      />
+
+                    <div className="d-flex justify-content-between align-items-center w-100">
+                      <h6>ຈຳນວນສິນຄ້າ:</h6>
+                      <h6>{cartDatas?.length} ລາຍການ</h6>
                     </div>
-                  </div>
-                  <div className="download-qrcode-element">
-                    <button
-                      type="button"
-                      className="btn-download-qrcode"
-                      onClick={captureScreen}
-                    >
-                      ດາວໂຫລດ qr
-                    </button>
-                  </div>
-                </>
-              ) : (
-                ""
-              )}
-              <div className="btn-open-select-banks">
-                <button
-                  type={
-                    loadingSubscripe || loadingPayment ? "button" : "submit"
-                  }
-                  className="btn-confirm-bank"
-                >
-                  {loadingSubscripe || loadingPayment ? (
-                    <>
-                      <Spinner size="sm" /> ກຳລັງກວດສອບ...
-                    </>
-                  ) : (
-                    <>
-                      <CheckCircleOutlined style={{ fontSize: 20 }} />
-                      ຊຳລະ
-                    </>
-                  )}
-                </button>
-              </div>
-            </Form>
-          </>
+                    <div className="d-flex justify-content-between align-items-center w-100">
+                      <h5>
+                        <b>ເງິນລວມທີ່ຕ້ອງຈ່າຍ: </b>
+                      </h5>
+                      <h5>
+                        <b>{numberFormat(totalPrice)} ກີບ</b>
+                      </h5>
+                    </div>
+                  </AccordionDetails>
+                </Accordion>
+                <br />
+
+                {qrcodeData !== undefined ? (
+                  <>
+                    <div ref={elementCaptureRef}>
+                      <div className="d-flex w-100 justify-content-center align-items-center p-2">
+                        Qr {typeBanks} ສຳຫຼັບການຈ່າຍເງິນ
+                      </div>
+                      <div className="qrcode-scanner-media">
+                        <GenQrCode
+                          qrcodeData={qrcodeData}
+                          handleGoback={handleGoback}
+                          getOrderId={getOrderId}
+                          shopId={shopId}
+                          affiliateId={affiliateId}
+                          dataCompleted={dataCompleted}
+                        />
+                      </div>
+                    </div>
+                    <div className="download-qrcode-element">
+                      <button
+                        type="button"
+                        className="btn-download-qrcode"
+                        onClick={captureScreen}
+                      >
+                        ດາວໂຫລດ qr
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  ""
+                )}
+                <div className="btn-open-select-banks">
+                  <button
+                    type={
+                      loadingSubscripe || loadingPayment ? "button" : "submit"
+                    }
+                    className="btn-confirm-bank"
+                  >
+                    {loadingSubscripe || loadingPayment ? (
+                      <>
+                        <Spinner size="sm" /> ກຳລັງກວດສອບ...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircleOutlined style={{ fontSize: 20 }} />
+                        ຊຳລະ
+                      </>
+                    )}
+                  </button>
+                </div>
+              </Form>
+            </>
+          </div>
         </div>
-      </div>
+      )}
 
       <Dialog
         open={openSelectBank}
@@ -1178,6 +1049,12 @@ export default function payment() {
 
       <ToastContainer />
       <FooterComponent />
+
+      <Modal centered show={showPreview} onHide={() => setShowPreview(false)}>
+        <Modal.Body style={{ width: '100%', height: "85vh", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', position: 'relative' }}>
+          <iframe src={qrCodeUrl} title="description" style={{ width: '100%', height: '100%' }} />
+        </Modal.Body>
+      </Modal>
     </>
   );
 }

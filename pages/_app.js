@@ -86,7 +86,7 @@ const App = ({ Component, pageProps }) => {
   );
 
   const authMiddleware = new ApolloLink((operation, forward) => {
-    const user = localStorage.getItem("USER_DATA");
+    const user = localStorage?.getItem("USER_DATA");
     let token;
     if (user) {
       token = JSON.parse(user)["accessToken"];

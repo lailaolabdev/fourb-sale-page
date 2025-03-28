@@ -134,6 +134,14 @@ mutation CreateQrWithPaymentGateway($data: PaymentInput!) {
   }
 }
 `;
+export const CREATE_PAYMENT_LINK_WITH_PHAPAY = gql`
+mutation CreatePaymentLinkWithPhapay($data: PaymentInput!) {
+  createPaymentLinkWithPhapay(data: $data) {
+    appLink
+    qrCode
+  }
+}
+`;
 
 export const UPDATE_MANY_ORDERGROUPS = gql`
   mutation UpdateManyOrderGroups(
