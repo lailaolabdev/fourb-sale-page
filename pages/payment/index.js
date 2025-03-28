@@ -598,6 +598,54 @@ export default function payment() {
     }
   };
 
+  // onprint bill
+
+  // const onPrintBill = async () => {
+  //   try {
+  //     const printerBillData = printer.find((e) => e?.status === true);
+
+  //     const dataImageForPrint = await html2canvas(
+  //       printerBillData?.width === "80mm"
+  //         ? bill80Ref.current
+  //         : bill58Ref.current,
+  //       {
+  //         useCORS: true,
+  //         scrollX: 10,
+  //         scrollY: printerBillData?.width === "80mm" ? 2 : 0,
+  //         scale:
+  //           printerBillData?.width === "80mm"
+  //             ? 560 / widthBill80
+  //             : 350 / widthBill58,
+  //       }
+  //     );
+
+
+  //     const urlByType = {
+  //       ETHERNET: "ethernet",
+  //       BLUETOOTH: "bluetooth",
+  //       USB: "usb",
+  //     };
+  //     const urlForPrinter = `http://localhost:9150/${urlByType[printerBillData?.type]
+  //       }/image`;
+
+  //     const _file = await base64ToBlob(dataImageForPrint.toDataURL());
+  //     const bodyFormData = new FormData();
+  //     bodyFormData.append("ip", printerBillData?.ip);
+  //     bodyFormData.append("port", "9100");
+  //     bodyFormData.append("image", _file);
+  //     bodyFormData.append("beep1", 1);
+  //     bodyFormData.append("beep2", 9);
+
+  //     await axios.post(urlForPrinter, bodyFormData, {
+  //       headers: { "Content-Type": "multipart/form-data" },
+  //     });
+
+      
+  //   } catch (err) {
+  //     console.log(err);
+  //   }
+  // };
+
   const compulsory = <span style={{ color: "orange" }}>(ບັງຄັບ)</span>;
 
   return (
