@@ -1,13 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@900&display=swap");
- 
+
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@100..900&display=swap');
 
 :root {
-  --colorMain: linear-gradient(
-    23deg,
-    rgba(47, 110, 163, 1) 0%,
-    rgba(90, 81, 160, 1) 58%
-  );
+  --colorMain: linear-gradient(23deg,
+      rgba(47, 110, 163, 1) 0%,
+      rgba(90, 81, 160, 1) 58%);
   --colorWhite: #fff;
   --colorShadow: #f2f2f2;
   --colorBorder: #ddd;
@@ -116,6 +114,7 @@ Modal.Footer {
   .containerPayment {
     position: relative;
   }
+
   .backgroundPayment {
     position: absolute;
     width: 100%;
@@ -224,6 +223,7 @@ Modal.Footer {
   input[type="number"] {
     -moz-appearance: textfield;
   }
+
   input[type="file"]::file-selector-button {
     display: none;
   }
@@ -385,10 +385,12 @@ Modal.Footer {
     cursor: pointer;
     transition: 0.3s all ease-in-out;
   }
+
   & .btn-register-now:hover {
     transform: scale(1.1);
   }
 }
+
 /* 
   .menu-drawer:hover {
   } */
@@ -421,6 +423,7 @@ Modal.Footer {
 .containerPayment {
   position: relative;
 }
+
 .backgroundPayment {
   position: absolute;
   width: 100%;
@@ -530,6 +533,7 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
 input[type="file"]::file-selector-button {
   display: none;
 }
@@ -821,10 +825,12 @@ input[type="file"]::file-selector-button {
 
       & ul {
         line-height: 1.5em;
+
         & li {
           font-size: 13px;
         }
       }
+
       & ol {
         line-height: 1.5em;
 
@@ -894,6 +900,7 @@ input[type="file"]::file-selector-button {
     & ul {
       list-style: none;
       margin-left: -1em;
+
       & li {
         display: flex;
         justify-content: start;
@@ -1031,8 +1038,8 @@ input[type="file"]::file-selector-button {
   }
 
   & .card-profile-shop[data-isprofile="true"] {
-    
-    
+
+
     transition: all .5s ease-out;
 
   }
@@ -1157,6 +1164,7 @@ input::placeholder {
   background: var(--colorMain);
   color: var(--colorWhite);
 }
+
 .headerSalePage .productNoLive:hover {
   background: var(--colorMain);
   color: var(--colorWhite);
@@ -1328,10 +1336,12 @@ input::placeholder {
   font-size: 0.8em;
   padding-top: 0.2em;
 }
+
 .productSalePage .title-product .txtSmall {
   font-size: 0.6em;
   margin-top: 0.4em;
 }
+
 .productSalePage .title-product .txtCurrency {
   margin-top: -5em;
   color: var(--colorMain);
@@ -1362,6 +1372,7 @@ input::placeholder {
     color: #ddd;
   }
 }
+
 .cartItem-product .cartImage {
   width: 9em;
   height: 100%;
@@ -1546,7 +1557,7 @@ input::placeholder {
 
   & .bank-actions {
     width: 100%;
-    padding:.6em 1em;
+    padding: .6em 1em;
     border-radius: 0.5em;
     border: 1px solid var(--colorGray);
     gap: 0.4em;
@@ -1574,12 +1585,14 @@ input::placeholder {
     background: var(--colorShadow);
   }
 }
+
 .payment-page {
   display: flex;
   justify-content: center;
   align-items: center;
   background: #fcfcfc;
   padding: 2em;
+  min-height: 100vh;
   height: auto;
   /* margin-top: -2em; */
   overflow-x: hidden;
@@ -1711,6 +1724,7 @@ input::placeholder {
   gap: 0.1em;
   line-height: 0.3em;
 }
+
 .amount-qty-size .boxShowAction p {
   user-select: none;
 }
@@ -1729,6 +1743,7 @@ input::placeholder {
   margin: 0.4em;
   font-size: 1em;
 }
+
 .amount-qty-size .boxShowAction .boxdisplay-button {
   color: var(--colorMain);
   background: var(--colorShadow);
@@ -1754,6 +1769,7 @@ input::placeholder {
   color: var(--colorWhite);
   cursor: pointer;
 }
+
 .boxdisplay-button .incrementView {
   width: 100%;
   height: 100%;
@@ -1917,6 +1933,7 @@ input::placeholder {
     height: 100%;
     object-fit: cover;
   }
+
   & .go-back-page {
     font-weight: bold;
     color: #fff;
@@ -2029,6 +2046,7 @@ input::placeholder {
 .btn-completed-order:hover {
   background: var(--colorMain);
 }
+
 .btn-completed-order:active {
   background: var(--colorMain);
 }
@@ -2057,10 +2075,14 @@ input::placeholder {
   } */
 
 .cancel-button-outline {
-  border: 2px solid #d33; /* Adjust the border color and thickness as needed */
-  background: transparent; /* Make the background transparent to create an outline effect */
-  color: #d33; /* Text color for the cancel button */
+  border: 2px solid #d33;
+  /* Adjust the border color and thickness as needed */
+  background: transparent;
+  /* Make the background transparent to create an outline effect */
+  color: #d33;
+  /* Text color for the cancel button */
 }
+
 /* ======================================= responsive web page ==================================== */
 
 @media screen and (max-width: 700px) {
@@ -2068,8 +2090,7 @@ input::placeholder {
     flex-direction: column;
     gap: 10px 10px;
 
-    & .btn-register-now {
-    }
+    & .btn-register-now {}
   }
 
   .action-footer-button {
@@ -2086,10 +2107,12 @@ input::placeholder {
     /* bottom: 0em; */
     width: 100%;
   }
+
   .openMenu-dropdown {
     margin-left: -0.1em;
     /* margin-top: -0.2em; */
   }
+
   .dropdown-content-actions {
     background: var(--colorWhite);
     width: 100%;
@@ -2133,6 +2156,7 @@ input::placeholder {
   .paid-successfully-card h3 {
     font-size: 2em;
   }
+
   .amountAll {
     font-size: 0.65em;
     border-radius: 0.2em;
@@ -2300,6 +2324,7 @@ input::placeholder {
     white-space: nowrap;
     width: 6em;
   }
+
   .cartItem-product .action-item h4 {
     font-size: 0.85em;
   }
@@ -2393,6 +2418,7 @@ input::placeholder {
         }
       }
     }
+
     & .footer-first {
       grid-template-columns: 1fr;
     }
@@ -2412,6 +2438,7 @@ input::placeholder {
     padding-left: 0em;
     padding-right: 0em;
   }
+
   .payment-page .payment-form {
     height: auto;
     padding: 1em;

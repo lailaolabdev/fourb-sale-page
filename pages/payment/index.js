@@ -655,9 +655,9 @@ export default function payment() {
         <div>
           <Invoice invoiceData={orderGroupWithSalepage?.getOrderGroupWithSalePage} />
           <br />
-          <div style={{ paddingLeft: "2em" }}>
+          {/* <div style={{ paddingLeft: "2em" }}>
             <Button>ຮັບບິນສັ່ງຊື້</Button>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div className="payment-page">

@@ -1233,7 +1233,7 @@
  /* cart style */
  .card-cart-products {
      width: 100%;
-     /* height: 100vh; */
+     min-height: 100vh;
      /* background: var(--colorShadow); */
      padding: 1em 2em;
      background: linear-gradient(to top, var(--colorGray), var(--colorWhite));

@@ -20,17 +20,17 @@ export default function FooterComponent() {
           <div className="logo-main">
             <img
               src={image_main}
-              style={{ width: "100%", height: "100%",border:'1px solid #f2f2f2', borderRadius:'50em' }}
+              style={{ width: "100%", height: "100%", border: '1px solid #f2f2f2', borderRadius: '50em' }}
             />
           </div>
-          <p style={{fontSize:18}}><b>Sale Page</b></p>
+          <p style={{ fontSize: 18 }}><b>Sale Page</b></p>
           <small>Lailaolab ICT Solutions CO.,LTD</small>
           <br />
           <small style={{ fontSize: 13 }}>
             {" "}
-            ບ້ານ ປາກ​ທ້າງ, ເມືອງ​ສີ​ໂຄດ​ຕະ​ບອງ, ນະ​ຄອນ​ຫຼວງວຽງ​ຈັນ, ປະ​ເທດ​ລາວ
+            ບ້ານ ໂນນຄໍ້, ເມືອງ​ໄຊເສດຖາ, ນະ​ຄອນ​ຫຼວງວຽງ​ຈັນ, ປະ​ເທດ​ລາວ
           </small>
-          <p style={{fontSize:14}}>ໂທ: +856 020 299-336-96</p>
+          <p style={{ fontSize: 14 }}>ໂທ: +856 020 299-336-96</p>
         </div>
         <div className="footer-title">
           <div>
@@ -106,6 +106,10 @@ export default function FooterComponent() {
               src="/assets/images/indochina.png"
               style={{ maxWidth: 40, maxHeight: 40 }}
             />
+            <img
+              src="/assets/images/Phapay_logo.png"
+              style={{ maxWidth: 40, maxHeight: 40, borderRadius: 10, background: "#fff" }}
+            />
           </div>
         </div>
         <div>
@@ -149,7 +153,7 @@ export default function FooterComponent() {
                   overflow: "hidden",
                 }}
               >
-                {/* <img src="/assets/images/mixay.png" style={{ width: "100%" }} /> */}
+                <img src="/assets/images/mixay.png" style={{ width: "100%" }} />
               </div>
               {/* &nbsp;
               <small>ບໍລິສັດ ຂົນສົ່ງ ອານຸສິດ (ກຳລັງພັດທະນາ)</small> */}
@@ -160,7 +164,7 @@ export default function FooterComponent() {
           <p>ຕິດຕາມພວກເຮົາ</p>
           <div style={{ display: "flex", gap: 20 }}>
             <div
-               onClick={() =>
+              onClick={() =>
                 window.open("https://www.facebook.com/4B.forbusiness", "_blank")
               }
             >
@@ -171,7 +175,7 @@ export default function FooterComponent() {
             </div>
             <div
               onClick={() => {
-                window.open("https://www.youtube.com/@cflivebylailaocf2342",  "_blank");
+                window.open("https://www.youtube.com/@cflivebylailaocf2342", "_blank");
               }}
             >
               <img
@@ -181,7 +185,7 @@ export default function FooterComponent() {
             </div>
             <div
               onClick={() => {
-                window.open("https://www.tiktok.com/@4bforbusiness",  "_blank");
+                window.open("https://www.tiktok.com/@4bforbusiness", "_blank");
               }}
             >
               <img
@@ -193,11 +197,11 @@ export default function FooterComponent() {
           </div>
         </div>
 
-        <div className="card-copy-right" style={{fontSize:12}}>
-<p >© 4B, All Right Reserved || By Lailaolab</p>
-      {versionWeb?.version}
+        <div className="card-copy-right" style={{ fontSize: 12 }}>
+          <p >© 4B, All Right Reserved || By Lailaolab</p>
+          {versionWeb?.version}
         </div>
-       
+
       </div>
       {/* <p style={{display:'flex',background:'none',border:'1px solid red', width:'100%', justifyContent:'center', alignItems:'center', padding:'3em 0'}}>
 
