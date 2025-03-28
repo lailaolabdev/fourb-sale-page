@@ -2,25 +2,15 @@
 
 import "../styles/globals.css";
 
-// export default function App({ Component, pageProps }) {
-//   return <Component {...pageProps} />
-// }
-
 import "../styles/styleSalePage.css";
 import "../styles/index.scss"; 
 import "../styles/_customstyle.scss"
 import "../styles/app.css"; 
 import "../styles/pagination.css"; 
 
-
-
- 
-
-// import "@fortawesome/fontawesome-svg-core/styles.css"; // import Font Awesome CSS
 import "bootstrap/dist/css/bootstrap.css";
 import {
   ApolloClient,
-  ApolloLink,
   ApolloProvider,
   HttpLink,
   InMemoryCache,
@@ -28,36 +18,27 @@ import {
   split,
 } from "@apollo/client";
 
-// import { config } from "@fortawesome/fontawesome-svg-core";
 import Head from "next/head";
 import Script from "next/script";
 import { DefaultSeo } from "next-seo";
 import "react-toastify/dist/ReactToastify.css";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import ReactGA from "react-ga";
-// import { authClient } from "./authClient";
 import { Provider } from "react-redux";
 import { store } from "../redux/store";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { WebSocket } from "ws";
 import { createClient } from "graphql-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
-// import { authClient } from "../autClient";
 import { StateProvider } from "../store";
 import { CLIENT_ID, S3_URL, SERVER_URI, SOCKET_SERVER_URI } from "../helper";
 import { ToastContainer } from "react-toastify";
 import { ToastProvider } from "react-toast-notifications"; 
 import { PrimeReactProvider } from "primereact/api";
-import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'primeicons/primeicons.css';
-        
-
-// config.autoAddCss = false;
-
-// const TRACKING_ID = "G-TWDP034E2W";
-// ReactGA.initialize(TRACKING_ID);
 
 const App = ({ Component, pageProps }) => {
   const httpLink = new HttpLink({
@@ -85,25 +66,25 @@ const App = ({ Component, pageProps }) => {
     httpLink
   );
 
-  const authMiddleware = new ApolloLink((operation, forward) => {
-    const user = localStorage?.getItem("USER_DATA");
-    let token;
-    if (user) {
-      token = JSON.parse(user)["accessToken"];
-    }
-    // add the authorization to the headers
-    operation.setContext(({ headers = {} }) => ({
-      headers: {
-        ...headers,
-        authorization: token ?? "",
-      },
-    }));
+  // const authMiddleware = new ApolloLink((operation, forward) => {
+  //   // const user = localStorage?.getItem("USER_DATA");
+  //   let token;
+  //   // if (user) {
+  //   //   token = JSON.parse(user)["accessToken"];
+  //   // }
+  //   // add the authorization to the headers
+  //   operation.setContext(({ headers = {} }) => ({
+  //     headers: {
+  //       ...headers,
+  //       authorization: token ?? "",
+  //     },
+  //   }));
 
-    return forward(operation);
-  });
+  //   return forward(operation);
+  // });
 
   const client = new ApolloClient({
-    link: concat(authMiddleware, link),
+    link: concat(link),
     cache: new InMemoryCache(),
     request: (operation) => {
       const user = localStorage.getItem("USER_DATA");
@@ -118,7 +99,6 @@ const App = ({ Component, pageProps }) => {
       }
     },
     onError: (err) => {
-      console.log("========<e>===>ERROR: ", err);
       let isTokenError1 = _.some(err.graphQLErrors, {
         message: "Error: TokenExpiredError: jwt expired",
       });

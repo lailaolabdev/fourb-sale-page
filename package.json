@@ -1,10 +1,10 @@
 {
   "name": "4b-sale-page-shop",
-  "version": "v1.3.3",
+  "version": "v1.3.4",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NODE_OPTIONS=--openssl-legacy-provider next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
