@@ -1,4 +1,5 @@
-import { numberFormat } from '@/helper';
+import { covertTimeZone, numberFormat } from '@/helper';
+import moment from 'moment';
 import React from 'react';
 import { Container, Row, Col, Table, Card } from 'react-bootstrap';
 
@@ -25,21 +26,21 @@ const Invoice = ({ invoiceData }) => {
                   <Col className="text-end">
                      <h1>INVOICE</h1>
                      <p>
-                        <strong>Invoice No:</strong> {invoiceData.code}<br />
-                        <strong>Date:</strong> {new Date(invoiceData.createdAt).toLocaleDateString()}<br />
+                        <strong>ເລກທີ່ບິນ:</strong> {invoiceData.code}<br />
+                        <strong>ວັນທີ:</strong> {moment(invoiceData.createdAt).format('DD/MM/YYYY')} <br />
                      </p>
                   </Col>
                </Row>
 
-               <p>{invoiceData?.customerName ?? ""}</p>
+               <p>ລູກຄ້າ: {invoiceData?.customerName ?? ""}</p>
 
                <Table striped bordered hover>
                   <thead>
                      <tr>
-                        <th>Item</th>
-                        <th>Description</th>
-                        <th className="text-end">Price</th>
-                        <th className="text-end">Amount</th>
+                        <th>ລຳດັບ</th>
+                        <th>ລາຍລະອຽດສິນຄ້າ</th>
+                        <th className="text-end">ລາຄາ</th>
+                        <th className="text-end">ລວມເປັນເງິນ</th>
                      </tr>
                   </thead>
                   <tbody>
@@ -48,7 +49,7 @@ const Invoice = ({ invoiceData }) => {
                            <td>{index + 1}</td>
                            <td>{item?.stock?.name ?? "-"}</td>
                            <td className="text-end">{numberFormat(item?.stock?.price ?? 0)} {item?.stock?.currency ?? "ກີບ"}</td>
-                           <td className="text-end">{item?.stock?.price * item?.amount} {item?.stock?.currency ?? "ກີບ"}</td>
+                           <td className="text-end">{numberFormat(item?.stock?.price * item?.amount ?? 0)} {item?.stock?.currency ?? "ກີບ"}</td>
                         </tr>
                      ))}
                   </tbody>

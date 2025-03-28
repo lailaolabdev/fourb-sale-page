@@ -91,7 +91,7 @@ export const GET_ORDER = gql`
   }
 `;
 export const GET_ORDERGROUPS_WITH_SALEPAGE = gql`
-  query GetOrderGroupWithSalePage($where: OrderGroupWhereInputOne!) {
+query GetOrderGroupWithSalePage($where: OrderGroupWhereInputOne!) {
   getOrderGroupWithSalePage(where: $where) {
     id
     amount
@@ -114,6 +114,7 @@ export const GET_ORDERGROUPS_WITH_SALEPAGE = gql`
         price
         image
         unit
+        currency
       }
     }
     cfName
@@ -128,6 +129,12 @@ export const GET_ORDERGROUPS_WITH_SALEPAGE = gql`
       id
       name
       phone
+      image
+      address {
+        district
+        village
+        province
+      }
     }
     code
     shipmentNumber

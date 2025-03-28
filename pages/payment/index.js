@@ -49,6 +49,7 @@ import { PAYMENT_GATEWAY_API_URL, PAYMENT_KEY } from "@/const";
 import { GET_ORDERGROUPS_WITH_SALEPAGE } from "@/apollo/order/query";
 import Invoice from "@/components/invoices/Invoice";
 import { setOrders } from "@/redux/setOrder/orders";
+import LoadingComponent from "@/components/LoadingComponent";
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -218,6 +219,13 @@ export default function payment() {
       );
       setCartDatas(_checkdatas);
     }
+    // loadOrderGroupWithSalepage({
+    //   variables: {
+    //     where: {
+    //       transactionId: "526633de-dc80-45f8-a224-27712ad7a4c1",
+    //     },
+    //   },
+    // })
   }, [patchBack, cartList]);
 
   useEffect(() => {
@@ -502,8 +510,8 @@ export default function payment() {
       const response = await createOrderSalepage({
         variables: {
           data: {
-            // amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
+            // amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
             // paymentMethod: values?.type,
             description: "4B_SALE_PAGE",
             orders: convertedOrders,
@@ -640,7 +648,7 @@ export default function payment() {
   //       headers: { "Content-Type": "multipart/form-data" },
   //     });
 
-      
+
   //   } catch (err) {
   //     console.log(err);
   //   }
@@ -651,6 +659,7 @@ export default function payment() {
   return (
     <>
       <CustomNavbar />
+      {loadingOrdeWithSalepage && <LoadingComponent />}
       {orderGroupWithSalepage?.getOrderGroupWithSalePage?.id ? (
         <div>
           <Invoice invoiceData={orderGroupWithSalepage?.getOrderGroupWithSalePage} />
@@ -1026,8 +1035,8 @@ export default function payment() {
                       </>
                     ) : (
                       <>
-                        <CheckCircleOutlined style={{ fontSize: 20 }} />
-                        ຊຳລະ
+                        {/* <CheckCircleOutlined style={{ fontSize: 20 }} /> */}
+                        ຢືນຢັນການຊຳລະ
                       </>
                     )}
                   </button>
@@ -1098,8 +1107,8 @@ export default function payment() {
       <ToastContainer />
       <FooterComponent />
 
-      <Modal centered show={showPreview} onHide={() => setShowPreview(false)}>
-        <Modal.Body style={{ width: '100%', height: "85vh", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', position: 'relative' }}>
+      <Modal size="lg" centered show={showPreview} onHide={() => setShowPreview(false)}>
+        <Modal.Body style={{ width: '100%', height: "85vh", maxHeight: "70em", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', position: 'relative' }}>
           <iframe src={qrCodeUrl} title="description" style={{ width: '100%', height: '100%' }} />
         </Modal.Body>
       </Modal>

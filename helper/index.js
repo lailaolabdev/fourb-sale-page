@@ -1,3 +1,5 @@
+import moment from "moment";
+
 // export const CORLOR_APP = "#3c169b";
 export const CORLOR_APP = "linear-gradient(23deg, rgba(47,110,163,1) 0%, rgba(90,81,160,1) 58%)";
 export const CORLOR_WHITE = "#FFF";
@@ -35,6 +37,11 @@ export const COMMISSION_OFFICE = 1;
 export const numberFormat = (_number) => {
   return new Intl.NumberFormat("en-US").format(_number);
 };
+export const covertTimeZone = (datatime, time) => {
+  const thaiTimezone = moment(datatime).tz("Asia/Bangkok").format(`DD/MM/YYYY ${time ? time : ''}`);
+
+  return thaiTimezone
+}
 
 // ======================================= link upoint ================================
 // Dev

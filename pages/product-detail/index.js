@@ -341,7 +341,6 @@ export default function index() {
     router.replace(destinationPath);
   };
 
-  console.log("product: ", product)
 
   return (
     <>

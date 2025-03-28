@@ -302,8 +302,9 @@ function ShopingStore({ initialShop }) {
 
   const handleAddProduct = (data) => {
     if (data?.amount <= 0) {
-      return toast.warning(`ສິນຄ້າ ${data?.name} ໝົດສະຕ໋ອກແລ້ວ!`, {
-        autoClose: 1500,
+      return toast.current.show({
+        severity: "success",
+        detail: `ສິນຄ້າ ${data?.name} ໝົດສະຕ໋ອກແລ້ວ!`,
       });
     } else {
       let _price = 0;
@@ -332,13 +333,7 @@ function ShopingStore({ initialShop }) {
 
       const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
 
-      // const _data = {
-      //   ...data,
-      //   price: roundedValue,
-      //   modelType: live, shop: shopId
-      // };
-
-      // console.log({_data})
+     
 
       const { __typename, ...restData } = data;
 
@@ -523,14 +518,14 @@ function ShopingStore({ initialShop }) {
                       className="favorite-view"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      <p
+                      {/* <p
                         className={
                           heartAnimation === index ? "heart-animation" : ""
                         }
                         onClick={() => onAddHeartProduct(item, index)}
                       >
                         <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
-                      </p>
+                      </p> */}
                     </div>
                     <div className="box-image">
                       {item?.image ? (
@@ -592,11 +587,11 @@ function ShopingStore({ initialShop }) {
                             )}
                           </h3>
                         </div>
-                        <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
-                        {/* <button onClick={() => handleAddProduct(item)}>
+                        {/* <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p> */}
+                        <button onClick={() => handleAddProduct(item)}>
                             <IoBagAddSharp />
                             <span>ເພິ່ມ</span>
-                          </button> */}
+                          </button>
                       </div>
                     </div>
                   </div>

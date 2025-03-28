@@ -1002,6 +1002,7 @@
                          display: flex;
                          justify-content: space-between;
                          align-items: end;
+                         /* flex-direction: column; */
 
                          & div {
 
@@ -1028,7 +1029,7 @@
                          }
 
                          & button {
-                             width: 100px;
+                             width: 70px;
                              padding: .4em;
                              border: none;
                              outline: none;
