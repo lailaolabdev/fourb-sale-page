@@ -81,7 +81,7 @@ function ShopingStore({ initialShop }) {
   const toast = useRef(null);
   const [categoryDatas, setCategoryDatas] = useState([]);
   const [shopInfo, setShopInfo] = useState()
-
+  const { cartList } = useSelector((state) => state?.salepage);
 
   const dispatch = useDispatch();
 
@@ -301,10 +301,14 @@ function ShopingStore({ initialShop }) {
   };
 
   const handleAddProduct = (data) => {
-    if (data?.amount <= 0) {
+    
+    const existingProductIndex = cartList.findIndex(item => item.id === data.id);
+
+    if (existingProductIndex !== -1) {
       return toast.current.show({
-        severity: "success",
-        detail: `ສິນຄ້າ ${data?.name} ໝົດສະຕ໋ອກແລ້ວ!`,
+        severity: "error",
+        summary: "ແຈ້ງເຕືອນ",
+        detail: "ສິນຄ້າໃນກະຕ່າມີແລ້ວ!",
       });
     } else {
       let _price = 0;
