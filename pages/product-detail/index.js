@@ -42,6 +42,7 @@ export default function index() {
   const [quantity, setQuantity] = useState(0);
   const [shopIdParams, setShopIdParams] = useState();
   const { patchBack } = useSelector((state) => state?.setpatch);
+  const { cartList } = useSelector((state) => state?.salepage);
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
@@ -84,12 +85,12 @@ export default function index() {
     if (router.query) {
       const queryKey = Object.keys(router.query)[0];
 
-      console.log({ queryKey }); 
+      console.log({ queryKey });
       if (queryKey) {
         // Split the query key by '_'
         const [shopId, name] = queryKey.split('_');
         setShopIdParams(shopId)
-        console.log({ shopId, name }); 
+        console.log({ shopId, name });
       }
     }
   }, [router.query]);
@@ -220,7 +221,7 @@ export default function index() {
       }
     }
 
-    console.log("productWithQuantity:::", productWithQuantity);
+    // console.log("productWithQuantity:::", productWithQuantity);
 
     // dispatch(addCartItem(productWithQuantity));
     // toast.current.show({
@@ -231,7 +232,8 @@ export default function index() {
   };
 
   const handleAddProduct = () => {
-    if (quantity > product?.amount) {
+    const existingProductIndex = cartList.findIndex(item => item.id === product.id);
+    if (existingProductIndex !== -1) {
       toast.current.show({
         severity: "error",
         summary: "ແຈ້ງເຕືອນ",
@@ -344,7 +346,7 @@ export default function index() {
 
   return (
     <>
-     <Head>
+      <Head>
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
@@ -360,7 +362,7 @@ export default function index() {
         <meta charSet="UTF-8" />
         <meta property="og:image" content={S3_URL + product?.image} />
         <meta name="twitter:image" content={S3_URL + product?.image} />
-      
+
       </Head>
 
       <Toast position="top-center" ref={toast} />
@@ -534,7 +536,7 @@ export default function index() {
         </div>
 
         <div className="card-description-product">
-         {product?.properties?.length> 0 && <div className="product-specifications">
+          {product?.properties?.length > 0 && <div className="product-specifications">
             <h4>ຂໍ້ມູນ ຄຸນນະສົມບົດ ສິນຄ້າ</h4>
             {product?.properties?.map((item, index) => (
               <div key={index}>
@@ -543,7 +545,7 @@ export default function index() {
               </div>
             ))}
           </div>}
-        {product?.descriptions?.length > 0 &&  <div className="product-specifications">
+          {product?.descriptions?.length > 0 && <div className="product-specifications">
             <h4>ລາຍລະອຽດສິນຄ້າ</h4>
 
             {product?.descriptions?.map((item, index) => (
