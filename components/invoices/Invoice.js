@@ -37,10 +37,11 @@ const Invoice = ({ invoiceData }) => {
                <Table striped bordered hover>
                   <thead>
                      <tr>
-                        <th>ລຳດັບ</th>
+                        <th>#</th>
                         <th>ລາຍລະອຽດສິນຄ້າ</th>
+                        <th className="text-end">ຈຳນວນ</th>
                         <th className="text-end">ລາຄາ</th>
-                        <th className="text-end">ລວມເປັນເງິນ</th>
+                        <th className="text-end">ເປັນເງິນ</th>
                      </tr>
                   </thead>
                   <tbody>
@@ -48,6 +49,7 @@ const Invoice = ({ invoiceData }) => {
                         <tr key={item.id}>
                            <td>{index + 1}</td>
                            <td>{item?.stock?.name ?? "-"}</td>
+                           <td>{item?.amount}</td>
                            <td className="text-end">{numberFormat(item?.stock?.price ?? 0)} {item?.stock?.currency ?? "ກີບ"}</td>
                            <td className="text-end">{numberFormat(item?.stock?.price * item?.amount ?? 0)} {item?.stock?.currency ?? "ກີບ"}</td>
                         </tr>
@@ -55,7 +57,7 @@ const Invoice = ({ invoiceData }) => {
                   </tbody>
                   <tfoot>
                      <tr>
-                        <td colSpan="3" className="text-end"><strong>Total</strong></td>
+                        <td colSpan="4" className="text-end"><strong>Total</strong></td>
                         <td className="text-end"><strong>{numberFormat(invoiceData?.sumPrice ?? 0)} ກີບ</strong></td>
                      </tr>
                   </tfoot>
