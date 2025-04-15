@@ -31,6 +31,7 @@ import EmptyImage from "@/components/salePage/EmptyImage";
 
 export default function index() {
   const router = useRouter();
+
   const [product, setProduct] = useState(null);
   const [stockAmount, setStockAmount] = useState(0);
   const toast = useRef(null);
@@ -43,6 +44,8 @@ export default function index() {
   const [shopIdParams, setShopIdParams] = useState();
   const { patchBack } = useSelector((state) => state?.setpatch);
   const { cartList } = useSelector((state) => state?.salepage);
+
+  // console.log("logs routers: ", router)
 
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
@@ -63,13 +66,11 @@ export default function index() {
 
   const {
     data: productDetail,
-    loading: loadingProduct,
-    refetch,
   } = useQuery(GET_STOCK, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-and-network",
     variables: {
       where: {
-        id: shopIdParams,
+        id: router.query.pid,
       },
     },
   });
@@ -85,13 +86,16 @@ export default function index() {
     if (router.query) {
       const queryKey = Object.keys(router.query)[0];
 
-      console.log({ queryKey });
       if (queryKey) {
         // Split the query key by '_'
         const [shopId, name] = queryKey.split('_');
         setShopIdParams(shopId)
-        console.log({ shopId, name });
       }
+
+      localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
+      // dispatch(getKeyPatch(router?.query));
+  
+
     }
   }, [router.query]);
 
@@ -131,17 +135,12 @@ export default function index() {
         const decodedItem = JSON.parse(base64Decode(router.query.item));
         setProduct(decodedItem);
       } catch (error) {
-        console.error("Failed to decode item data:", error);
-        setProduct(null); // Or handle the error appropriately
+        setProduct(null);
       }
     }
   }, [router.query.item]);
 
   useEffect(() => {
-    // if (product?.containImages) {
-    //   setPreviewImage(product?.containImages[0]);
-    // }else {
-    // }
     setPreviewImage(product?.image);
     if (product?.amount > 0) {
       setStockAmount(product?.amount - 1);
@@ -235,9 +234,9 @@ export default function index() {
     const existingProductIndex = cartList.findIndex(item => item.id === product.id);
     if (existingProductIndex !== -1) {
       toast.current.show({
-        severity: "error",
+        severity: "info",
         summary: "ແຈ້ງເຕືອນ",
-        detail: "ສິນຄ້າໃນສະຕ໋ອກບໍ່ພໍຂາຍ!",
+        detail: "ສິນຄ້ານີ້ເພິ່ມໃສ່ກະຕ່າແລ້ວ!",
       });
       return;
     }
@@ -328,20 +327,21 @@ export default function index() {
 
   // click the menu home
   const onCalbackToHome = async () => {
-    // Retrieve the state from local storage
-    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    // const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    const { id, pid, influencer, commissionForShopId } = router?.query;
 
-    // Construct the destination path based on available data
-    let destinationPath = `../shop/${idPreState?.id}`;
+    let destinationPath = `../shop/${id}`;
 
-    if (idPreState?.affiliateId) {
-      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
-      if (idPreState?.commissionForShopId) {
-        destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
-      }
+    if (influencer) {
+      destinationPath += `?influencer=${influencer}`;
+      // if (commissionForShopId) {
+      //   destinationPath += `&commissionForShopId=${commissionForShopId}`;
+      // }
     }
     router.replace(destinationPath);
   };
+
+  
 
 
   return (

@@ -115,3 +115,20 @@ export const GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE = gql`
     }
   }
 `;
+
+export const GET_COMMISSION_BY_INFLUENCER = gql`
+query GetCommissionByInfluencer($where: ShopSettingCommissionInfulancerWhereInput) {
+  getCommissionByInfluencer(where: $where) {
+    id 
+    shop_name 
+    infulancer_name
+    commission
+    deduction
+    type
+    isDeleted
+    createdAt
+    updatedAt
+    note
+  }
+}
+`;

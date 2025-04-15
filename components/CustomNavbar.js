@@ -97,16 +97,21 @@ export default function CustomNavbar({ shopDetail }) {
   }, []);
 
   useEffect(() => {
-    const _checkdatas = cartList.filter((item) => item?.shop === patchBack?.id);
-    if (_checkdatas) {
-      const totalQty = cartList.reduce((acc, data) => {
-        return acc + data?.qty;
-      }, 0);
+    // const _data = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    // if (_data.id === cartList[0].shop) {
 
-      setShopId(patchBack?.id)
 
-      setDataBage(totalQty);
-    }
+      const _checkdatas = cartList.filter((item) => item?.shop === patchBack?.id);
+      if (_checkdatas) {
+        const totalQty = cartList.reduce((acc, data) => {
+          return acc + data?.qty;
+        }, 0);
+
+        setShopId(patchBack?.id)
+
+        setDataBage(totalQty);
+      }
+    // }
   }, [cartList, patchBack]);
 
 
@@ -127,7 +132,7 @@ export default function CustomNavbar({ shopDetail }) {
   }, [shopDetail, loadShopData]);
 
   // useEffect(() => {
-    
+
   //   if (shopDetail) {
 
   //     setShopData(shopDetail)
@@ -171,11 +176,11 @@ export default function CustomNavbar({ shopDetail }) {
       icon: <FiHome style={{ fontSize: 18 }} />,
       url: "/home",
     },
-    {
-      title: "ກ່ຽວກັບຮ້ານ",
-      icon: <FaPage4 style={{ fontSize: 18 }} />,
-      url: "../about-us",
-    },
+    // {
+    //   title: "ກ່ຽວກັບຮ້ານ",
+    //   icon: <FaPage4 style={{ fontSize: 18 }} />,
+    //   url: "../about-us",
+    // },
     // {
     //   title: "ຕິດຕໍ່ພວກເຮົາ",
     //   icon: <FaChalkboardUser style={{ fontSize: 18 }} />,
@@ -192,15 +197,15 @@ export default function CustomNavbar({ shopDetail }) {
     //   url: "../policy",
     // },
 
-    {
-      title: clientData?.email_verified ? "ອອກຈາກລະບົບ" : "ລ໋ອກອິນ",
-      icon: clientData?.email_verified ? (
-        <HiOutlineLogout style={{ fontSize: 18 }} />
-      ) : (
-        <IoMdLogIn style={{ fontSize: 18 }} />
-      ),
-      url: clientData?.email_verified ? "/sign-out" : "/sigin",
-    },
+    // {
+    //   title: clientData?.email_verified ? "ອອກຈາກລະບົບ" : "ລ໋ອກອິນ",
+    //   icon: clientData?.email_verified ? (
+    //     <HiOutlineLogout style={{ fontSize: 18 }} />
+    //   ) : (
+    //     <IoMdLogIn style={{ fontSize: 18 }} />
+    //   ),
+    //   url: clientData?.email_verified ? "/sign-out" : "/sigin",
+    // },
   ];
 
   useEffect(() => {
@@ -246,14 +251,12 @@ export default function CustomNavbar({ shopDetail }) {
   const onMenuLink = (menu) => {
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
 
+
     // Construct the destination path based on available data
     let destinationPath = `../shop/${idPreState?.id}`;
 
-    if (idPreState?.affiliateId) {
-      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
-      if (idPreState?.commissionForShopId) {
-        destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
-      }
+    if (idPreState?.influencer) {
+      destinationPath += `?influencer=${idPreState.influencer}`;
     }
     if (menu?.url === "/sigin") {
       setShowLogin(true);
@@ -271,11 +274,12 @@ export default function CustomNavbar({ shopDetail }) {
     // Retrieve the state from local storage
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
 
+
     // Construct the destination path based on available data
     let destinationPath = `../shop/${idPreState?.id}`;
 
-    if (idPreState?.affiliateId) {
-      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+    if (idPreState?.influencer) {
+      destinationPath += `?influencer=${idPreState.influencer}`;
       if (idPreState?.commissionForShopId) {
         destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
       }
@@ -382,8 +386,8 @@ export default function CustomNavbar({ shopDetail }) {
                 <FiHome style={{ fontSize: 15 }} />
                 ໜ້າຫລັກ
               </li>
-              <li onClick={() => navigate.push("../about-us")}>
-                <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບຮ້ານ</li>
+              {/* <li onClick={() => navigate.push("../about-us")}>
+                <FaPage4 style={{ fontSize: 15 }} />ກ່ຽວກັບຮ້ານ</li> */}
               {/* <li onClick={() => navigate.push("../contact-us")}>
               <FaChalkboardUser style={{ fontSize: 15 }} />
                 ຕິດຕໍ່ພວກເຮົາ

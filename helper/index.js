@@ -1,9 +1,10 @@
 import moment from "moment";
 
 // export const CORLOR_APP = "#3c169b";
-export const CORLOR_APP = "linear-gradient(23deg, rgba(47,110,163,1) 0%, rgba(90,81,160,1) 58%)";
-export const CORLOR_WHITE = "#FFF";
-export const COLOR_TEXT = "rgba(47,110,163,1)";
+// export const CORLOR_APP = "linear-gradient(23deg, rgba(47,110,163,1) 0%, rgba(90,81,160,1) 58%)";
+export const CORLOR_APP = "linear-gradient(45deg, #5D0072 0%, #DB1237 100%)"; 
+     export const CORLOR_WHITE = "#FFF";
+export const COLOR_TEXT = "#DB1237";
 
 export const S3_URL = "https://lailaocf-bucket.s3.amazonaws.com/files/";
 export const S3_URL_MEDIUM = "https://lailaocf-bucket.s3.amazonaws.com/resized/medium/";
@@ -49,9 +50,9 @@ export const covertTimeZone = (datatime, time) => {
 // export const SOCKET_SERVER_URI = "wss://api-dev.bbbb.com.la/";
 
 // Production
-export const SERVER_URI = "https://api.bbbb.com.la/";
-export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
+// export const SERVER_URI = "https://api.bbbb.com.la/";
+// export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
 
 // localhost
-// export const SERVER_URI = "http://localhost:7070/";
-// export const SOCKET_SERVER_URI = "ws://localhost:7070/" 
+export const SERVER_URI = "http://localhost:7070/";
+export const SOCKET_SERVER_URI = "ws://localhost:7070/" 

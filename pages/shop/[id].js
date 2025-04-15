@@ -1,27 +1,16 @@
 "use client";
 
-import {
-  GET_SHOP,
-  GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE,
-  SHOP,
-} from "@/apollo";
-import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
-import { GET_CATEGORYS, GET_STOCKS } from "@/apollo/stocks";
-import CustomNavbar from "@/components/CustomNavbar";
-import LoadingComponent from "@/components/LoadingComponent";
-import ModalPreView from "@/components/ModalPreview";
-import FooterComponent from "@/components/salePage/FooterComponent";
-import PaginationComponent from "@/components/salePage/PaginationComponent";
-import {
-  COMMISSION_OFFICE,
-  S3_URL,
-  S3_URL_MEDIUM,
-  calculateRoundedValue,
-  numberFormat,
-} from "@/helper";
-import { addCartItem } from "@/redux/salepage/cartReducer";
 import { useLazyQuery, useMutation } from "@apollo/client";
+import { IoBagAddSharp } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { Toast } from "primereact/toast";
+import { Paginator } from "primereact/paginator";
+import _ from "lodash";
+import Head from "next/head";
+import { Form } from "react-bootstrap"
 import { useRouter } from "next/router";
+
+// icons
 import React, {
   useCallback,
   useEffect,
@@ -29,43 +18,52 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { IoBagAddSharp } from "react-icons/io5";
-import { useDispatch, useSelector } from "react-redux";
-import Head from "next/head";
-import EmptyImage from "@/components/salePage/EmptyImage";
-import CustomPagination from "@/components/CustomPagination";
-import SwiperComponent from "@/components/SwiperComponent";
-import { Toast } from "primereact/toast";
-import authClient from "@/autClient";
-import { HiMiniShoppingBag } from "react-icons/hi2";
-import { encode as base64Encode } from "js-base64";
-import { MdArrowBackIos } from "react-icons/md";
-import { GrNext } from "react-icons/gr";
-import { Paginator } from "primereact/paginator";
+
+// store
+import { addCartItem } from "@/redux/salepage/cartReducer";
+
+// constants import
+import {
+  GET_COMMISSION_BY_INFLUENCER,
+  GET_SHOP,
+  SHOP,
+} from "@/apollo";
+import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
+import { GET_CATEGORYS, GET_STOCKS } from "@/apollo/stocks";
+import CustomNavbar from "@/components/CustomNavbar";
+import LoadingComponent from "@/components/LoadingComponent";
+import FooterComponent from "@/components/salePage/FooterComponent";
 import { getKeyPatch } from "@/redux/setPatch/patchBack";
+import EmptyImage from "@/components/salePage/EmptyImage";
+import SwiperComponent from "@/components/SwiperComponent";
+import authClient from "@/autClient";
 import useWindowDimensions from "@/helper/useWindowDimensions";
-import { Rating } from "primereact/rating";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import { UPDATE_STOCK, UPDATE_STOCK_HEART } from "@/apollo/order/mutation";
-import { formatNumberFavorite } from "@/const";
-import _ from "lodash";
-import { Form } from "react-bootstrap"
+import { UPDATE_STOCK_HEART } from "@/apollo/order/mutation";
+
+// helper import
+
+import {
+  COMMISSION_OFFICE,
+  S3_URL,
+  S3_URL_MEDIUM,
+  calculateRoundedValue,
+  numberFormat,
+} from "@/helper";
 
 function ShopingStore({ initialShop }) {
   const router = useRouter();
   const {
     liveId,
     live,
-    affiliateId,
+    influencer,
     id,
-    shopForAffiliateId,
-    commissionForShopId,
   } = router.query;
   const shopId = id;
+  const influencerId = influencer;
 
   const { height, width } = useWindowDimensions();
 
-  const itemsPerPage = 25;
+  const itemsPerPage = 50;
   const [isOpenView, setIsOpenView] = useState(false);
   const parentDivRef = useRef(null);
   const [productLists, setProductsLists] = useState([]);
@@ -80,7 +78,6 @@ function ShopingStore({ initialShop }) {
   const [filterNew, setFilterNew] = useState();
   const toast = useRef(null);
   const [categoryDatas, setCategoryDatas] = useState([]);
-  const [shopInfo, setShopInfo] = useState()
   const { cartList } = useSelector((state) => state?.salepage);
 
   const dispatch = useDispatch();
@@ -101,8 +98,8 @@ function ShopingStore({ initialShop }) {
 
   const [
     getShopCommissionFor,
-    { data: shopDataCommissionFor, loading: shopLoading },
-  ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
+    { data: shopDataCommissionFor },
+  ] = useLazyQuery(GET_COMMISSION_BY_INFLUENCER, {
     fetchPolicy: "cache-and-network",
   });
 
@@ -111,49 +108,39 @@ function ShopingStore({ initialShop }) {
     { data: loadCategoryData, loading: loadingCategoryDatas },
   ] = useLazyQuery(GET_CATEGORYS, { fetchPolicy: "cache-and-network" });
 
-  const [updateStock] = useMutation(UPDATE_STOCK);
+  // const [updateStock] = useMutation(UPDATE_STOCK);
   const [updateStockHeart] = useMutation(UPDATE_STOCK_HEART);
 
   // click to scrolling to left and right
   const scrollContainerRef = useRef(null);
-
-  const scrollLeft = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft -= 100; // Adjust the value as needed
-    }
-  };
-
-  const scrollRight = () => {
-    if (scrollContainerRef.current) {
-      scrollContainerRef.current.scrollLeft += 100; // Adjust the value as needed
-    }
-  };
-
-  const totalPages = Math.ceil(productTotal / itemsPerPage);
 
   const handlePageChange = useCallback((newPage) => {
     setCurrentPage(newPage?.page);
     setCount(newPage?.first);
   }, []);
 
-  const _commissionForAffiliate =
-    shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
+  const _commissionForAffiliate = shopDataCommissionFor?.getCommissionByInfluencer?.commission;
 
-  // get patch key to localstorage
+
   useEffect(() => {
     localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
     dispatch(getKeyPatch(router?.query));
-  }, [shopId]);
 
-  useEffect(() => {
-    getShopCommissionFor({
-      variables: {
-        where: {
-          id: commissionForShopId,
+    if (shopId) {
+      handleFetchDataPromise(shopId);
+    }
+
+    if (influencerId) {
+      getShopCommissionFor({
+        variables: {
+          where: {
+            infulancer: influencerId,
+            shop: shopId
+          },
         },
-      },
-    });
-  }, [commissionForShopId]);
+      });
+    }
+  }, [router?.query]);
 
   useEffect(() => {
     if (loadCategoryData) {
@@ -189,33 +176,6 @@ function ShopingStore({ initialShop }) {
     };
   }, []);
 
-  useEffect(() => {
-    getShopData({
-      variables: {
-        where: {
-          id: shopId,
-        },
-      },
-    });
-
-    getExchangeRate({
-      variables: {
-        where: {
-          shop: shopId,
-        },
-      },
-    });
-
-    getCategoryData({
-      variables: {
-        where: {
-          shop: shopId,
-          isDeleted: false,
-        },
-      },
-    });
-
-  }, [shopId]);
 
   useEffect(() => {
     if (loadShopData?.shop) {
@@ -223,6 +183,33 @@ function ShopingStore({ initialShop }) {
       localStorage.setItem("SP_SHOP_DATA", JSON.stringify(loadShopData))
     }
   }, [loadShopData]);
+
+  const handleFetchDataPromise = async (_shopId) => {
+    await getShopData({
+      variables: {
+        where: {
+          id: _shopId,
+        },
+      },
+    });
+
+    await getExchangeRate({
+      variables: {
+        where: {
+          shop: _shopId,
+        },
+      },
+    });
+
+    await getCategoryData({
+      variables: {
+        where: {
+          shop: _shopId,
+          isDeleted: false,
+        },
+      },
+    });
+  }
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
@@ -247,7 +234,6 @@ function ShopingStore({ initialShop }) {
         _where = {
           ..._where,
           amount: parseInt(isStock),
-
         };
       }
 
@@ -265,12 +251,12 @@ function ShopingStore({ initialShop }) {
   };
 
 
-
   const _calculatePriceWithExchangeRate = (price, currency, reduction) => {
     let _price = 0;
 
+    // Check if isExChangeRate is defined before accessing its properties
     if (["BAHT", "ບາດ"].includes(currency)) {
-      _price = price * isExChangeRate?.baht;
+      _price = price * (isExChangeRate?.baht || 0);
     } else if (["USD", "ໂດລາ"].includes(currency)) {
       _price = price * (isExChangeRate?.usd || 0);
     } else {
@@ -279,29 +265,30 @@ function ShopingStore({ initialShop }) {
 
     let priceProduct = 0;
 
-    if (commissionForShopId) {
+    // Make sure influencerId is defined before using it
+    if (influencerId) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
       priceProduct = _price;
     }
 
+    // The commission calculation had a logic error
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-    } else {
-      priceProduct = _price;
     }
 
+    // The reduction calculation was incorrect
     // ຄຳນວນສ່ວນຫຼຸດ
     if (reduction > 0) {
-
-      priceProduct = (priceProduct * reduction) / 100;
+      // Apply reduction as a discount (subtract the percentage)
+      priceProduct = priceProduct - (priceProduct * reduction) / 100;
     }
 
     return calculateRoundedValue(priceProduct / 1000) * 1000;
   };
 
   const handleAddProduct = (data) => {
-    
+
     const existingProductIndex = cartList.findIndex(item => item.id === data.id);
 
     if (existingProductIndex !== -1) {
@@ -323,7 +310,7 @@ function ShopingStore({ initialShop }) {
 
       let priceProduct = 0;
 
-      if (commissionForShopId) {
+      if (influencerId) {
         priceProduct = _price + (_price * _commissionForAffiliate) / 100;
       } else {
         priceProduct = _price;
@@ -331,13 +318,9 @@ function ShopingStore({ initialShop }) {
 
       if (shopDetail?.commissionService) {
         priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-      } else {
-        priceProduct = _price;
       }
 
       const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
-
-     
 
       const { __typename, ...restData } = data;
 
@@ -364,7 +347,7 @@ function ShopingStore({ initialShop }) {
     const shortUrl = `${newItem?.id}_${newItem?.name}`;
     router.push({
       pathname: "../product-detail",
-      query:  shortUrl 
+      query: shortUrl
     })
   }
 
@@ -508,7 +491,7 @@ function ShopingStore({ initialShop }) {
         </p> */}
 
           <div className="card-items">
-            {!stockData && loadingStock ? (
+            {(loadingStock && !stockData) ? (
               <LoadingComponent titleLoading="ກຳລັງໂຫລດຂໍ້ມູນ...!!" />
             ) : (
               <>
@@ -593,9 +576,9 @@ function ShopingStore({ initialShop }) {
                         </div>
                         {/* <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p> */}
                         <button onClick={() => handleAddProduct(item)}>
-                            <IoBagAddSharp />
-                            <span>ເພິ່ມ</span>
-                          </button>
+                          <IoBagAddSharp />
+                          <span>ເພິ່ມ</span>
+                        </button>
                       </div>
                     </div>
                   </div>

@@ -72,7 +72,7 @@ export default function CartDetail() {
 
   // apollo client hooks
   const [createOrderSalepage, { loading: loadingPayment }] = useMutation(CREATE_PAYMENT_LINK_WITH_PHAPAY);
-  const [loadOrderGroupWithSalepage, { data: orderGroupWithSalepage, loading: loadingOrdeWithSalepage }] = useLazyQuery(GET_ORDERGROUPS_WITH_SALEPAGE, { fetchPolicy: 'cache-and-network' })
+  const [loadOrderGroupWithSalepage, { data: orderGroupWithSalepage }] = useLazyQuery(GET_ORDERGROUPS_WITH_SALEPAGE, { fetchPolicy: 'cache-and-network' })
 
   const { data: onSubscriptionPaymentLink } = useSubscription(ON_RECEIVE_PAYMENT_LINK, {
     variables: {
@@ -189,15 +189,17 @@ export default function CartDetail() {
   const handleConfirmRemoveCart = () => {
     const patchkey = JSON.parse(localStorage.getItem("PATCH_KEY"));
 
-    const checkBeforeRemove = cartDatas.map(
-      (item) => item?.shop === patchkey?.id
-    );
+    // console.log("logs cartdata: ", cartDatas, patchkey)
+    // const checkBeforeRemove = cartDatas.map(
+    //   (item) => item?.shop === patchkey?.id
+    // );
+
     // setCartDatas(checkBeforeRemove)
-    if (checkBeforeRemove[0]) {
+    // if (checkBeforeRemove[0]) {
       dispatch(setOrders([]));
       dispatch(removeCartItem());
       setShowConfirmRemove(false);
-    }
+    // }
 
   };
 
@@ -208,8 +210,8 @@ export default function CartDetail() {
     // Construct the destination path based on available data
     let destinationPath = `../shop/${idPreState?.id}`;
 
-    if (idPreState?.affiliateId) {
-      destinationPath += `?affiliateId=${idPreState.affiliateId}`;
+    if (idPreState?.influencer) {
+      destinationPath += `?influencer=${idPreState.influencer}`;
       if (idPreState?.commissionForShopId) {
         destinationPath += `&commissionForShopId=${idPreState.commissionForShopId}`;
       }
@@ -398,7 +400,7 @@ export default function CartDetail() {
                   {/* {patchBack?.id === "63ec6d38c617221e6ccf5edc" ? */}
                   {patchBack?.id === "67d7c40e39135102068ccec6" ?
                     <Button disabled={loadingPayment} style={{ background: CORLOR_APP, width: '100%' }} onClick={onPaymentWithPhapay} >{loadingPayment ? "ກຳລັງຊຳລະ..." : "ຊຳລະເງິນ"}</Button>
-                    : <Button style={{ background: CORLOR_APP, width: '100%' }} onClick={handleConfirmCart} >ຈ່າຍເງິນ</Button>}
+                    : <Button style={{ background: CORLOR_APP, width: '100%', border:'none', padding: 10 }} onClick={handleConfirmCart} >ຈ່າຍເງິນ</Button>}
                   {/* <CustomButton
                 type="submit"
                 text="ສັ່ງຊື້"
@@ -414,10 +416,10 @@ export default function CartDetail() {
             </div>
           ) : (
             <div style={{ padding: '2em', overflow: 'hidden', display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-              <Alert style={{ width: "100%", textAlign: 'center' }} variant="warning">
-                <small>ກະລຸນາເລືອກສິນຄ້າກ່ອນ!</small>
-              </Alert>
-              <img style={{ width: '100%', maxWidth: 400, height: '100%' }} src="https://test.techhut.com.bd/images/no-item-in-cart.gif" />
+              {/* <Alert style={{ width: "100%", textAlign: 'center' }} variant="warning">
+              </Alert> */}
+              <img style={{ width: '100%', maxWidth: 400, height: '100%' }} src="https://silkbooth.com/media/wysiwyg/test/Cart_empty_page.gif" />
+              <small>ກະລຸນາເລືອກສິນຄ້າກ່ອນ!</small>
             </div>
           )}
         </>

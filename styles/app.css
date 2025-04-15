@@ -4,6 +4,7 @@
      --colorMain: linear-gradient(26deg,
              rgba(47, 110, 163, 1) 0%,
              rgba(90, 81, 160, 1) 58%);
+     --colorMain2: linear-gradient(45deg, #5D0072 0%, #DB1237 100%);
      --colorWhite: #fff;
      --colorShadow: #f2f2f2;
      --colorText: #0c3763bb;
@@ -18,7 +19,7 @@
      --boxShadowItem: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
      --colorRed: #e31f1f;
      --colorGreen: rgb(8, 132, 8);
-     --colorText2: #0c2440f;
+     --colorText2: #0c2440f; 
  }
 
  * {
@@ -261,7 +262,7 @@
          display: flex;
          justify-content: space-between;
          align-items: center;
-         background: var(--colorMain);
+         background: var(--colorMain2);
          color: var(--colorWhite);
          padding: 0 6em;
 

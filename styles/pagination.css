@@ -1,8 +1,10 @@
 /* Pagination.css */
 :root {
-    --colorMain: linear-gradient(23deg,
+    /* --colorMain: linear-gradient(23deg,
             rgba(47, 110, 163, 1) 0%,
-            rgba(90, 81, 160, 1) 58%);
+            rgba(90, 81, 160, 1) 58%); */
+     --colorMain: linear-gradient(45deg, #5D0072 0%, #DB1237 100%);
+
     --colorWhite: #fff;
     --colorShadow: #f2f2f2;
     --colorText: #0c3763bb;
