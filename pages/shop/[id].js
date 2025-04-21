@@ -37,7 +37,6 @@ import { getKeyPatch } from "@/redux/setPatch/patchBack";
 import EmptyImage from "@/components/salePage/EmptyImage";
 import SwiperComponent from "@/components/SwiperComponent";
 import authClient from "@/autClient";
-import useWindowDimensions from "@/helper/useWindowDimensions";
 import { UPDATE_STOCK_HEART } from "@/apollo/order/mutation";
 
 // helper import
@@ -60,8 +59,6 @@ function ShopingStore({ initialShop }) {
   } = router.query;
   const shopId = id;
   const influencerId = influencer;
-
-  const { height, width } = useWindowDimensions();
 
   const itemsPerPage = 50;
   const [isOpenView, setIsOpenView] = useState(false);
@@ -266,7 +263,7 @@ function ShopingStore({ initialShop }) {
     let priceProduct = 0;
 
     // Make sure influencerId is defined before using it
-    if (influencerId) {
+    if (influencerId && _commissionForAffiliate) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
       priceProduct = _price;
@@ -279,10 +276,10 @@ function ShopingStore({ initialShop }) {
 
     // The reduction calculation was incorrect
     // ຄຳນວນສ່ວນຫຼຸດ
-    if (reduction > 0) {
-      // Apply reduction as a discount (subtract the percentage)
+    if (reduction > 0 && reduction !== null) {
       priceProduct = priceProduct - (priceProduct * reduction) / 100;
     }
+
 
     return calculateRoundedValue(priceProduct / 1000) * 1000;
   };
@@ -310,7 +307,7 @@ function ShopingStore({ initialShop }) {
 
       let priceProduct = 0;
 
-      if (influencerId) {
+      if (influencerId && _commissionForAffiliate) {
         priceProduct = _price + (_price * _commissionForAffiliate) / 100;
       } else {
         priceProduct = _price;
@@ -500,6 +497,7 @@ function ShopingStore({ initialShop }) {
                     className="item-now"
                     key={index}
                     onClick={() => handleProductPreview(item)}
+                    style={{opacity: item?.amount <= 0 ? 0.5 : 1}}
                   >
                     <div
                       className="favorite-view"
@@ -575,7 +573,7 @@ function ShopingStore({ initialShop }) {
                           </h3>
                         </div>
                         {/* <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p> */}
-                        <button onClick={() => handleAddProduct(item)}>
+                        <button disabled={item?.amount > 0 ? false: true} onClick={() => handleAddProduct(item)}>
                           <IoBagAddSharp />
                           <span>ເພິ່ມ</span>
                         </button>
