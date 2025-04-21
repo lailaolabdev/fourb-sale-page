@@ -65,12 +65,13 @@ export default function payment() {
   const {
     liveId,
     live,
-    affiliateId,
+    influencer,
     id,
     shopForAffiliateId,
     commissionForShopId,
   } = router.query;
   // const shopId = id;
+  const influencerId = influencer;
 
   const paperStyle = {
     borderRadius: "1em",
@@ -347,7 +348,7 @@ export default function payment() {
   const handleGoback = () => {
     let idPreState = {
       shopId: shopId,
-      affiliateId: affiliateId,
+      affiliateId: influencerId,
     };
 
     if (commissionForShopId) {
@@ -359,11 +360,11 @@ export default function payment() {
 
     const destinationPath =
       idPreState.shopId &&
-        idPreState.affiliateId &&
+        idPreState.influencerId &&
         idPreState.commissionForShopId
-        ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}&commissionForShopId=${idPreState.commissionForShopId}`
-        : idPreState.shopId && idPreState.affiliateId
-          ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.affiliateId}`
+        ? `../cartdetail/${idPreState.shopId}?influencerId=${idPreState.influencerId}&commissionForShopId=${idPreState.commissionForShopId}`
+        : idPreState.shopId && idPreState.influencerId
+          ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.influencerId}`
           : `../cartdetail/${idPreState?.shopId}`;
     console.log("path_payment:----->", destinationPath);
     router.push(destinationPath);
@@ -493,10 +494,10 @@ export default function payment() {
         // infulancer_percent: idPreState?.commissionForShopId ? _commissionForAffiliate : 0,
       };
 
-      if (idPreState?.affiliateId) {
+      if (idPreState?.influencerId) {
         _orderGroup = {
           ..._orderGroup,
-          infulancer: idPreState?.affiliateId,
+          infulancer: idPreState?.influencerId,
         };
       }
       if (idPreState?.commissionForShopId) {
