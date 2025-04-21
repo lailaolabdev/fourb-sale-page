@@ -497,24 +497,23 @@ function ShopingStore({ initialShop }) {
                     className="item-now"
                     key={index}
                     onClick={() => handleProductPreview(item)}
-                    style={{opacity: item?.amount <= 0 ? 0.5 : 1}}
+                    style={{ opacity: item?.amount <= 0 ? 0.5 : 1 }}
                   >
                     <div
                       className="favorite-view"
                       onClick={(e) => e.stopPropagation()}
                     >
-                      {/* <p
-                        className={
-                          heartAnimation === index ? "heart-animation" : ""
-                        }
-                        onClick={() => onAddHeartProduct(item, index)}
-                      >
-                        <FaHeart style={{ fontSize: 20, color: "#483D8B" }} />
-                      </p> */}
+
                     </div>
                     <div className="box-image">
                       {item?.image ? (
-                        <img src={S3_URL_MEDIUM + item?.image} />
+                        <img
+                          src={S3_URL_MEDIUM + item?.image}
+                          onError={(e) => {
+                            e.target.onerror = null; // Prevent infinite loop
+                            e.target.src = S3_URL + item?.image;
+                          }}
+                        />
                       ) : (
                         <EmptyImage />
                       )}
@@ -573,7 +572,7 @@ function ShopingStore({ initialShop }) {
                           </h3>
                         </div>
                         {/* <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p> */}
-                        <button disabled={item?.amount > 0 ? false: true} onClick={() => handleAddProduct(item)}>
+                        <button disabled={item?.amount > 0 ? false : true} onClick={() => handleAddProduct(item)}>
                           <IoBagAddSharp />
                           <span>ເພິ່ມ</span>
                         </button>
@@ -602,6 +601,15 @@ function ShopingStore({ initialShop }) {
       <FooterComponent />
     </>
   );
+}
+
+function ImageWithFallback({ item }) {
+  const [url, setUrl] = useState(`${S3_URL_MEDIUM}${item.image}`);
+  return (<img src={url} onError={(e) => {
+    if (url !== `${S3_URL}${item.image}`) {
+      setUrl(`${S3_URL}${item.image}`);
+    }
+  }} />);
 }
 
 export async function getServerSideProps(context) {
