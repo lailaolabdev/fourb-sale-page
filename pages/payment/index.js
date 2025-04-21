@@ -450,7 +450,9 @@ export default function payment() {
 
   const handleConfirmBank = async () => {
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    const localShop = JSON.parse(localStorage.getItem("SP_SHOP_DATA"));
 
+    console.log("logs idPreState: ", idPreState, localShop.shop)
     try {
       setIsValidate(false);
       setOpenSelectBank(false);
@@ -491,13 +493,19 @@ export default function payment() {
         phone,
         logistic,
         destinationLogistic: connectField,
-        // infulancer_percent: idPreState?.commissionForShopId ? _commissionForAffiliate : 0,
       };
 
-      if (idPreState?.influencerId) {
+      if (localShop?.shop?.commissionAffiliate) {
         _orderGroup = {
           ..._orderGroup,
-          infulancer: idPreState?.influencerId,
+          infulancer_percent: localShop?.shop?.commision,
+        };
+      }
+
+      if (idPreState?.influencer) {
+        _orderGroup = {
+          ..._orderGroup,
+          infulancer: idPreState?.influencer,
         };
       }
       if (idPreState?.commissionForShopId) {
@@ -527,49 +535,6 @@ export default function payment() {
         setQrCodeUrl(_preLink?.redirectURL)
       }
 
-      // .then(async (message) => {
-      //   const dataResponse = message?.data?.createQrWithPaymentGateway;
-
-      //   let compareData = {
-      //     ...dataResponse,
-      //     shopId: shopId,
-      //     amountPaided: totalPrice,
-      //   };
-      //   dispatch(setDataCompleteds(compareData));
-      //   setDataCompleted(compareData);
-      //   setQrCodeData(dataResponse?.qrCode);
-
-      //   /* ------ use bcel one defalt ---------- */
-      //   setGetOrderId(message?.data?.createQrWithPaymentGateway?.data?.id);
-
-      //   if (dataResponse && dataResponse.appLink) {
-      //     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-      //     const isDeepLink =
-      //       dataResponse.appLink.startsWith("onepay://") ||
-      //       dataResponse.appLink.startsWith("someOtherCustomScheme://"); // Add other schemes as needed
-
-      //     if (isDeepLink) {
-      //       if (isIOS) {
-      //         window.location.href = dataResponse.appLink;
-      //       } else {
-      //         const iframe = document.createElement("iframe");
-      //         iframe.style.display = "none";
-      //         iframe.src = dataResponse.appLink;
-      //         document.body.appendChild(iframe);
-      //         setTimeout(() => {
-      //           document.body.removeChild(iframe);
-      //         }, 1000);
-      //       }
-      //     } else {
-      //       console.log(
-      //         "Not a deep link, might open in a new tab:",
-      //         dataResponse.appLink
-      //       );
-      //     }
-      //   }
-
-      //   return;
-      // });
       return;
     } catch (error) {
       console.error("Error creating order:", error);
