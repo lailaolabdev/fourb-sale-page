@@ -92,7 +92,7 @@ export default function index() {
 
       // localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
       // dispatch(getKeyPatch(router?.query));
-  
+
 
     }
   }, [router.query]);
@@ -157,9 +157,9 @@ export default function index() {
   }, [loadExchangeRate?.exchangeRate]);
 
   const _calculatePriceWithExchangeRate = (price, currency, reduction) => {
-    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
-    const {id, pid, influencer, commissionForShopId } = idPreState;
-    const influencerId = influencer;
+    let idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    const { id, pid, influencer, commissionForShopId } = idPreState;
+    let influencerId = influencer;
     let _price = 0;
 
     if (["BAHT", "ບາດ"].includes(currency)) {
@@ -181,10 +181,10 @@ export default function index() {
 
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-    }  
+    }
 
-     // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
-     if (influencerId && shopDetail?.commissionAffiliate) {
+    // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
+    if (influencerId && shopDetail?.commissionAffiliate) {
       priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
     }
 
@@ -196,7 +196,7 @@ export default function index() {
     return calculateRoundedValue(priceProduct / 1000) * 1000;
   };
 
-  
+
 
   const handleAddProduct = () => {
     const existingProductIndex = cartList.findIndex(item => item.id === product.id);
@@ -231,8 +231,8 @@ export default function index() {
     // ຄ່າບໍລິການຂອງລະບົບ
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-    } 
-    
+    }
+
     // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
     if (shopDetail?.commissionAffiliate) {
       priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
@@ -314,7 +314,7 @@ export default function index() {
     router.replace(destinationPath);
   };
 
-  
+
 
 
   return (
