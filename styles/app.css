@@ -547,7 +547,7 @@
  .card-contact-shop {
      position: fixed;
      bottom: 1em;
-     left: 1em;
+     right: 1em;
      z-index: 99;
      width: 45px;
      height: 45px;

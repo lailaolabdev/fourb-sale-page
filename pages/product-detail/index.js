@@ -45,8 +45,6 @@ export default function index() {
   const { patchBack } = useSelector((state) => state?.setpatch);
   const { cartList } = useSelector((state) => state?.salepage);
 
-  // console.log("logs routers: ", router)
-
   const [getExchangeRate, { data: loadExchangeRate }] = useLazyQuery(
     GET_EXCHANGRATE,
     { fetchPolicy: "network-only" }
@@ -70,7 +68,7 @@ export default function index() {
     fetchPolicy: "cache-and-network",
     variables: {
       where: {
-        id: router.query.pid,
+        id: router.query.id,
       },
     },
   });
@@ -92,7 +90,7 @@ export default function index() {
         setShopIdParams(shopId)
       }
 
-      localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
+      // localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
       // dispatch(getKeyPatch(router?.query));
   
 
@@ -171,6 +169,7 @@ export default function index() {
 
     let priceProduct = 0;
 
+    // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
     if (patchBack?.commissionForShopId) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
@@ -179,8 +178,11 @@ export default function index() {
 
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-    } else {
-      priceProduct = _price;
+    }  
+
+     // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
+     if (shopDetail?.commissionAffiliate) {
+      priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
     }
 
     // ຄຳນວນສ່ວນຫຼຸດ
@@ -191,44 +193,7 @@ export default function index() {
     return calculateRoundedValue(priceProduct / 1000) * 1000;
   };
 
-  // add product to cart
-  const onAddToCart = () => {
-    let productWithQuantity = {};
-
-    // Calculate the new price based on the reduction percentage
-    const reduction = product.reduction ?? 0;
-    const newPrice = product.price - (product.price * reduction) / 100;
-
-    if (quantity > 1) {
-      productWithQuantity = {
-        ...product,
-        shop: patchBack?.id,
-        newQuantity: quantity,
-      };
-      // Only update the price if there is a reduction
-      if (product.reduction) {
-        productWithQuantity.price = newPrice;
-      }
-    } else {
-      productWithQuantity = {
-        ...product,
-        shop: patchBack?.id,
-      };
-      // Only update the price if there is a reduction
-      if (product.reduction) {
-        productWithQuantity.price = newPrice;
-      }
-    }
-
-    // console.log("productWithQuantity:::", productWithQuantity);
-
-    // dispatch(addCartItem(productWithQuantity));
-    // toast.current.show({
-    //   severity: "success",
-    //   summary: "ສຳເລັດ",
-    //   detail: "ເພິ່ມສິນຄ້າເຂົ້າກະຕ່າຂອງທ່ານແລ້ວ",
-    // });
-  };
+  
 
   const handleAddProduct = () => {
     const existingProductIndex = cartList.findIndex(item => item.id === product.id);
@@ -253,16 +218,21 @@ export default function index() {
 
     let priceProduct = 0;
 
+    // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
     if (patchBack?.commissionForShopId) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
       priceProduct = _price;
     }
 
+    // ຄ່າບໍລິການຂອງລະບົບ
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-    } else {
-      priceProduct = _price;
+    } 
+    
+    // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
+    if (shopDetail?.commissionAffiliate) {
+      priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
     }
 
     if (product?.reduction !== null || product?.reduction) {
@@ -327,8 +297,8 @@ export default function index() {
 
   // click the menu home
   const onCalbackToHome = async () => {
-    // const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
-    const { id, pid, influencer, commissionForShopId } = router?.query;
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    const { id, pid, influencer, commissionForShopId } = idPreState;
 
     let destinationPath = `../shop/${id}`;
 

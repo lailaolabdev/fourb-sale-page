@@ -277,7 +277,7 @@ export default function CartDetail() {
 
       <div style={{ padding: "5px 0" }}>
         <div className="bread-crumb">
-          <span onClick={onBackPage}><MdHome style={{ fontSize: 15 }} /></span>
+          <span onClick={onBackPage}>ໜ້າຫລັກ</span>
           <RxSlash />
           <span style={{ cursor: 'default' }}>ກະຕ່າສິນຄ້າ</span>
         </div>

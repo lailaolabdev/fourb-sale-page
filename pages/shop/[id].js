@@ -262,7 +262,7 @@ function ShopingStore({ initialShop }) {
 
     let priceProduct = 0;
 
-    // Make sure influencerId is defined before using it
+    // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
     if (influencerId && _commissionForAffiliate) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
@@ -272,6 +272,11 @@ function ShopingStore({ initialShop }) {
     // The commission calculation had a logic error
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
+    }
+
+    // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
+    if (shopDetail?.commissionAffiliate) {
+      priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
     }
 
     // The reduction calculation was incorrect
@@ -307,6 +312,7 @@ function ShopingStore({ initialShop }) {
 
       let priceProduct = 0;
 
+      // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
       if (influencerId && _commissionForAffiliate) {
         priceProduct = _price + (_price * _commissionForAffiliate) / 100;
       } else {
@@ -315,6 +321,11 @@ function ShopingStore({ initialShop }) {
 
       if (shopDetail?.commissionService) {
         priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
+      }
+
+      // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
+      if (shopDetail?.commissionAffiliate) {
+        priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
       }
 
       const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
@@ -341,7 +352,7 @@ function ShopingStore({ initialShop }) {
   const handleProductPreview = (item) => {
     const { __typename, ...newItem } = item;
 
-    const shortUrl = `${newItem?.id}_${newItem?.name}`;
+    const shortUrl = `id=${newItem?.id}&name=${newItem?.name}`;
     router.push({
       pathname: "../product-detail",
       query: shortUrl
