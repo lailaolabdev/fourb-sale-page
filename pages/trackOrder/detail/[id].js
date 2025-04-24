@@ -54,7 +54,7 @@ export default function index() {
   //   }
   // },[filter])
   const orderInfo = trackMyOrder?.orderGroups?.data[0];
-  console.log({ orderInfo });
+  // console.log({ orderInfo });
 
   const handleBack = () => {
     dispatch(setOrderGroups([]));

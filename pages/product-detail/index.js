@@ -184,7 +184,7 @@ export default function index() {
     }
 
     // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
-    if (influencerId && shopDetail?.commissionAffiliate) {
+    if (shopDetail?.commissionAffiliate) {
       priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
     }
 
