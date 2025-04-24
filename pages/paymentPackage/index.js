@@ -12,8 +12,6 @@ export default function subnups() {
     GEN_QR_AND_SUBSCRIPE_FOR_PAYMENT_ADD_PACKAGE
   );
 
-  console.log('transactionId--->', transactionId?.setqr);
-
   const handleConfirmBcel = async () => {
 
 
