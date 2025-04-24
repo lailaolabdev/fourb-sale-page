@@ -157,6 +157,9 @@ export default function index() {
   }, [loadExchangeRate?.exchangeRate]);
 
   const _calculatePriceWithExchangeRate = (price, currency, reduction) => {
+    const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+    const {id, pid, influencer, commissionForShopId } = idPreState;
+    const influencerId = influencer;
     let _price = 0;
 
     if (["BAHT", "ບາດ"].includes(currency)) {
@@ -181,7 +184,7 @@ export default function index() {
     }  
 
      // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
-     if (shopDetail?.commissionAffiliate) {
+     if (influencerId && shopDetail?.commissionAffiliate) {
       priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
     }
 

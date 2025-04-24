@@ -41,9 +41,6 @@ import Invoice from "@/components/invoices/Invoice";
 export default function CartDetail() {
   const router = useRouter();
 
-  // Retrieve the compareData from the query parameters
-  const compareData = JSON.parse(router.query.compareData || "{}");
-
   // Access query parameters from the router
   const {
     liveId,
