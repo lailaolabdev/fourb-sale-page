@@ -35,6 +35,7 @@ export default function index() {
   const [product, setProduct] = useState(null);
   const [stockAmount, setStockAmount] = useState(0);
   const toast = useRef(null);
+  const [influencerId, setInfluencerId] = useState("");
 
   const [previewImage, setPreviewImage] = useState([]);
   const [defaultImage, setDefaultImage] = useState();
@@ -90,6 +91,10 @@ export default function index() {
         setShopIdParams(shopId)
       }
 
+      let idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
+      const { id, pid, influencer, commissionForShopId } = idPreState;
+
+      setInfluencerId(influencer);
       // localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
       // dispatch(getKeyPatch(router?.query));
 
@@ -157,9 +162,7 @@ export default function index() {
   }, [loadExchangeRate?.exchangeRate]);
 
   const _calculatePriceWithExchangeRate = (price, currency, reduction) => {
-    let idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
-    const { id, pid, influencer, commissionForShopId } = idPreState;
-    let influencerId = influencer;
+
     let _price = 0;
 
     if (["BAHT", "ບາດ"].includes(currency)) {
