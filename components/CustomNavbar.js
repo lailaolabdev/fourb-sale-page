@@ -49,6 +49,7 @@ import { GrPrevious } from "react-icons/gr";
 import { GET_SHOP } from "@/apollo";
 import { useLazyQuery } from "@apollo/client";
 import { contactWhatsAppWitdhShop } from "@/const";
+import _ from "lodash";
 
 
 export default function CustomNavbar({ shopDetail }) {
@@ -96,22 +97,36 @@ export default function CustomNavbar({ shopDetail }) {
     }
   }, []);
 
+  // useEffect(() => {
+  //     const _checkdatas = cartList.filter((item) => item?.shop === patchBack?.id);
+  //     if (!_.isEmpty(_checkdatas)) {
+  //       const totalQty = cartList.reduce((acc, data) => {
+          
+  //         return acc + data?.qty;
+  //       }, 0);
+
+  //       setShopId(patchBack?.id)
+
+  //       setDataBage(totalQty);
+  //     } else {
+  //       setDataBage(0);
+  //     }
+  //   // }
+  // }, [cartList, patchBack]);
   useEffect(() => {
-    // const _data = JSON.parse(localStorage.getItem("PATCH_KEY"));
-    // if (_data.id === cartList[0].shop) {
-
-
-      const _checkdatas = cartList.filter((item) => item?.shop === patchBack?.id);
-      if (_checkdatas) {
-        const totalQty = cartList.reduce((acc, data) => {
-          return acc + data?.qty;
-        }, 0);
-
-        setShopId(patchBack?.id)
-
-        setDataBage(totalQty);
-      }
-    // }
+    const _checkdatas = cartList.filter((item) => item?.shop === patchBack?.id);
+    
+    if (!_.isEmpty(_checkdatas)) {
+      // Calculate total quantity only for items from the specific shop
+      const totalQty = _checkdatas.reduce((acc, data) => {
+        return acc + (data?.qty || 0);
+      }, 0);
+  
+      setShopId(patchBack?.id);
+      setDataBage(totalQty);
+    } else {
+      setDataBage(0);
+    }
   }, [cartList, patchBack]);
 
 
