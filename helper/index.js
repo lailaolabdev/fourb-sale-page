@@ -51,9 +51,9 @@ export const covertTimeZone = (datatime, time) => {
 // export const SOCKET_SERVER_URI = "wss://api-dev.bbbb.com.la/";
 
 // Production
-// export const SERVER_URI = "https://api.bbbb.com.la/";
-// export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
+export const SERVER_URI = "https://api.bbbb.com.la/";
+export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
 
 // localhost
-export const SERVER_URI = "http://localhost:7070/";
-export const SOCKET_SERVER_URI = "ws://localhost:7070/" 
+// export const SERVER_URI = "http://localhost:7070/";
+// export const SOCKET_SERVER_URI = "ws://localhost:7070/" 
