@@ -286,7 +286,10 @@ function ShopingStore({ initialShop }) {
     }
 
 
-    return calculateRoundedValue(priceProduct / 1000) * 1000;
+    let finalPrice = calculateRoundedValue(priceProduct / 1000) * 1000;
+    console.log("logs finalPrice: ", finalPrice)
+    
+    return finalPrice;
   };
 
   const handleAddProduct = (data) => {

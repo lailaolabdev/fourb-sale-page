@@ -24,6 +24,7 @@ export const CLIENT_ID = "191329944996-toam9grdvadq5sdbjaicr2t70pqjl4n0.apps.goo
 export const calculateRoundedValue = (price) => {
   let integerPart = Math.floor(price);
   let decimalPart = price - integerPart;
+  console.log("decimalPart: ", decimalPart)
 
   if (decimalPart < 0.5 && decimalPart != 0) {
     return integerPart + 0.5;
@@ -50,9 +51,9 @@ export const covertTimeZone = (datatime, time) => {
 // export const SOCKET_SERVER_URI = "wss://api-dev.bbbb.com.la/";
 
 // Production
-export const SERVER_URI = "https://api.bbbb.com.la/";
-export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
+// export const SERVER_URI = "https://api.bbbb.com.la/";
+// export const SOCKET_SERVER_URI = "wss://api.bbbb.com.la/";  
 
 // localhost
-// export const SERVER_URI = "http://localhost:7070/";
-// export const SOCKET_SERVER_URI = "ws://localhost:7070/" 
+export const SERVER_URI = "http://localhost:7070/";
+export const SOCKET_SERVER_URI = "ws://localhost:7070/" 

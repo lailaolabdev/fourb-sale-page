@@ -127,7 +127,7 @@ export default function payment() {
   const { cartList } = useSelector((state) => state?.salepage);
   const { patchBack } = useSelector((state) => state?.setpatch);
 
-  const shopId = patchBack?.id; 
+  const shopId = patchBack?.id;
 
   const totalPrice = cartDatas.reduce(
     (acc, item) => acc + item.price * item.qty,
@@ -148,7 +148,7 @@ export default function payment() {
 
   const [
     getShopCommissionFor,
-    { data: shopDataCommissionFor},
+    { data: shopDataCommissionFor },
   ] = useLazyQuery(GET_COMMISSION_BY_INFLUENCER, {
     fetchPolicy: "cache-and-network",
   });
@@ -219,10 +219,10 @@ export default function payment() {
       );
       setCartDatas(_checkdatas);
     }
-   
+
   }, [patchBack, cartList]);
 
-  useEffect(() => { 
+  useEffect(() => {
     getShopCommissionFor({
       variables: {
         where: {
@@ -388,8 +388,7 @@ export default function payment() {
 
   const handleConfirmBank = async () => {
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
-    const localShop = JSON.parse(localStorage.getItem("SP_SHOP_DATA"));
- 
+
     try {
       setIsValidate(false);
       setOpenSelectBank(false);
@@ -397,15 +396,15 @@ export default function payment() {
       if (loadingSubscripe || loadingPayment) return;
 
       // Convert the orders into the required format
-      const convertedOrders = await (cartDatas || []).map((order) => ({
+      const convertedOrders = (cartDatas || []).map((order) => ({
         stock: order?.id,
         shop: shopId,
         amount: order?.qty,
-        price: order?.price,
-        originPrice: order?.price,
-        productName: order?.name,
-        currency: order?.currency,
-        totalPrice: order?.qty * order?.price,
+        // price: order?.price,
+        // originPrice: order?.price,
+        // productName: order?.name,
+        // currency: order?.currency,
+        // totalPrice: order?.qty * order?.price,
       }));
 
       const connectField =
@@ -456,10 +455,6 @@ export default function payment() {
       const response = await createOrderSalepage({
         variables: {
           data: {
-            amount: totalPrice, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            // amount: 1, // ຈຳນວນເງິນທີ່ຕ້ອງຊຳລະຢູ່ ແອັບ
-            // paymentMethod: values?.type,
-            description: "4B_SALE_PAGE",
             orders: convertedOrders,
             orderGroup: _orderGroup,
           },
@@ -508,54 +503,6 @@ export default function payment() {
       });
     }
   };
-
-  // onprint bill
-
-  // const onPrintBill = async () => {
-  //   try {
-  //     const printerBillData = printer.find((e) => e?.status === true);
-
-  //     const dataImageForPrint = await html2canvas(
-  //       printerBillData?.width === "80mm"
-  //         ? bill80Ref.current
-  //         : bill58Ref.current,
-  //       {
-  //         useCORS: true,
-  //         scrollX: 10,
-  //         scrollY: printerBillData?.width === "80mm" ? 2 : 0,
-  //         scale:
-  //           printerBillData?.width === "80mm"
-  //             ? 560 / widthBill80
-  //             : 350 / widthBill58,
-  //       }
-  //     );
-
-
-  //     const urlByType = {
-  //       ETHERNET: "ethernet",
-  //       BLUETOOTH: "bluetooth",
-  //       USB: "usb",
-  //     };
-  //     const urlForPrinter = `http://localhost:9150/${urlByType[printerBillData?.type]
-  //       }/image`;
-
-  //     const _file = await base64ToBlob(dataImageForPrint.toDataURL());
-  //     const bodyFormData = new FormData();
-  //     bodyFormData.append("ip", printerBillData?.ip);
-  //     bodyFormData.append("port", "9100");
-  //     bodyFormData.append("image", _file);
-  //     bodyFormData.append("beep1", 1);
-  //     bodyFormData.append("beep2", 9);
-
-  //     await axios.post(urlForPrinter, bodyFormData, {
-  //       headers: { "Content-Type": "multipart/form-data" },
-  //     });
-
-
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // };
 
   const compulsory = <span style={{ color: "orange" }}>(ບັງຄັບ)</span>;
 
@@ -1010,7 +957,12 @@ export default function payment() {
       <ToastContainer />
       <FooterComponent />
 
-      <Modal size="lg" centered show={showPreview} onHide={() => setShowPreview(false)}>
+      <Modal
+        size="lg"
+        backdrop="static"
+        keyboard={false}
+        centered show={showPreview} onHide={() => setShowPreview(false)}>
+        <Modal.Header closeButton />
         <Modal.Body style={{ width: '100%', height: "85vh", maxHeight: "70em", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', position: 'relative' }}>
           <iframe src={qrCodeUrl} title="description" style={{ width: '100%', height: '100%' }} />
         </Modal.Body>

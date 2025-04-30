@@ -168,13 +168,13 @@ export default function index() {
 
     let priceProduct = 0;
 
-
     // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
     if (patchBack?.influencer) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
       priceProduct = _price;
     }
+
 
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
