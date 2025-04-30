@@ -42,7 +42,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { bankDatas } from "../../const/selectBankData";
 import html2canvas from "html2canvas";
 import { removeCartItem } from "../../redux/salepage/cartReducer";
-import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE } from "@/apollo";
+import { GET_COMMISSION_BY_INFLUENCER, GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE } from "@/apollo";
 import CustomNavbar from "@/components/CustomNavbar";
 import { io } from "socket.io-client";
 import { PAYMENT_GATEWAY_API_URL, PAYMENT_KEY } from "@/const";
@@ -121,16 +121,13 @@ export default function payment() {
   const [logisticBranches, setLogisticBranches] = useState([]);
   const [originalLogisticBranches, setOriginalLogisticBranches] = useState([]);
   const [preTransactionId, setPreTransactionId] = useState("");
-  const [preInvoiceObj, setPreInvoiceObj] = useState({});
+  const [commissionInflu, setCommissionInflu] = useState(0);
 
   const ordersState = useSelector((state) => state?.setorder);
   const { cartList } = useSelector((state) => state?.salepage);
   const { patchBack } = useSelector((state) => state?.setpatch);
 
-
-  // const { setId } = useSelector((state) => state?.predata);
-  const shopId = patchBack?.id;
-  // const affiliateId = setId?.idPreState?.affiliateId;
+  const shopId = patchBack?.id; 
 
   const totalPrice = cartDatas.reduce(
     (acc, item) => acc + item.price * item.qty,
@@ -144,20 +141,16 @@ export default function payment() {
 
   const [createOrderSalepage, { loading: loadingPayment }] = useMutation(
     CREATE_PAYMENT_LINK_WITH_PHAPAY
-    // CRATE_QR_WITH_PAYMENT_GATEWAY
-    // CREATE_ORDER_ON_SALE_PAGE
   );
   const [createQrPayment, { loading: loadingSubscripe }] = useMutation(
     CREATE_QR_AND_SUBSCRIPE_FOR_PAYMENT
   );
-  const [getPresignUrl, { data: presignUrlData }] =
-    useLazyQuery(GET_PRESIGN_URL);
 
   const [
     getShopCommissionFor,
-    { data: shopDataCommissionFor, loading: shopLoading },
-  ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
-    fetchPolicy: "network-only",
+    { data: shopDataCommissionFor},
+  ] = useLazyQuery(GET_COMMISSION_BY_INFLUENCER, {
+    fetchPolicy: "cache-and-network",
   });
   const [loadOrderGroupWithSalepage, { data: orderGroupWithSalepage, loading: loadingOrdeWithSalepage }] = useLazyQuery(GET_ORDERGROUPS_WITH_SALEPAGE, { fetchPolicy: 'cache-and-network' })
 
@@ -186,6 +179,12 @@ export default function payment() {
       return '';
     }
   }
+
+  useEffect(() => {
+    if (shopDataCommissionFor) {
+      setCommissionInflu(shopDataCommissionFor?.getCommissionByInfluencer?.commission)
+    }
+  }, [shopDataCommissionFor]);
 
   useEffect(() => {
     if (qrCodeUrl) {
@@ -220,69 +219,20 @@ export default function payment() {
       );
       setCartDatas(_checkdatas);
     }
-    // loadOrderGroupWithSalepage({
-    //   variables: {
-    //     where: {
-    //       transactionId: "526633de-dc80-45f8-a224-27712ad7a4c1",
-    //     },
-    //   },
-    // })
+   
   }, [patchBack, cartList]);
 
-  useEffect(() => {
+  useEffect(() => { 
     getShopCommissionFor({
       variables: {
         where: {
-          id: commissionForShopId,
+          infulancer: patchBack.influencer, // influencer id
+          shop: shopId, // shop id
         },
       },
     });
-  }, [commissionForShopId]);
+  }, [shopId, patchBack]);
 
-  // ຖ້າບໍ່ມີ onepay ແມ່ນໃຫ້ໃຊ້ໂຕອັບໂຫລດຮູບ qrcode ການຊຳລະ
-  useEffect(() => {
-    if (presignUrlData?.preSignedUrl?.url) {
-      onFileUpload(presignUrlData?.preSignedUrl?.url);
-    }
-  }, [presignUrlData]);
-
-
-  const onFileUpload = async (url) => {
-    try {
-      if (file && url) {
-        const uploadfile = await axios.put(url, file, {
-          headers: {
-            "Content-Type": "file/*; image/*",
-            Accept: "application/json",
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "DELETE, POST, GET, OPTIONS",
-            "Access-Control-Allow-Headers":
-              "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With",
-          },
-        });
-        // console.log("uploadfile: ", uploadfile);
-      }
-    } catch (error) {
-      console.log("ERROR: ", error);
-    }
-  };
-
-  // ອັບໂຫລດຮູບ
-  const handleUpload = async (event) => {
-    try {
-      setFile(event.target.files[0]);
-      var ext = event.target.files[0].name.split(".").pop();
-      let filename = uuidv4() + "." + ext;
-      await getPresignUrl({
-        variables: {
-          name: filename,
-        },
-      });
-      setFileName(filename);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   useEffect(() => {
     // initSetting();
@@ -348,7 +298,7 @@ export default function payment() {
   const handleGoback = () => {
     let idPreState = {
       shopId: shopId,
-      affiliateId: influencerId,
+      affiliateId: patchBack.influencer,
     };
 
     if (commissionForShopId) {
@@ -366,7 +316,6 @@ export default function payment() {
         : idPreState.shopId && idPreState.influencerId
           ? `../cartdetail/${idPreState.shopId}?affiliateId=${idPreState.influencerId}`
           : `../cartdetail/${idPreState?.shopId}`;
-    console.log("path_payment:----->", destinationPath);
     router.push(destinationPath);
   };
 
@@ -424,17 +373,6 @@ export default function payment() {
     };
   }, [ordersState?.setOrder, isExChangeRate]);
 
-  // console.log("customerName---->", customerName)
-  const _calculatePriceWithExchangeRate = (price, currency) => {
-    if (["BAHT", "ບາດ"].includes(currency)) {
-      return price * isExChangeRate?.baht;
-    } else if (["USD", "ໂດລາ"].includes(currency)) {
-      // console.log("result:====>", price, isExChangeRate?.usd);
-      return price * (isExChangeRate?.usd || 0);
-    }
-
-    return price;
-  };
 
   const _filterOriginalLogisticBranches = (district, isOriginal) => {
     let _newBranches = [];
@@ -451,8 +389,7 @@ export default function payment() {
   const handleConfirmBank = async () => {
     const idPreState = JSON.parse(localStorage.getItem("PATCH_KEY"));
     const localShop = JSON.parse(localStorage.getItem("SP_SHOP_DATA"));
-
-    console.log("logs idPreState: ", idPreState, localShop.shop)
+ 
     try {
       setIsValidate(false);
       setOpenSelectBank(false);
@@ -495,17 +432,17 @@ export default function payment() {
         destinationLogistic: connectField,
       };
 
-      if (localShop?.shop?.commissionAffiliate) {
+      if (patchBack.influencer && commissionInflu) {
         _orderGroup = {
           ..._orderGroup,
-          infulancer_percent: localShop?.shop?.commision,
+          infulancer_percent: commissionInflu,
         };
       }
 
-      if (idPreState?.influencer) {
+      if (patchBack.influencer) {
         _orderGroup = {
           ..._orderGroup,
-          infulancer: idPreState?.influencer,
+          infulancer: patchBack.influencer,
         };
       }
       if (idPreState?.commissionForShopId) {

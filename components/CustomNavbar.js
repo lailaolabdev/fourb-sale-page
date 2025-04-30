@@ -337,17 +337,19 @@ export default function CustomNavbar({ shopDetail }) {
             className="nav-form-control"
             style={{ width: width > 800 ? "45%" : "100%" }}
           >
+            <div className="icon-search">
+              <FaSearch />
+            </div>
+
             <input
               type="text"
-              placeholder="ຊອກຫາສິນຄ້າທີ່ທ່ານມັກ..."
+              placeholder="Search your product here..."
               // value={filterData}
               onKeyDown={onChangeFillter}
             // onChange={(e) => setFilterData(e.target.value)}
             />
 
-            <div className="icon-search">
-              <FaSearch />
-            </div>
+            
           </div>
 
           {width > 800 && (

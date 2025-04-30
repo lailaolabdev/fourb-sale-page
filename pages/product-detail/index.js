@@ -26,7 +26,7 @@ import { Toast } from "primereact/toast";
 import { Fieldset } from "primereact/fieldset";
 import { formatNumberFavorite } from "@/const";
 import { GET_EXCHANGRATE } from "@/apollo/exchanrage";
-import { GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, SHOP } from "@/apollo";
+import { GET_COMMISSION_BY_INFLUENCER, GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, SHOP } from "@/apollo";
 import EmptyImage from "@/components/salePage/EmptyImage";
 
 export default function index() {
@@ -56,11 +56,8 @@ export default function index() {
   });
   // const { detailProduct } = useQuery(GET_STOCK)
 
-  const [
-    getShopCommissionFor,
-    { data: shopDataCommissionFor, loading: shopLoading },
-  ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
-    fetchPolicy: "network-only",
+  const [ getShopCommissionFor, { data: shopDataCommissionFor }] = useLazyQuery(GET_COMMISSION_BY_INFLUENCER, {
+    fetchPolicy: "cache-and-network",
   });
 
   const {
@@ -95,10 +92,6 @@ export default function index() {
       const { id, pid, influencer, commissionForShopId } = idPreState;
 
       setInfluencerId(influencer);
-      // localStorage.setItem("PATCH_KEY", JSON.stringify(router?.query));
-      // dispatch(getKeyPatch(router?.query));
-
-
     }
   }, [router.query]);
 
@@ -120,7 +113,8 @@ export default function index() {
     getShopCommissionFor({
       variables: {
         where: {
-          id: patchBack?.commissionForShopId,
+          infulancer: patchBack?.influencer, // influencer id
+          shop: patchBack?.id, // shop id
         },
       },
     });
@@ -154,8 +148,7 @@ export default function index() {
     }
   }, [product]);
 
-  const _commissionForAffiliate =
-    shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
+  const _commissionForAffiliate = shopDataCommissionFor?.getCommissionByInfluencer?.commission;
 
   const isExChangeRate = useMemo(() => {
     return loadExchangeRate?.exchangeRate;
@@ -175,8 +168,9 @@ export default function index() {
 
     let priceProduct = 0;
 
+
     // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
-    if (patchBack?.commissionForShopId) {
+    if (patchBack?.influencer) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
       priceProduct = _price;
@@ -229,7 +223,7 @@ export default function index() {
     let priceProduct = 0;
 
     // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
-    if (patchBack?.commissionForShopId) {
+    if (patchBack?.influencer) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
       priceProduct = _price;
