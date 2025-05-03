@@ -504,7 +504,7 @@ export default function payment() {
     }
   };
 
-  const compulsory = <span style={{ color: "orange" }}>(ບັງຄັບ)</span>;
+  const compulsory = <span style={{ color: "red" }}>*</span>;
 
   return (
     <>

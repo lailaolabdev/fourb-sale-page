@@ -1,6 +1,6 @@
 {
   "name": "4b-sale-page-shop",
-  "version": "v1.3.11",
+  "version": "v1.3.12",
   "private": true,
   "scripts": {
     "dev": "next dev",
