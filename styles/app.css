@@ -22,14 +22,12 @@
      --colorText2: #0c2440f;
  }
 
- * {
-     font-family: "Noto Sans Lao", sans-serif;
-     scroll-behavior: smooth,
+ *, body {
+     font-family: "Noto Sans Lao", "Phetsarath OT", sans-serif;
+     scroll-behavior: smooth;
+     /* background: var(--colorShadow); */
  }
 
- body {
-     background: var(--colorShadow);
- }
 
  .p-gination {
      font-size: 12px;

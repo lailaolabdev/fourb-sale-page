@@ -185,15 +185,19 @@ export default function payment() {
       setCommissionInflu(shopDataCommissionFor?.getCommissionByInfluencer?.commission)
     }
   }, [shopDataCommissionFor]);
-
+  
+  console.log("logs pretransaction id:--: ", preTransactionId)
   useEffect(() => {
     if (qrCodeUrl) {
+      console.log("logs qrCodeUrl: ", qrCodeUrl)
       let transactionId = extractTransactionId(qrCodeUrl);
       setPreTransactionId(transactionId)
     }
   }, [qrCodeUrl]);
 
   useEffect(() => {
+  console.log("logs onSubscriptionPaymentLink:--- ", onSubscriptionPaymentLink)
+
     if (onSubscriptionPaymentLink) {
       if (onSubscriptionPaymentLink?.onSubReceiveLinkCodeWithSalePage?.transactionId === preTransactionId) {
         setShowPreview(false)
@@ -461,6 +465,7 @@ export default function payment() {
         },
       })
 
+      console.log("logs response:--->", response)
       if (response) {
         setShowPreview(true);
         let _preLink = JSON.parse(response?.data?.createPaymentLinkWithPhapay?.appLink);
