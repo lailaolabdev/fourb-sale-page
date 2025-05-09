@@ -186,18 +186,14 @@ export default function payment() {
     }
   }, [shopDataCommissionFor]);
   
-  console.log("logs pretransaction id:--: ", preTransactionId)
   useEffect(() => {
     if (qrCodeUrl) {
-      console.log("logs qrCodeUrl: ", qrCodeUrl)
       let transactionId = extractTransactionId(qrCodeUrl);
       setPreTransactionId(transactionId)
     }
   }, [qrCodeUrl]);
 
   useEffect(() => {
-  console.log("logs onSubscriptionPaymentLink:--- ", onSubscriptionPaymentLink)
-
     if (onSubscriptionPaymentLink) {
       if (onSubscriptionPaymentLink?.onSubReceiveLinkCodeWithSalePage?.transactionId === preTransactionId) {
         setShowPreview(false)
