@@ -287,7 +287,6 @@ function ShopingStore({ initialShop }) {
 
 
     let finalPrice = calculateRoundedValue(priceProduct / 1000) * 1000;
-    console.log("logs finalPrice: ", finalPrice)
     
     return finalPrice;
   };

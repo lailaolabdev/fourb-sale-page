@@ -1,4 +1,5 @@
 import {
+  GET_COMMISSION_BY_INFLUENCER,
   GET_SHOP,
   GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE,
   SHOP,
@@ -75,6 +76,8 @@ function SearchProduct({ initialShop }) {
 
   const toast = useRef(null);
   const { patchBack } = useSelector((state) => state?.setpatch);
+  const { cartList } = useSelector((state) => state?.salepage);
+
   const shopId = patchBack?.id;
 
   const dispatch = useDispatch();
@@ -95,9 +98,9 @@ function SearchProduct({ initialShop }) {
 
   const [
     getShopCommissionFor,
-    { data: shopDataCommissionFor, loading: shopLoading },
-  ] = useLazyQuery(GET_SHOP_COMMISSION_FOR_AFFILIATE_ONE, {
-    fetchPolicy: "network-only",
+    { data: shopDataCommissionFor },
+  ] = useLazyQuery(GET_COMMISSION_BY_INFLUENCER, {
+    fetchPolicy: "cache-and-network",
   });
 
   const [updateStock] = useMutation(UPDATE_STOCK);
@@ -123,20 +126,22 @@ function SearchProduct({ initialShop }) {
     setCurrentPage(newPage?.page);
     setCount(newPage?.first);
   }, []);
+  console.log("log shopDataCommissionFor:-->", shopDataCommissionFor)
 
-
-  const _commissionForAffiliate =
-    shopDataCommissionFor?.shopSettingCommissionInfluencer?.commission;
+  const _commissionForAffiliate = shopDataCommissionFor?.getCommissionByInfluencer?.commission;
 
   useEffect(() => {
-    getShopCommissionFor({
-      variables: {
-        where: {
-          id: commissionForShopId,
+    if (patchBack?.influencer) {
+      getShopCommissionFor({
+        variables: {
+          where: {
+            infulancer: patchBack?.influencer,
+            shop: patchBack?.id,
+          },
         },
-      },
-    });
-  }, [commissionForShopId]);
+      });
+    }
+  }, [patchBack]);
 
   useEffect(() => {
     if (stockData) {
@@ -250,23 +255,45 @@ function SearchProduct({ initialShop }) {
     }
 
     let priceProduct = 0;
-
-    if (commissionForShopId) {
+    // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
+    if (patchBack?.influencer && _commissionForAffiliate) {
       priceProduct = _price + (_price * _commissionForAffiliate) / 100;
     } else {
       priceProduct = _price;
     }
 
+    // The commission calculation had a logic error
     if (shopDetail?.commissionService) {
       priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-    } else {
-      priceProduct = _price;
     }
 
-    return calculateRoundedValue(priceProduct / 1000) * 1000;
+    // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
+    if (patchBack?.influencer && shopDetail?.commissionAffiliate) {
+      priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
+    }
+
+    // The reduction calculation was incorrect
+    // ຄຳນວນສ່ວນຫຼຸດ
+    // if (reduction > 0 && reduction !== null) {
+    //   priceProduct = priceProduct - (priceProduct * reduction) / 100;
+    // }
+
+
+    let finalPrice = calculateRoundedValue(priceProduct / 1000) * 1000;
+
+    return finalPrice; 
   };
 
+  // add product to cart
   const handleAddProduct = (data) => {
+    const existingProductIndex = cartList.findIndex(item => item.id === data.id);
+    if (existingProductIndex !== -1) {
+      return toast.current.show({
+        severity: "error",
+        summary: "ແຈ້ງເຕືອນ",
+        detail: "ສິນຄ້າໃນກະຕ່າມີແລ້ວ!",
+      });
+    }
     if (data?.amount <= 0) {
       return toast.warning(`ສິນຄ້າ ${data?.name} ໝົດສະຕ໋ອກແລ້ວ!`, {
         autoClose: 1500,
@@ -284,7 +311,8 @@ function SearchProduct({ initialShop }) {
 
       let priceProduct = 0;
 
-      if (commissionForShopId) {
+      // ຄ່າຄອມມິດຊັ່ນ ສະເພາະຮ້ານ ກັບ ອິນຟູ ກຳນົດຕ່າງຫາກ
+      if (patchBack?.influencer && _commissionForAffiliate) {
         priceProduct = _price + (_price * _commissionForAffiliate) / 100;
       } else {
         priceProduct = _price;
@@ -292,19 +320,14 @@ function SearchProduct({ initialShop }) {
 
       if (shopDetail?.commissionService) {
         priceProduct = priceProduct + (priceProduct * COMMISSION_OFFICE) / 100;
-      } else {
-        priceProduct = _price;
+      }
+
+      // ຄ່າຄອມມິດຊັ່ນທີ່ຮ້ານເປີດໃຫ້ບໍລິການ ໃຫ້ ອິນຟູ
+      if (patchBack?.influencer && shopDetail?.commissionAffiliate) {
+        priceProduct = priceProduct + (priceProduct * shopDetail?.commision) / 100;
       }
 
       const roundedValue = calculateRoundedValue(priceProduct / 1000) * 1000;
-
-      // const _data = {
-      //   ...data,
-      //   price: roundedValue,
-      //   modelType: live, shop: shopId
-      // };
-
-      // console.log({_data})
 
       const { __typename, ...restData } = data;
 
@@ -314,8 +337,6 @@ function SearchProduct({ initialShop }) {
         modelType: live,
         shop: shopId,
       };
-
-      console.log({ _data });
 
       dispatch(addCartItem(_data));
 
@@ -330,7 +351,8 @@ function SearchProduct({ initialShop }) {
   // preview my product
   const handleProductPreview = (item) => {
     const { __typename, ...newItem } = item;
-    const shortUrl = `${newItem?.id}_${newItem?.name}`;
+
+    const shortUrl = `id=${newItem?.id}&name=${newItem?.name}`;
     router.push({
       pathname: "../product-detail",
       query: shortUrl
@@ -485,11 +507,11 @@ function SearchProduct({ initialShop }) {
                             )}
                           </h3>
                         </div>
-                        <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p>
-                        {/* <button onClick={() => handleAddProduct(item)}>
-                            <IoBagAddSharp />
-                            <span>ເພິ່ມ</span>
-                          </button> */}
+                        {/* <p>{formatNumberFavorite(item?.favorite) ?? 0} sold</p> */}
+                        <button onClick={() => handleAddProduct(item)}>
+                          <IoBagAddSharp />
+                          <span>ເພິ່ມ</span>
+                        </button>
                       </div>
                     </div>
                   </div>
